@@ -6,10 +6,10 @@
 - hook OnGameModeInit - appends all the admin command to **adminCommands** variable.
 
 ## admin_ban.inc
-``Ban_AddUser(playerid, byid, reason, interval_type, banduration)`` - Creates a new entry on the database.
-``Ban_RemoveUser(username[], playerid = INVALID_PLAYER_ID)`` - Removes an entry from the database.
-``Ban_Check(playerid)`` - Returns true if the player matches one of the entries in the database by IP, GCPI or name.
-``Ban_GetData(playerid, username[], ip[], reason[], admin[], bandate[], unbandate[])`` - Returns all the ban data, used if **Ban_Check** is true.
+- ``Ban_AddUser(playerid, byid, reason, interval_type, banduration)`` - Creates a new entry on the database.
+- ``Ban_RemoveUser(username[], playerid = INVALID_PLAYER_ID)`` - Removes an entry from the database.
+- ``Ban_Check(playerid)`` - Returns true if the player matches one of the entries in the database by IP, GCPI or name.
+- ``Ban_GetData(playerid, username[], ip[], reason[], admin[], bandate[], unbandate[])`` - Returns all the ban data, used if **Ban_Check** is true.
 
 check module [admin_ban-cmd.inc](https://github.com/PatrickGTR/gta-open/blob/master/gamemodes/core/admin/admin_ban-cmd.inc) for usage of this API.
 
