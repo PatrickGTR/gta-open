@@ -22,8 +22,18 @@ Statement: stmt_retrieveAdmin;
 
 
 hook OnGameModeInit() {
+    
 
-    stmt_retrieveAdmin = MySQL_Prepare();
+    static const query_retrieveAdmin[] = "\
+        SELECT \
+            admin_level \
+        FROM  \
+            admins \
+        WHERE \
+            u_id = ? \
+        "
+    ;
+    stmt_retrieveAdmin = MySQL_PrepareStatement(query_retrieveAdmin);
 }
 
 hook OnPlayerLogin(playerid)
