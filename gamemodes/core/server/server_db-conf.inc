@@ -5,11 +5,11 @@
 static 
     MySQL:MySQL_ConHandle;
 
-
+// TODO: move to environment var or .ini config.
 static const 
     MYSQL_HOST[]    = "localhost",
     MYSQL_PW[]      = "",
-    MYSQL_DB[]      = "gta-dm",
+    MYSQL_DB[]      = "gta-open",
     MYSQL_USER[]    = "root";
 
 hook OnGameModeInit() {

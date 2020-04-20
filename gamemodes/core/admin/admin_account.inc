@@ -13,11 +13,14 @@ enum
     ADM_LVL_5
 }
 
-static
-		  adminLevel[MAX_PLAYERS],
-		  adminCommands[5][2048],
-BitArray: adminOnDuty<MAX_PLAYERS>,
-Statement: stmt_retrieveAdmin;
+// accessed globally
+new adminCommands[5][2048];
+
+static 
+    PlayerAdminLevel[MAX_PLAYERS], 
+    BitArray: adminOnDuty<MAX_PLAYERS>,
+    Statement: stmt_retrieveAdmin
+;
 
 
 
@@ -33,34 +36,24 @@ hook OnGameModeInit() {
             u_id = ? \
         "
     ;
-    stmt_retrieveAdmin = MySQL_PrepareStatement(query_retrieveAdmin);
+    stmt_retrieveAdmin = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveAdmin);
 }
 
 hook OnPlayerLogin(playerid)
 {
-    inline OnPlayerAdminLoad()
-	{
-		if(cache_num_rows())
-		{
+    inline OnPlayerAdminLoad() {
+        new 
+            adminLevel;
 
-			new
-				adm_level;
+        MySQL_BindResultInt(stmt_retrieveAdmin, 0, adminLevel);
 
-			cache_get_value_name_int(0, "admin_level", adm_level);
+        if(MySQL_Statement_FetchRow(stmt_retrieveAdmin)) {
+            Admin_SetPlayerLevel(playerid, adminLevel);
+        }   
 
-			Admin_SetPlayerLevel(playerid, adm_level);
-		}
-	}
-    static const query[] = "\
-        SELECT \
-            admin_level \
-        FROM  \
-            admins \
-        WHERE \
-            u_id = %i \
-        "
-    ;
-	MySQL_TQueryInline(MySQL_GetHandle(), using inline OnPlayerAdminLoad, query, GetPlayerAccountID(playerid));
+    }
+    MySQL_BindInt(stmt_retrieveAdmin, 0, GetPlayerAccountID(playerid));
+    MySQL_ExecuteThreaded_Inline(stmt_retrieveAdmin, using inline OnPlayerAdminLoad);
 }
 
 /*
@@ -113,7 +106,7 @@ stock Admin_AddCommandToList(level, const string[])
 
 stock Admin_SetPlayerLevel(playerid, level)
 {
-    adminLevel[playerid] = level;
+    PlayerAdminLevel[playerid] = level;
 
     new string[256];
 
@@ -146,7 +139,7 @@ stock Admin_GetRankName(playerid)
 }
 
 Admin_GetPlayerLevel(playerid)
-    return adminLevel[playerid];
+    return PlayerAdminLevel[playerid];
 
 
 stock Admin_SetPlayerDuty(playerid, bool:toggle)
