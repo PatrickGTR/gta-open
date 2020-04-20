@@ -1,6 +1,6 @@
 {
 	"user": "Patrick",
-	"repo": "gta-dm",
+	"repo": "gta-open",
 	"entry": "gamemodes/main.pwn",
 	"output": "gamemodes/main.amx",
 	"dependencies": [
