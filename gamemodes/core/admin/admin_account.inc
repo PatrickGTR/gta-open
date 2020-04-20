@@ -63,7 +63,7 @@ hook OnPlayerLogin(playerid)
         - SendAdminMessageF(fmat[], {Float,_}:...);
 */
 
-stock SendAdminMessage(const fmat[])
+stock SendAdminMsg(const fmat[])
 {
     foreach(new i : Player)
     {
@@ -75,7 +75,7 @@ stock SendAdminMessage(const fmat[])
     return 1;
 }
 
-stock SendAdminMessageF(const fmat[], {Float,_}:...)
+stock SendAdminMsgF(const fmat[], {Float,_}:...)
 {
     new
         out[144];
@@ -85,7 +85,7 @@ stock SendAdminMessageF(const fmat[], {Float,_}:...)
         if (i != INVALID_PLAYER_ID && Admin_GetPlayerLevel(i) > 0)
         {
             formatex(out, sizeof(out), fmat, ___(1));
-            SendAdminMessage(out);
+            SendAdminMsg(out);
         }
     }
     return 1;

@@ -2,7 +2,7 @@
 // Github -> https://github.com/PatrickGTR
 
 // Credits to these people, made the production easier.
-// Southclaw, Y_Les, maddinatO, SyS, Zeex, Slice
+// Southclaw, Y_Les, maddinatO, SyS, Zeex, Slice, Lorenc
 
 #include <a_samp>
 
