@@ -97,11 +97,7 @@ hook OnPlayerConnect(playerid) {
     MySQL_ExecuteParallel_Inline(stmt_checkPlayer, using inline OnDataLoad);
 }
 
-hook OnPlayerDisconnect(playerid, reason) {
-
-}
-
-SetPlayerKills(playerid, value) {
+stock SetPlayerKills(playerid, value) {
     return Player_Kills[playerid] = value;
 }
 
@@ -109,18 +105,18 @@ stock GetPlayerKills(playerid) {
     return Player_Kills[playerid];
 }
 
-SetPlayerDeaths(playerid, value) {
+stock SetPlayerDeaths(playerid, value) {
     return Player_Deaths[playerid] = value;
 }
 
-stock GetPlayerDeaths(playerid, value) {
+stock GetPlayerDeaths(playerid) {
     return Player_Deaths[playerid];
 }
 
-SetPlayerAccountID(playerid, value) {
+stock SetPlayerAccountID(playerid, value) {
     return Player_UID[playerid] = value;
 }
 
-GetPlayerAccountID(playerid) {
+stock GetPlayerAccountID(playerid) {
     return Player_UID[playerid];
 }

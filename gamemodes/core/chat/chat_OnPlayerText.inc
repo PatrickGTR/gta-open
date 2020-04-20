@@ -10,7 +10,7 @@ public OnPlayerText(playerid, text[])
         return 0;
     }
 
-    if(!IsPlayerLoggedIn(playerid)) {
+    if(!Player_IsLoggedIn(playerid)) {
         SendErrorMsg(playerid, "You need to login before you can speak.");
         return 0;
     }

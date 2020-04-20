@@ -126,6 +126,6 @@ static
  }
 
  // API
-IsPlayerLoggedIn(playerid) {
+Player_IsLoggedIn(playerid) {
     return gPlayerLoginStatus[playerid];
 }
