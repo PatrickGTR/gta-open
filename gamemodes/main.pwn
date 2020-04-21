@@ -20,12 +20,12 @@
 
 #define SERVER_NAME 			"GTA:DM v1.0.0"
 
-#define MYSQL_PREPARE_DEBUG 	(false)
+#define MYSQL_PREPARE_DEBUG 	(true)
 #define SETUP_TABLE 			(true)
 
 // (dd, mm, yyyy)
-#define SQL_DATETIME_FORMAT     "%%d %%M %%Y at %%r"
-#define SQL_DATE_FORMAT         "%%d %%M %%Y"
+#define SQL_DATETIME_FORMAT     "%d %M %Y at %r"
+#define SQL_DATE_FORMAT         "%d %M %Y"
 
 new Float:Spawns[][] =
 {
