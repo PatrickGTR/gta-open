@@ -82,7 +82,7 @@ hook OnPlayerConnect(playerid) {
         MySQL_BindResult(stmt_checkPlayer, 1, playerHash, sizeof(playerHash));
 
         if(MySQL_Statement_FetchRow(stmt_checkPlayer)) {
-            SetPlayerAccountID(playerid, playerUID);
+            Account_SetID(playerid, playerUID);
 
             Account_PromptLogin(playerid, playerHash);
         } else {
@@ -97,26 +97,26 @@ hook OnPlayerConnect(playerid) {
     MySQL_ExecuteParallel_Inline(stmt_checkPlayer, using inline OnDataLoad);
 }
 
-stock SetPlayerKills(playerid, value) {
+stock Player_SetKills(playerid, value) {
     return Player_Kills[playerid] = value;
 }
 
-stock GetPlayerKills(playerid) {
+stock Player_GetKills(playerid) {
     return Player_Kills[playerid];
 }
 
-stock SetPlayerDeaths(playerid, value) {
+stock Player_SetDeaths(playerid, value) {
     return Player_Deaths[playerid] = value;
 }
 
-stock GetPlayerDeaths(playerid) {
+stock Player_GetDeaths(playerid) {
     return Player_Deaths[playerid];
 }
 
-stock SetPlayerAccountID(playerid, value) {
+stock Account_SetID(playerid, value) {
     return Player_UID[playerid] = value;
 }
 
-stock GetPlayerAccountID(playerid) {
+stock Account_GetID(playerid) {
     return Player_UID[playerid];
 }

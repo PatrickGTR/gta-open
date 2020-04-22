@@ -63,7 +63,7 @@ static Account_Create(playerid, const password[]) {
 // return n/a
 static Account_InsertToDatabase(playerid, const hash[]) {
     inline OnPlayerRegister() {
-        SetPlayerAccountID(playerid, cache_insert_id());
+        Account_SetID(playerid, cache_insert_id());
 
         static const 
                 msg_title[] = "~g~Welcome!",

@@ -63,8 +63,8 @@ static Account_LoadData(playerid) {
 
         if(MySQL_Statement_FetchRow(stmt_loadPlayerData)) {
             
-            SetPlayerKills(playerid, kills);
-            SetPlayerDeaths(playerid, deaths);
+            Player_SetKills(playerid, kills);
+            Player_SetDeaths(playerid, deaths);
 
     
             static const 
@@ -78,11 +78,11 @@ static Account_LoadData(playerid) {
 
             dbg("player", "player successfully logged in", 
                 _p("username", playerid), 
-                _i("uid", GetPlayerAccountID(playerid)));
+                _i("uid", Account_GetID(playerid)));
         }
     }
 
-    MySQL_BindInt(stmt_loadPlayerData, 0, GetPlayerAccountID(playerid));
+    MySQL_BindInt(stmt_loadPlayerData, 0, Account_GetID(playerid));
     MySQL_ExecuteParallel_Inline(stmt_loadPlayerData, using inline OnDataLoad);
 }
 
@@ -106,7 +106,7 @@ static
 
             dbg("player", "player has been kicked for too many login attempts", 
                 _p("username", playerid), 
-                _i("uid", GetPlayerAccountID(playerid)) 
+                _i("uid", Account_GetID(playerid)) 
             );
             return;
         }
@@ -114,7 +114,7 @@ static
         dbg("player", "player failed to login",
             _i("attemps", Player_Attempts[playerid]),
             _p("username", playerid),
-            _i("uid", GetPlayerAccountID(playerid))
+            _i("uid", Account_GetID(playerid))
 		);
 
         Player_Attempts[playerid] ++;

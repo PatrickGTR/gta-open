@@ -52,7 +52,7 @@ hook OnPlayerLogin(playerid)
         }   
 
     }
-    MySQL_BindInt(stmt_retrieveAdmin, 0, GetPlayerAccountID(playerid));
+    MySQL_BindInt(stmt_retrieveAdmin, 0, Account_GetID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_retrieveAdmin, using inline OnPlayerAdminLoad);
 }
 
@@ -119,7 +119,7 @@ stock Admin_SetPlayerLevel(playerid, level)
         admin_level = %i \
     ";
 
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, GetPlayerAccountID(playerid), level, level);
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Account_GetID(playerid), level, level);
     mysql_tquery(MySQL_GetHandle(), string);
 }
 

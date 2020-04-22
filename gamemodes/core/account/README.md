@@ -7,12 +7,12 @@
 - ``hook OnMySQLConnected()`` - Initialise the prepared statement for this module.
 - ``hook OnPlayerConnect(playerid)`` - Initialise player data, checks if player is banned if not ban then proceed to check whether player is registered otherwise prompt register dialog.
 #### Functions
-- ``SetPlayerKills(playerid, value)``
-- ``GetPlayerKills(playerid)``
-- ``SetPlayerDeaths(playerid, value)``
-- ``GetPlayerDeaths(playerid)``
-- ``SetPlayerAccountID(playerid, value) ``
-- ``GetPlayerAccountID(playerid)``
+- ``Player_SetKills(playerid, value)``
+- ``Player_GetKills(playerid)``
+- ``Player_SetDeaths(playerid, value)``
+- ``Player_GetDeaths(playerid)``
+- ``Account_SetID(playerid, value) ``
+- ``Account_GetID(playerid)``
   
 ## account_create.inc 
 #### hooked callback
