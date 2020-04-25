@@ -72,9 +72,9 @@ hook OnGameModeInit() {
 		exY = storeData[i][E_EXIT_POS][1];
 		exZ = storeData[i][E_EXIT_POS][2];
 		intID = storeData[i][E_INTERIOR_ID];
-		vwID = i;
+		vwID = i; // unique vw id.
         
-		entID = Entrance_Create(enX, enY, enZ, angle, exX, exY, exZ, angle, vwID, intID); // interior id
+		entID = Entrance_Create(enX, enY, enZ, angle, exX, exY, exZ, angle, vwID, intID);
 		
         Entrance_SetIcon(entID, storeData[i][E_MAP_ICON]);
         Entrance_SetName(entID, storeData[i][E_STORE_NAME]);
