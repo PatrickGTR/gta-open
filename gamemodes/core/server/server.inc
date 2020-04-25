@@ -3,17 +3,17 @@
 #include <server_db-conf>
 #include <server_entrances>
 
-enum E_STORE_DATA
+enum E_ENTRANCE_DATA
 {
-	interiorID,
-    mapIcon,
-    storeName[MAX_STORE_NAME],
-    Float:entPos[3],
-    Float:extPos[3],
+	E_INTERIOR_ID,
+    E_MAP_ICON,
+    E_STORE_NAME[MAX_STORE_NAME],
+    Float:E_ENTRANCE_POS[3],
+    Float:E_EXIT_POS[3],
 } 
 
-
-static const storeData[][E_STORE_DATA] =
+static 
+	const storeData[][E_ENTRANCE_DATA] =
 { 
 	{5, 54, 	"[GYM]", 				    {2229.9028, -1721.258, 13.5612}, {772.3065, -5.51570, 1000.7285}},
 	{11, 49, 	"[TEN GREEN BOTTLES]",	    {2309.987548, -1643.436279, 14.827047}, {501.9013, -67.5635, 998.7578}},
@@ -33,7 +33,7 @@ static const storeData[][E_STORE_DATA] =
 	{12, 7, 	"[BARBER]", 			    {2070.632568, -1793.837036, 13.546875}, {411.8917,-54.4434,1001.8984}},
 	{6, 30, 	"[POLICE DEPT.]", 		    {1555.501220, -1675.639038, 16.195312}, {246.8373,62.3343,1003.6406}},
 	{5, 29, 	"[PIZZA]", 			    	{2105.488281, -1806.570434, 13.554687}, {372.2738, -133.5248, 1001.4922}},
-	{2, -1, 	"[STRIP CLUB]", 		    {2421.597900, -1219.242675, 25.561447}, {1204.7625,-13.8523,1000.9219}},
+	{2, 36, 	"[STRIP CLUB]", 		    {2421.597900, -1219.242675, 25.561447}, {1204.7625,-13.8523,1000.9219}},
 	{17, 48, 	"[DISCO]", 			    	{1837.038696, -1682.395996, 13.322851}, {493.4810, -24.9531, 1000.6719}},
 	{17, 61, 	"[24/7]", 				    {1833.777343, -1842.623657, 13.578125}, {-25.9472, -188.2597, 1003.5469}},
 	{17, 61, 	"[24/7]", 				    {1000.593017, -919.916809, 42.328125}, {-25.9472, -188.2597, 1003.5469}},
@@ -41,10 +41,10 @@ static const storeData[][E_STORE_DATA] =
 	{1, 45, 	"[SUBURBAN]", 			    {2112.8643, -1211.4548, 23.9629}, {203.8414, -50.6566, 1001.8047}},
 	{5, 45, 	"[VICTIM]", 			    {461.707031, -1500.845092, 31.044902}, {227.3678, -8.3722, 1002.2109}},
 	{17, 17, 	"[JIM'S STICKY DONUTS]",   	{1038.096191, -1340.726074, 13.745031}, {377.1306, -193.3048, 1000.6328}},
-	{3, -1, 	"[CITY HALL]", 				{1481.037719, -1772.312622, 18.795755}, {390.7462, 173.7627, 1008.3828}},
-	{15, -1, 	"[JEFFERSON MOTEL]", 	    {2233.292968, -1159.849243, 25.890625}, {2214.3845, -1150.4780, 1025.7969}},
+	{3, 12, 	"[CITY HALL]", 				{1481.037719, -1772.312622, 18.795755}, {390.7462, 173.7627, 1008.3828}},
+	{15, 59, 	"[JEFFERSON MOTEL]", 	    {2233.292968, -1159.849243, 25.890625}, {2214.3845, -1150.4780, 1025.7969}},
 	{3, 45,	 	"[PROLAPS]", 			    {499.5353000, -1360.6348, 16.3690}, {207.0255, -140.3765, 1003.5078}},
-	{18, 45,	 "[ZIP]", 				    {1457.0670, -1137.1027, 23.9441}, {161.2982, -97.1033, 1001.8047}}
+	{18, 45,	"[ZIP]", 				    {1457.0670, -1137.1027, 23.9441}, {161.2982, -97.1033, 1001.8047}}
 };
 
 hook OnGameModeInit() {
@@ -58,24 +58,26 @@ hook OnGameModeInit() {
 		Float:exX,
 		Float:exY,
 		Float:exZ,
-		intID;
+		intID,
+		vwID;
 
 	new const Float:angle = 90.0;
 
     for(new i = 0; i < sizeof(storeData); i++) {
 
-		enX = storeData[i][entPos][0];
-		enY = storeData[i][entPos][1];
-		enZ = storeData[i][entPos][2];
-		exX = storeData[i][extPos][0];
-		exY = storeData[i][extPos][1];
-		exZ = storeData[i][extPos][2];
-		intID = storeData[i][interiorID];
+		enX = storeData[i][E_ENTRANCE_POS][0];
+		enY = storeData[i][E_ENTRANCE_POS][1];
+		enZ = storeData[i][E_ENTRANCE_POS][2];
+		exX = storeData[i][E_EXIT_POS][0];
+		exY = storeData[i][E_EXIT_POS][1];
+		exZ = storeData[i][E_EXIT_POS][2];
+		intID = storeData[i][E_INTERIOR_ID];
+		vwID = i;
         
-		entID = Entrance_Create(enX, enY, enZ, angle, exX, exY, exZ, angle, i, intID); // interior id
+		entID = Entrance_Create(enX, enY, enZ, angle, exX, exY, exZ, angle, vwID, intID); // interior id
 		
-        Entrance_SetIcon(entID, storeData[i][mapIcon]);
-        Entrance_SetName(entID, storeData[i][storeName]);
+        Entrance_SetIcon(entID, storeData[i][E_MAP_ICON]);
+        Entrance_SetName(entID, storeData[i][E_STORE_NAME]);
     }
 
 
