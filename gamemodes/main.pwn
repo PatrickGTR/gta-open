@@ -18,7 +18,11 @@
 #define YSI_NO_HEAP_MALLOC
 #define YSI_NO_CACHE_MESSAGE
 
-#define SERVER_NAME 			"GTA:DM v1.0.0"
+#define SERVER_NAME 			"Grand Thefte Open"
+#define SERVER_VERSION			"1.0.0"
+#define SERVER_MODE 			"Cops and Robbers"
+#define SERVER_LANGUAGE			"English"
+#define SERVER_WEBSITE			"www.sa-mp.com"
 
 #define TEXTLABEL_STREAMDISTANCE    (50)
 #define CHECKPOINT_STREAMDISTANCE   (50)
@@ -81,7 +85,11 @@ main() {
 
 public OnGameModeInit()
 {
-	SetGameModeText(SERVER_NAME);
+	SendRconCommand("hostname "SERVER_NAME" v"SERVER_VERSION"");
+	SendRconCommand("gamemodetext "SERVER_MODE"");
+	SendRconCommand("language "SERVER_LANGUAGE"");
+	SendRconCommand("weburl "SERVER_WEBSITE"");
+
 	SetWorldTime(23);
 	SetWeather(0);
 	DisableInteriorEnterExits();
@@ -152,7 +160,7 @@ public OnPlayerSpawn(playerid)
 {
 	new rand = random(sizeof(Spawns));
 	SetPlayerPos(playerid, Spawns[rand][0], Spawns[rand][1], Spawns[rand][2]);
-
+	SetPlayerWantedLevel(playerid, 100);
 	return 1;
 }
 
