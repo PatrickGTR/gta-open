@@ -82,7 +82,7 @@ hook OnPlayerConnect(playerid) {
         MySQL_BindResult(stmt_checkPlayer, 1, playerHash, sizeof(playerHash));
 
         if(MySQL_Statement_FetchRow(stmt_checkPlayer)) {
-            Account_SetID(playerid, playerUID);
+            Player_SetAccountID(playerid, playerUID);
 
             Account_PromptLogin(playerid, playerHash);
         } else {
@@ -113,10 +113,10 @@ stock Player_GetDeaths(playerid) {
     return Player_Deaths[playerid];
 }
 
-stock Account_SetID(playerid, value) {
+stock Player_SetAccountID(playerid, value) {
     return Player_UID[playerid] = value;
 }
 
-stock Account_GetID(playerid) {
+stock Player_GetAccountID(playerid) {
     return Player_UID[playerid];
 }

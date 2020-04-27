@@ -69,7 +69,7 @@ hook OnPlayerLogin(playerid)
         }
     }
 
-    MySQL_BindInt(stmt_selectVIP, 0, Account_GetID(playerid));
+    MySQL_BindInt(stmt_selectVIP, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_selectVIP, using inline OnPlayerVIPLoad);
 }
 
@@ -78,7 +78,7 @@ stock VIP_GivePlayer(playerid, level, interval_type, duration) {
 
 	interval = interval_type == 0 ? ("MONTH") : ("YEAR");
 
-    MySQL_BindInt(stmt_insertVIP, 0, Account_GetID(playerid));
+    MySQL_BindInt(stmt_insertVIP, 0, Player_GetAccountID(playerid));
     MySQL_BindInt(stmt_insertVIP, 1, level);
     MySQL_BindInt(stmt_insertVIP, 2, duration);
     MySQL_Bind(stmt_insertVIP, 3, interval);
@@ -88,7 +88,7 @@ stock VIP_GivePlayer(playerid, level, interval_type, duration) {
 }
 
 stock VIP_RemovePlayer(playerid) {
-    MySQL_BindInt(stmt_deleteVIP, 0, Account_GetID(playerid));
+    MySQL_BindInt(stmt_deleteVIP, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_deleteVIP);
 }
 

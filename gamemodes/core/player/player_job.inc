@@ -1,7 +1,8 @@
 #include <YSI_Coding\y_hooks>
 
 static 
-    PlayerJob[MAX_PLAYERS];
+    PlayerJob[MAX_PLAYERS],
+    Statement:stmt_savePlayerJob;
 
 static const JOB_LIST[] = "\
     Drug Dealer\n\
@@ -12,6 +13,11 @@ static const JOB_LIST[] = "\
 ;
 
 // Hook
+hook OnGameModeInit() {
+    stmt_savePlayerJob = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET job_id = ? WHERE u_id = ?");
+    return 1;
+}
+
 hook OnPlayerSpawn(playerid) {
     // Init
     PlayerJob[playerid] = TYPE_NO_JOB;
@@ -21,12 +27,15 @@ hook OnPlayerSpawn(playerid) {
         Player_ShowJobMenu(playerid);
         Player_RandomSpawn(playerid);
     }
+    return 1;
 }
 
 // Functions
 Player_SetJob(playerid, job_id, bool:save = false) {
     if(save) {
-        //mysql_tquery(GetSQLHandle(), sprintf("UPDATE "T_ACCOUNT" SET "F_JOB" = %i WHERE "F_ACCOUNTID" = %i", job_id, GetPlayerAccountID(playerid)));
+        MySQL_BindInt(stmt_savePlayerJob, 0, Player_GetJob(playerid));
+        MySQL_BindInt(stmt_savePlayerJob, 1, Player_GetAccountID(playerid));
+        MySQL_ExecuteThreaded(stmt_savePlayerJob);
     }
 
     PlayerJob[playerid] = job_id;
@@ -48,32 +57,35 @@ Player_ShowJobMenu(playerid) {
             return Player_ShowJobMenu(playerid);
         }
 
+        new jobID;
+
         switch(listitem) {
             case TYPE_DRUGDEALER:  {
                 MessageBox_Show(playerid, TYPE_INFORMATION, "Drug Dealer", "Your objective is to create drugs and sell them to earn profit!", 1000 * 10);
-                Player_SetJob(playerid, TYPE_DRUGDEALER, true);
+                jobID = TYPE_DRUGDEALER;
             }
             case TYPE_WEAPONDEALER: {
                 MessageBox_Show(playerid, TYPE_INFORMATION, "Weapon Dealer", "Your objective is to sell any kind of weapons and sell them to earn profit!", 1000 * 10);
-                Player_SetJob(playerid, TYPE_WEAPONDEALER, true);
+                jobID = TYPE_WEAPONDEALER;
             }
             case TYPE_HITMAN: {
                 MessageBox_Show(playerid, TYPE_INFORMATION, "Hitman", "Your objective is to kill players with contract and earn a big amount of money!", 1000 * 10);
-                Player_SetJob(playerid, TYPE_HITMAN, true);
+                jobID = TYPE_HITMAN;
             }
             case TYPE_TERRORIST: {
                 MessageBox_Show(playerid, TYPE_INFORMATION, "Terrorist", "Your objective is to plant bombs in cars, explode bank and prison entrances!", 1000 * 10);
-                Player_SetJob(playerid, TYPE_TERRORIST, true);
+                jobID = TYPE_TERRORIST;
             }
             case TYPE_RAPIST: {
                 MessageBox_Show(playerid, TYPE_INFORMATION, "Rapist", "Your objective is to infect players with different sexually transmitted disseases!", 1000 * 10);
-                Player_SetJob(playerid, TYPE_RAPIST, true);
+                jobID = TYPE_RAPIST;
             }
             case TYPE_MECHANIC: {
                 MessageBox_Show(playerid, TYPE_INFORMATION, "Mechanic", "Being mechanic allows you to repair your own vehicle and other player's vehicle!", 1000 * 10);
-                Player_SetJob(playerid, TYPE_MECHANIC, true);
+                jobID = TYPE_MECHANIC;
             }
         }
+        Player_SetJob(playerid, jobID, true);
         Player_GiveJobWeapons(playerid);
     }
     Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_LIST, "Job Menu", JOB_LIST , "Choose", "Cancel");

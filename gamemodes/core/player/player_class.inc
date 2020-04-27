@@ -50,10 +50,12 @@ hook OnGameModeInit() {
 
 hook OnPlayerConnect(playerid) {
     PlayerClass[playerid] = -1;
+	return 1;
 }
 
 stock Player_SetClass(playerid, classid) {
     PlayerClass[playerid] = classid;
+	return 1;
 }
 
 stock Player_GetClass(playerid) {

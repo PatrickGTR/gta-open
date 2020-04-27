@@ -11,8 +11,8 @@
 - ``Player_GetKills(playerid)``
 - ``Player_SetDeaths(playerid, value)``
 - ``Player_GetDeaths(playerid)``
-- ``Account_SetID(playerid, value) ``
-- ``Account_GetID(playerid)``
+- ``Player_SetAccountID(playerid, value) ``
+- ``Player_GetAccountID(playerid)``
   
 ## account_create.inc 
 #### hooked callback

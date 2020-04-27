@@ -12,7 +12,7 @@ static
 
 // Initialise
 hook OnMySQLConnected(playerid) {
-    stmt_loadPlayerData = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT kills, deaths FROM players WHERE u_id = ?");
+    stmt_loadPlayerData = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT kills, deaths, job_id, wanted_level FROM players WHERE u_id = ?");
 }
 
 hook OnPlayerConnect(playerid) {
@@ -56,15 +56,23 @@ Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
 static Account_LoadData(playerid) {
     inline OnDataLoad() {
         new 
-            kills, deaths;
+            kills, 
+            deaths,
+            jobID, 
+            wantedLevel;
         MySQL_BindResultInt(stmt_loadPlayerData, 0, kills);
         MySQL_BindResultInt(stmt_loadPlayerData, 1, deaths);
+        MySQL_BindResultInt(stmt_loadPlayerData, 2, jobID);
+        MySQL_BindResultInt(stmt_loadPlayerData, 3, wantedLevel);
+
 
 
         if(MySQL_Statement_FetchRow(stmt_loadPlayerData)) {
             
             Player_SetKills(playerid, kills);
             Player_SetDeaths(playerid, deaths);
+            Player_SetJob(playerid, jobID);
+            SetPlayerWantedLevel(playerid, wantedLevel);
 
     
             static const 
@@ -78,11 +86,11 @@ static Account_LoadData(playerid) {
 
             dbg("player", "player successfully logged in", 
                 _p("username", playerid), 
-                _i("uid", Account_GetID(playerid)));
+                _i("uid", Player_GetAccountID(playerid)));
         }
     }
 
-    MySQL_BindInt(stmt_loadPlayerData, 0, Account_GetID(playerid));
+    MySQL_BindInt(stmt_loadPlayerData, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteParallel_Inline(stmt_loadPlayerData, using inline OnDataLoad);
 }
 
@@ -106,7 +114,7 @@ static
 
             dbg("player", "player has been kicked for too many login attempts", 
                 _p("username", playerid), 
-                _i("uid", Account_GetID(playerid)) 
+                _i("uid", Player_GetAccountID(playerid)) 
             );
             return;
         }
@@ -114,7 +122,7 @@ static
         dbg("player", "player failed to login",
             _i("attemps", Player_Attempts[playerid]),
             _p("username", playerid),
-            _i("uid", Account_GetID(playerid))
+            _i("uid", Player_GetAccountID(playerid))
 		);
 
         Player_Attempts[playerid] ++;
