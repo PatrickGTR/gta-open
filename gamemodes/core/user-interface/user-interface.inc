@@ -3,3 +3,4 @@
 #include <ui_fpspingpacket>
 #include <ui_info-box>
 #include <ui_wanted-lvl>
+#include <ui_class-selection>

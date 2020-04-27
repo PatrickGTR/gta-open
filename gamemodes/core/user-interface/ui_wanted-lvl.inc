@@ -23,7 +23,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
     SetPlayerWantedLevel(playerid, 0);
 }
 
-UpdatedPlayerWantedLevelTD(playerid, level)
+static stock UpdatedPlayerWantedLevelTD(playerid, level)
 {
     if(level == 0)
     {

@@ -19,6 +19,6 @@ timer EndPlayerSpawnProtection[5000](playerid)
     return 1;
 }
 
-IsPlayerSpawnProtected(playerid) {
+stock Player_HasSpawnProtect(playerid) {
 	return Bit_Get(Player_SpawnProtection, playerid);
 }
