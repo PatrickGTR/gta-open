@@ -1,9 +1,5 @@
 #include <YSI_Coding\y_hooks>
 
-#if defined SETUP_TABLE
-    #include <admin_setup-table>
-#endif
-
 #include <admin_ban-cmd>
 
 // Create a new entry on the database.

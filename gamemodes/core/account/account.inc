@@ -4,8 +4,9 @@
 #include <account_vip>
 #include <account_wanted-level>
 
-#if defined SETUP_TABLE
-    #include <account_setup-table>
+#if SETUP_TABLE
+    #include <account_setup-players-table>
+    #include <account_setup-vip-table>
 #endif
 
 #include <YSI_Coding\y_hooks>

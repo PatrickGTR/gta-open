@@ -13,8 +13,8 @@ hook OnMySQLConnected()
             PRIMARY KEY (u_id), \
             UNIQUE KEY username (username)\
         )";
-	mysql_tquery(MySQL_GetHandle(), query);
+    mysql_tquery(MySQL_GetHandle(), query);
 
     log("setting up 'players' table...");
-	return 1;
+    return 1;
 }

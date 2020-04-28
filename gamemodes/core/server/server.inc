@@ -80,13 +80,6 @@ hook OnGameModeInit() {
         Entrance_SetIcon(entID, storeData[i][E_MAP_ICON]);
         Entrance_SetName(entID, storeData[i][E_STORE_NAME]);
     }
-
-
-	// Init Vehicles
-	LoadStaticVehiclesFromFile("vehicles/ls_airport.txt");
-	LoadStaticVehiclesFromFile("vehicles/ls_gen_inner.txt");
-	LoadStaticVehiclesFromFile("vehicles/ls_gen_outer.txt");
-	LoadStaticVehiclesFromFile("vehicles/ls_law.txt");
 }
 
 
