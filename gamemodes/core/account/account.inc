@@ -2,6 +2,7 @@
 #include <account_create>
 #include <account_login>
 #include <account_vip>
+#include <account_wanted-level>
 
 #if defined SETUP_TABLE
     #include <account_setup-table>

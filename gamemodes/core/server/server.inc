@@ -2,6 +2,7 @@
 
 #include <server_db-conf>
 #include <server_entrances>
+#include <server_wanted-level>
 
 enum E_ENTRANCE_DATA
 {

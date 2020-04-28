@@ -1,57 +1,44 @@
 #include <YSI_Coding\y_hooks>
 
 static
-    PlayerText: PlayerWantedLevel[MAX_PLAYERS];
+    PlayerText: ui_WantedLevel[MAX_PLAYERS],
+    bool: ui_WantedLevelShown[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid) {
-    PlayerWantedLevel[playerid] = CreatePlayerTextDraw   (playerid,600.000000, 109.000000, "7");
-    PlayerTextDrawAlignment                 (playerid, PlayerWantedLevel[playerid], 2);
-    PlayerTextDrawBackgroundColor           (playerid, PlayerWantedLevel[playerid], TD_OUTLINE_COLOUR);
-    PlayerTextDrawFont                      (playerid, PlayerWantedLevel[playerid], 1);
-    PlayerTextDrawLetterSize                (playerid, PlayerWantedLevel[playerid], 0.230000, 0.899999);
-    PlayerTextDrawColor                     (playerid, PlayerWantedLevel[playerid], -1872621313);
-    PlayerTextDrawSetOutline                (playerid, PlayerWantedLevel[playerid], 1);
-    PlayerTextDrawSetProportional           (playerid, PlayerWantedLevel[playerid], 1);
-    PlayerTextDrawSetSelectable             (playerid, PlayerWantedLevel[playerid], 0);
+    ui_WantedLevel[playerid] = CreatePlayerTextDraw(playerid,600.000000, 109.000000, "7");
+    PlayerTextDrawAlignment                 (playerid, ui_WantedLevel[playerid], 2);
+    PlayerTextDrawBackgroundColor           (playerid, ui_WantedLevel[playerid], TD_OUTLINE_COLOUR);
+    PlayerTextDrawFont                      (playerid, ui_WantedLevel[playerid], 1);
+    PlayerTextDrawLetterSize                (playerid, ui_WantedLevel[playerid], 0.230000, 0.899999);
+    PlayerTextDrawColor                     (playerid, ui_WantedLevel[playerid], -1872621313);
+    PlayerTextDrawSetOutline                (playerid, ui_WantedLevel[playerid], 1);
+    PlayerTextDrawSetProportional           (playerid, ui_WantedLevel[playerid], 1);
+    PlayerTextDrawSetSelectable             (playerid, ui_WantedLevel[playerid], 0);
+    return 1;
 }
 
 hook OnPlayerDisconnect(playerid, reason) {
-    PlayerTextDrawHide(playerid, PlayerWantedLevel[playerid]);
+    PlayerTextDrawHide(playerid, ui_WantedLevel[playerid]);
+    ui_WantedLevelShown[playerid] = false;
+    return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason) {
-    SetPlayerWantedLevel(playerid, 0);
-}
-
-static stock UpdatedPlayerWantedLevelTD(playerid, level)
+stock UI_UpdatePlayerWanted(playerid, level)
 {
-    if(level == 0)
-    {
-        PlayerTextDrawHide(playerid, PlayerWantedLevel[playerid]);
+    if(level == 0) {
+        PlayerTextDrawHide(playerid, ui_WantedLevel[playerid]);
+        ui_WantedLevelShown[playerid] = false;
+        return 0;
     }
-    else
-    {
-        PlayerTextDrawHide(playerid, PlayerWantedLevel[playerid]);
-        PlayerTextDrawShow(playerid, PlayerWantedLevel[playerid]);
+
+    if(!ui_WantedLevelShown[playerid]) {
+        PlayerTextDrawShow(playerid, ui_WantedLevel[playerid]);
+        ui_WantedLevelShown[playerid] = true;
     }
 
     new 
         string[5];
     format(string, sizeof(string), "%d", level);
-    PlayerTextDrawSetString(playerid, PlayerWantedLevel[playerid], string);
+    PlayerTextDrawSetString(playerid, ui_WantedLevel[playerid], string);
+    return 1;
 }
-
-stock ALS_SetPlayerWantedLevel(playerid, level)
-{
-    UpdatedPlayerWantedLevelTD(playerid, level);
-    // TOODO: save wanted level when function is called
-    //UpdatePlayerWantedLevelMySQL(playerid, level);
-    return SetPlayerWantedLevel(playerid, level);
-}
-#if defined _ALS_SetPlayerWantedLevel
-    #undef SetPlayerWantedLevel
-#else
-    #define _ALS_SetPlayerWantedLevel
-#endif
-
-#define SetPlayerWantedLevel ALS_SetPlayerWantedLevel

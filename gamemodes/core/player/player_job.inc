@@ -13,33 +13,38 @@ static const JOB_LIST[] = "\
 ;
 
 // Hook
-hook OnGameModeInit() {
+hook OnMySQLConnected() {
     stmt_savePlayerJob = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET job_id = ? WHERE u_id = ?");
     return 1;
 }
 
-hook OnPlayerSpawn(playerid) {
-    // Init
+hook OnPlayerConnect(playerid) {
     PlayerJob[playerid] = TYPE_NO_JOB;
+}
 
-    // Asign
+hook OnPlayerSpawn(playerid) {
     if(Player_GetClass(playerid) == TEAM_CIVILIAN) {
-        Player_ShowJobMenu(playerid);
+        if(Player_GetJob(playerid) == TYPE_NO_JOB) {
+            Player_ShowJobMenu(playerid);
+        }
         Player_RandomSpawn(playerid);
+        Player_GiveJobWeapons(playerid);
     }
     return 1;
 }
 
 // Functions
-Player_SetJob(playerid, job_id, bool:save = false) {
+Player_SetJob(playerid, jobid, bool:save = false) {
+
+
     if(save) {
-        MySQL_BindInt(stmt_savePlayerJob, 0, Player_GetJob(playerid));
+        MySQL_BindInt(stmt_savePlayerJob, 0, jobid);
         MySQL_BindInt(stmt_savePlayerJob, 1, Player_GetAccountID(playerid));
         MySQL_ExecuteThreaded(stmt_savePlayerJob);
     }
 
-    PlayerJob[playerid] = job_id;
-    return job_id;
+    PlayerJob[playerid] = jobid;
+    return 1;
 }
 
 Player_GetJob(playerid) {
@@ -50,14 +55,13 @@ Player_ShowJobMenu(playerid) {
     if (Player_GetJob(playerid) != TYPE_NO_JOB)
         return 0;
     
+    new jobID;
     inline _response(ply_id, dialogid, response, listitem, string:inputtext[]) {
         #pragma unused ply_id, dialogid, inputtext
         if (!response) {
             SendErrorMsg(playerid, "You have to select a job!");
             return Player_ShowJobMenu(playerid);
         }
-
-        new jobID;
 
         switch(listitem) {
             case TYPE_DRUGDEALER:  {
