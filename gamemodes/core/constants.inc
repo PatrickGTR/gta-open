@@ -16,9 +16,11 @@
 #define SERVER_LANGUAGE			"English"
 #define SERVER_WEBSITE			"www.sa-mp.com"
 
-#define TEXTLABEL_STREAMDISTANCE    (50)
-#define CHECKPOINT_STREAMDISTANCE   (50)
-#define MAPICON_STREAMDISTANCE      (300)
+#define NEXT_PAGE (25)
+
+#define TEXTLABEL_STREAMDISTANCE    (100)
+#define CHECKPOINT_STREAMDISTANCE   (100)
+#define MAPICON_STREAMDISTANCE      (500)
 
 // (dd, mm, yyyy)
 #define SQL_DATETIME_FORMAT     "%d %M %Y at %r"

@@ -37,6 +37,7 @@
 				"gamemodes/core/server",
 				"gamemodes/core/account",
 				"gamemodes/core/player",
+				"gamemodes/core/player/attachment",
 				"gamemodes/core/admin"
 			],
 			"constants": {

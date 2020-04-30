@@ -1,6 +1,5 @@
 #include <YSI_Coding\y_hooks>
 
-#include <server_db-conf>
 #include <server_entrances>
 #include <server_wanted-level>
 

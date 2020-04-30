@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 hook OnMySQLConnected() {
-    static query[] = "\
+    static const query[] = "\
     CREATE TABLE IF NOT EXISTS bans \
     (\
         username VARCHAR(24), \
@@ -15,4 +15,5 @@ hook OnMySQLConnected() {
     )";
     mysql_tquery(MySQL_GetHandle(), query);
     log("setting up 'bans' table...");
+    return 1;
 }

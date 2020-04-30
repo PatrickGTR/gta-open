@@ -13,11 +13,13 @@ stock LOGGER_FIELD:_p(const field[], playerid) {
     return LOGGER_FIELD:result;
 }
 
-stock IsNumeric(const string[]) //your format is is i maked that Is so now try
+stock IsNumeric(const string[])
 {
-    for (new i = 0, j = strlen(string); i < j; i++)
-    {
-        if (string[i] > '9' || string[i] < '0') return 0;
+    new
+        ch, i;
+    while ((ch = string[i++])) if (!('0' <= ch <= '9')) {
+        return 0;
     }
     return 1;
 }
+

@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-hook OnMYSQLConnected() {
+hook OnMySQLConnected() {
     static const query[] = "\
     CREATE TABLE IF NOT EXISTS admins \
     ( \

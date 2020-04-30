@@ -7,8 +7,9 @@
 
 #include <a_samp>
 
+#define MYSQL_PREPARE_DEBUG 	(true)
 
-#define MYSQL_PREPARE_DEBUG 	(false)
+// Set to true if table aren't set up.
 #define SETUP_TABLE 			(false)
 
 #include <constants>
@@ -41,5 +42,13 @@ public OnGameModeInit() {
 	LoadStaticVehiclesFromFile("vehicles/ls_gen_inner.txt");
 	LoadStaticVehiclesFromFile("vehicles/ls_gen_outer.txt");
 	LoadStaticVehiclesFromFile("vehicles/ls_law.txt");
+	return 1;
+}
+
+CMD:gmoney(playerid, params[]) {
+
+	new money = strval(params);
+
+	GivePlayerMoney(playerid, money);
 	return 1;
 }

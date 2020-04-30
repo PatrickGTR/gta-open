@@ -1,8 +1,8 @@
 #include <YSI_Coding\y_hooks>
 
-#if defined SETUP_TABLE
-    #include <admin_setup-admins-table>
+#if SETUP_TABLE
     #include <admin_setup-bans-table>
+    #include <admin_setup-admins-table>
 #endif
 
 #include <admin_account>
