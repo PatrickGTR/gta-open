@@ -1,6 +1,6 @@
-# gta-dm
+# GTA Open
+## Cops and robbers mode based in Los Santos.
 
-[![sampctl](https://img.shields.io/badge/sampctl-gta--dm-2f2f2f.svg?style=for-the-badge)](https://github.com/Patrick/gta-dm)
 
 Run this gamemode in two line!
 ```bash
