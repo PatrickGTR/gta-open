@@ -42,10 +42,18 @@ static
 hook OnMySQLConnected() {
     static const query_LoadAttachments[] = "\
         SELECT \
-            slot, model, bone, \
-            offset_x, offset_y, offset_z, \
-            rotation_x, rotation_y, rotation_z, \
-            scale_x, scale_y, scale_z \
+            slot, \
+			model, \
+			bone, \
+            offset_x, \
+			offset_y, \
+			offset_z, \
+            rotation_x,\
+			rotation_y, \
+			rotation_z, \
+            scale_x, \
+			scale_y, \
+			scale_z \
         FROM \
             attachments \
         WHERE \
