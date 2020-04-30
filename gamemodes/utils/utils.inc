@@ -4,6 +4,7 @@
 #include <utils_vehicles>
 #include <utils_player>
 
+#include <YSI_Core\y_utils>
 
 #include <logger>
 //extras
@@ -13,13 +14,4 @@ stock LOGGER_FIELD:_p(const field[], playerid) {
     return LOGGER_FIELD:result;
 }
 
-stock IsNumeric(const string[])
-{
-    new
-        ch, i;
-    while ((ch = string[i++])) if (!('0' <= ch <= '9')) {
-        return 0;
-    }
-    return 1;
-}
 

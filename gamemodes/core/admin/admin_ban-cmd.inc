@@ -1,6 +1,6 @@
 ACMD:[3]ban(playerid, params[])
 {
-    if (isnull(params) || IsNumeric(params))  {
+    if (isnull(params) || isnumeric(params))  {
         SendClientMessage(playerid, COLOR_YELLOW, "/ban day | month | year");
         return 1;
     }

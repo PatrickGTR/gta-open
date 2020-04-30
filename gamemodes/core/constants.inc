@@ -3,8 +3,6 @@
 #define BCRYPT_COST 12
 #define MAX_BAN_REASON (32)
 
-#define strcpy(%0,%1) strcat((%0[0] = '\0', %0), %1)
-
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_VERSION_CHECK
 #define YSI_NO_HEAP_MALLOC
