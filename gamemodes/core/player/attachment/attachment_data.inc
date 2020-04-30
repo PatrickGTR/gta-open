@@ -139,7 +139,7 @@ static const gModelInfo[][E_MODEL] =
 
 // returns the model id of the model by given index.
 stock Attachment_GetModelID(index) {
-    if(index > sizeof(gModelInfo)) {
+    if(IS_IN_RANGE(index, 0, sizeof(gModelInfo))) {
         return -1;
     }
     return gModelInfo[index][E_MODEL_ID];
@@ -147,7 +147,7 @@ stock Attachment_GetModelID(index) {
 
 // returns the bone id of the model by given index.
 stock Attachment_GetModelBoneID(index) {
-    if(index > sizeof(gModelInfo)) {
+    if(IS_IN_RANGE(index, 0, sizeof(gModelInfo))) {
         return -1;
     }
     return gModelInfo[index][E_MODEL_BONEID];
@@ -155,7 +155,7 @@ stock Attachment_GetModelBoneID(index) {
 
 // returns the price of the model by given index.
 stock Attachment_GetModelPrice(index) {
-    if(index > sizeof(gModelInfo)) {
+    if(IS_IN_RANGE(index, 0, sizeof(gModelInfo))) {
         return -1;
     }
     return gModelInfo[index][E_MODEL_PRICE];
