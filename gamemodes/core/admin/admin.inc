@@ -12,6 +12,9 @@
 
 #include <admin_cmd_lvl4>
 
+#include <admin_cmd_lvl5>
+
+#include <rcon_cmd>
 
 hook OnGameModeInit() {
 
@@ -21,4 +24,6 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(3, "/unban");
 
     Admin_AddCommandToList(4, "/setvip");
+
+    Admin_AddCommandToList(5, "/setadmin");
 }

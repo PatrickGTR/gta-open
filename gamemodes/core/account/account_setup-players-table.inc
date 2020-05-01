@@ -10,7 +10,7 @@ hook OnMySQLConnected()
             password char(250) NOT NULL,\
             kills mediumint(8) NOT NULL DEFAULT '0',\
             deaths mediumint(8) NOT NULL DEFAULT '0',\
-            jobID tinyint(4) NOT NULL,\
+            job_id tinyint(4) NOT NULL,\
             wantedLevel mediumint(6) NOT NULL,\
             PRIMARY KEY (u_id), \
             UNIQUE KEY username (username)\
