@@ -1,5 +1,3 @@
-#include <colors>
-
 ACMD:[5]setadmin(playerid, params[])
 {
     new target, level;
