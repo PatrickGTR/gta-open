@@ -1,26 +1,20 @@
-#include <colors>
-
 CMD:rconsetadmin(playerid, params[])
 {
     if(IsPlayerAdmin(playerid))
     {
-        new target, level, string[128];
-        new pname[MAX_PLAYER_NAME];
-        GetPlayerName(playerid, pname, sizeof(pname));
-        if(sscanf(params, "ui", target, level)) return SendClientMessage(playerid, COLOR_ERROR, "USAGE: /setadmin [player] [level]");
-        if(target == INVALID_PLAYER_ID) return SendClientMessage(playerid, COLOR_ERROR, "ERROR: INVALID PLAYER!");
+        new target, level;
+        if(sscanf(params, "ui", target, level)) return SendSyntaxMsg(playerid, "/setadmin [player] [level]");
+        if(target == INVALID_PLAYER_ID) return SendErrorMsg(playerid, "INVALID PLAYER!");
         if(level < 0 || level > MAX_ADMIN_LEVELS)
         {
-            format(string, sizeof(string), "Max admin level is %d", MAX_ADMIN_LEVELS);
-            SendClientMessage(playerid, COLOR_ERROR, string);
+            SendErrorMsgF(playerid, "Max admin level is %d", MAX_ADMIN_LEVELS);
         }
         Admin_SetPlayerLevel(playerid, level);
         for(new i = 0; i < MAX_PLAYERS; i++)
         {
             if(Admin_GetPlayerLevel(i) > 1)
             {
-                format(string, sizeof(string), "%s (%d) has been promoted to %s", pname, target, Admin_GetRankName(target));
-                SendClientMessage(playerid, COLOR_MODERATION, string);
+                SendServerMsgF(playerid, "%p (%d) has been promoted to %s", target, target, Admin_GetRankName(target));
             }
         }
     }
