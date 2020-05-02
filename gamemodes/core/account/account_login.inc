@@ -59,11 +59,13 @@ static Account_LoadData(playerid) {
             kills, 
             deaths,
             jobID, 
-            wantedLevel;
+            wantedLevel,
+            playerBounty;
         MySQL_BindResultInt(stmt_loadPlayerData, 0, kills);
         MySQL_BindResultInt(stmt_loadPlayerData, 1, deaths);
         MySQL_BindResultInt(stmt_loadPlayerData, 2, jobID);
         MySQL_BindResultInt(stmt_loadPlayerData, 3, wantedLevel);
+        MySQL_BindResultInt(stmt_loadPlayerData, 4, playerBounty);
 
 
 
