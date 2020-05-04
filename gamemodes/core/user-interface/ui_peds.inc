@@ -3,16 +3,16 @@
 
 #define MAX_PED_NAME              (60)
 
-enum ACTORS_DATA
+enum E_ACTORS_DATA
 {
-    Skin,
-    UniqueVM,
-    Name[MAX_PED_NAME],
+    E_ACTOR_DATA_SKIN,
+    E_ACTOR_DATA_UNIQUEVM,
+    E_ACTOR_DATA_NAME[MAX_PED_NAME],
     Float:ACTOR_POS[4],
 }
 
 static
-    const DATA[][ACTORS_DATA] = 
+    const DATA[][E_ACTORS_DATA] = 
 {
     {81, 0, "[GYM]", {757.9487,5.4251,1000.7023,268.0144}},
     {11, 1, "[TEN GREEN BOTTLES]", {497.0593,-77.5612,998.7651,358.8423}},
@@ -57,8 +57,8 @@ hook OnGameModeInit() {
 		pedY = DATA[i][ACTOR_POS][1];
 		pedZ = DATA[i][ACTOR_POS][2];
         pedAng = DATA[i][ACTOR_POS][3];
-        pedSkin = DATA[i][Skin];
-        pedVM = DATA[i][UniqueVM];
+        pedSkin = DATA[i][E_ACTOR_DATA_SKIN];
+        pedVM = DATA[i][E_ACTOR_DATA_UNIQUEVM];
 
         Robbery_CreateActor(pedSkin, pedX, pedY, pedZ, pedAng, pedVM, 500, 3000);
     }
