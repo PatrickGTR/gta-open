@@ -23,6 +23,7 @@
 #include <player>
 #include <admin> 
 #include <chat> // chat & messaging
+#include <burglary_system>
 
 // Will be called after the rest ^
 public OnGameModeInit() {
