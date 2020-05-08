@@ -16,7 +16,7 @@ enum RHIDEOUTS {
 
 stock const RandomHideouts[][RHIDEOUTS] =
 {
-    {70.7297, -1577.4290, 2.6172, 2.0}
+    { -68.8063, -1576.7695, 2.6172, 3.0}
 };
 
 stock SetRandomHideout(playerid) {
