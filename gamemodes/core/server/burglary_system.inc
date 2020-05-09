@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 
-new bankcp, casinocp;
+new bankcp, casinocp, manscp;
 
 new robbing[MAX_PLAYERS];
 new robbingdone[MAX_PLAYERS];
@@ -9,6 +9,7 @@ new BurglaryInfo[MAX_PLAYERS];
 
 new bankrecent, bankreset;
 new casinorecent, casinoreset;
+new mansrecent, mansreset;
 
 enum RHIDEOUTS {
     Float:rhX,
@@ -56,6 +57,18 @@ hook OnPlayerUpdate(playerid)
             casinoreset = SetTimer("CasinoCooldown", 300000, false);
         }
     }
+    if(robbing[playerid] == 1 && BurglaryInfo[playerid] == 3)
+    {
+        if(!IsPlayerInRangeOfPoint(playerid, 7.0, 1230.8403, -807.2298, 1084.0078))
+        {
+            if(robbingdone[playerid] == 1) return 0;
+            SendServerMsg(playerid, "You've left the checkpoint robbery cancelled!");
+            robbing[playerid] = 0;
+            BurglaryInfo[playerid] = 0;
+            robbingdone[playerid] = 0;
+            mansreset = SetTimer("MansCooldown", 300000, false);
+        }
+    }
     else return 0;
     return 1;
 }
@@ -68,6 +81,8 @@ hook OnGameModeInit()
     //casino
     CreateDynamicObject(2332, 1141.6999511719, 12.10000038147, 1000.0999755859, 0.0, 0.0, 0.0, 31);
     casinocp = CreateDynamicCP(1141.6899, 11.1338, 1000.6797, 1.0, 31, 12, .streamdistance = CHECKPOINT_STREAMDISTANCE);
+    //mansion
+    manscp = CreateDynamicCP(1230.8403, -807.2298, 1084.0078, 1.0, 32, 5, .streamdistance = CHECKPOINT_STREAMDISTANCE);
 }
 
 hook OnPlayerEnterDynamicCP(playerid, checkpointid) 
@@ -77,6 +92,9 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
     }
     if(checkpointid == casinocp) {
         SendServerMsg(playerid, "Use /robbery to rob the casino!");
+    }
+    if(checkpointid == manscp) {
+        SendServerMsg(playerid, "Use /robbery to rob the mansion!");
     }
     return 1;
 }
@@ -113,6 +131,19 @@ hook OnPlayerEnterRaceCP(playerid)
             robbingdone[playerid] = 0;
             casinoreset = SetTimer("CasinoCooldown", 300000, false);
         }
+        if(BurglaryInfo[playerid] == 3) //mansion
+        {
+            new bmrand = random(200000);
+            GivePlayerMoney(playerid, bmrand);
+            for(new i = 0; i < MAX_PLAYERS; i++)
+            {
+                SendServerMsgF(i, "%p (%d) has robbed %d from XomoX's mansion!", playerid, playerid, bmrand);
+            }
+            robbing[playerid] = 0;
+            BurglaryInfo[playerid] = 0;
+            robbingdone[playerid] = 0;
+            mansreset = SetTimer("MansCooldown", 300000, false);
+        }
     }
     else return 0;
     return 1;
@@ -135,6 +166,14 @@ CMD:robbery(playerid) {
         SendServerMsg(playerid, "Robbing the casino stay in the red marker!");
         SetTimerEx("SetHideoutTimer", 20000, false, "i", playerid);
     }
+    else if(IsPlayerInRangeOfPoint(playerid, 7.0, 1230.8403, -807.2298, 1084.0078)) {
+        if(mansrecent == 1) return SendServerMsg(playerid, "The Mansion is recently robbed!");
+        robbing[playerid] = 1;
+        BurglaryInfo[playerid] = 3;
+        mansrecent = 1;
+        SendServerMsg(playerid, "Robbing the mansion stay in the red marker!");
+        SetTimerEx("SetHideoutTimer", 20000, false, "i", playerid);
+    }
     else return SendServerMsg(playerid, "You're not near a robbery checkpoint!");
     return 1;
 }
@@ -144,6 +183,7 @@ public SetHideoutTimer(playerid)
 {
     SetPlayerWantedLevel(playerid, GetPlayerWantedLevel(playerid) + 6);
     Player_SaveWantedLevel(playerid, GetPlayerWantedLevel(playerid));
+    robbingdone[playerid] = 1;
     SetRandomHideout(playerid);
     SendServerMsg(playerid, "Go to the hideout and evede the cops!");
     return 1;
@@ -166,8 +206,21 @@ public CasinoCooldown()
 {
     for(new i = 0; i < MAX_PLAYERS; i++)
     {
-        SendServerMsg(i, "CasinoCooledDown!");
+        SendServerMsg(i, "Casino CooledDown!");
     }
     casinorecent = 0;
     KillTimer(casinoreset);
+    return 1;
+}
+
+forward MansCooldown();
+public MansCooldown()
+{
+    for(new i = 0; i < MAX_PLAYERS; i++)
+    {
+        SendServerMsg(i, "Mansion CooledDown!");
+    }
+    mansrecent = 1;
+    KillTimer(mansreset);
+    return 1;
 }
