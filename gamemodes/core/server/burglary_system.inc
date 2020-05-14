@@ -20,7 +20,10 @@ enum RHIDEOUTS {
 
 stock const RandomHideouts[][RHIDEOUTS] =
 {
-    { -68.8063, -1576.7695, 2.6172, 3.0}
+    { -68.8063, -1576.7695, 2.6172, 3.0},
+    { -1644.6675, -2253.2825, 31.7160, 3.0},
+    { -52.6506, -1147.7380, 1.0781, 3.0},
+    { -42.4774, -222.8400, 5.4297, 3.0}
 };
 
 stock SetRandomHideout(playerid) {
@@ -88,12 +91,15 @@ hook OnGameModeInit()
 hook OnPlayerEnterDynamicCP(playerid, checkpointid) 
 {
     if(checkpointid == bankcp) {
+        if(robbing[playerid] == 1) return 0;
         SendServerMsg(playerid, "Use /robbery to rob the bank!");
     }
     if(checkpointid == casinocp) {
+        if(robbing[playerid] == 1) return 0;
         SendServerMsg(playerid, "Use /robbery to rob the casino!");
     }
     if(checkpointid == manscp) {
+        if(robbing[playerid] == 1) return 0;
         SendServerMsg(playerid, "Use /robbery to rob the mansion!");
     }
     return 1;
@@ -139,6 +145,7 @@ hook OnPlayerEnterRaceCP(playerid)
             {
                 SendServerMsgF(i, "%p (%d) has robbed %d from XomoX's mansion!", playerid, playerid, bmrand);
             }
+            DisablePlayerRaceCheckpoint(playerid);
             robbing[playerid] = 0;
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
