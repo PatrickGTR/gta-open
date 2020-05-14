@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-
+new burglarytimer[MAX_PLAYERS];
 new bankcp, casinocp, manscp;
 
 new robbing[MAX_PLAYERS];
@@ -44,7 +44,8 @@ hook OnPlayerUpdate(playerid)
             SendServerMsg(playerid, "You've left the checkpoint robbery cancelled!");
             robbing[playerid] = 0;
             BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0; 
+            robbingdone[playerid] = 0;
+            KillTimer(burglarytimer[playerid]); 
             bankreset = SetTimer("BankCooldown", 300000, false);
         }
     }
@@ -57,6 +58,7 @@ hook OnPlayerUpdate(playerid)
             robbing[playerid] = 0;
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
+            KillTimer(burglarytimer[playerid]); 
             casinoreset = SetTimer("CasinoCooldown", 300000, false);
         }
     }
@@ -69,6 +71,7 @@ hook OnPlayerUpdate(playerid)
             robbing[playerid] = 0;
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
+            KillTimer(burglarytimer[playerid]); 
             mansreset = SetTimer("MansCooldown", 300000, false);
         }
     }
@@ -159,29 +162,39 @@ hook OnPlayerEnterRaceCP(playerid)
 CMD:robbery(playerid) {
     if(IsPlayerInRangeOfPoint(playerid, 7.0, 2306.5659, -5.1260, 26.7422)) {
         if(bankrecent == 1) return SendServerMsg(playerid, "The bank is recently robbed!");
+        if(Player_GetClass(playerid) != TEAM_CIVILIAN) return SendServerMsg(playerid, "Only Civilians can rob the Bank!");
         robbing[playerid] = 1;
         BurglaryInfo[playerid] = 1;
         bankrecent = 1;
         SendServerMsg(playerid, "Robbing the bank stay in the red marker!");
-        SetTimerEx("SetHideoutTimer", 20000, false, "i", playerid);
+        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 0);
+        burglarytimer[playerid] = SetTimerEx("SetHideoutTimer", 20000, false, "i", playerid);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 7.0, 1141.6899, 11.1338, 1000.6797)) {
         if(casinorecent == 1) return SendServerMsg(playerid, "The Casino is recently robbed!");
+        if(Player_GetClass(playerid) != TEAM_CIVILIAN) return SendServerMsg(playerid, "Only Civilians can rob the Casino!");
         robbing[playerid] = 1;
         BurglaryInfo[playerid] = 2;
         casinorecent = 1;
         SendServerMsg(playerid, "Robbing the casino stay in the red marker!");
-        SetTimerEx("SetHideoutTimer", 20000, false, "i", playerid);
+        burglarytimer[playerid] = SetTimerEx("SetHideoutTimer", 20000, false, "i", playerid);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 7.0, 1230.8403, -807.2298, 1084.0078)) {
         if(mansrecent == 1) return SendServerMsg(playerid, "The Mansion is recently robbed!");
+        if(Player_GetClass(playerid) != TEAM_CIVILIAN) return SendServerMsg(playerid, "Only Civilians can rob the Mansion!");
         robbing[playerid] = 1;
         BurglaryInfo[playerid] = 3;
         mansrecent = 1;
         SendServerMsg(playerid, "Robbing the mansion stay in the red marker!");
-        SetTimerEx("SetHideoutTimer", 20000, false, "i", playerid);
+        burglarytimer[playerid] = SetTimerEx("SetHideoutTimer", 20000, false, "i", playerid);
     }
     else return SendServerMsg(playerid, "You're not near a robbery checkpoint!");
+    return 1;
+}
+
+CMD:bank(playerid) {
+    SetPlayerPos(playerid, 2306.5659, -5.1260, 26.7422);
+    SetPlayerVirtualWorld(playerid, 30);
     return 1;
 }
 
@@ -190,6 +203,7 @@ public SetHideoutTimer(playerid)
 {
     SetPlayerWantedLevel(playerid, GetPlayerWantedLevel(playerid) + 6);
     Player_SaveWantedLevel(playerid, GetPlayerWantedLevel(playerid));
+    ClearAnimations(playerid, 1);
     robbingdone[playerid] = 1;
     SetRandomHideout(playerid);
     SendServerMsg(playerid, "Go to the hideout and evede the cops!");
