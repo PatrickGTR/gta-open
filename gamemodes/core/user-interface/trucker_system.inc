@@ -2,16 +2,22 @@
 
 #define MAX_DELIVERY_NAME       (30)
 
-new IsPlayerTrucking[MAX_PLAYERS];
-new TruckingCooldown[MAX_PLAYERS];
-new PlayerCanTruck[MAX_PLAYERS];
-new IsPlayerGettingGoods[MAX_PLAYERS];
-new IsPlayerDeliveringGoods[MAX_PLAYERS];
+new 
+    IsPlayerTrucking[MAX_PLAYERS];
+new 
+    TruckingCooldown[MAX_PLAYERS];
+new 
+    PlayerCanTruck[MAX_PLAYERS];
+new 
+    IsPlayerGettingGoods[MAX_PLAYERS];
+new 
+    IsPlayerDeliveringGoods[MAX_PLAYERS];
 
 enum Delivery_Datas
 {
     STORE_DELIVERY_NAME[MAX_DELIVERY_NAME],
     Float:DCP[4],
+
 }
 
 static
@@ -36,6 +42,7 @@ stock StartPickup(playerid) {
     if(TruckingCooldown[playerid] == 1) return SendServerMsg(playerid, "Please wait before starting a trucking mission again!");
     IsPlayerTrucking[playerid] = 1;
     IsPlayerGettingGoods[playerid] = 1;
+    SendServerMsg(playerid, "You're trucking now please pick up goods!");
     DisablePlayerRaceCheckpoint(playerid);
     SetPlayerRaceCheckpoint(playerid, 1, 2174.6182, -2266.6165, 13.3797, 2174.6182, -2266.6165, 13.3797, 3.0);
     return 1;
@@ -47,15 +54,16 @@ stock StartWork(playerid) {
     new randloc = random(sizeof(DeliverData));
     new
         Float:TruckerCp[4],
-        Store_Name;
+        storeName[MAX_DELIVERY_NAME];
     TruckerCp[0] = DeliverData[randloc][DCP][0];
     TruckerCp[1] = DeliverData[randloc][DCP][1];
     TruckerCp[2] = DeliverData[randloc][DCP][2];
-    Store_Name = DeliverData[randloc][STORE_DELIVERY_NAME];
+    strcpy(storeName, DeliverData[randloc][STORE_DELIVERY_NAME], sizeof(storeName));
     DisablePlayerRaceCheckpoint(playerid);
     SetPlayerRaceCheckpoint(playerid, 1, TruckerCp[0], TruckerCp[1], TruckerCp[2], TruckerCp[0], TruckerCp[1], TruckerCp[2], 3.0);
-    SendServerMsgF(playerid, "Go to %s and deliver goods", Store_Name);
+    SendServerMsgF(playerid, "Go to %s and deliver goods", storeName);
     SendServerMsg(playerid, "On Duty!, Don't exit the vehicle!");
+    printf("%s", storeName);
     return 1;
 }
 
