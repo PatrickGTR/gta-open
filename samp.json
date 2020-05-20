@@ -2,6 +2,9 @@
 	"gamemodes": [
 		"main"
 	],
+	"filterscripts": [
+		"ls_elevator"
+	],
 	"plugins": [
 		"crashdetect",
 		"mysql",

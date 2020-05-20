@@ -164,6 +164,20 @@ hook OnPlayerEnterRaceCP(playerid)
             robbingdone[playerid] = 0;
             defer MansCooldown();
         }
+        if(BurglaryInfo[playerid] == 4)
+        {
+            new bmrand = random(100000);
+            GivePlayerMoney(playerid, bmrand);
+            for(new i = 0; i < MAX_PLAYERS; i++)
+            {
+                SendServerMsgF(i, "%p (%d) has robbed %d from the tower!", playerid, playerid, bmrand);
+            }
+            DisablePlayerRaceCheckpoint(playerid);
+            robbing[playerid] = 0;
+            BurglaryInfo[playerid] = 0;
+            robbingdone[playerid] = 0;
+            defer TowerCooldown();
+        }
     }
     else return 0;
     return 1;
@@ -262,6 +276,6 @@ timer MansCooldown[RobberyCD]()
     {
         SendServerMsg(i, "Mansion CooledDown!");
     }
-    mansrecent = 1;
+    mansrecent = 0;
     return 1;
 }
