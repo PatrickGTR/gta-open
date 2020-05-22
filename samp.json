@@ -1,0 +1,19 @@
+{
+	"gamemodes": [
+		"main"
+	],
+	"filterscripts": [
+		"ls_elevator"
+	],
+	"plugins": [
+		"crashdetect",
+		"mysql",
+		"samp_bcrypt",
+		"sscanf",
+		"streamer"
+	],
+	"rcon_password": "password",
+	"port": 7777,
+	"hostname": "SAMP",
+	"maxplayers": 32
+}

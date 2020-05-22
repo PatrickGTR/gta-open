@@ -38,7 +38,9 @@
 				"gamemodes/core/account",
 				"gamemodes/core/player",
 				"gamemodes/core/player/attachment",
-				"gamemodes/core/admin"
+				"gamemodes/core/admin",
+				"gamemodes/core/systems",
+				"gamemodes/core/commands"
 			],
 			"constants": {
 				"DEV_BUILD": "1"
