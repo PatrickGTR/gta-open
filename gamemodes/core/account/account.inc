@@ -3,10 +3,12 @@
 #include <account_login>
 #include <account_vip>
 #include <account_wanted-level>
+#include <inventory>
 
 #if SETUP_TABLE
     #include <account_setup-players-table>
     #include <account_setup-vip-table>
+    #include <account_setup-inventory>
 #endif
 
 #include <YSI_Coding\y_hooks>

@@ -10,7 +10,7 @@
 #define MYSQL_PREPARE_DEBUG 	(true)
 
 // Set to true if table aren't set up.
-#define SETUP_TABLE 			(false)
+#define SETUP_TABLE 			(false)	
 
 #include <constants>
 #include <init>
@@ -24,6 +24,7 @@
 #include <admin> 
 #include <system>
 #include <chat> // chat & messaging
+#include <cmds>
 
 // Will be called after the rest ^
 public OnGameModeInit() {
