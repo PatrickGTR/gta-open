@@ -86,7 +86,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
  	{
  	    if(MenuID[playerid] != -1)
  	    {
-	  		if(newkeys == KEY_FIRE)
+	  		if(newkeys == KEY_NO)
 	    	{
 				MenuID[playerid] = -1;
 				pHasItems[playerid] = 0;
@@ -118,12 +118,12 @@ stock TextMenuShowForPlayer(playerid,menuid,const header[],content[],items=0)
     if(items != 0)
     {
         pHasItems[playerid] = items;
-    	format(J_Menustring, sizeof(J_Menustring), "~n~~n~~n~%s~n~~n~~w~___________Press_~y~T_~w~Or_~y~F6~w~_and_type_option_number~n~_________________Press_~y~LMB_~w~to_close_this_box~n~~n~", content);
+    	format(J_Menustring, sizeof(J_Menustring), "~n~~n~~n~%s~n~~n~~w~___________Press_~y~T_~w~Or_~y~F6~w~_and_type_option_number~n~_________________Press_~y~N_~w~to_close_this_box~n~~n~", content);
 	}
 	else
 	{
 	    pHasItems[playerid] = 0;
-        format(J_Menustring, sizeof(J_Menustring), "~n~~n~~n~%s~n~~n~~w~_________________Press_~y~LMB_~w~to_close_this_box~n~~n~", content);
+        format(J_Menustring, sizeof(J_Menustring), "~n~~n~~n~%s~n~~n~~w~_________________Press_~y~N_~w~to_close_this_box~n~~n~", content);
 	}
 	PlayerTextDrawSetString(playerid, J_TMenu[playerid][1], J_Menustring);
 	PlayerTextDrawShow(playerid,J_TMenu[playerid][0]);

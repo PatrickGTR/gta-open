@@ -24,8 +24,6 @@
 #define MAX_MONEY_ROB       10000
 #define ROBBERY_WAIT_TIME   (5)
 
-
-
 enum E_ACTOR_ROBBERY_DATA
 {
 	actor_skin,
@@ -47,7 +45,6 @@ static
 forward RunActorAnimationSequence(playerid, actorid, animation_pattern);
 forward OnPlayerStartRobbery(playerid, actorid, robbed_recently);
 forward OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type);
-
 
 /*
 	Function:
