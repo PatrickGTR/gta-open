@@ -29,7 +29,7 @@ hook OnPlayerLogin(playerid)
         MySQL_BindResultInt(stmt_retrieveIfix, 0, instafix);
 
         if(MySQL_Statement_FetchRow(stmt_retrieveIfix)) {
-            GiveInstaFix(playerid, instafix);
+            SetInstaFix(playerid, instafix);
         }
     }
     MySQL_BindInt(stmt_retrieveIfix, 0, Player_GetAccountID(playerid));

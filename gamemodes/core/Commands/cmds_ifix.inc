@@ -13,3 +13,7 @@ CMD:instafix(playerid) {
     SetInstaFix(playerid, 0);
     return 1;
 }
+
+CMD:ifix(playerid) {
+    return cmd_instafix(playerid);
+}

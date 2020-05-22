@@ -137,6 +137,17 @@ stock TextMenuHideForPlayer(playerid)
 	PlayerTextDrawHide(playerid,J_TMenu[playerid][1]);
 }
 
+stock TextMenuHide(playerid, menuid)
+{
+	if(MenuID[playerid] == menuid)
+	{
+		MenuID[playerid] = -1;
+		pHasItems[playerid] = 0;
+		PlayerTextDrawHide(playerid,J_TMenu[playerid][0]);
+		PlayerTextDrawHide(playerid,J_TMenu[playerid][1]);
+	}
+}
+
 #if defined _ALS_OnPlayerConnect
 	#undef OnPlayerConnect
 #else

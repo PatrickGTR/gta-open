@@ -40,7 +40,7 @@
 				"gamemodes/core/player/attachment",
 				"gamemodes/core/admin",
 				"gamemodes/core/systems",
-				"gamemodes/core/cmds"
+				"gamemodes/core/Commands"
 			],
 			"constants": {
 				"DEV_BUILD": "1"
