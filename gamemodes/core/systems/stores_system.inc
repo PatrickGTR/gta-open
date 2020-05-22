@@ -231,22 +231,22 @@ stock ShowAmmuMenu(playerid) {
         bool:form = true;
     if(form)
     {
-        strcat(AMMU,"~y~1.~w~Tec 9 500 ammo [~g~50000~w~]~n~");
-        strcat(AMMU,"~y~2.~w~Tec 9 250 ammo [~g~25000~w~]~n~");
-        strcat(AMMU,"~y~3.~w~Mac 10 500 ammo [~g~50000~w~]~n~");
-        strcat(AMMU,"~y~4.~w~Mac 10 250 ammo [~g~25000~w~]~n~");
-        strcat(AMMU,"~y~5.~w~MP5 500 ammo [~g~50000~w~]~n~");
-        strcat(AMMU,"~y~6.~w~MP5 250 ammo [~g~25000~w~]~n~");
-        strcat(AMMU,"~y~7.~w~Sawn Off 500 ammo [~g~50000~w~]~n~");
-        strcat(AMMU,"~y~8.~w~Sawn Off 250 ammo [~g~25000~w~]~n~");
-        strcat(AMMU,"~y~9.~w~Deagle 500 ammo [~g~50000~w~]~n~");
-        strcat(AMMU,"~y~10.~w~Deagle 250 ammo [~g~25000~w~]~n~");
-        strcat(AMMU,"~y~11.~w~Sniper 100 ammo [~g~25000~w~]~n~");
-        strcat(AMMU,"~y~12.~w~Sniper 50 ammo [~g~10000~w~]~n~");
-        strcat(AMMU,"~y~13.~w~M4 500 ammo [~g~50000~w~]~n~");
-        strcat(AMMU,"~y~14.~w~M4 250 ammo [~g~25000~w~]~n~");
-        strcat(AMMU,"~y~15.~w~Chainsaw [~g~15000~w~]~n~");
-        strcat(AMMU,"~y~16.~w~Armour [~g~1000~w~]");
+        strcat(AMMU,"~y~1.~w~Tec 9 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~y~2.~w~Tec 9 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~y~3.~w~Mac 10 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~y~4.~w~Mac 10 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~y~5.~w~MP5 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~y~6.~w~MP5 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~y~7.~w~Sawn Off 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~y~8.~w~Sawn Off 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~y~9.~w~Deagle 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~y~10.~w~Deagle 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~y~11.~w~Sniper 100 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~y~12.~w~Sniper 50 ammo [~g~$10,000~w~]~n~");
+        strcat(AMMU,"~y~13.~w~M4 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~y~14.~w~M4 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~y~15.~w~Chainsaw [~g~$15,000~w~]~n~");
+        strcat(AMMU,"~y~16.~w~Armour [~g~$1,000~w~]");
         form = false;
     }
     TextMenuShowForPlayer(playerid, MENU_AMMU, "~b~AMMUNATION", AMMU, 16);
