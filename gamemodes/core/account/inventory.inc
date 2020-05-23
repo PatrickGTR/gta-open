@@ -10,7 +10,7 @@ hook OnGameModeInit()
 {
     static const query_retrieveIfix[] = "\
         SELECT \
-            instant_fix \
+            ifix \
         FROM   \
             inv \
         WHERE  \
@@ -48,7 +48,7 @@ stock Player_SetInstaFix(playerid, stocks)
     VALUES \
         (%i, %i) \
     ON DUPLICATE KEY UPDATE \
-        instant_fix = %i \
+        ifix = %i \
     ";
 
     mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), stocks, stocks);

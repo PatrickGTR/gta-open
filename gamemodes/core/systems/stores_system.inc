@@ -2,7 +2,9 @@
 #include <YSI_Coding\y_timers>
 
 #define MENU_AMMU       (0)
-#define MENU_MECH       (1)
+#define MENU_AMMU2      (2)
+#define MENU_MECH       (3)
+#define MENU_INV        (4)
 
 new 
     FixingVeh[MAX_PLAYERS],
@@ -33,6 +35,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_TEC9, 500);
                 GivePlayerMoney(playerid, -50000);
+                ShowAmmuMenu(playerid);
             }
             case 2:
             {
@@ -41,6 +44,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_TEC9, 250);
                 GivePlayerMoney(playerid, -25000);
+                ShowAmmuMenu(playerid);
             }
             case 3:
             {
@@ -49,6 +53,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_UZI, 500);
                 GivePlayerMoney(playerid, -50000);
+                ShowAmmuMenu(playerid);
             }
             case 4:
             {
@@ -57,6 +62,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_UZI, 250);
                 GivePlayerMoney(playerid, -25000);
+                ShowAmmuMenu(playerid);
             }
             case 5:
             {
@@ -65,6 +71,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_MP5, 500);
                 GivePlayerMoney(playerid, -50000);
+                ShowAmmuMenu(playerid);
             }
             case 6:
             {
@@ -73,6 +80,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_MP5, 250);
                 GivePlayerMoney(playerid, -25000);
+                ShowAmmuMenu(playerid);
             }
             case 7:
             {
@@ -81,6 +89,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_SAWEDOFF, 500);
                 GivePlayerMoney(playerid, -50000);
+                ShowAmmuMenu(playerid);
             }
             case 8:
             {
@@ -89,6 +98,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_SAWEDOFF, 250);
                 GivePlayerMoney(playerid, -25000);
+                ShowAmmuMenu(playerid);
             }
             case 9:
             {
@@ -97,6 +107,7 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_DEAGLE, 500);
                 GivePlayerMoney(playerid, -50000);
+                ShowAmmuMenu(playerid);
             }
             case 10:
             {
@@ -105,54 +116,75 @@ public OnTextMenuResponse(playerid,menuid,listitem)
                 }
                 GivePlayerWeapon(playerid, WEAPON_DEAGLE, 250);
                 GivePlayerMoney(playerid, -25000);
+                ShowAmmuMenu(playerid);
             }
             case 11:
+            {
+                ShowAmmuMenu2(playerid);
+            }
+        }
+    }
+    if(menuid == MENU_AMMU2)
+    {
+        switch(listitem)
+        {
+            case 1:
             {
                 if(GetPlayerMoney(playerid) < 50000) {
                     return SendServerMsg(playerid, "Not Enough Money!");
                 }
-                GivePlayerWeapon(playerid, WEAPON_SNIPER, 500);
+                GivePlayerWeapon(playerid, WEAPON_SNIPER, 100);
                 GivePlayerMoney(playerid, -50000);
+                ShowAmmuMenu2(playerid);
             }
-            case 12:
+            case 2:
             {
                 if(GetPlayerMoney(playerid) < 25000) {
                     return SendServerMsg(playerid, "Not Enough Money!");
                 }
-                GivePlayerWeapon(playerid, WEAPON_SNIPER, 250);
+                GivePlayerWeapon(playerid, WEAPON_SNIPER, 50);
                 GivePlayerMoney(playerid, -25000);
+                ShowAmmuMenu2(playerid);
             }
-            case 13:
+            case 3:
             {
                 if(GetPlayerMoney(playerid) < 50000) {
                     return SendServerMsg(playerid, "Not Enough Money!");
                 }
                 GivePlayerWeapon(playerid, WEAPON_M4, 500);
                 GivePlayerMoney(playerid, -50000);
+                ShowAmmuMenu2(playerid);
             }
-            case 14:
+            case 4:
             {
                 if(GetPlayerMoney(playerid) < 25000) {
                     return SendServerMsg(playerid, "Not Enough Money!");
                 }
                 GivePlayerWeapon(playerid, WEAPON_M4, 250);
                 GivePlayerMoney(playerid, -25000);
+                ShowAmmuMenu2(playerid);
             }
-            case 15:
+            case 5:
             {
                 if(GetPlayerMoney(playerid) < 15000) {
                     return SendServerMsg(playerid, "Not Enough Money!");
                 }
                 GivePlayerWeapon(playerid, WEAPON_CHAINSAW, 1);
                 GivePlayerMoney(playerid, -15000);
+                ShowAmmuMenu2(playerid);
             }
-            case 16:
+            case 6:
             {
                 if(GetPlayerMoney(playerid) < 1000) {
                     return SendServerMsg(playerid, "Not Enough Money!");
                 }
                 SetPlayerArmour(playerid, 100);
                 GivePlayerMoney(playerid, -1000);
+                ShowAmmuMenu2(playerid);
+            }
+            case 7:
+            {
+                ShowAmmuMenu(playerid);
             }
         }
     }
@@ -190,9 +222,22 @@ public OnTextMenuResponse(playerid,menuid,listitem)
 
 hook OnPlayerUpdate(playerid)
 {
-    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 295.4240, -82.5273, 1001.5156) || !IsPlayerInRangeOfPoint(playerid, 5.0, 312.8376, -167.7640, 999.5938))
+    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 295.4240, -82.5273, 1001.5156))
     {
+        if(Player_IsInAmmu(playerid)) {
+            return 0;
+        }
         TextMenuHide(playerid, MENU_AMMU);
+        TextMenuHide(playerid, MENU_AMMU2);
+
+    }
+    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 312.8376, -167.7640, 999.5938))
+    {
+        if(Player_IsInAmmu(playerid)) {
+            return 0;
+        }
+        TextMenuHide(playerid, MENU_AMMU);
+        TextMenuHide(playerid, MENU_AMMU2);
     }
     if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1015.4679, -930.1953, 42.1797))
     {
@@ -227,30 +272,53 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 stock ShowAmmuMenu(playerid) {
     new
-        AMMU[615],
+        AMMU[600],
         bool:form = true;
     if(form)
     {
-        strcat(AMMU,"~y~1.~w~Tec 9 500 ammo [~g~$50,000~w~]~n~");
-        strcat(AMMU,"~y~2.~w~Tec 9 250 ammo [~g~$25,000~w~]~n~");
-        strcat(AMMU,"~y~3.~w~Mac 10 500 ammo [~g~$50,000~w~]~n~");
-        strcat(AMMU,"~y~4.~w~Mac 10 250 ammo [~g~$25,000~w~]~n~");
-        strcat(AMMU,"~y~5.~w~MP5 500 ammo [~g~$50,000~w~]~n~");
-        strcat(AMMU,"~y~6.~w~MP5 250 ammo [~g~$25,000~w~]~n~");
-        strcat(AMMU,"~y~7.~w~Sawn Off 500 ammo [~g~$50,000~w~]~n~");
-        strcat(AMMU,"~y~8.~w~Sawn Off 250 ammo [~g~$25,000~w~]~n~");
-        strcat(AMMU,"~y~9.~w~Deagle 500 ammo [~g~$50,000~w~]~n~");
-        strcat(AMMU,"~y~10.~w~Deagle 250 ammo [~g~$25,000~w~]~n~");
-        strcat(AMMU,"~y~11.~w~Sniper 100 ammo [~g~$25,000~w~]~n~");
-        strcat(AMMU,"~y~12.~w~Sniper 50 ammo [~g~$10,000~w~]~n~");
-        strcat(AMMU,"~y~13.~w~M4 500 ammo [~g~$50,000~w~]~n~");
-        strcat(AMMU,"~y~14.~w~M4 250 ammo [~g~$25,000~w~]~n~");
-        strcat(AMMU,"~y~15.~w~Chainsaw [~g~$15,000~w~]~n~");
-        strcat(AMMU,"~y~16.~w~Armour [~g~$1,000~w~]");
+        strcat(AMMU,"~r~1.~w~Tec 9 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~r~2.~w~Tec 9 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~r~3.~w~Mac 10 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~r~4.~w~Mac 10 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~r~5.~w~MP5 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~r~6.~w~MP5 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~r~7.~w~Sawn Off 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~r~8.~w~Sawn Off 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~r~9.~w~Deagle 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~r~10.~w~Deagle 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~r~11.~y~Next Page");
         form = false;
     }
-    TextMenuShowForPlayer(playerid, MENU_AMMU, "~b~AMMUNATION", AMMU, 16);
+    TextMenuShowForPlayer(playerid, MENU_AMMU, "~b~AMMUNATION", AMMU, 11);
     return 1;
+}
+
+stock ShowAmmuMenu2(playerid)
+{
+    new 
+        AMMU[600],
+        bool:form = true;
+    if(form)
+    {
+        strcat(AMMU,"~r~1.~w~Sniper 100 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~r~2.~w~Sniper 50 ammo [~g~$10,000~w~]~n~");
+        strcat(AMMU,"~r~3.~w~M4 500 ammo [~g~$50,000~w~]~n~");
+        strcat(AMMU,"~r~4.~w~M4 250 ammo [~g~$25,000~w~]~n~");
+        strcat(AMMU,"~r~5.~w~Chainsaw [~g~$15,000~w~]~n~");
+        strcat(AMMU,"~r~6.~w~Armour [~g~$1,000~w~]~n~");
+        strcat(AMMU,"~r~7.~y~Prev Page");
+        form = false;
+    }
+    TextMenuShowForPlayer(playerid, MENU_AMMU2, "~b~AMMUNATION", AMMU, 7);
+    return 1;
+}
+
+stock Player_IsInAmmu(playerid) 
+{
+    if(GetPlayerVirtualWorld(playerid) == 7 || GetPlayerVirtualWorld(playerid) == 8) {
+        return 1;
+    }
+    return 0;
 }
 
 stock ShowMechServices(playerid) 
@@ -260,8 +328,8 @@ stock ShowMechServices(playerid)
         bool:form = true;
     if(form)
     {
-        strcat(MECH,"~y~1.~w~Fix your vehicle [~g~1520~w~]~n~");
-        strcat(MECH,"~y~2.~w~Insta fix [~g~15000~w~]~n~");
+        strcat(MECH,"~r~1.~w~Fix your vehicle [~g~1520~w~]~n~");
+        strcat(MECH,"~r~2.~w~Insta fix [~g~15000~w~]~n~");
         form = false;
     }
     TextMenuShowForPlayer(playerid, MENU_MECH, "~b~MECHANIC SERVICES", MECH, 2);
@@ -272,5 +340,6 @@ timer FixVehTime[5000](playerid)
 {
     FixingVeh[playerid] = 0;
     RepairVehicle(GetPlayerVehicleID(playerid));
+    GameTextForPlayer(playerid, "Your vehicle has been fixed", 2000, 3);
     return 1;
 }
