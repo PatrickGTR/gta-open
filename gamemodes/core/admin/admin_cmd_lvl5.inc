@@ -5,7 +5,7 @@ ACMD:[5]setadmin(playerid, params[])
     if(target == INVALID_PLAYER_ID) return SendErrorMsg(playerid, "INVALID PLAYER!");
     if(level < 0 || level > MAX_ADMIN_LEVELS)
     {
-        SendErrorMsgF(playerid, "Max admin level is %d", MAX_ADMIN_LEVELS);
+        return SendErrorMsgF(playerid, "Max admin level is %d", MAX_ADMIN_LEVELS);
     }
     Admin_SetPlayerLevel(playerid, level);
     for(new i = 0; i < MAX_PLAYERS; i++)

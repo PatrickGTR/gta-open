@@ -10,7 +10,7 @@ hook OnGameModeInit()
 {
     static const query_retrieveIfix[] = "\
         SELECT \
-            ifix \
+            instant_fix \
         FROM   \
             inv \
         WHERE  \
@@ -36,7 +36,7 @@ hook OnPlayerLogin(playerid)
     MySQL_ExecuteThreaded_Inline(stmt_retrieveIfix, using inline OnPlayerInvLoad);
 }
 
-stock SetInstaFix(playerid, stocks) 
+stock Player_SetInstaFix(playerid, stocks) 
 {
     PlayerInstaFix[playerid] = stocks;
 
@@ -44,16 +44,16 @@ stock SetInstaFix(playerid, stocks)
 
     static const query[] = "\
     INSERT INTO \
-        inv(u_id, ifix) \
+        inv(u_id, instant_fix) \
     VALUES \
         (%i, %i) \
     ON DUPLICATE KEY UPDATE \
-        ifix = %i \
+        instant_fix = %i \
     ";
 
     mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), stocks, stocks);
     mysql_tquery(MySQL_GetHandle(), string);
 }
 
-stock GetInstaFix(playerid) 
+stock Player_GetInstaFix(playerid) 
     return PlayerInstaFix[playerid];
