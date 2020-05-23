@@ -1,5 +1,5 @@
 #include <a_samp>
-#include <robable_actor>
+#include <actor_robbery>
 
 #define MAX_PED_NAME              (60)
 
