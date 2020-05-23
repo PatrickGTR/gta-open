@@ -8,9 +8,8 @@ static enum {
 }
 
 static 
-    IsPlayerTrucking[MAX_PLAYERS], 
-    TruckingCooldown[MAX_PLAYERS], 
-    bool:PlayerCanTruck[MAX_PLAYERS],
+    bool:IsPlayerTrucking[MAX_PLAYERS], 
+    TruckingCooldown[MAX_PLAYERS],
     PlayerTruckingState[MAX_PLAYERS];
 
 enum E_DELIVERY_DATA
@@ -24,16 +23,13 @@ enum E_DELIVERY_DATA
 static
     const DeliverData[][E_DELIVERY_DATA] =
 {
-    {"Disco", 821.5656, -1682.2516, 13.3828},
+    {"Disco", 1821.5656, -1682.2516, 13.3828},
     {"LSPD", 1535.8329, -1673.7499, 13.3828},
     {"LS BANK", 590.8960, -1231.8680, 17.7482},
     {"Ammunation Plaza", 1358.8153, -1278.5531, 13.3517}
 };
 
 CMD:trucker(playerid) {
-    if(!PlayerCanTruck[playerid]) {
-        return 1;
-    }
     if(!IsPlayerInVehicle(playerid, 414)) {
         SendErrorMsg(playerid, "You're not in a truck!");
         return 1;
@@ -47,7 +43,7 @@ Trucker_Pickup(playerid) {
     if(gettime() < TruckingCooldown[playerid]) {
         return SendErrorMsg(playerid, "Please wait before starting a trucking mission again!");
     }
-    IsPlayerTrucking[playerid] = 1;
+    IsPlayerTrucking[playerid] = true;
     PlayerTruckingState[playerid] = STATE_PICKUP;
     
     DisablePlayerRaceCheckpoint(playerid);
@@ -80,28 +76,27 @@ Trucker_Begin(playerid) {
 }
 
 Trucker_End(playerid) {
-    IsPlayerTrucking[playerid] = 0;
+    IsPlayerTrucking[playerid] = false;
     TruckingCooldown[playerid] = gettime() + 20;
 
     DisablePlayerRaceCheckpoint(playerid);
-    
     return 1;
 }
 
 hook OnPlayerEnterRaceCP(playerid) 
 {
-    if(PlayerTruckingState[playerid] == STATE_DELIVER) {
-        new randm = random(50000);
-        if(IsPlayerTrucking[playerid] == 1)
-        {
+    if(IsPlayerTrucking[playerid])
+    {
+        if(PlayerTruckingState[playerid] == STATE_DELIVER) {
+            new randm = random(50000);
             GivePlayerMoney(playerid, randm);
             Trucker_End(playerid);
             SendServerMsg(playerid, "You've finished trucking!");
             SendServerMsgF(playerid, "And The Store gave you %d!", randm);
         }
-    }
-    if(PlayerTruckingState[playerid] == STATE_PICKUP) {
-        Trucker_Begin(playerid);
+        if(PlayerTruckingState[playerid] == STATE_PICKUP) {
+            Trucker_Begin(playerid);
+        }
     }
     return 1;
 }
@@ -112,45 +107,14 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
             SendServerMsg(playerid, "Failed! you've exited the vehicle!");
             Trucker_End(playerid);
         }
-        else {
-            PlayerCanTruck[playerid] = false;
-        }
     }
     return 1;
 }
 
 hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
     if(GetVehicleModel(vehicleid) == 414) {
-        PlayerCanTruck[playerid] = true;
         SendServerMsg(playerid, "Use /trucker to start a trucker mission");
     }
     return 1;
 }
 
-CMD:canitruck(playerid) {
-    if(PlayerCanTruck[playerid])
-    {
-        SendServerMsg(playerid, "Yes you can truck");
-    }
-    else
-    {
-        SendServerMsg(playerid, "No you can't truck");
-    }
-    return 1;
-}
-
-CMD:givetruck(playerid) {
-    new Float:pos[4];
-    GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
-    GetPlayerFacingAngle(playerid, pos[3]);
-    CreateVehicle(414, pos[0], pos[1], pos[2], pos[3], 0, 0, -1, 0);
-    return 1;
-}
-
-CMD:car(playerid) {
-    new Float:pos[4];
-    GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
-    GetPlayerFacingAngle(playerid, pos[3]);
-    CreateVehicle(411, pos[0], pos[1], pos[2], pos[3], 0, 0, -1, 0);
-    return 1;
-}
