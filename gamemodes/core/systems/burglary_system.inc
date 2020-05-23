@@ -242,7 +242,7 @@ timer SetHideoutTimer[20000](playerid)
     ClearAnimations(playerid, 1);
     robbingdone[playerid] = 1;
     SetRandomHideout(playerid);
-    SendServerMsg(playerid, "Go to the hideout and evede the cops!");
+    SendServerMsg(playerid, "Go to the hideout and evade the cops!");
     return 1;
 }
 

@@ -65,7 +65,7 @@ hook OnGameModeInit() {
     }
 }
 
-public OnPlayerStartRobbery(playerid, actorid, robbed_recently)
+public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently)
 {
     if(robbed_recently)
     {
