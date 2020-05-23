@@ -174,14 +174,14 @@ public OnTextMenuResponse(playerid,menuid,listitem)
             }
             case 2:
             {
-                if(GetInstaFix(playerid) != 0) {
+                if(Player_GetInstaFix(playerid) != 0) {
                     return SendServerMsg(playerid, "You already have instafix!");
                 }
                 if(GetPlayerMoney(playerid) < 15000) {
                     return SendServerMsg(playerid, "Not Enough Money!");
                 }
                 GivePlayerMoney(playerid, -15000);
-                SetInstaFix(playerid, 1);
+                Player_SetInstaFix(playerid, 1);
             }
         }
     }
