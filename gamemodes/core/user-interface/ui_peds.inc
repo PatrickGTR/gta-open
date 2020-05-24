@@ -93,6 +93,6 @@ public OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type)
             SendServerMsg(playerid, "You have gone too far away from the actor, he managed to call 911! RUN!");
         }
     }
-    GivePlayerWantedLevel(playerid, 2);
+    Player_GiveWantedLevel(playerid, 2);
     return 1;
 }
