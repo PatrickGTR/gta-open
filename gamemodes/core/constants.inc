@@ -24,6 +24,9 @@
 #define SQL_DATETIME_FORMAT     "%d %M %Y at %r"
 #define SQL_DATE_FORMAT         "%d %M %Y"
 
+#define PRESSED(%0) \
+    (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
+
 enum {
     TYPE_NO_JOB = -1,
     TYPE_DRUGDEALER = 0,

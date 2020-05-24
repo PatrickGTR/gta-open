@@ -2,7 +2,7 @@
 // Github -> https://github.com/PatrickGTR
 
 // Credits to these people, made the production easier.
-// Southclaw, Y_Les, maddinatO, SyS, Zeex, Slice, Lorenc
+// Southclaw, Y_Les, maddinatOr, SyS, Zeex, Slice, Lorenc
 
 
 #include <a_samp>
@@ -48,9 +48,17 @@ public OnGameModeInit() {
 }
 
 CMD:gmoney(playerid, params[]) {
+	GivePlayerMoney(playerid, 100000);
+	return 1;
+}
 
-	new money = strval(params);
 
-	GivePlayerMoney(playerid, money);
+CMD:test1(playerid, params[]) {
+	Ammunation_ShowMenu(playerid, true);
+	return 1;
+}
+
+CMD:test(playerid, params[]) {
+	Ammunation_ShowMenu(playerid);
 	return 1;
 }
