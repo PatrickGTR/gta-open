@@ -122,7 +122,6 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
             return 1;
         }
         if (checkpointid == entranceCheckpoint[entid]) {
-            TextMenuHideForPlayer(playerid);
             Entrance_SetPlayerCD(playerid, gettime() + 2);
 
             SetPlayerVirtualWorld(playerid, exitVirtualID[entid]);
@@ -136,7 +135,6 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
             strcpy(getShopName[playerid], entranceStoreName[entid], MAX_STORE_NAME);
         }
         if (checkpointid == exitCheckpoint[entid]) {
-            TextMenuHideForPlayer(playerid);
             Entrance_SetPlayerCD(playerid, gettime() + 2);
 
             SetPlayerInterior(playerid, 0);

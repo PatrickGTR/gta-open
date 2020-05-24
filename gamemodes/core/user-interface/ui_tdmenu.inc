@@ -8,9 +8,13 @@ static
 	TextMenuState[MAX_PLAYERS],
 	TextMenuItemCount[MAX_PLAYERS];
 
-hook OnPlayerConnect(playerid)
-{
+hook OnPlayerConnect(playerid) {
+	// reset data
+	TextMenuState[playerid] = false;
 	TextMenuItemCount[playerid] = 0;
+	TextMenuCallbackHandler[playerid][0] = EOS;
+	TextMenuItems[playerid][0] = EOS;
+
     TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 143.249816, 130.266815, "Header");
 	PlayerTextDrawLetterSize(playerid, TextMenuHeader[playerid], 0.541876, 1.489166);
 	PlayerTextDrawAlignment(playerid, TextMenuHeader[playerid], 2);
@@ -42,21 +46,29 @@ hook OnPlayerText(playerid, text[]) {
     if(TextMenuState[playerid]) {
         if(TextMenuItemCount[playerid] != 0) {
             if(isnumeric(text)) {
-			    if(strval(text) > 0 && strval(text) <= TextMenuItemCount[playerid]) {
+				new value = strval(text);
+			    if(value > 0 && value <= TextMenuItemCount[playerid]) {
 
 					if(!isnull(TextMenuCallbackHandler[playerid])) {
-						CallLocalFunction(TextMenuCallbackHandler[playerid], "ii", playerid, strval(text));
+
+						TextMenuState[playerid] = false;
+						TextMenuItemCount[playerid] = 0;
+						TextMenuItems[playerid][0] = EOS;
+						PlayerTextDrawHide(playerid, TextMenuHeader[playerid]);
+						PlayerTextDrawHide(playerid, TextMenuBody[playerid]);
+
+						CallLocalFunction(TextMenuCallbackHandler[playerid], "ii", playerid, value);
+						
+						TextMenuCallbackHandler[playerid][0] = EOS;
+						return ~0; // stop the hook from caryying on and don't show the input to players.
 					} else {
 						log("ui_tdmenu.inc - SEVERE! - empty string passed to CallLocalFunction.");
 					}
-
-					TextMenu_Hide(playerid);
-					return 0; // stop the number from showing to global chat.
 			    }
 			}
         }
     }
-    return 1;
+    return 0;
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
@@ -70,39 +82,79 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	return 1;
 }
 
+// returns
+// - 0 if playerid is invalid.
+// - total items.
 stock TextMenu_Add(playerid, const item[]) {
 
-	new temp[32];
+	if(!IsPlayerConnected(playerid)) {
+		return 0;
+	}
 
-	format(temp, sizeof(temp), "_%i. %s~n~", (TextMenuItemCount[playerid]  + 1), item);
-	strcat(TextMenuItems[playerid], temp, sizeof(TextMenuItems[]));
-	return TextMenuItemCount[playerid] ++;
+	new tempString[64];
+	// layout e.g (1. Deagle)
+	TextMenuItemCount[playerid] ++;
+	format(tempString, sizeof(tempString), "_~r~%i. %s~n~", TextMenuItemCount[playerid], item);
+	strcat(TextMenuItems[playerid], tempString, sizeof(TextMenuItems[]));
+	return TextMenuItemCount[playerid];
 }
 
+// returns
+// - 0 if player is invalid.
+// - 1 success
 stock TextMenu_Create(playerid, const callback[], const title[]) {
+	if(!IsPlayerConnected(playerid)) {
+		return 0;
+	}
+	
+	// Just to make sure everything is fresh everytime we create 
+	// a new  Text Menu.
+	TextMenu_Hide(playerid);
+
 	strcpy(TextMenuCallbackHandler[playerid], callback, 32);
-    PlayerTextDrawSetString(playerid, TextMenuHeader[playerid], title);
+
+	new tempString[35];
+	format(tempString, sizeof(tempString), "~b~%s", title);
+    PlayerTextDrawSetString(playerid, TextMenuHeader[playerid], tempString);
+	return 1;
 }
 
+// returns
+// - 0 if player is invalid.
+// - 1 success
 stock TextMenu_Show(playerid)
 {
+	if(!IsPlayerConnected(playerid)) {
+		return 0;
+	}
+
 	new
 		string[1028];
     format(string, sizeof(string), "~n~~n~~n~%s~n~~n~~w~___________Press_~y~T_~w~Or_~y~F6~w~_and_type_option_number~n~_________________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
 	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
+	
 	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);
 	PlayerTextDrawShow(playerid,TextMenuBody[playerid]);
+
 	TextMenuState[playerid] = true;
-	TextMenuItems[playerid][0] = EOS;
+	return 1;
 }
 
+// returns
+// - 0 if player is invalid.
+// - 1 success
 stock TextMenu_Hide(playerid)
 {
+	if(!IsPlayerConnected(playerid)) {
+		return 0;
+	}
+
+	TextMenuCallbackHandler[playerid][0] = EOS;
 	TextMenuState[playerid] = false;
 	TextMenuItemCount[playerid] = 0;
-	TextMenuCallbackHandler[playerid][0] = EOS;
 	TextMenuItems[playerid][0] = EOS;
 	PlayerTextDrawHide(playerid,TextMenuHeader[playerid]);
 	PlayerTextDrawHide(playerid,TextMenuBody[playerid]);
+	return 1;
 }
 

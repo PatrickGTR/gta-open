@@ -47,53 +47,18 @@ public OnGameModeInit() {
 	return 1;
 }
 
-
-CMD:test1(playerid, params[]) {
-	TextMenu_Create(playerid, "TestMenu1", "Title1");
-	TextMenu_Add(playerid, "hello1");
-	TextMenu_Add(playerid, "Hi1");
-	TextMenu_Add(playerid, "What's up1");
-	TextMenu_Show(playerid);
+CMD:gmoney(playerid, params[]) {
+	GivePlayerMoney(playerid, 100000);
 	return 1;
 }
 
-forward TestMenu1(playerid, listitem);
-public TestMenu1(playerid, listitem) {
-	switch(listitem) {
-		case 1: {
-			SendClientMessage(playerid, -1, "Hello1");
-		}
-		case 2: {
-			SendClientMessage(playerid, -1, "Hi1");
-		}
-		case 3: {
-			SendClientMessage(playerid, -1, "What's up1");
-		}
-	}
+
+CMD:test1(playerid, params[]) {
+	Ammunation_ShowMenu(playerid, true);
 	return 1;
 }
 
 CMD:test(playerid, params[]) {
-	TextMenu_Create(playerid, "TestMenu", "Title");
-	TextMenu_Add(playerid, "hello");
-	TextMenu_Add(playerid, "Hi");
-	TextMenu_Add(playerid, "What's up");
-	TextMenu_Show(playerid);
-	return 1;
-}
-
-forward TestMenu(playerid, listitem);
-public TestMenu(playerid, listitem) {
-	switch(listitem) {
-		case 1: {
-			SendClientMessage(playerid, -1, "Hello");
-		}
-		case 2: {
-			SendClientMessage(playerid, -1, "Hi");
-		}
-		case 3: {
-			SendClientMessage(playerid, -1, "What's up");
-		}
-	}
+	Ammunation_ShowMenu(playerid);
 	return 1;
 }
