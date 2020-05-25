@@ -139,12 +139,16 @@ stock TextMenu_Show(playerid)
 }
 
 // returns
-// - 0 if player is invalid.
+// - 0 if player is invalid or trying to hide a menu when there isn't shown.
 // - 1 success
 stock TextMenu_Hide(playerid)
 {
 	if(!IsPlayerConnected(playerid)) {
 		return 0;
+	}
+
+	if(!TextMenuState[playerid]) {
+		return 0; 	
 	}
 
 	TextMenuCallbackHandler[playerid][0] = EOS;

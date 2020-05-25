@@ -5,6 +5,12 @@
 // Southclaw, Y_Les, maddinatOr, SyS, Zeex, Slice, Lorenc
 
 
+// Custom Callbacks
+// OnPlayerLogin(playerid) -> called when player successfully logged in.
+// OnPlayerRegister(playerid) -> called when player successfully registered.
+
+
+
 #include <a_samp>
 
 #define MYSQL_PREPARE_DEBUG 	(false)
