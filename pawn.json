@@ -16,7 +16,8 @@
 		"https://github.com/Sreyas-Sreelal/samp-bcrypt",
 		"https://github.com/Southclaws/samp-logger",
 		"https://github.com/PatrickGTR/MySQL-Prepared-Statements",
-		"https://github.com/samp-incognito/samp-streamer-plugin"
+		"https://github.com/samp-incognito/samp-streamer-plugin",
+		"https://github.com/PatrickGTR/actor_robbery"
 	],
 	"local": true,
 	"builds": [

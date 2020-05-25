@@ -2,12 +2,18 @@
 // Github -> https://github.com/PatrickGTR
 
 // Credits to these people, made the production easier.
-// Southclaw, Y_Les, maddinatO, SyS, Zeex, Slice, Lorenc
+// Southclaw, Y_Les, maddinatOr, SyS, Zeex, Slice, Lorenc
+
+
+// Custom Callbacks
+// OnPlayerLogin(playerid) -> called when player successfully logged in.
+// OnPlayerRegister(playerid) -> called when player successfully registered.
+
 
 
 #include <a_samp>
 
-#define MYSQL_PREPARE_DEBUG 	(true)
+#define MYSQL_PREPARE_DEBUG 	(false)
 
 // Set to true if table aren't set up.
 #define SETUP_TABLE 			(false)	
@@ -48,9 +54,17 @@ public OnGameModeInit() {
 }
 
 CMD:gmoney(playerid, params[]) {
+	GivePlayerMoney(playerid, 100000);
+	return 1;
+}
 
-	new money = strval(params);
 
-	GivePlayerMoney(playerid, money);
+CMD:test1(playerid, params[]) {
+	Ammunation_ShowMenu(playerid, true);
+	return 1;
+}
+
+CMD:test(playerid, params[]) {
+	Ammunation_ShowMenu(playerid);
 	return 1;
 }

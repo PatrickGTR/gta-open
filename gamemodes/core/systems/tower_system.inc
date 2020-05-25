@@ -1,20 +1,21 @@
 #include <YSI_Coding\y_hooks>
 #include <YSI_Coding\y_timers>
+#include <YSI_Data\y_iterate>
 
 new 
     TowerCP,
-    towerrecent,
+    TowerRobbedRecently,
     BriefCase,
     TowerEnt,
     Timer:FindingTimer[MAX_PLAYERS];
 
-enum BCLOCATION {
-    Float:bcX,
-    Float:bcY,
-    Float:bcZ
+enum E_BRIEFCASE_DATA {
+    Float:E_BRIEFCASE_X,
+    Float:E_BRIEFCASE_Y,
+    Float:E_BRIEFCASE_Z
 }
 
-stock const RandomBriefCase[][BCLOCATION] =
+static const RandomBriefCase[][E_BRIEFCASE_DATA] =
 {
     {1831.9935, -1274.5226, 125.7266},
     {1788.1812, -1309.2687, 125.7266},
@@ -22,11 +23,11 @@ stock const RandomBriefCase[][BCLOCATION] =
     {1774.2363,-1301.4355,125.7209}
 };
 
-stock BriefCaseLoc(playerid) {
+Briefcase_SetRandomLoc(playerid) {
     new rand = random(sizeof(RandomBriefCase));
     robbingdone[playerid] = 1;
     DestroyPickup(BriefCase);
-    BriefCase = CreatePickup(1210, 2, RandomBriefCase[rand][bcX], RandomBriefCase[rand][bcY], RandomBriefCase[rand][bcZ], 0);
+    BriefCase = CreatePickup(1210, 2, RandomBriefCase[rand][E_BRIEFCASE_X], RandomBriefCase[rand][E_BRIEFCASE_Y], RandomBriefCase[rand][E_BRIEFCASE_Z], 0);
 }
 
 hook OnGameModeInit()
@@ -36,6 +37,7 @@ hook OnGameModeInit()
     TowerCP = CreateDynamicCP(1817.1315, -1307.1591, 98.5000, 1.0, 0, 0, .streamdistance = CHECKPOINT_STREAMDISTANCE);
     TowerEnt = Entrance_Create(1807.0723, -1290.1117, 131.7344, 90.0, 1815.9473, -1317.6854, 125.7266, 90.0, 0, 0);
     Entrance_SetIcon(TowerEnt, 42);
+    return 1;
 }
 
 hook OnPlayerEnterDynamicCP(playerid, checkpointid)
@@ -48,12 +50,10 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
     return 1;
 }
 
-hook OnPlayerUpdate(playerid)
+hook OnPlayerLeaveDynamicCP(playerid, checkpointid)
 {
-    if(robbing[playerid] == 1 && BurglaryInfo[playerid] == 4)
-    {
-        if(!IsPlayerInRangeOfPoint(playerid, 7.0, 1817.1315, -1307.1591, 98.5000))
-        {
+    if(checkpointid == TowerCP) {
+        if(robbing[playerid] == 1 && BurglaryInfo[playerid] == 4) {
             if(robbingdone[playerid] == 1) return 0;
             SendServerMsg(playerid, "You've left the checkpoint robbery cancelled!");
             robbing[playerid] = 0;
@@ -66,22 +66,22 @@ hook OnPlayerUpdate(playerid)
     return 1;
 }
 
-hook OnPlayerPickUpPickup(playerid, pickupid)
-{
-    if(pickupid == BriefCase)
-    {
-        SetHideout(playerid);
-        stop FindingTimer[playerid];
+hook OnPlayerPickUpPickup(playerid, pickupid) {
+    if(pickupid == BriefCase) {
+        SetHideout(playerid); 
+        
         DestroyPickup(BriefCase);
+
+        stop FindingTimer[playerid];
     }
-    return 0;
+    return 1;
 }
 
 CMD:towerrobbery(playerid) {
     if(!IsPlayerInRangeOfPoint(playerid, 7.0, 1817.1315, -1307.1591, 98.5000)) {
         return SendServerMsg(playerid, "You're not near the safe!");
     }
-    if(towerrecent == 1) {
+    if(TowerRobbedRecently == 1) {
         return SendServerMsg(playerid, "The Tower is recently robbed!");
     }
     if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
@@ -92,7 +92,7 @@ CMD:towerrobbery(playerid) {
     }
     robbing[playerid] = 1;
     BurglaryInfo[playerid] = 4;
-    towerrecent = 1;
+    TowerRobbedRecently = 1;
     SendServerMsg(playerid, "Robbing the Office stay in the red marker!");
     ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 0);
     burglarytimer[playerid] = defer SetBriefCaseLoc(playerid);
@@ -102,10 +102,9 @@ CMD:towerrobbery(playerid) {
 timer SetBriefCaseLoc[20000](playerid)
 {
     Player_GiveWantedLevel(playerid, 6);
-    Player_SaveWantedLevel(playerid, GetPlayerWantedLevel(playerid));
     ClearAnimations(playerid, 1);
     robbingdone[playerid] = 1;
-    BriefCaseLoc(playerid);
+    Briefcase_SetRandomLoc(playerid);
     FindingTimer[playerid] = defer TowerFailedToGetBC(playerid);
     SendServerMsg(playerid, "You have 25 seconds to get the Brief Case on the PentHouse");
     return 1;
@@ -114,7 +113,6 @@ timer SetBriefCaseLoc[20000](playerid)
 timer TowerFailedToGetBC[25000](playerid)
 {
     Player_GiveWantedLevel(playerid, 6);
-    Player_SaveWantedLevel(playerid, GetPlayerWantedLevel(playerid));
     DestroyPickup(BriefCase);
     robbing[playerid] = 0;
     BurglaryInfo[playerid] = 0;
@@ -124,12 +122,10 @@ timer TowerFailedToGetBC[25000](playerid)
 
 timer TowerCooldown[RobberyCD]()
 {
-    for(new i = 0; i < MAX_PLAYERS; i++)
-    {
+    foreach(new i : Player) {
         SendServerMsg(i, "Tower CooledDown!");
     }
-    towerrecent = 0;
-    return 1;
+    TowerRobbedRecently = 0;
 }
 
 CMD:forcetowercd(playerid)
@@ -140,12 +136,12 @@ CMD:forcetowercd(playerid)
 
 stock SetHideout(playerid)
 {
-    Player_GiveWantedLevel(playerid, 6);
-    Player_SaveWantedLevel(playerid, GetPlayerWantedLevel(playerid));
-    ClearAnimations(playerid, 1);
     robbingdone[playerid] = 1;
+    ClearAnimations(playerid, 1);
     SetRandomHideout(playerid);
+
     SendServerMsg(playerid, "Go to the hideout and evede the cops!");
+    Player_GiveWantedLevel(playerid, 6);
     return 1;
 }
 

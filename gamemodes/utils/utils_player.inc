@@ -25,3 +25,18 @@ GetPlayerFPS(playerid) {
     }
     return 0;
 }
+
+Player_IsInAmmu(playerid) 
+{
+    if(GetPlayerVirtualWorld(playerid) == 7 || GetPlayerVirtualWorld(playerid) == 8) {
+        new const ammunationInteriors[] = {
+            1, 4, 6, 7
+        };
+        for(new i = 0; i < sizeof(ammunationInteriors); i ++) {
+            if(GetPlayerInterior(playerid) == ammunationInteriors[i]) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}

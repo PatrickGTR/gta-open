@@ -24,23 +24,22 @@ new
 enum RHIDEOUTS {
     Float:rhX,
     Float:rhY,
-    Float:rhZ,
-    Float:rhSize
+    Float:rhZ
 }
 
 stock const RandomHideouts[][RHIDEOUTS] =
 {
-    { -68.8063, -1576.7695, 2.6172, 3.0},
-    { -1644.6675, -2253.2825, 31.7160, 3.0},
-    { -52.6506, -1147.7380, 1.0781, 3.0},
-    { -42.4774, -222.8400, 5.4297, 3.0}
+    {-68.8063, -1576.7695, 2.6172},
+    {-1644.6675, -2253.2825, 31.7160},
+    {-52.6506, -1147.7380, 1.0781},
+    {-42.4774, -222.8400, 5.4297}
 };
 
 stock SetRandomHideout(playerid) {
     new rand = random(sizeof(RandomHideouts));
-    DisablePlayerRaceCheckpoint(playerid);
     robbingdone[playerid] = 1;
-    SetPlayerRaceCheckpoint(playerid, 1, RandomHideouts[rand][rhX], RandomHideouts[rand][rhY], RandomHideouts[rand][rhZ], RandomHideouts[rand][rhX], RandomHideouts[rand][rhY], RandomHideouts[rand][rhZ], RandomHideouts[rand][rhSize]);
+    DisablePlayerRaceCheckpoint(playerid);
+    SetPlayerRaceCheckpoint(playerid, 1, RandomHideouts[rand][rhX], RandomHideouts[rand][rhY], RandomHideouts[rand][rhZ], RandomHideouts[rand][rhX], RandomHideouts[rand][rhY], RandomHideouts[rand][rhZ], 3.0);
     return 1;
 }
 
@@ -85,7 +84,6 @@ hook OnPlayerUpdate(playerid)
             defer MansCooldown();
         }
     }
-    else return 0;
     return 1;
 }
 
@@ -179,7 +177,6 @@ hook OnPlayerEnterRaceCP(playerid)
             defer TowerCooldown();
         }
     }
-    else return 0;
     return 1;
 }
 
@@ -242,11 +239,10 @@ CMD:robbery(playerid) {
 timer SetHideoutTimer[20000](playerid)
 {
     Player_GiveWantedLevel(playerid, 6);
-    Player_SaveWantedLevel(playerid, GetPlayerWantedLevel(playerid));
     ClearAnimations(playerid, 1);
     robbingdone[playerid] = 1;
     SetRandomHideout(playerid);
-    SendServerMsg(playerid, "Go to the hideout and evede the cops!");
+    SendServerMsg(playerid, "Go to the hideout and evade the cops!");
     return 1;
 }
 

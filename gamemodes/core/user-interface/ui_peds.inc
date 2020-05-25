@@ -1,5 +1,5 @@
 #include <a_samp>
-#include <robable_actor>
+#include <actor_robbery>
 
 #define MAX_PED_NAME              (60)
 
@@ -65,7 +65,7 @@ hook OnGameModeInit() {
     }
 }
 
-public OnPlayerStartRobbery(playerid, actorid, robbed_recently)
+public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently)
 {
     if(robbed_recently)
     {
@@ -93,7 +93,6 @@ public OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type)
             SendServerMsg(playerid, "You have gone too far away from the actor, he managed to call 911! RUN!");
         }
     }
-    SetPlayerWantedLevel(playerid, GetPlayerWantedLevel(playerid) + 2);
-    Player_SaveWantedLevel(playerid, GetPlayerWantedLevel(playerid));
+    Player_GiveWantedLevel(playerid, 2);
     return 1;
 }

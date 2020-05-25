@@ -79,6 +79,8 @@ static Account_InsertToDatabase(playerid, const hash[]) {
     MySQL_Bind(stmt_insertPlayer, 1, hash);
 
     MySQL_ExecuteThreaded_Inline(stmt_insertPlayer, using inline OnPlayerRegister);
+
+    CallLocalFunction("OnPlayerRegister", "i", playerid);
 }
 
 forward OnPassswordHash(playerid);

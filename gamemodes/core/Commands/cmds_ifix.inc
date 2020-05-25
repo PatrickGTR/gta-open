@@ -15,5 +15,6 @@ CMD:instafix(playerid) {
 }
 
 CMD:ifix(playerid) {
+ 
     return cmd_instafix(playerid);
 }

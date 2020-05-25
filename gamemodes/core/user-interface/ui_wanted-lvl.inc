@@ -25,6 +25,11 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 stock UI_UpdatePlayerWanted(playerid, level)
 {
+    new 
+        string[5];
+    format(string, sizeof(string), "%d", level);
+    PlayerTextDrawSetString(playerid, ui_WantedLevel[playerid], string);
+
     if(level == 0) {
         PlayerTextDrawHide(playerid, ui_WantedLevel[playerid]);
         ui_WantedLevelShown[playerid] = false;
@@ -35,10 +40,5 @@ stock UI_UpdatePlayerWanted(playerid, level)
         PlayerTextDrawShow(playerid, ui_WantedLevel[playerid]);
         ui_WantedLevelShown[playerid] = true;
     }
-
-    new 
-        string[5];
-    format(string, sizeof(string), "%d", level);
-    PlayerTextDrawSetString(playerid, ui_WantedLevel[playerid], string);
     return 1;
 }

@@ -32,7 +32,6 @@ stock Player_GiveWantedLevel(playerid, level)  {
 
 hook OnPlayerDeath(playerid, killerid, reason) {
     SetPlayerWantedLevel(playerid, 0);
-    Player_SaveWantedLevel(playerid, 0);
     return 1;
 }
 
