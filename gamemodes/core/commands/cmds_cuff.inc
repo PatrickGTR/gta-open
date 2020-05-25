@@ -15,6 +15,11 @@ CMD:cuffcw(playerid)
     if(!IsPlayerInRangeOfPoint(ClosesWar, 5.0, x, y, z)) {
         return SendErrorMsg(playerid, "There's no warrant near you");
     }
+    if(GetPlayerState(ClosesWar) != PLAYER_STATE_ONFOOT) {
+        SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", ClosesWar, ClosesWar);
+        SendServerMsgF(ClosesWar, "%p (%d) has asked you to pull over", playerid, playerid);
+        return 0;
+    }
     if(PlayerCuffed[ClosesWar] == true) {
         return SendErrorMsg(playerid, "The player is already cuffed");
     }
@@ -46,6 +51,11 @@ CMD:cuff(playerid, params[])
     }
     if(!IsPlayerInRangeOfPoint(targetid, 5.0, x, y, z)) {
         return SendErrorMsg(playerid, "There's no warrant near you");
+    }
+    if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
+        SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", targetid, targetid);
+        SendServerMsgF(targetid, "%p (%d) has asked you to pull over", playerid, playerid);
+        return 0;
     }
     if(PlayerCuffed[targetid] == true) {
         return SendErrorMsg(playerid, "The player is already cuffed");

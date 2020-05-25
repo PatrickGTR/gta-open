@@ -127,6 +127,15 @@ hook OnPlayerDisconnect(playerid, reason)
     return 1;
 }
 
+hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+{
+    if(PlayerCuffed[playerid] == true) {
+        SendServerMsg(playerid, "You can't enter a vehicle while cuffed! EJECTED!");
+        RemovePlayerFromVehicle(playerid);
+    }
+    return 1;
+}
+
 stock Player_SetJail(playerid, bool:jailed)
 {
     PlayerJailed[playerid] = jailed;
