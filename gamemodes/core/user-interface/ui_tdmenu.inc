@@ -58,8 +58,6 @@ hook OnPlayerText(playerid, text[]) {
 						PlayerTextDrawHide(playerid, TextMenuBody[playerid]);
 
 						CallLocalFunction(TextMenuCallbackHandler[playerid], "ii", playerid, value);
-						
-						TextMenuCallbackHandler[playerid][0] = EOS;
 						return ~0; // stop the hook from caryying on and don't show the input to players.
 					} else {
 						log("ui_tdmenu.inc - SEVERE! - empty string passed to CallLocalFunction.");
@@ -158,3 +156,16 @@ stock TextMenu_Hide(playerid)
 	return 1;
 }
 
+
+// returns
+// - 0 if player is invalid.
+// - 1 success
+stock TextMenu_HideSpecific(playerid, const callback[]) {
+
+	if(!strcmp(TextMenuCallbackHandler[playerid], callback)) {
+		if(TextMenu_Hide(playerid)) {
+			return 1;
+		}
+	}
+	return 0;
+}

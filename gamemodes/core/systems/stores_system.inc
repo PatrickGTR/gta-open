@@ -169,8 +169,8 @@ public TextMenuAmmunationNext(playerid, listitem) {
     return 1;
 }
 
-forward TextMennuMechanic(playerid, listitem);
-public TextMennuMechanic(playerid, listitem)
+forward TextMenuMechanic(playerid, listitem);
+public TextMenuMechanic(playerid, listitem)
 {
     switch(listitem) {
         case 1: {
@@ -204,14 +204,16 @@ hook OnPlayerUpdate(playerid)
         if(Player_IsInAmmu(playerid)) {
             return 1;
         }
-        TextMenu_Hide(playerid);
+        TextMenu_HideSpecific(playerid, "TextMenuAmmunationMain");
+        TextMenu_HideSpecific(playerid, "TextMenuAmmunationNext");
 
     }
     if(!IsPlayerInRangeOfPoint(playerid, 5.0, 312.8376, -167.7640, 999.5938)) {
         if(Player_IsInAmmu(playerid)) {
             return 1;
         }
-        TextMenu_Hide(playerid);
+        TextMenu_HideSpecific(playerid, "TextMenuAmmunationMain");
+        TextMenu_HideSpecific(playerid, "TextMenuAmmunationNext");
     }
     if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1015.4679, -930.1953, 42.1797)) {
         if(PlayerFixingVehicle[playerid]) {
@@ -219,7 +221,7 @@ hook OnPlayerUpdate(playerid)
             GameTextForPlayer(playerid, "~r~You moved, fix canceled", 3000, 3);
             PlayerFixingVehicle[playerid] = false;
         }
-        TextMenu_Hide(playerid);
+        TextMenu_HideSpecific(playerid, "TextMenuMechanic");
     }
     return 1;
 }
@@ -269,7 +271,7 @@ stock Ammunation_ShowMenu(playerid, bool:next = false) {
 
 stock ShowMechServices(playerid) 
 {
-    TextMenu_Create(playerid, "TextMennuMechanic", "Mechanic Services");
+    TextMenu_Create(playerid, "TextMenuMechanic", "Mechanic Services");
     TextMenu_Add(playerid, "~w~Fix your vehicle [~g~1520~w~]");
     TextMenu_Add(playerid, "~w~Insta fix [~g~15000~w~]");
     TextMenu_Show(playerid);

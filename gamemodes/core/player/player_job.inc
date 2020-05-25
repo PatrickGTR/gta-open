@@ -22,17 +22,6 @@ hook OnPlayerConnect(playerid) {
     PlayerJob[playerid] = TYPE_NO_JOB;
 }
 
-hook OnPlayerSpawn(playerid) {
-    if(Player_GetClass(playerid) == TEAM_CIVILIAN) {
-        if(Player_GetJob(playerid) == TYPE_NO_JOB) {
-            Player_ShowJobMenu(playerid);
-        }
-        Player_RandomSpawn(playerid);
-        Player_GiveJobWeapons(playerid);
-    }
-    return 1;
-}
-
 // Functions
 Player_SetJob(playerid, jobid, bool:save = false) {
 
