@@ -15,10 +15,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     }
     if(PRESSED(KEY_SUBMISSION))
     {
-        if(PlayerCuffed[Player_GetClosestWanted(playerid)] == 0) {
+        if(PlayerCuffed[Player_GetClosestWanted(playerid)] == false) {
             return cmd_cuffcw(playerid);
         }
-        else if(PlayerCuffed[Player_GetClosestWanted(playerid)] == 1) {
+        else if(PlayerCuffed[Player_GetClosestWanted(playerid)] == true) {
             return cmd_arrestcw(playerid);
         }
     }

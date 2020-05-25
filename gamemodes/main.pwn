@@ -53,18 +53,7 @@ public OnGameModeInit() {
 	return 1;
 }
 
-CMD:gmoney(playerid, params[]) {
-	GivePlayerMoney(playerid, 100000);
-	return 1;
-}
-
-
-CMD:test1(playerid, params[]) {
-	Ammunation_ShowMenu(playerid, true);
-	return 1;
-}
-
-CMD:test(playerid, params[]) {
-	Ammunation_ShowMenu(playerid);
+CMD:gmoney(playerid) {
+	GivePlayerMoney(playerid, 1000000);
 	return 1;
 }

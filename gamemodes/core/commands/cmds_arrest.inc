@@ -7,10 +7,10 @@ CMD:arrestcw(playerid)
     if(!IsPlayerConnected(ClosesWar)) {
         return SendErrorMsg(playerid, "Player is not connected!");
     }
-    if(PlayerCuffed[ClosesWar] == 0) {
+    if(PlayerCuffed[ClosesWar] == false) {
         return SendErrorMsg(playerid, "You need to cuff the player first!");
     }
-    if(PlayerJailed[ClosesWar] == 1) {
+    if(PlayerJailed[ClosesWar] == true) {
         return SendErrorMsg(playerid, "Player is jailed now!");
     }
     ApplyAnimation(ClosesWar, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);
@@ -39,10 +39,10 @@ CMD:arrest(playerid, params[])
     if(!IsPlayerConnected(targetid)) {
         return SendErrorMsg(playerid, "Player is not connected!");
     }
-    if(PlayerCuffed[targetid] == 0) {
+    if(PlayerCuffed[targetid] == false) {
         return SendErrorMsg(playerid, "You need to cuff the player first!");
     }
-    if(PlayerJailed[targetid] == 1) {
+    if(PlayerJailed[targetid] == true) {
         return SendErrorMsg(playerid, "Player is jailed now!");
     }
     ApplyAnimation(ClosesWar, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);

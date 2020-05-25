@@ -15,6 +15,9 @@ CMD:cuffcw(playerid)
     if(!IsPlayerInRangeOfPoint(ClosesWar, 5.0, x, y, z)) {
         return SendErrorMsg(playerid, "There's no warrant near you");
     }
+    if(PlayerCuffed[ClosesWar] == true) {
+        return SendErrorMsg(playerid, "The player is already cuffed");
+    }
     SendServerMsgF(ClosesWar, "You have been cuffed by officer %p (%d)", playerid, playerid);
     SendServerMsgF(playerid, "You're now cuffing %p (%d)", ClosesWar, ClosesWar);
     SetPlayerAttachedObject(ClosesWar, 0, 19418, 6, -0.011000, 0.028000, -0.022000, -15.600012, -33.699977,-81.700035, 0.891999, 1.000000, 1.168000);
@@ -43,6 +46,9 @@ CMD:cuff(playerid, params[])
     }
     if(!IsPlayerInRangeOfPoint(targetid, 5.0, x, y, z)) {
         return SendErrorMsg(playerid, "There's no warrant near you");
+    }
+    if(PlayerCuffed[targetid] == true) {
+        return SendErrorMsg(playerid, "The player is already cuffed");
     }
     SendServerMsgF(targetid, "You have been cuffed by officer %p (%d)", playerid, playerid);
     SendServerMsgF(playerid, "You're now cuffing %p (%d)", targetid, targetid);
