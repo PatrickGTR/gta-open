@@ -14,6 +14,8 @@
 #define SERVER_LANGUAGE			"English"
 #define SERVER_WEBSITE			"www.sa-mp.com"
 
+#define PLAYER_DEBUG_HANDLER    "player"
+
 #define NEXT_PAGE (25)
 
 #define TEXTLABEL_STREAMDISTANCE    (100)
