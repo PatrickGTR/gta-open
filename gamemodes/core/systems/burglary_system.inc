@@ -3,10 +3,11 @@
 
 #define RobberyCD 300000
 
-new
-    Timer:burglarytimer[MAX_PLAYERS];
+static
+    Timer:burglarytimer[MAX_PLAYERS]
+;
 
-new 
+static 
     bankcp, 
     casinocp, 
     manscp;
@@ -14,12 +15,14 @@ new
 new 
     robbing[MAX_PLAYERS],
     robbingdone[MAX_PLAYERS],
-    BurglaryInfo[MAX_PLAYERS];
+    BurglaryInfo[MAX_PLAYERS]
+;
 
-new 
+static 
     bankrecent,
     casinorecent,
-    mansrecent;
+    mansrecent
+;
 
 enum RHIDEOUTS {
     Float:rhX,
@@ -97,6 +100,18 @@ hook OnGameModeInit()
     casinocp = CreateDynamicCP(1141.6899, 11.1338, 1000.6797, 1.0, 31, 12, .streamdistance = CHECKPOINT_STREAMDISTANCE);
     //mansion
     manscp = CreateDynamicCP(1230.8403, -807.2298, 1084.0078, 1.0, 32, 5, .streamdistance = CHECKPOINT_STREAMDISTANCE);
+}
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+    if(PRESSED(KEY_YES)) {
+        if(IsPlayerInRangeOfPoint(playerid, 5.0, 295.4240, -82.5273, 1001.5156) || IsPlayerInRangeOfPoint(playerid, 5.0, 312.8376, -167.7640, 999.5938)) {
+            Ammunation_ShowMenu(playerid);
+        }
+    }
+    if(PRESSED(KEY_YES) && IsPlayerInRangeOfPoint(playerid, 5.0, 1015.4679, -930.1953, 42.1797)) {
+        ShowMechServices(playerid);
+    }
+    return 1;
 }
 
 hook OnPlayerEnterDynamicCP(playerid, checkpointid) 

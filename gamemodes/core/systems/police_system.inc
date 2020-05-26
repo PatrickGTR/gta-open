@@ -81,6 +81,12 @@ stock Player_Jail(playerid) {
         RemovePlayerAttachedObject(playerid, 0);
         SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
         PLAYER_SetPlayerWantedLevel(playerid, 0);
+        if(BurglaryInfo[playerid] != 0) {
+            robbing[playerid] = 0;
+            BurglaryInfo[playerid] = 0;
+            robbingdone[playerid] = 0;
+            stop burglarytimer[playerid];
+        }
     }
     return 1;
 }
@@ -108,6 +114,22 @@ hook OnPlayerLogin(playerid)
     }
     MySQL_BindInt(stmt_retrieveJailed, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_retrieveJailed, using inline OnPlayerJailLoad);
+    return 1;
+}
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+    new id = Player_GetClosestWanted(playerid);
+
+    if(id == -1) {
+        return 1;
+    }
+
+    if(PlayerCuffed[targetid] == false) {
+        return cmd_cuffcw(playerid);
+    }
+    else if(PlayerCuffed[targetid] == true) {
+        return cmd_arrestcw(playerid);
+    }
     return 1;
 }
 

@@ -57,3 +57,8 @@ CMD:gmoney(playerid) {
 	GivePlayerMoney(playerid, 1000000);
 	return 1;
 }
+
+public OnPlayerTakePlayerDamage( playerid, issuerid, &Float: amount, weaponid, bodypart )
+{
+    return 1;
+}
