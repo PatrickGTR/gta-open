@@ -107,6 +107,7 @@ ProcessGiveDamageUI(playerid, damageid, Float:damage) {
 hook OnPlayerDamagePlayer(playerid, damagedid, Float: amount, weaponid, bodypart) {
     ProcessTakeDamageUI(damagedid, playerid, amount);
     ProcessGiveDamageUI(playerid, damagedid, amount);
+	return 1;
 }
 
 hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
@@ -114,6 +115,7 @@ hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	if(weaponid == WEAPON_COLLISION) { // Collision (Mainly fall damage)
 		ProcessTakeDamageUI(playerid, INVALID_PLAYER_ID, amount);
 	}
+	return 1;
 }
 
 timer HideGiveDamageUI[seconds](playerid, damageid, seconds) {

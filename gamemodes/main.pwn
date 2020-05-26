@@ -68,3 +68,11 @@ CMD:test(playerid, params[]) {
 	Ammunation_ShowMenu(playerid);
 	return 1;
 }
+
+
+// temporary fix for players not taking damage, although api should handle this when
+// not in use.
+public OnPlayerTakePlayerDamage( playerid, issuerid, &Float: amount, weaponid, bodypart )
+{
+    return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
+}
