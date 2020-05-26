@@ -58,17 +58,25 @@ CMD:gmoney(playerid, params[]) {
 	return 1;
 }
 
+#include <YSI_Coding\y_timers>
+new timer = 300;
+new Timer:timer_test;
 
-CMD:test1(playerid, params[]) {
-	Ammunation_ShowMenu(playerid, true);
+CMD:starttime(playerid, params[]) {
+	timer_test = repeat TestTimer(playerid);
 	return 1;
 }
 
-CMD:test(playerid, params[]) {
-	Ammunation_ShowMenu(playerid);
+timer TestTimer[1000](playerid) {
+
+	if(timer <= 0) {
+		stop timer_test;
+	}
+
+	UI_TimeLeft(playerid, timer);
+	timer --;
 	return 1;
 }
-
 
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.
