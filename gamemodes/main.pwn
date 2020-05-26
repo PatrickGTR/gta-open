@@ -58,7 +58,29 @@ CMD:gmoney(playerid) {
 	return 1;
 }
 
+#include <YSI_Coding\y_timers>
+new timer = 300;
+new Timer:timer_test;
+
+CMD:starttime(playerid, params[]) {
+	timer_test = repeat TestTimer(playerid);
+	return 1;
+}
+
+timer TestTimer[1000](playerid) {
+
+	if(timer <= 0) {
+		stop timer_test;
+	}
+
+	UI_TimeLeft(playerid, timer);
+	timer --;
+	return 1;
+}
+
+// temporary fix for players not taking damage, although api should handle this when
+// not in use.
 public OnPlayerTakePlayerDamage( playerid, issuerid, &Float: amount, weaponid, bodypart )
 {
-    return 1;
+    return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
 }
