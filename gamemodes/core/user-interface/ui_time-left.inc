@@ -1,8 +1,11 @@
 #include <YSI_Coding\y_hooks>
+#include <YSI_Coding\y_timers>
 
 new 
     PlayerText:timeLeft[MAX_PLAYERS],
-    bool:timeLeftShown[MAX_PLAYERS];
+    bool:timeLeftShown[MAX_PLAYERS], 
+    timeLeftCounter[MAX_PLAYERS],
+    Timer:timeLeftTimer[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid) {
     timeLeft[playerid] = CreatePlayerTextDraw(playerid, 130.000000, 400.000000, "Time left:~n~~g~05:55");
@@ -19,7 +22,8 @@ hook OnPlayerConnect(playerid) {
     PlayerTextDrawSetProportional(playerid, timeLeft[playerid], 1);
     PlayerTextDrawSetSelectable(playerid, timeLeft[playerid], 0);
 
-    timeLeftShown[playerid] = false; 
+    timeLeftShown[playerid] = false;
+    timeLeftCounter[playerid] = 0;
     return 1;
 }
 
@@ -32,12 +36,6 @@ stock UI_TimeLeft(playerid, seconds) {
         return 0;
     }
 
-    if(seconds <= 0  && timeLeftShown[playerid]) {
-        timeLeftShown[playerid] = false;
-        PlayerTextDrawHide(playerid, timeLeft[playerid]);
-        return 1;
-    }
-
     new 
         string[30],
         mins,
@@ -48,13 +46,25 @@ stock UI_TimeLeft(playerid, seconds) {
     format(string, sizeof(string), "Time Left~n~~g~%02d:%02d", mins ,secs);
     PlayerTextDrawSetString(playerid, timeLeft[playerid], string);
 
-
     if(!timeLeftShown[playerid]) {
         timeLeftShown[playerid] = true;
+        timeLeftTimer[playerid] = repeat decrementTimeLeft(playerid);
         PlayerTextDrawShow(playerid, timeLeft[playerid]);
     }
+    if(seconds <= 0) {
+        timeLeftShown[playerid] = false;
+        PlayerTextDrawHide(playerid, timeLeft[playerid]);
+    }
 
+    timeLeftCounter[playerid] = seconds;
     return 1;
+}
+
+timer decrementTimeLeft[1000](playerid) {
+    if(timeLeftCounter[playerid] -- <= 0) {
+        stop timeLeftTimer[playerid];
+    }
+    UI_TimeLeft(playerid, timeLeftCounter[playerid]);
 }
 
 stock UI_HideTimeLeft(playerid) {
