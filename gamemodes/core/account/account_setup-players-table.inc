@@ -13,6 +13,7 @@ hook OnMySQLConnected()
             job_id tinyint(4) NOT NULL DEFAULT '0',\
             wanted_level mediumint(6) NOT NULL DEFAULT '0',\
             player_bounty mediumint(8) NOT NULL DEFAULT '0',\
+            player_jailed varchar(10) NOT NULL,\
             PRIMARY KEY (u_id), \
             UNIQUE KEY username (username)\
         )";

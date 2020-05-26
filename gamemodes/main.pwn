@@ -53,8 +53,8 @@ public OnGameModeInit() {
 	return 1;
 }
 
-CMD:gmoney(playerid, params[]) {
-	GivePlayerMoney(playerid, 100000);
+CMD:gmoney(playerid) {
+	GivePlayerMoney(playerid, 1000000);
 	return 1;
 }
 
