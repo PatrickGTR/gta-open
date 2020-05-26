@@ -3,7 +3,7 @@
 
 #define RobberyCD 300000
 
-static
+new
     Timer:burglarytimer[MAX_PLAYERS]
 ;
 
@@ -15,7 +15,8 @@ static
 new 
     robbing[MAX_PLAYERS],
     robbingdone[MAX_PLAYERS],
-    BurglaryInfo[MAX_PLAYERS]
+    BurglaryInfo[MAX_PLAYERS],
+    Timer:BurglaryFailed[MAX_PLAYERS]
 ;
 
 static 
@@ -58,6 +59,7 @@ hook OnPlayerUpdate(playerid)
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
             stop burglarytimer[playerid];
+            UI_HideTimeLeft(playerid);
             defer BankCooldown();
         }
     }
@@ -71,6 +73,7 @@ hook OnPlayerUpdate(playerid)
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
             stop burglarytimer[playerid];
+            UI_HideTimeLeft(playerid);
             defer CasinoCooldown();
         }
     }
@@ -84,6 +87,7 @@ hook OnPlayerUpdate(playerid)
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
             stop burglarytimer[playerid];
+            UI_HideTimeLeft(playerid);
             defer MansCooldown();
         }
     }
@@ -147,6 +151,8 @@ hook OnPlayerEnterRaceCP(playerid)
             robbing[playerid] = 0;
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
+            UI_HideTimeLeft(playerid);
+            stop BurglaryFailed[playerid];
             defer BankCooldown();
         }
         if(BurglaryInfo[playerid] == 2) //casino
@@ -161,6 +167,8 @@ hook OnPlayerEnterRaceCP(playerid)
             robbing[playerid] = 0;
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
+            UI_HideTimeLeft(playerid);
+            stop BurglaryFailed[playerid];
             defer CasinoCooldown();
         }
         if(BurglaryInfo[playerid] == 3) //mansion
@@ -175,6 +183,8 @@ hook OnPlayerEnterRaceCP(playerid)
             robbing[playerid] = 0;
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
+            UI_HideTimeLeft(playerid);
+            stop BurglaryFailed[playerid];
             defer MansCooldown();
         }
         if(BurglaryInfo[playerid] == 4)
@@ -189,6 +199,8 @@ hook OnPlayerEnterRaceCP(playerid)
             robbing[playerid] = 0;
             BurglaryInfo[playerid] = 0;
             robbingdone[playerid] = 0;
+            UI_HideTimeLeft(playerid);
+            stop BurglaryFailed[playerid];
             defer TowerCooldown();
         }
     }
@@ -209,6 +221,7 @@ CMD:robbery(playerid) {
         robbing[playerid] = 1;
         BurglaryInfo[playerid] = 1;
         bankrecent = 1;
+        UI_TimeLeft(playerid, 20);
         SendServerMsg(playerid, "Robbing the bank stay in the red marker!");
         ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 0);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
@@ -227,6 +240,7 @@ CMD:robbery(playerid) {
         BurglaryInfo[playerid] = 2;
         casinorecent = 1;
         SendServerMsg(playerid, "Robbing the casino stay in the red marker!");
+        UI_TimeLeft(playerid, 20);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 7.0, 1230.8403, -807.2298, 1084.0078)) {
@@ -243,6 +257,7 @@ CMD:robbery(playerid) {
         BurglaryInfo[playerid] = 3;
         mansrecent = 1;
         SendServerMsg(playerid, "Robbing the mansion stay in the red marker!");
+        UI_TimeLeft(playerid, 20);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
     }
     else {
@@ -258,6 +273,17 @@ timer SetHideoutTimer[20000](playerid)
     robbingdone[playerid] = 1;
     SetRandomHideout(playerid);
     SendServerMsg(playerid, "Go to the hideout and evade the cops!");
+    BurglaryFailed[playerid] = defer RobberyFailed(playerid);
+    UI_TimeLeft(playerid, 300);
+    return 1;
+}
+
+timer RobberyFailed[300000](playerid)
+{
+    robbing[playerid] = 0;
+    BurglaryInfo[playerid] = 0;
+    robbingdone[playerid] = 0;
+    UI_HideTimeLeft(playerid);
     return 1;
 }
 

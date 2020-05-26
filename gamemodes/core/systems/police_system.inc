@@ -118,17 +118,22 @@ hook OnPlayerLogin(playerid)
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    new id = Player_GetClosestWanted(playerid);
+    if(PRESSED(KEY_SUBMISSION)) {
+        if(Player_GetClass(playerid) != TEAM_POLICE) {
+            return 0;
+        }
+        new id = Player_GetClosestWanted(playerid);
 
-    if(id == -1) {
-        return 1;
-    }
+        if(id == -1) {
+            return 1;
+        }
 
-    if(PlayerCuffed[targetid] == false) {
-        return cmd_cuffcw(playerid);
-    }
-    else if(PlayerCuffed[targetid] == true) {
-        return cmd_arrestcw(playerid);
+        if(PlayerCuffed[id] == false) {
+            return cmd_cuffcw(playerid);
+        }
+        else if(PlayerCuffed[id] == true) {
+            return cmd_arrestcw(playerid);
+        }
     }
     return 1;
 }

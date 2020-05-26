@@ -57,6 +57,9 @@ stock UI_TimeLeft(playerid, seconds) {
     return 1;
 }
 
+stock UI_HideTimeLeft(playerid) {
+    return UI_TimeLeft(playerid, 0);
+}
 
 
 
