@@ -59,10 +59,7 @@ hook OnPlayerLeaveDynamicCP(playerid, checkpointid)
         if(robbing[playerid] == 1 && BurglaryInfo[playerid] == 4) {
             if(robbingdone[playerid] == 1) return 0;
             SendServerMsg(playerid, "You've left the checkpoint robbery cancelled!");
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            stop burglarytimer[playerid];
+            Player_StopRobbery(playerid);
             UI_HideTimeLeft(playerid);
             defer TowerCooldown();
         }

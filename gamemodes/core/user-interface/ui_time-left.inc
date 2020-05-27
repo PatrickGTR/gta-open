@@ -54,6 +54,7 @@ stock UI_TimeLeft(playerid, seconds) {
     if(seconds <= 0) {
         timeLeftShown[playerid] = false;
         PlayerTextDrawHide(playerid, timeLeft[playerid]);
+        stop timeLeftTimer[playerid];
     }
 
     timeLeftCounter[playerid] = seconds;
@@ -65,57 +66,6 @@ timer decrementTimeLeft[1000](playerid) {
         stop timeLeftTimer[playerid];
     }
     UI_TimeLeft(playerid, timeLeftCounter[playerid]);
-}
-
-stock UI_JailTimeLeft(playerid, seconds) {
-    if(!IsPlayerConnected(playerid)) {
-        return 0;
-    }
-
-    new 
-        string[30],
-        mins,
-        secs;
-
-    mins = seconds / 60;
-    secs = seconds % 60;
-    format(string, sizeof(string), "Time Left~n~~g~%02d:%02d~n~~w~", mins ,secs);
-    PlayerTextDrawSetString(playerid, timeLeft[playerid], string);
-
-    if(!timeLeftShown[playerid]) {
-        timeLeftShown[playerid] = true;
-        timeLeftTimer[playerid] = repeat decrementTimeLeft2(playerid);
-        PlayerTextDrawShow(playerid, timeLeft[playerid]);
-    }
-    if(seconds <= 0) {
-        timeLeftShown[playerid] = false;
-        PlayerTextDrawHide(playerid, timeLeft[playerid]);
-        stop timeLeftTimer[playerid];
-    }
-
-    timeLeftCounter[playerid] = seconds;
-
-    new string2[256];
-
-    static const query[] = "\
-    INSERT INTO \
-        jailed(u_id, jailed_time) \
-    VALUES \
-        (%i, %i) \
-    ON DUPLICATE KEY UPDATE \
-        jailed_time = %i \
-    ";
-
-    mysql_format(MySQL_GetHandle(), string2, sizeof(string2), query, Player_GetAccountID(playerid), seconds, seconds);
-    mysql_tquery(MySQL_GetHandle(), string2);
-    return 1;
-}
-
-timer decrementTimeLeft2[1000](playerid) {
-    if(timeLeftCounter[playerid] -- <= 0) {
-        stop timeLeftTimer[playerid];
-    }
-    UI_JailTimeLeft(playerid, timeLeftCounter[playerid]);
 }
 
 stock UI_HideTimeLeft(playerid) {

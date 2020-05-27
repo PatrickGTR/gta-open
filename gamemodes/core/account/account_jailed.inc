@@ -53,8 +53,3 @@ hook OnPlayerLogin(playerid){
     MySQL_BindInt(stmt_retrieveTime, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_retrieveTime, using inline OnPlayerJailedTimeLoad);
 }
-
-hook OnPlayerSpawn(playerid) {
-    UI_JailTimeLeft(playerid, Jailtime[playerid]);
-    return 1;
-}

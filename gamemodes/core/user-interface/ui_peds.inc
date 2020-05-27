@@ -67,13 +67,18 @@ hook OnGameModeInit() {
 
 public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently)
 {
-    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
-        return SendServerMsg(playerid, "Only Civilians can rob stores!");
-    }
     if(robbed_recently)
     {
         SendServerMsg(playerid, "This store have been robbed recently!");
         return 0;
+    }
+    return 1;
+}
+
+public OnPlayerRequestRobbery(playerid, actorid)
+{
+    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+        return SendServerMsg(playerid, "Only Civilians can rob stores!");
     }
     return 1;
 }

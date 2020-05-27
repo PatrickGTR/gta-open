@@ -7,6 +7,9 @@ CMD:arrestcw(playerid)
     if(!IsPlayerConnected(ClosesWar)) {
         return SendErrorMsg(playerid, "Player is not connected!");
     }
+    if(ClosesWar == -1)  {
+        return SendErrorMsg(playerid, "There's no warrant near you");
+    }
     if(GetPlayerState(ClosesWar) != PLAYER_STATE_ONFOOT) {
         SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", ClosesWar, ClosesWar);
         SendServerMsgF(ClosesWar, "Officer %p (%d) has asked you to pull over!", playerid, playerid);
@@ -23,9 +26,8 @@ CMD:arrestcw(playerid)
     ApplyAnimation(playerid, "PED", "ARRESTgun", 4.1, 0, 1, 1, 1, 3000, 1);
     SendServerMsgF(playerid, "You have arrested %p (%d)", ClosesWar, ClosesWar);
     SendServerMsgF(ClosesWar, "You have been arrested by %p (%d)", playerid, playerid);
-    Player_SetBail(ClosesWar, 5000);
-    UI_JailTimeLeft(ClosesWar, 300);
-    Player_Jail(ClosesWar);
+    Player_SendToJail(playerid, 300, true);
+    Player_SetJail(playerid, true);
     return 1;
 }
 
@@ -60,9 +62,8 @@ CMD:arrest(playerid, params[])
     SetPlayerSpecialAction(targetid, SPECIAL_ACTION_NONE);
     ApplyAnimation(targetid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);
     ApplyAnimation(playerid, "PED", "ARRESTgun", 4.1, 0, 1, 1, 1, 3000, 1);
-    Player_SetBail(targetid, 5000);
-    UI_JailTimeLeft(targetid, 300);
-    Player_Jail(targetid);
+    Player_SendToJail(playerid, 300, true);
+    Player_SetJail(playerid, true);
     return 1;
 }
 

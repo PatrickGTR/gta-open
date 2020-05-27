@@ -10,13 +10,6 @@ static
     Statement: stmt_retrieveJailed
 ;
 
-static
-    Float:jailX,
-    Float:jailY,
-    Float:jailZ,
-    Float:jailA
-;
-
 enum E_JAILPOS_DATA
 {
     Float:E_JAILPOS_X,
@@ -26,7 +19,7 @@ enum E_JAILPOS_DATA
 }
 
 static
-    const DATA[][E_JAILPOS_DATA] =
+    const JailData[][E_JAILPOS_DATA] =
 {
     {264.2428, 86.4775, 1001.0391, 271.6097},
     {263.9785, 82.0106, 1001.0391, 269.8944}
@@ -63,30 +56,55 @@ stock Player_GetClosestWanted(playerid) {
     return closestID;
 }
 
-stock Player_Jail(playerid) {
-    for(new i = 0; i < sizeof(DATA); i++) {
-        jailX = DATA[i][E_JAILPOS_X];
-        jailY = DATA[i][E_JAILPOS_Y];
-        jailZ = DATA[i][E_JAILPOS_Z];
-        jailA = DATA[i][E_JAILPOS_A];
+stock Player_SendToJail(playerid, seconds, bool:save = false) {
+    if(!UI_TimeLeft(playerid, seconds)) { 
+        return 0;
+    }
 
-        SetPlayerPos(playerid, jailX, jailY, jailZ);
-        SetPlayerFacingAngle(playerid, jailA);
-        SetPlayerVirtualWorld(playerid, 16);
-        SetPlayerInterior(playerid, 6);
-        ClearAnimations(playerid, 1);
-        Player_SetJail(playerid, true);
-        PlayerCuffed[playerid] = false;
-        ResetPlayerWeapons(playerid);
-        RemovePlayerAttachedObject(playerid, 0);
-        SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
-        PLAYER_SetPlayerWantedLevel(playerid, 0);
-        if(BurglaryInfo[playerid] != 0) {
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            stop burglarytimer[playerid];
-        }
+    new
+        Float:x,
+        Float:y,
+        Float:z,
+        Float:ang,
+        idx = random(sizeof(JailData));
+    x = JailData[idx][E_JAILPOS_X];
+    y = JailData[idx][E_JAILPOS_Y];
+    z = JailData[idx][E_JAILPOS_Z];
+    ang = JailData[idx][E_JAILPOS_A];
+
+    SetPlayerPos(playerid, x, y, z);
+    SetPlayerFacingAngle(playerid, ang);
+    SetPlayerVirtualWorld(playerid, 16);
+    SetPlayerInterior(playerid, 6);
+
+
+    ClearAnimations(playerid, 1);
+
+    Player_SetJail(playerid, true);
+    Player_SetCuffed(playerid, false);
+
+    ResetPlayerWeapons(playerid);
+    RemovePlayerAttachedObject(playerid, 0);
+    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+    PLAYER_SetPlayerWantedLevel(playerid, 0);
+    if(BurglaryInfo[playerid] != 0) {
+        Player_StopRobbery(playerid);
+    }
+
+    if(save) {
+        new 
+            string[256];
+        static const query[] = "\
+            INSERT INTO \
+                jailed(u_id, jailed_time) \
+            VALUES \
+                (%i, %i) \
+            ON DUPLICATE KEY UPDATE \
+                jailed_time = %i \
+        ";
+
+        mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), seconds, seconds);
+        mysql_tquery(MySQL_GetHandle(), string);
     }
     return 1;
 }
@@ -141,7 +159,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 hook OnPlayerSpawn(playerid)
 {
     if(Player_IsJailed(playerid)) {
-        Player_Jail(playerid);
+        Player_SendToJail(playerid, 300, true);
     }
     return 1;
 }
@@ -149,8 +167,7 @@ hook OnPlayerSpawn(playerid)
 hook OnPlayerDisconnect(playerid, reason)
 {
     if(PlayerCuffed[playerid] == true) {
-        Player_SetBail(playerid, 5000);
-        UI_JailTimeLeft(playerid, 300);
+        Player_SendToJail(playerid, 300, true);
         Player_SetJail(playerid, true);
     }
     return 1;
@@ -184,22 +201,8 @@ stock Player_SetJail(playerid, bool:jailed)
     mysql_tquery(MySQL_GetHandle(), string);
 }
 
-stock Player_SetBail(playerid, bail) {
-    BailBalance[playerid] = bail;
-
-    new string[256];
-
-    static const query[] = "\
-    INSERT INTO \
-        jailed(u_id, bail_balance) \
-    VALUES \
-        (%i, %i) \
-    ON DUPLICATE KEY UPDATE \
-        bail_balance = %i \
-    ";
-
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), bail, bail);
-    mysql_tquery(MySQL_GetHandle(), string);
+stock Player_SetCuffed(playerid, bool:cuffed) {
+    return PlayerCuffed[playerid] = cuffed;
 }
 
 stock Player_IsJailed(playerid) {

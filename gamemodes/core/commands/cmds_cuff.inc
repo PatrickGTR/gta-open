@@ -9,8 +9,8 @@ CMD:cuffcw(playerid)
     if(Player_GetClass(playerid) != TEAM_POLICE) {
         return SendErrorMsg(playerid, "Only cops can use this command!");
     }
-    if(!IsPlayerConnected(ClosesWar)) {
-        return SendErrorMsg(playerid, "Player is not connected!");
+    if(ClosesWar == -1)  {
+        return SendErrorMsg(playerid, "There's no warrant near you");
     }
     if(!IsPlayerInRangeOfPoint(ClosesWar, 5.0, x, y, z)) {
         return SendErrorMsg(playerid, "There's no warrant near you");

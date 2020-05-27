@@ -55,10 +55,7 @@ hook OnPlayerUpdate(playerid)
         {
             if(robbingdone[playerid] == 1) return 0;
             SendServerMsg(playerid, "You've left the checkpoint robbery cancelled!");
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            stop burglarytimer[playerid];
+            Player_StopRobbery(playerid);
             UI_HideTimeLeft(playerid);
             defer BankCooldown();
         }
@@ -69,10 +66,7 @@ hook OnPlayerUpdate(playerid)
         {
             if(robbingdone[playerid] == 1) return 0;
             SendServerMsg(playerid, "You've left the checkpoint robbery cancelled!");
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            stop burglarytimer[playerid];
+            Player_StopRobbery(playerid);
             UI_HideTimeLeft(playerid);
             defer CasinoCooldown();
         }
@@ -83,10 +77,7 @@ hook OnPlayerUpdate(playerid)
         {
             if(robbingdone[playerid] == 1) return 0;
             SendServerMsg(playerid, "You've left the checkpoint robbery cancelled!");
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            stop burglarytimer[playerid];
+            Player_StopRobbery(playerid);
             UI_HideTimeLeft(playerid);
             defer MansCooldown();
         }
@@ -264,6 +255,13 @@ CMD:robbery(playerid) {
         return SendServerMsg(playerid, "You're not near a robbery checkpoint!");
     }
     return 1;
+}
+
+stock Player_StopRobbery(playerid) {
+    robbing[playerid] = 0;
+    BurglaryInfo[playerid] = 0;
+    robbingdone[playerid] = 0;
+    stop burglarytimer[playerid];
 }
 
 timer SetHideoutTimer[20000](playerid)
