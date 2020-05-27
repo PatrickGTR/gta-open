@@ -10,6 +10,8 @@
 
 #include <admin_cmd_lvl1>
 
+#include <admin_cmd_lvl2>
+
 #include <admin_cmd_lvl4>
 
 #include <admin_cmd_lvl5>
@@ -19,6 +21,8 @@
 hook OnGameModeInit() {
 
     Admin_AddCommandToList(1, "/acmds - list of admin commands");
+
+    Admin_AddCommandToList(2, "/unjail - unjail a player");
 
     Admin_AddCommandToList(3, "/ban");
     Admin_AddCommandToList(3, "/unban");

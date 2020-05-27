@@ -53,22 +53,15 @@ public OnGameModeInit() {
 	return 1;
 }
 
-CMD:gmoney(playerid, params[]) {
-	GivePlayerMoney(playerid, 100000);
+CMD:gmoney(playerid) {
+	GivePlayerMoney(playerid, 1000000);
 	return 1;
 }
 
-
-CMD:test1(playerid, params[]) {
-	Ammunation_ShowMenu(playerid, true);
+CMD:givewanted(playerid) {
+	PLAYER_SetPlayerWantedLevel(playerid, 3);
 	return 1;
 }
-
-CMD:test(playerid, params[]) {
-	Ammunation_ShowMenu(playerid);
-	return 1;
-}
-
 
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.

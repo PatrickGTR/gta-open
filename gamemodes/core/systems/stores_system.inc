@@ -11,7 +11,7 @@ hook OnGameModeInit()
     Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to purchase items", COLOR_WHITE, 295.4240, -82.5273, 1002.5156, 40.0, 6, 0);
     Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to purchase items", COLOR_WHITE, 312.8376, -167.7640, 1000.5938, 40.0, 7, 0);
     Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to view services", COLOR_WHITE, 1015.4679, -930.1953, 43.1797, 40.0, 0, 0);
-    CreateActor(50, 1015.4679, -930.1953, 42.1797, 184.6950);
+    CreateActor(50, 1015.4679, -930.1953, 42.1797, 184.6950); //Mechanic
     CreateDynamicMapIcon(1015.4679, -930.1953, 42.1797, 27, -1, .streamdistance = 200.0, .style = MAPICON_GLOBAL);
     return 1;
 }
@@ -222,18 +222,6 @@ hook OnPlayerUpdate(playerid)
             PlayerFixingVehicle[playerid] = false;
         }
         TextMenu_HideSpecific(playerid, "TextMenuMechanic");
-    }
-    return 1;
-}
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    if(PRESSED(KEY_YES)) {
-        if(IsPlayerInRangeOfPoint(playerid, 5.0, 295.4240, -82.5273, 1001.5156) || IsPlayerInRangeOfPoint(playerid, 5.0, 312.8376, -167.7640, 999.5938)) {
-            Ammunation_ShowMenu(playerid);
-        }
-    }
-    if(PRESSED(KEY_YES) && IsPlayerInRangeOfPoint(playerid, 5.0, 1015.4679, -930.1953, 42.1797)) {
-        ShowMechServices(playerid);
     }
     return 1;
 }

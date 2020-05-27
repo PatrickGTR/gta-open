@@ -75,6 +75,14 @@ public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently)
     return 1;
 }
 
+public OnPlayerRequestRobbery(playerid, actorid)
+{
+    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+        return SendServerMsg(playerid, "Only Civilians can rob stores!");
+    }
+    return 1;
+}
+
 public OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type)
 {
     switch(type)

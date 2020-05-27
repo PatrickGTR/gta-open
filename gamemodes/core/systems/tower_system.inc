@@ -2,12 +2,15 @@
 #include <YSI_Coding\y_timers>
 #include <YSI_Data\y_iterate>
 
-new 
+static
     TowerCP,
     TowerRobbedRecently,
     BriefCase,
-    TowerEnt,
-    Timer:FindingTimer[MAX_PLAYERS];
+    TowerEnt
+;
+new
+    Timer:FindingTimer[MAX_PLAYERS]
+;
 
 enum E_BRIEFCASE_DATA {
     Float:E_BRIEFCASE_X,
@@ -56,10 +59,8 @@ hook OnPlayerLeaveDynamicCP(playerid, checkpointid)
         if(robbing[playerid] == 1 && BurglaryInfo[playerid] == 4) {
             if(robbingdone[playerid] == 1) return 0;
             SendServerMsg(playerid, "You've left the checkpoint robbery cancelled!");
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            stop burglarytimer[playerid];
+            Player_StopRobbery(playerid);
+            UI_HideTimeLeft(playerid);
             defer TowerCooldown();
         }
     }
@@ -68,7 +69,7 @@ hook OnPlayerLeaveDynamicCP(playerid, checkpointid)
 
 hook OnPlayerPickUpPickup(playerid, pickupid) {
     if(pickupid == BriefCase) {
-        SetHideout(playerid); 
+        SetHideoutTimer(playerid); 
         
         DestroyPickup(BriefCase);
 
@@ -96,6 +97,7 @@ CMD:towerrobbery(playerid) {
     SendServerMsg(playerid, "Robbing the Office stay in the red marker!");
     ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 0);
     burglarytimer[playerid] = defer SetBriefCaseLoc(playerid);
+    UI_TimeLeft(playerid, 20);
     return 1;
 }
 
@@ -106,6 +108,7 @@ timer SetBriefCaseLoc[20000](playerid)
     robbingdone[playerid] = 1;
     Briefcase_SetRandomLoc(playerid);
     FindingTimer[playerid] = defer TowerFailedToGetBC(playerid);
+    UI_TimeLeft(playerid, 25);
     SendServerMsg(playerid, "You have 25 seconds to get the Brief Case on the PentHouse");
     return 1;
 }
@@ -117,6 +120,7 @@ timer TowerFailedToGetBC[25000](playerid)
     robbing[playerid] = 0;
     BurglaryInfo[playerid] = 0;
     robbingdone[playerid] = 0;
+    UI_HideTimeLeft(playerid);
     return 1;
 }
 
@@ -131,17 +135,6 @@ timer TowerCooldown[RobberyCD]()
 CMD:forcetowercd(playerid)
 {
     TowerCooldown();
-    return 1;
-}
-
-stock SetHideout(playerid)
-{
-    robbingdone[playerid] = 1;
-    ClearAnimations(playerid, 1);
-    SetRandomHideout(playerid);
-
-    SendServerMsg(playerid, "Go to the hideout and evede the cops!");
-    Player_GiveWantedLevel(playerid, 6);
     return 1;
 }
 

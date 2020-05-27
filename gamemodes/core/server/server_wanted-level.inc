@@ -26,7 +26,7 @@ stock Player_GiveWantedLevel(playerid, level)  {
         currentLevel = Player_GetWantedLevel(playerid),
         newLevel = currentLevel + level;
     
-    SetPlayerWantedLevel(playerid, newLevel);
+    PLAYER_SetPlayerWantedLevel(playerid, newLevel);
     return 1;
 }
 
