@@ -1,13 +1,13 @@
 #include <YSI_Coding\y_hooks>
 
+new 
+    BailBalance[MAX_PLAYERS],
+    Jailtime[MAX_PLAYERS]
+;
+
 static
     Statement: stmt_retrieveBal,
     Statement: stmt_retrieveTime
-;
-
-new
-    BailBalance[MAX_PLAYERS],
-    Jailtime[MAX_PLAYERS]
 ;
 
 hook OnGameModeInit()

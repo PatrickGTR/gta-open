@@ -1,12 +1,11 @@
 #include <YSI_Coding\y_hooks>
 #include <YSI_Coding\y_timers>
 
-static
+new
     PlayerText:timeLeft[MAX_PLAYERS],
     bool:timeLeftShown[MAX_PLAYERS], 
     timeLeftCounter[MAX_PLAYERS],
     Timer:timeLeftTimer[MAX_PLAYERS];
-    
 
 hook OnPlayerConnect(playerid) {
     timeLeft[playerid] = CreatePlayerTextDraw(playerid, 130.000000, 400.000000, "Time left:~n~~g~05:55");
@@ -80,7 +79,7 @@ stock UI_JailTimeLeft(playerid, seconds) {
 
     mins = seconds / 60;
     secs = seconds % 60;
-    format(string, sizeof(string), "Time Left~n~~g~%02d:%02d", mins ,secs);
+    format(string, sizeof(string), "Time Left~n~~g~%02d:%02d~n~~w~", mins ,secs);
     PlayerTextDrawSetString(playerid, timeLeft[playerid], string);
 
     if(!timeLeftShown[playerid]) {
