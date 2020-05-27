@@ -58,23 +58,8 @@ CMD:gmoney(playerid) {
 	return 1;
 }
 
-#include <YSI_Coding\y_timers>
-new timer = 300;
-new Timer:timer_test;
-
-CMD:starttime(playerid, params[]) {
-	timer_test = repeat TestTimer(playerid);
-	return 1;
-}
-
-timer TestTimer[1000](playerid) {
-
-	if(timer <= 0) {
-		stop timer_test;
-	}
-
-	UI_TimeLeft(playerid, timer);
-	timer --;
+CMD:givewanted(playerid) {
+	PLAYER_SetPlayerWantedLevel(playerid, 3);
 	return 1;
 }
 

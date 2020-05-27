@@ -4,11 +4,13 @@
 #include <account_vip>
 #include <account_wanted-level>
 #include <inventory>
+#include <account_jailed>
 
 #if SETUP_TABLE
     #include <account_setup-players-table>
     #include <account_setup-vip-table>
     #include <account_setup-inventory>
+    #include <account_setup-jailed>
 #endif
 
 #include <YSI_Coding\y_hooks>

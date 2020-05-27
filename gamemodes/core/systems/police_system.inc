@@ -36,9 +36,9 @@ hook OnGameModeInit()
 {
     static const query_retrieveJailed[] = "\
         SELECT \
-            player_jailed \
+            bail_required \
         FROM \
-            players \
+            jailed \
         WHERE \
             u_id = ? \
         "
@@ -149,6 +149,8 @@ hook OnPlayerSpawn(playerid)
 hook OnPlayerDisconnect(playerid, reason)
 {
     if(PlayerCuffed[playerid] == true) {
+        Player_SetBail(playerid, 5000);
+        UI_JailTimeLeft(playerid, 300);
         Player_SetJail(playerid, true);
     }
     return 1;
@@ -171,14 +173,32 @@ stock Player_SetJail(playerid, bool:jailed)
 
     static const query[] = "\
     INSERT INTO \
-        players(u_id, player_jailed) \
+        jailed(u_id, bail_required) \
     VALUES \
         (%i, %i) \
     ON DUPLICATE KEY UPDATE \
-        player_jailed = %i \
+        bail_required = %i \
     ";
 
     mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), jailed, jailed);
+    mysql_tquery(MySQL_GetHandle(), string);
+}
+
+stock Player_SetBail(playerid, bail) {
+    BailBalance[playerid] = bail;
+
+    new string[256];
+
+    static const query[] = "\
+    INSERT INTO \
+        jailed(u_id, bail_balance) \
+    VALUES \
+        (%i, %i) \
+    ON DUPLICATE KEY UPDATE \
+        bail_balance = %i \
+    ";
+
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), bail, bail);
     mysql_tquery(MySQL_GetHandle(), string);
 }
 
