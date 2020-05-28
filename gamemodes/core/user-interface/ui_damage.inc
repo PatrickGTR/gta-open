@@ -18,7 +18,7 @@ hook OnPlayerConnect(playerid) {
 
 	dmg_Giver[playerid] = CreatePlayerTextDraw   (playerid, 170.0, y,"~w~Player ~y~(Deagle) ~g~+46");
 	PlayerTextDrawFont                           (playerid, dmg_Giver[playerid], 1);
-	PlayerTextDrawLetterSize                     (playerid, dmg_Giver[playerid], 0.18000, 0.9);
+	PlayerTextDrawLetterSize                     (playerid, dmg_Giver[playerid], 0.18, 0.18 * 4);
 	PlayerTextDrawBackgroundColor                (playerid, dmg_Giver[playerid], TD_OUTLINE_COLOUR);
 	PlayerTextDrawColor                          (playerid, dmg_Giver[playerid], -1);
 	PlayerTextDrawSetProportional                (playerid, dmg_Giver[playerid], 1);
@@ -27,7 +27,7 @@ hook OnPlayerConnect(playerid) {
 
 	dmg_Reciever[playerid] = CreatePlayerTextDraw(playerid, 380.0, y,"~w~Player ~y~(Deagle) ~r~-46");
 	PlayerTextDrawFont                           (playerid, dmg_Reciever[playerid], 1);
-	PlayerTextDrawLetterSize                     (playerid, dmg_Reciever[playerid], 0.18000, 0.9);
+	PlayerTextDrawLetterSize                     (playerid, dmg_Reciever[playerid], 0.18, 0.18 * 4);
 	PlayerTextDrawBackgroundColor                (playerid, dmg_Reciever[playerid], TD_OUTLINE_COLOUR);
 	PlayerTextDrawColor                          (playerid, dmg_Reciever[playerid], -1);
 	PlayerTextDrawSetProportional                (playerid, dmg_Reciever[playerid], 1);

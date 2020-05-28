@@ -17,7 +17,8 @@
 		"Southclaws/samp-logger",
 		"PatrickGTR/MySQL-Prepared-Statements",
 		"samp-incognito/samp-streamer-plugin",
-		"PatrickGTR/actor_robbery"
+		"PatrickGTR/actor_robbery",
+		"kristoisberg/samp-map-zones"
 	],
 	"local": true,
 	"builds": [
@@ -38,6 +39,7 @@
 				"gamemodes/core/server",
 				"gamemodes/core/account",
 				"gamemodes/core/player",
+				"gamemodes/core/player/job",
 				"gamemodes/core/player/attachment",
 				"gamemodes/core/admin",
 				"gamemodes/core/systems",

@@ -6,7 +6,7 @@ hook OnPlayerConnect(playerid) {
     FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid,502.0, 1.4, "_");
 	PlayerTextDrawBackgroundColor(playerid, FPSPingPacket[playerid], COLOR_BLACK);
 	PlayerTextDrawFont(playerid, FPSPingPacket[playerid], 1);
-    PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.190000, 0.93000);
+    PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.19, 0.19 * 4);
 	PlayerTextDrawColor(playerid, FPSPingPacket[playerid], 16711935);
 	PlayerTextDrawSetOutline(playerid, FPSPingPacket[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, FPSPingPacket[playerid], 1);

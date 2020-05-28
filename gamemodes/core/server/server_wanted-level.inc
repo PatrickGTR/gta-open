@@ -64,6 +64,7 @@ stock PLAYER_SetPlayerWantedLevel(playerid, level) {
 
     PlayerWantedLevel[playerid] = level;
     UI_UpdatePlayerWanted(playerid, level);
+    Player_UpdateColour(playerid);
     Player_SaveWantedLevel(playerid, level);
 	return SetPlayerWantedLevel(playerid, level);
 }

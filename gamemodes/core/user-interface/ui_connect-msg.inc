@@ -8,7 +8,7 @@ static
 
 hook OnGameModeInit() {
     LeaveJoinTD = TextDrawCreate    (536.000000, 210.000000, "JOIN: PDS2K12");
-    TextDrawLetterSize              (LeaveJoinTD, 0.1999, 0.8999);
+    TextDrawLetterSize              (LeaveJoinTD, 0.2, 0.2 * 4);
     TextDrawAlignment               (LeaveJoinTD, 1);
     TextDrawBackgroundColor         (LeaveJoinTD, TD_OUTLINE_COLOUR);
     TextDrawColor                   (LeaveJoinTD, -1);

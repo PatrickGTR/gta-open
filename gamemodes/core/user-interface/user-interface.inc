@@ -7,3 +7,4 @@
 #include <ui_peds>
 #include <ui_tdmenu>
 #include <ui_time-left>
+#include <ui_location>
