@@ -5,11 +5,11 @@ CMD:bail(playerid) {
     if(timeLeftCounter[playerid] != 0) {
         return SendErrorMsg(playerid, "You've not served your sentence!");
     }
-    if(GetPlayerMoney(playerid) < 5000) {
-        return SendErrorMsg(playerid, "You don't have enough money to pay 5000");
+    if(GetPlayerMoney(playerid) < Player_GetBailAmount(playerid)) {
+        return SendErrorMsgF(playerid, "You don't have "C_GREEN"$%i "C_WHITE"to pay for your bail.", Player_GetBailAmount(playerid));
     }
     Player_UnJail(playerid);
-    GivePlayerMoney(playerid, 5000);
-    BailBalance[playerid] = 0;
+    GivePlayerMoney(playerid, Player_GetBailAmount(playerid));
+    Player_SetBailAmount(playerid, 0);
     return 1;
 }

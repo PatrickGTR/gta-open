@@ -54,27 +54,27 @@ Player_ShowJobMenu(playerid) {
 
         switch(listitem) {
             case TYPE_DRUGDEALER:  {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "Drug Dealer", "Your objective is to create drugs and sell them to earn profit!", 1000 * 10);
+                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Drug Dealer", "Your objective is to create drugs and sell them to earn profit!", 1000 * 10);
                 jobID = TYPE_DRUGDEALER;
             }
             case TYPE_WEAPONDEALER: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "Weapon Dealer", "Your objective is to sell any kind of weapons and sell them to earn profit!", 1000 * 10);
+                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Weapon Dealer", "Your objective is to sell any kind of weapons and sell them to earn profit!", 1000 * 10);
                 jobID = TYPE_WEAPONDEALER;
             }
             case TYPE_HITMAN: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "Hitman", "Your objective is to kill players with contract and earn a big amount of money!", 1000 * 10);
+                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Hitman", "Your objective is to kill players with contract and earn a big amount of money!", 1000 * 10);
                 jobID = TYPE_HITMAN;
             }
             case TYPE_TERRORIST: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "Terrorist", "Your objective is to plant bombs in cars, explode bank and prison entrances!", 1000 * 10);
+                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Terrorist", "Your objective is to plant bombs in cars, explode bank and prison entrances!", 1000 * 10);
                 jobID = TYPE_TERRORIST;
             }
             case TYPE_RAPIST: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "Rapist", "Your objective is to infect players with different sexually transmitted disseases!", 1000 * 10);
+                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Rapist", "Your objective is to infect players with different sexually transmitted disseases!", 1000 * 10);
                 jobID = TYPE_RAPIST;
             }
             case TYPE_MECHANIC: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "Mechanic", "Being mechanic allows you to repair your own vehicle and other player's vehicle!", 1000 * 10);
+                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Mechanic", "Being mechanic allows you to repair your own vehicle and other player's vehicle!", 1000 * 10);
                 jobID = TYPE_MECHANIC;
             }
         }
