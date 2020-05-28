@@ -9,7 +9,7 @@ hook OnPlayerConnect(playerid) {
     PlayerTextDrawAlignment                 (playerid, ui_WantedLevel[playerid], 2);
     PlayerTextDrawBackgroundColor           (playerid, ui_WantedLevel[playerid], TD_OUTLINE_COLOUR);
     PlayerTextDrawFont                      (playerid, ui_WantedLevel[playerid], 1);
-    PlayerTextDrawLetterSize                (playerid, ui_WantedLevel[playerid], 0.230000, 0.899999);
+    PlayerTextDrawLetterSize                (playerid, ui_WantedLevel[playerid], 0.23, 0.23 * 4);
     PlayerTextDrawColor                     (playerid, ui_WantedLevel[playerid], -1872621313);
     PlayerTextDrawSetOutline                (playerid, ui_WantedLevel[playerid], 1);
     PlayerTextDrawSetProportional           (playerid, ui_WantedLevel[playerid], 1);

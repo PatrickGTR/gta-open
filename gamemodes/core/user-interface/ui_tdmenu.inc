@@ -15,30 +15,27 @@ hook OnPlayerConnect(playerid) {
 	TextMenuCallbackHandler[playerid][0] = EOS;
 	TextMenuItems[playerid][0] = EOS;
 
-    TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 143.249816, 130.266815, "Header");
-	PlayerTextDrawLetterSize(playerid, TextMenuHeader[playerid], 0.541876, 1.489166);
+    TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 143.0, 130.0, "Header");
+	PlayerTextDrawLetterSize(playerid, TextMenuHeader[playerid], 0.5, 0.5 * 4);
 	PlayerTextDrawAlignment(playerid, TextMenuHeader[playerid], 2);
 	PlayerTextDrawColor(playerid, TextMenuHeader[playerid], COLOR_BLUE);
-	PlayerTextDrawSetShadow(playerid, TextMenuHeader[playerid], 0);
 	PlayerTextDrawSetOutline(playerid, TextMenuHeader[playerid], 1);
-	PlayerTextDrawBackgroundColor(playerid, TextMenuHeader[playerid], 255);
+	PlayerTextDrawBackgroundColor(playerid, TextMenuHeader[playerid], TD_OUTLINE_COLOUR);
 	PlayerTextDrawFont(playerid, TextMenuHeader[playerid], 3);
 	PlayerTextDrawSetProportional(playerid, TextMenuHeader[playerid], 1);
-	PlayerTextDrawSetShadow(playerid, TextMenuHeader[playerid], 0);
+	
 
-	TextMenuBody[playerid] = CreatePlayerTextDraw(playerid, 30.724655, 129.533676, "Content");
-	PlayerTextDrawLetterSize(playerid, TextMenuBody[playerid], 0.251874, 0.940833);
-	PlayerTextDrawTextSize(playerid, TextMenuBody[playerid], 266.977142, 0.000000);
+	TextMenuBody[playerid] = CreatePlayerTextDraw(playerid, 31.0, 130.0, "Content");
+	PlayerTextDrawLetterSize(playerid, TextMenuBody[playerid], 0.2, 0.2 * 4);
+	PlayerTextDrawTextSize(playerid, TextMenuBody[playerid], 267.0, 0.000000);
 	PlayerTextDrawAlignment(playerid, TextMenuBody[playerid], 1);
 	PlayerTextDrawColor(playerid, TextMenuBody[playerid], -1);
 	PlayerTextDrawUseBox(playerid, TextMenuBody[playerid], 1);
 	PlayerTextDrawBoxColor(playerid, TextMenuBody[playerid], 120);
-	PlayerTextDrawSetShadow(playerid, TextMenuBody[playerid], 1);
 	PlayerTextDrawSetOutline(playerid, TextMenuBody[playerid], 1);
-	PlayerTextDrawBackgroundColor(playerid, TextMenuBody[playerid], 255);
+	PlayerTextDrawBackgroundColor(playerid, TextMenuBody[playerid], TD_OUTLINE_COLOUR);
 	PlayerTextDrawFont(playerid, TextMenuBody[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, TextMenuBody[playerid], 1);
-	PlayerTextDrawSetShadow(playerid, TextMenuBody[playerid], 1);
 	return 1;
 }
 

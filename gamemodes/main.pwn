@@ -8,8 +8,11 @@
 // Custom Callbacks
 // OnPlayerLogin(playerid) -> called when player successfully logged in.
 // OnPlayerRegister(playerid) -> called when player successfully registered.
+// OnPlayerSecondUpdate -> called every second per player (like OnPlayerUpdate but not as intensive.)
 
-
+// TextdrawLetterSize Rule -> Thanks to DamianC
+// Letter-size-y = letter-size-x * 4
+// For a nice font display
 
 #include <a_samp>
 
@@ -63,9 +66,10 @@ CMD:givewanted(playerid) {
 	return 1;
 }
 
+
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.
-public OnPlayerTakePlayerDamage( playerid, issuerid, &Float: amount, weaponid, bodypart )
+public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bodypart )
 {
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
 }

@@ -40,3 +40,28 @@ Player_IsInAmmu(playerid)
     }
     return 0;
 }
+
+Float:Player_GetArmour(playerid) {
+    new 
+        Float:playerArmour;
+    
+    GetPlayerArmour(playerid, playerArmour);    
+    return playerArmour;
+}
+
+stock Player_IsNearPlayer(playerid, targetid, Float:radius)
+{
+	new 
+        Float:x, 
+        Float:y, 
+        Float:z;
+
+	GetPlayerPos(playerid, x, y, z);
+
+    new 
+        matchingVW = GetPlayerVirtualWorld(playerid) == GetPlayerVirtualWorld(targetid),
+        matchingInt = GetPlayerInterior(playerid) == GetPlayerInterior(targetid),
+        inRange = IsPlayerInRangeOfPoint(targetid, radius, x, y, z);
+
+	return matchingVW && matchingInt && inRange;
+}
