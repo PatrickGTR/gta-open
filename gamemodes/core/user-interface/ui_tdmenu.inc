@@ -86,7 +86,7 @@ stock TextMenu_Add(playerid, const item[]) {
 		return 0;
 	}
 
-	new tempString[64];
+	new tempString[128];
 	// layout e.g (1. Deagle)
 	TextMenuItemCount[playerid] ++;
 	format(tempString, sizeof(tempString), "_~r~%i. %s~n~", TextMenuItemCount[playerid], item);

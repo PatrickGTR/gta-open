@@ -6,7 +6,7 @@ static
     MapZone:PlayerInteriorZoneID[MAX_PLAYERS] = INVALID_MAP_ZONE_ID;
 
 
-stock GetPlayerLocation(playerid, string[], len = sizeof(string)) {
+stock Player_GetLocation(playerid, string[], len = sizeof(string)) {
 
     new 
         MapZone: zoneid = GetPlayerMapZone(playerid),
@@ -33,7 +33,7 @@ hook OnPlayerSecondUpdate(playerid) {
     if(PlayerLastZoneID[playerid] != zoneID) {
         new 
             zoneName[MAX_MAP_ZONE_NAME];
-        GetPlayerLocation(playerid, zoneName);
+        Player_GetLocation(playerid, zoneName);
         UI_SetLocation(playerid, zoneName);
         PlayerLastZoneID[playerid] = zoneID;
     }

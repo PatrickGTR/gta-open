@@ -30,6 +30,7 @@ hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart)
 
 hook OnPlayerDisconnect(playerid, reason)
 {
+	// TODO: Save player hit instead.
     if (Bit_Get(HasHit, playerid))  {
         SendMsgAllF(COLOR_ORANGE, "** HIT **: "C_WHITE"Contract on "C_GREY"%p (%i) "C_WHITE"has been cancelled, player left.", playerid, playerid );
     }
@@ -43,103 +44,91 @@ static _InitHitmanData(playerid) {
     HitPlacedBy[playerid][0] = EOS;
 }
 
+forward HitmanTextMenu(playerid, listitem);
+public HitmanTextMenu(playerid, listitem) {
+	foreach(new i : Player) {
+		if(!Bit_Get(HasHit, i)) {
+			continue;
+		}
+
+		if((listitem - 1) == i) {
+			new 
+				location[MAX_MAP_ZONE_NAME + 12];
+			Player_GetLocation(i, location);
+			SendClientMessage(playerid, COLOR_YELLOW, "Tracking....");
+			SendMsgF(playerid, COLOR_GREY, "%p (%i) "C_WHITE"is near "C_GREY"%s", i, i, location);
+			SendClientMessage(playerid, COLOR_GREEN, "Tracked!");
+			break;
+		}
+	}
+	return 1;
+} 
+
 CMD:hitlist(playerid, params[]) {
 	new 
 		count = 0;
 
-	// if (Player_GetJob(playerid) != TYPE_HITMAN || Player_GetClass(playerid) != TEAM_CIVILIAN) {
-	// 	return SendErrorMsg(playerid, "You are not allowed to use this command if you are not a hitman.");
-    // }
+	if (Player_GetJob(playerid) != TYPE_HITMAN || Player_GetClass(playerid) != TEAM_CIVILIAN) {
+		return SendErrorMsg(playerid, "You are not allowed to use this command if you are not a hitman.");
+    }
 
     new 
-        tmpString[100],
-        hitList[512];
+        tmpString[100];
 
-
+	TextMenu_Create(playerid, "HitmanTextMenu", "~y~Hitlist");
     foreach(new i : Player) {
         if(Bit_Get(HasHit, i)) {
             format(tmpString, sizeof(tmpString), 
-            "~y~Username: ~w~%p (%i) ~y~Reason: ~w~%s ~y~Amount: ~g~$%i~n~", 
-            count, i, i, HitPlacedBy[i],  HitReason[i], HitAmount[i]);
-            strcat(hitList, tmpString, sizeof(hitList));
-
+            "~y~Username: ~w~%p(%i) ~y~Amount: ~g~$%i ~y~By: ~w~%s", 
+        	i, i, HitAmount[i], HitPlacedBy[i]);
+			TextMenu_Add(playerid, tmpString);
             count ++;
         }
     }
     if(count == 0) {
-        strcat(hitList, "There are no hits available", sizeof(hitList));
-    }
-
-    MessageBox_Show(playerid, TYPE_MSGBOX, "~y~Hitlist", hitList);
-
-	// SendClientMessage(playerid, COLOR_GREEN, "______________________ "C_ORANGE"[ BEGIN ] "C_GREEN"______________________");
-	// foreach(new i : Player)
-	// {
-	// 	if (Bit_Get(HasHit, i))
-	// 	{
-	// 		SendMsgF(playerid, COLOR_WHITE, "Username: %p (%i) - Placed By: %s - Reason: %s- Amount: "C_GREEN"$%i", i, i, HitPlacedBy[i],  HitReason[i], HitAmount[i]);
-	// 		++ count;
-	// 	}
-	// }
-	// if (count != 1) SendClientMessage(playerid, COLOR_WHITE, "There are no hits available");
-	// SendClientMessage(playerid, COLOR_GREEN, "______________________ "C_ORANGE"[ END ] "C_GREEN"______________________");
+    	MessageBox_Show(playerid, TYPE_MSGBOX, "~y~Hitlist", "There are no hits available");
+    } else {
+		TextMenu_Show(playerid);
+	}
 	return true;
 }
-
-
-// CMD:track(playerid, params[])
-// {	
-// 	if (Player_GetJob(playerid) != TYPE_HITMAN || Player_GetClass(playerid) != TEAM_CIVILIAN)
-// 		return SendErrorMsg(playerid, "You are not allowed to use this command if you are not a hitman.");
-// 
-// 	if (isnull(params))
-// 		return SendSyntaxMsg(playerid, "/track <playerid>");
-// 
-// 	new targetid = strval(params);
-// 
-// 	if (targetid == playerid)
-// 		return SendErrorMsg(playerid, "You are not allowed to track yourself.");
-// 
-// 	if (!IsPlayerConnected(targetid))
-// 		return SendErrorMsg(playerid, "The player you are trying to track is not connected.");
-// 
-// 	if (!Player_IsSpawned(targetid))
-// 		return SendErrorMsg(playerid, "The player you are trying to track is not spawned.");
-// 
-// 	if (GetPlayerInterior(targetid) > 1)
-// 	{
-// 		SendMsgF(playerid, COLOR_WHITE, "Location of "C_GREY"%p "C_WHITE"near "C_GREY"inside an interior", targetid);
-// 	}
-// 	else SendMsgF(playerid, COLOR_WHITE, "Location of "C_GREY"%p "C_WHITE"near "C_GREY"%s", targetid, GetPlayerLocation(playerid));
-// 	return true;
-// }	
 
 CMD:placehit(playerid, params[])
 {
 	new 
 		targetid, hitamount, reason[32];
 
-	// if (Player_GetJob(playerid) == TYPE_HITMAN && Player_GetClass(playerid) == TEAM_CIVILIAN )
-	// 	return SendErrorMsg(playerid, "You are not allowed to place hit on others if you are a hitman.");
+	if (Player_GetJob(playerid) == TYPE_HITMAN && Player_GetClass(playerid) == TEAM_CIVILIAN ) {	
+		return SendErrorMsg(playerid, "You are not allowed to place hit on others if you are a hitman.");
+	}
 
-	if (sscanf(params, "ris[32]", targetid, hitamount, reason))
+	if (sscanf(params, "ris[32]", targetid, hitamount, reason)) {
 		return SendSyntaxMsg(playerid, "/placehit <playerid> <Amount> <Reason>");
+	}
 
-	if (!IsPlayerConnected(targetid))
+	if(strlen(reason) > 32) {
+		return SendErrorMsg(playerid, "Reason too lon, shorten it. "C_YELLOW"TIP: "C_GREY"MAX 32 characters.");
+	}
+
+	if (!IsPlayerConnected(targetid)) {
 		return SendErrorMsg(playerid, "The player you are placing hit on is not connected.");
+	}
 
-	if (!Player_IsSpawned(targetid))
+	if (!Player_IsSpawned(targetid)) {
 		return SendErrorMsg(playerid, "The player you are placing hit on is not spawned.");
+	}
 
-	if (GetPlayerMoney(playerid) < hitamount)
+	if (GetPlayerMoney(playerid) < hitamount) {
 		return SendErrorMsg(playerid, "You do not have enough money to pay the hit, earn more money!");
+	}
 
-	if (hitamount < 10000)
+	if (hitamount < 10000) {
 		return SendErrorMsg(playerid, "The hitman will not accept your offer, increase the amount of the hit!");
+	}
 
-	if (Bit_Get(HasHit, targetid))
+	if (Bit_Get(HasHit, targetid)) {
 		return SendErrorMsg(playerid, "The player you are placing hit on already has one.");
-
+	}
 
 	new 
 		name[MAX_PLAYER_NAME];

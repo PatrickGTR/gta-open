@@ -27,6 +27,29 @@ stock Player_IsSpawned(playerid) {
     return Bit_Get(PlayerSpawnState, playerid);
 }
 
+// updates player colour depending on wanted level.
+// innocent = white
+// < 4 = yellow
+// 4 .. 12 = orange
+// > 12 = red.
+stock Player_UpdateColour(playerid) {
+    new
+        playerWantedLevel = GetPlayerWantedLevel(playerid);
+    if (playerWantedLevel == 0) {
+        SetPlayerColor(playerid, COLOR_WHITE);
+    }
+    else if (0 < playerWantedLevel < 4) {
+        SetPlayerColor(playerid, COLOR_YELLOW);
+    }
+    else if (4 <= playerWantedLevel <= 12) {
+        SetPlayerColor(playerid, COLOR_ORANGE);
+    }
+    else if (12 < playerWantedLevel) {
+        SetPlayerColor(playerid, COLOR_RED);
+    }
+    return 1;
+}
+
 static ptask _PlayerPerSecondTimer[1000](playerid) {
     if(Player_IsSpawned(playerid)) {
         CallLocalFunction("OnPlayerSecondUpdate", "i", playerid);
