@@ -103,9 +103,7 @@ static Account_LoadData(playerid) {
 static 
     Player_Attempts[MAX_PLAYERS];
 
- forward OnPasswordVerify(playerid, bool:success);
- public OnPasswordVerify(playerid, bool:success) {
-
+public OnPasswordVerify(playerid, bool:success) {
     if(!success) {
         SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", Player_Attempts, MAX_PASSWORD_ATTEMPT);
         Account_PromptLogin(playerid, gPlayerHash[playerid]);
@@ -125,7 +123,7 @@ static
             _i("attemps", Player_Attempts[playerid]),
             _p("username", playerid),
             _i("uid", Player_GetAccountID(playerid))
-		);
+        );
 
         Player_Attempts[playerid] ++;
         return;
@@ -133,7 +131,7 @@ static
 
     Account_LoadData(playerid);
     Player_Attempts[playerid] = 0;
- }
+}
 
  // API
 Player_IsLoggedIn(playerid) {
