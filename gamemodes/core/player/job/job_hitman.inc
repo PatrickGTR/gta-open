@@ -46,20 +46,19 @@ static _InitHitmanData(playerid) {
 
 forward HitmanTextMenu(playerid, listitem);
 public HitmanTextMenu(playerid, listitem) {
-	foreach(new i : Player) {
-		if(!Bit_Get(HasHit, i)) {
-			continue;
-		}
 
-		if((listitem - 1) == i) {
-			new 
-				location[MAX_MAP_ZONE_NAME + 12];
-			Player_GetLocation(i, location);
-			SendClientMessage(playerid, COLOR_YELLOW, "Tracking....");
-			SendMsgF(playerid, COLOR_GREY, "%p (%i) "C_WHITE"is near "C_GREY"%s", i, i, location);
-			SendClientMessage(playerid, COLOR_GREEN, "Tracked!");
-			break;
-		}
+	new tmpString[24];
+	format(tmpString, sizeof(tmpString), "HitmanMenuItem_%i", listitem);
+	new targetid = GetPVarInt(playerid, tmpString);
+
+	if(Bit_Get(HasHit, targetid)) {
+		new 
+			location[MAX_MAP_ZONE_NAME + 12];
+		Player_GetLocation(targetid, location);
+		SendClientMessage(playerid, COLOR_YELLOW, "Tracking....");
+		SendMsgF(playerid, COLOR_GREY, "%p (%i) "C_WHITE"is near "C_GREY"%s", targetid, targetid, location);
+		SendClientMessage(playerid, COLOR_GREEN, "Tracked!");
+		
 	}
 	return 1;
 } 
@@ -79,10 +78,15 @@ CMD:hitlist(playerid, params[]) {
     foreach(new i : Player) {
         if(Bit_Get(HasHit, i)) {
             format(tmpString, sizeof(tmpString), 
-            "~y~Username: ~w~%p(%i) ~y~Amount: ~g~$%i ~y~By: ~w~%s", 
+            "~y~%p(%i) ~g~$%i ~y~By: ~w~%s", 
         	i, i, HitAmount[i], HitPlacedBy[i]);
 			TextMenu_Add(playerid, tmpString);
+
+			format(tmpString, sizeof(tmpString), "HitmanMenuItem_%i", count);
+			SetPVarInt(playerid, tmpString, i);
             count ++;
+
+			
         }
     }
     if(count == 0) {

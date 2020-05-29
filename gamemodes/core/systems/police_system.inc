@@ -77,7 +77,6 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
     SetPlayerVirtualWorld(playerid, 16);
     SetPlayerInterior(playerid, 6);
 
-
     ClearAnimations(playerid, 1);
 
     Player_SetJail(playerid, true);
