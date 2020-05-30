@@ -103,6 +103,7 @@ static Account_LoadData(playerid) {
 static 
     Player_Attempts[MAX_PLAYERS];
 
+forward OnPasswordVerify(playerid, bool:success);
 public OnPasswordVerify(playerid, bool:success) {
     if(!success) {
         SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", Player_Attempts, MAX_PASSWORD_ATTEMPT);
