@@ -16,10 +16,11 @@
 
 #include <a_samp>
 
-#define MYSQL_PREPARE_DEBUG 	(false)
+#define MYSQL_PREPARE_DEBUG 	(true)
+#define MAX_STATEMENTS 32
 
 // Set to true if table aren't set up.
-#define SETUP_TABLE 			(true)	
+#define SETUP_TABLE 			(false)	
 
 #include <constants>
 #include <init>

@@ -9,6 +9,7 @@ hook OnMySQLConnected()
             kills mediumint(8) NOT NULL DEFAULT '0',\
             deaths mediumint(8) NOT NULL DEFAULT '0',\
             job_id tinyint(4) NOT NULL DEFAULT '0',\
+            class_id tinyint(4) NOT NULL DEFAULT '0',\
             wanted_level mediumint(6) NOT NULL DEFAULT '0',\
             player_bounty mediumint(8) NOT NULL DEFAULT '0',\
             money mediumint(8) NOT NULL DEFAULT '0',\

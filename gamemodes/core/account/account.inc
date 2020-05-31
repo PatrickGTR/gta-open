@@ -4,6 +4,7 @@
 #include <account_vip>
 #include <account_wanted-level>
 #include <inventory>
+#include <account_stats>
 
 #if SETUP_TABLE
     #include <account_setup-players-table>
