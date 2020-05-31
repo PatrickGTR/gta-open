@@ -72,9 +72,6 @@ CMD:c4(playerid, params[]) {
 	return 1;
 }
 
-
-
-
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.
 public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bodypart )

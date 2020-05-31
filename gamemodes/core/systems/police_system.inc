@@ -55,6 +55,11 @@ stock Player_GetClosestWanted(playerid) {
     GetPlayerPos(playerid, x, y, z);
     foreach(new i : Player) 
     {
+
+        if(playerid == i) {
+            continue;
+        }
+
         if(IsPlayerInRangeOfPoint(i, 4.0, x, y, z) && Player_GetWantedLevel(i) >= 3) {
             closestID = i;
         }

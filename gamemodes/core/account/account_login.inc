@@ -95,11 +95,24 @@ public OnPasswordVerify(playerid, bool:success) {
     PlayerAttempts[playerid] = 0;
     Account_NotifySuccess(playerid);
     CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
+    SpawnPlayer(playerid);
 }
 
 hook OnPlayeLogin(playerid) {
     gPlayerLoginStatus[playerid] = true;
     return 1;
+}
+
+hook OnPlayerRequestClass(playerid, classid) {
+
+    if(!Player_NewComer(playerid) && Player_IsLoggedIn(playerid)) {
+        defer ForceSpawnPlayer(playerid);
+    }
+    return 1;
+}
+
+timer ForceSpawnPlayer[GetPlayerPing(playerid) + 50](playerid) {
+    SpawnPlayer(playerid);
 }
 
 hook OnPlayerSpawn(playerid)
@@ -110,25 +123,11 @@ hook OnPlayerSpawn(playerid)
     return 1;
 }
 
-hook OnPlayerRequestClass(playerid, classid)
-{
-    TogglePlayerSpectating(playerid, true);
-    if(Player_IsLoggedIn(playerid) && !Player_NewComer(playerid)) {
-        defer ForceSpawnPlayer(playerid);
-    }
-    return 1;
-}
-
 hook OnPlayerDisconnect(playerid, reason)
 {
     // save money
     // save skin (if changed)
     return 1;
-}
-
-timer ForceSpawnPlayer[1](playerid) {
-    TogglePlayerSpectating(playerid, false);
-    SpawnPlayer(playerid);
 }
 
 CMD:kill(playerid) {

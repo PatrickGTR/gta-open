@@ -6,7 +6,7 @@ static
     Statement: stmt_retrieveIfix;
 
 #pragma unused stmt_retrieveIfix
-/*
+
 hook OnGameModeInit()
 {
     static const query_retrieveIfix[] = "\
@@ -35,7 +35,7 @@ hook OnPlayerLogin(playerid)
     }
     MySQL_BindInt(stmt_retrieveIfix, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_retrieveIfix, using inline OnPlayerInvLoad);
-} */
+} 
 
 stock Player_SetInstaFix(playerid, stocks) 
 {
