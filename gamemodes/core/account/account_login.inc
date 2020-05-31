@@ -112,8 +112,8 @@ hook OnPlayerSpawn(playerid)
 
 hook OnPlayerRequestClass(playerid, classid)
 {
+    TogglePlayerSpectating(playerid, true);
     if(Player_IsLoggedIn(playerid) && !Player_NewComer(playerid)) {
-        TogglePlayerSpectating(playerid, true);
         defer ForceSpawnPlayer(playerid);
     }
     return 1;

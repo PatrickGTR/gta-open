@@ -32,9 +32,10 @@ hook OnPlayerLogin(playerid) {
 }
 
 hook OnPlayerRegister(playerid) {
-     // insert stats default data.
+    // insert stats default data.
     MySQL_BindInt(stmt_insertPlayerStats, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_insertPlayerStats);
+    #pragma unused stmt_insertPlayerStats
 }
 
 static Account_LoadStats(playerid) {
@@ -55,13 +56,7 @@ static Account_LoadStats(playerid) {
         MySQL_BindResultInt(stmt_loadPlayerStats, 5, playerSkin);
         MySQL_BindResultInt(stmt_loadPlayerStats, 6, playerClass);
 
-        if(MySQL_Statement_FetchRow(stmt_loadPlayerStats)) {
-
-            printf("kills %i, deaths %i, job id: %i", kills, deaths, jobID);
-            printf("wanted: %i, money: %i, skin: %i", wantedLevel, playerMoney, playerSkin);
-            printf("class: %i", playerClass);
-            
-
+        if(MySQL_Statement_FetchRow(stmt_loadPlayerStats)) { 
             Player_SetKills(playerid, kills);
             Player_SetDeaths(playerid, deaths);
             Player_SetJob(playerid, jobID);

@@ -16,7 +16,7 @@
 
 #include <a_samp>
 
-#define MYSQL_PREPARE_DEBUG 	(true)
+#define MYSQL_PREPARE_DEBUG 	(false)
 #define MAX_STATEMENTS 32
 
 // Set to true if table aren't set up.
