@@ -47,8 +47,8 @@ timer LSCellClose[1000 * 8]() {
 	}
 	SendMsgAllF(COLOR_ORANGE, "** JAIL BREACH ** %p (%i) "C_WHITE"managed to free all the prisoners by planting c4 and detonated it.", playerid, playerid);
 
-	MoveDynamicObject(JailCell1, 266.36240, 86.0, 1001.29077, 0.5); 
-    MoveDynamicObject(JailCell2, 266.36240, 82.0, 1001.29077, 0.5); 
+	MoveDynamicObject(JailCell1, 266.36240, 86.68930, 1001.29077, 0.5); 
+    MoveDynamicObject(JailCell2, 266.36240, 82.21280, 1001.29077, 0.5); 
 
 	JailCellBreached = true;
 	return 0;
