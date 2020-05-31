@@ -57,9 +57,9 @@ hook OnGameModeInit()
     ;
     stmt_retrieveBal = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveBal);
     CreateDynamicObject (19302, 266.36240, 85.68930, 1001.29077, 0.00000, 0.00000, 90.00000, 16); //cell 1 left
-    CreateDynamicObject (19302, 266.36240, 87.45930, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 1 right
+    CreateDynamicObject (19302, 266.36240, 87.45930, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 1 right the cell that you might want to move
     CreateDynamicObject (19302, 266.36240, 81.21280, 1001.29077, 0.00000, 0.00000, 90.00000, 16); //cell 2 left
-    CreateDynamicObject (19302, 266.36240, 82.94550, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 2 right
+    CreateDynamicObject (19302, 266.36240, 82.94550, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 2 right the cell that you might want to move
     CreateDynamicObject (19302, 266.36240, 78.46120, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 3 left
     CreateDynamicObject (19302, 266.36240, 76.72040, 1001.29077, 0.00000, 0.00000, 90.00000, 16);//cell  3 right
     return 1;
