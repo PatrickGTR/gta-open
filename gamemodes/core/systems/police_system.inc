@@ -56,6 +56,19 @@ hook OnGameModeInit()
         "
     ;
     stmt_retrieveBal = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveBal);
+    CreateDynamicObject (19302, 266.36240, 85.68930, 1001.29077, 0.00000, 0.00000, 90.00000, 16); //cell 1
+    CreateDynamicObject (19302, 266.36240, 87.45930, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 1
+    CreateDynamicObject (19302, 266.36240, 81.21280, 1001.29077, 0.00000, 0.00000, 90.00000, 16); //cell 2
+    CreateDynamicObject (19302, 266.36240, 82.94550, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 2
+    CreateDynamicObject (19302, 266.36240, 78.46120, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 3
+    CreateDynamicObject (19302, 266.36240, 76.72040, 1001.29077, 0.00000, 0.00000, 90.00000, 16);//cell  3
+    return 1;
+}
+
+hook OnPlayerConnect(playerid) 
+{
+    RemoveBuildingForPlayer (playerid, 14843, 266.3516, 81.1953, 1001.2813, 0.25);
+    return 1;
 }
 
 stock Player_GetClosestWanted(playerid) {
