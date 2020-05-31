@@ -19,7 +19,7 @@
 #define MYSQL_PREPARE_DEBUG 	(false)
 
 // Set to true if table aren't set up.
-#define SETUP_TABLE 			(false)	
+#define SETUP_TABLE 			(true)	
 
 #include <constants>
 #include <init>

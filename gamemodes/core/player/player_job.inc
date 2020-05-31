@@ -14,7 +14,7 @@ static const JOB_LIST[] = "\
 
 // Hook
 hook OnMySQLConnected() {
-    stmt_savePlayerJob = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET job_id = ? WHERE u_id = ?");
+    stmt_savePlayerJob = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET job_id = ? WHERE u_id = ?");
     return 1;
 }
 

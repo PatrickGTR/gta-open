@@ -4,7 +4,7 @@ static
     Statement: stmt_updateWantedLevel;
 
 hook OnMySQLConnected(playerid) {
-    stmt_updateWantedLevel = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET wanted_level = ? WHERE u_id = ?");
+    stmt_updateWantedLevel = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET wanted_level = ? WHERE u_id = ?");
     return 1;
 }
 
