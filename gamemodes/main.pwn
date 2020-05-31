@@ -66,6 +66,13 @@ CMD:givewanted(playerid) {
 	return 1;
 }
 
+CMD:c4(playerid, params[]) {
+	Player_SetC4(playerid, 10);
+	return 1;
+}
+
+
+
 
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.

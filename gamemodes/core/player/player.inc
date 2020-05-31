@@ -3,6 +3,7 @@
 #include <player_class>
 #include <player_job>
 #include <player_location>
+#include <player_items>
 
 #include <attachment>
 #include <job>
