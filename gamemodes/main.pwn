@@ -17,6 +17,7 @@
 #include <a_samp>
 
 #define MYSQL_PREPARE_DEBUG 	(false)
+#define MAX_STATEMENTS 32
 
 // Set to true if table aren't set up.
 #define SETUP_TABLE 			(false)	
@@ -70,9 +71,6 @@ CMD:c4(playerid, params[]) {
 	Player_SetC4(playerid, 10);
 	return 1;
 }
-
-
-
 
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.

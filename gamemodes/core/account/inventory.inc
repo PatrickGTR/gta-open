@@ -3,8 +3,9 @@
 
 static
     PlayerInstaFix[MAX_PLAYERS],
-    Statement: stmt_retrieveIfix
-;
+    Statement: stmt_retrieveIfix;
+
+#pragma unused stmt_retrieveIfix
 
 hook OnGameModeInit()
 {
@@ -34,7 +35,7 @@ hook OnPlayerLogin(playerid)
     }
     MySQL_BindInt(stmt_retrieveIfix, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_retrieveIfix, using inline OnPlayerInvLoad);
-}
+} 
 
 stock Player_SetInstaFix(playerid, stocks) 
 {

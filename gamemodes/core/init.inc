@@ -32,15 +32,16 @@ hook OnGameModeInit() {
         return 1;
     }
 
-    CallLocalFunction("OnMySQLConnected", "");
     log("MySQL connection is successful.");
+
+    CallLocalFunction("OnMySQLConnected", "");
     return 1;
 }
 
 hook OnGameModeExit() {
+    log("MySQL connection has been closed.");
     CallLocalFunction("OnMySQLPreClose", "");
     mysql_close(MySQL_ConHandle);
-    log("MySQL connection has been closed.");
 }
 
 stock MySQL:MySQL_GetHandle() {

@@ -40,8 +40,8 @@ enum {
 }
 
 enum {
-    TEAM_CIVILIAN = NO_TEAM ,
-    TEAM_POLICE = 0,
+    TEAM_CIVILIAN = 0,
+    TEAM_POLICE,
     TEAM_ARMY,
     TEAM_MEDIC
 }

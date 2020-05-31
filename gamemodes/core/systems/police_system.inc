@@ -4,8 +4,7 @@
 static
     Jailtime[MAX_PLAYERS],
     BailBalance[MAX_PLAYERS],
-    Statement: stmt_retrieveBal,
-    Statement: stmt_retrieveTime
+    Statement: stmt_retrieveJail
 ;
 
 new
@@ -13,9 +12,6 @@ new
     bool:PlayerJailed[MAX_PLAYERS]
 ;
 
-static
-    Statement: stmt_retrieveJailed
-;
 
 enum E_JAILPOS_DATA
 {
@@ -34,8 +30,10 @@ static
 
 hook OnGameModeInit()
 {
-    static const query_retrieveJailed[] = "\
+    static const query_retrieveBal[] = "\
         SELECT \
+            jailed_time, \
+            bail_balance, \
             bail_required \
         FROM \
             jailed \
@@ -43,19 +41,7 @@ hook OnGameModeInit()
             u_id = ? \
         "
     ;
-    stmt_retrieveJailed = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveJailed);
-
-    static const query_retrieveBal[] = "\
-        SELECT \
-            jailed_time, \
-            bail_balance \
-        FROM \
-            jailed \
-        WHERE \
-            u_id = ? \
-        "
-    ;
-    stmt_retrieveBal = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveBal);
+    stmt_retrieveJail = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveBal);
     return 1;
 }
 
@@ -69,6 +55,11 @@ stock Player_GetClosestWanted(playerid) {
     GetPlayerPos(playerid, x, y, z);
     foreach(new i : Player) 
     {
+
+        if(playerid == i) {
+            continue;
+        }
+
         if(IsPlayerInRangeOfPoint(i, 4.0, x, y, z) && Player_GetWantedLevel(i) >= 3) {
             closestID = i;
         }
@@ -140,34 +131,25 @@ stock Player_UnJail(playerid) {
 
 hook OnPlayerLogin(playerid) 
 {
-    inline OnPlayerJailLoad()
-    {
-        new
-            player_jailed;
-        MySQL_BindResultInt(stmt_retrieveJailed, 0, player_jailed);
-
-        if(MySQL_Statement_FetchRow(stmt_retrieveJailed)) {
-            Player_SetJail(playerid, bool:player_jailed);
-        }
-    }
-    MySQL_BindInt(stmt_retrieveJailed, 0, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded_Inline(stmt_retrieveJailed, using inline OnPlayerJailLoad);
     inline OnPlayerJailedTimeLoad()
     {
         new
             jailTime,
-            bailBalance;
+            bailBalance,
+            playerJailed;
             
-        MySQL_BindResultInt(stmt_retrieveTime, 0, jailTime);
-        MySQL_BindResultInt(stmt_retrieveBal, 1, bailBalance);
+        MySQL_BindResultInt(stmt_retrieveJail, 0, jailTime);
+        MySQL_BindResultInt(stmt_retrieveJail, 1, bailBalance);
+        MySQL_BindResultInt(stmt_retrieveJail, 2, playerJailed);
 
-        if(MySQL_Statement_FetchRow(stmt_retrieveTime)) {
+        if(MySQL_Statement_FetchRow(stmt_retrieveJail)) {
             Jailtime[playerid] = jailTime;
             BailBalance[playerid] = bailBalance;
+            Player_SetJail(playerid, bool:playerJailed);
         }
     }
-    MySQL_BindInt(stmt_retrieveTime, 0, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded_Inline(stmt_retrieveTime, using inline OnPlayerJailedTimeLoad);
+    MySQL_BindInt(stmt_retrieveJail, 0, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded_Inline(stmt_retrieveJail, using inline OnPlayerJailedTimeLoad);
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
