@@ -10,6 +10,7 @@
     #include <account_setup-vip-table>
     #include <account_setup-inventory>
     #include <account_setup-jailed>
+    #include <account_setup-stats>
 #endif
 
 #include <YSI_Coding\y_hooks>
