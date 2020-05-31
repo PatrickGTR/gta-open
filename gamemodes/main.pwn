@@ -66,6 +66,11 @@ CMD:givewanted(playerid) {
 	return 1;
 }
 
+CMD:opencell(playerid, params[]) {
+	ExplodeCellDoors(playerid);
+	return 1;
+}
+
 
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.

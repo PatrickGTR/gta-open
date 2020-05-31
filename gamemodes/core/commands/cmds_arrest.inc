@@ -26,8 +26,8 @@ CMD:arrestcw(playerid)
     ApplyAnimation(playerid, "PED", "ARRESTgun", 4.1, 0, 1, 1, 1, 3000, 1);
     SendServerMsgF(playerid, "You have arrested %p (%d)", ClosesWar, ClosesWar);
     SendServerMsgF(ClosesWar, "You have been arrested by %p (%d)", playerid, playerid);
-    Player_SendToJail(playerid, 300, true);
-    Player_SetJail(playerid, true);
+    Player_SendToJail(ClosesWar, 300, true);
+    Player_SetJail(ClosesWar, true);
     return 1;
 }
 
@@ -62,8 +62,8 @@ CMD:arrest(playerid, params[])
     SetPlayerSpecialAction(targetid, SPECIAL_ACTION_NONE);
     ApplyAnimation(targetid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);
     ApplyAnimation(playerid, "PED", "ARRESTgun", 4.1, 0, 1, 1, 1, 3000, 1);
-    Player_SendToJail(playerid, 300, true);
-    Player_SetJail(playerid, true);
+    Player_SendToJail(targetid, 300, true);
+    Player_SetJail(targetid, true);
     return 1;
 }
 
