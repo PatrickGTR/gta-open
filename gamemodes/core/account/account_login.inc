@@ -95,7 +95,18 @@ public OnPasswordVerify(playerid, bool:success) {
     PlayerAttempts[playerid] = 0;
     Account_NotifySuccess(playerid);
     CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
+    
+    // Force Spawn Player
+    SetSpawnInfo(playerid, NO_TEAM, GetPlayerSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
     SpawnPlayer(playerid);
+}
+
+static 
+    Statement: stmt_updatePlayerSkin;
+
+hook OnMySQLConnected() {
+    stmt_updatePlayerSkin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET skin = ? WHERE u_id = ?");
+    return 1;
 }
 
 hook OnPlayeLogin(playerid) {
@@ -103,22 +114,11 @@ hook OnPlayeLogin(playerid) {
     return 1;
 }
 
-hook OnPlayerRequestClass(playerid, classid) {
-
-    if(!Player_NewComer(playerid) && Player_IsLoggedIn(playerid)) {
-        defer ForceSpawnPlayer(playerid);
-    }
-    return 1;
-}
-
-timer ForceSpawnPlayer[GetPlayerPing(playerid) + 50](playerid) {
-    SpawnPlayer(playerid);
-}
-
-hook OnPlayerSpawn(playerid)
-{
+hook OnPlayerSpawn(playerid) {
     if(Player_NewComer(playerid)) {
-        // save player skin
+        MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
+        MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
+        MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
     }
     return 1;
 }
