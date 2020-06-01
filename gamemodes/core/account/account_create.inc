@@ -100,6 +100,10 @@ public OnPassswordHash(playerid) {
     Account_InsertToDatabase(playerid, hash);
 }
 
-stock Player_NewComer(playerid) {
+stock Player_New(playerid) {
     return PlayerFirstTime[playerid];
+}
+
+stock Player_SetNew(playerid, bool:status) {
+    PlayerFirstTime[playerid] = status;
 }

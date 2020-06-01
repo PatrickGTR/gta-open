@@ -97,7 +97,7 @@ public OnPasswordVerify(playerid, bool:success) {
     CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
     
     // Force Spawn Player
-    SetSpawnInfo(playerid, NO_TEAM, GetPlayerSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+    SetSpawnInfo(playerid, NO_TEAM, Player_GetSavedSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
     SpawnPlayer(playerid);
 }
 
@@ -115,10 +115,13 @@ hook OnPlayeLogin(playerid) {
 }
 
 hook OnPlayerSpawn(playerid) {
-    if(Player_NewComer(playerid)) {
+    if(Player_New(playerid)) {
+        Player_SetSavedSkin(playerid, GetPlayerSkin(playerid));
         MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
         MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
         MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
+        Class_SelectionState(playerid, false);
+        Player_SetNew(playerid, false);
     }
     return 1;
 }

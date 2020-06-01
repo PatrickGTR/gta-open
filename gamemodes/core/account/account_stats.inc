@@ -2,7 +2,16 @@
 
 static 
     Statement:stmt_loadPlayerStats,
-    Statement:stmt_insertPlayerStats;
+    Statement:stmt_insertPlayerStats,
+    PlayerSkin[MAX_PLAYERS];
+
+stock Player_GetSavedSkin(playerid) {
+    return PlayerSkin[playerid];
+}
+
+stock Player_SetSavedSkin(playerid, amount) {
+    PlayerSkin[playerid] = amount;
+}
 
 hook OnMySQLConnected() {
 
@@ -63,6 +72,8 @@ static Account_LoadStats(playerid) {
             SetPlayerWantedLevel(playerid, wantedLevel);
             GivePlayerMoney(playerid, playerMoney);
             SetPlayerSkin(playerid, playerSkin);
+
+            PlayerSkin[playerid] = playerSkin;
             Player_SetClass(playerid, playerClass);
         }
     }
