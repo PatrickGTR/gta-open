@@ -6,7 +6,7 @@
 	"dependencies": [
 		"sampctl/samp-stdlib",
 		"maddinat0r/sscanf",
-		"pawn-lang/YSI-Includes/tree/5.x",
+		"pawn-lang/YSI-Includes@5.x",
 		"Zeex/amx_assembly",
 		"Y-Less/code-parse.inc",
 		"Y-Less/indirection",
@@ -28,7 +28,8 @@
 				"-;+",
 				"-(+",
 				"-d3",
-				"-E"
+				"-E",
+				"-Z"
 			],
 			"includes": [
 				"gamemodes/utils",
@@ -90,4 +91,3 @@
 		"output": true
 	}
 }
-
