@@ -23,7 +23,7 @@
 	"local": true,
 	"builds": [
 		{
-			"name": "",
+			"version": "3.10.10",
 			"args": [
 				"-;+",
 				"-(+",

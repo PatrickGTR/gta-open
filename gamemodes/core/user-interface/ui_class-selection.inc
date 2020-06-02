@@ -4,12 +4,7 @@ static
     PlayerText:ClassName[MAX_PLAYERS],
     PlayerText:ClassInfo[MAX_PLAYERS],
     bool:ClassTDShown[MAX_PLAYERS];
-
-hook OnPlayerRequestClass(playerid, classid) {
-    UI_ClassSelectionTDShow(playerid);
-    return 1;
-}
-
+    
 hook OnPlayerSpawn(playerid) {
     if(ClassTDShown[playerid]) {
         UI_ClassSelectioTDHide(playerid);

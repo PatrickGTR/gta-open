@@ -1,20 +1,16 @@
 #include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
+#include <YSI_Coding\y_timers>
 #include <formatex>
 #include <logger>
 #include <mysql_prepared>
 
 static
-    Statement:stmt_loadPlayerData,
     gPlayerHash[MAX_PLAYERS][250],
     bool:gPlayerLoginStatus[MAX_PLAYERS];
 
 
 // Initialise
-hook OnMySQLConnected(playerid) {
-    stmt_loadPlayerData = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT kills, deaths, job_id, wanted_level FROM players WHERE u_id = ?");
-}
-
 hook OnPlayerConnect(playerid) {
     gPlayerHash[playerid][0] = EOS;
     gPlayerLoginStatus[playerid] = false;
@@ -22,8 +18,6 @@ hook OnPlayerConnect(playerid) {
 
 // Global 
 Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
-
-
     if(isnull(gPlayerHash[playerid])) {
         strcat(gPlayerHash[playerid], password, len);
     }
@@ -53,47 +47,11 @@ Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
 }
 
 // Local
-static Account_LoadData(playerid) {
-    inline OnDataLoad() {
-        new 
-            kills, 
-            deaths,
-            jobID, 
-            wantedLevel,
-            playerBounty;
-        MySQL_BindResultInt(stmt_loadPlayerData, 0, kills);
-        MySQL_BindResultInt(stmt_loadPlayerData, 1, deaths);
-        MySQL_BindResultInt(stmt_loadPlayerData, 2, jobID);
-        MySQL_BindResultInt(stmt_loadPlayerData, 3, wantedLevel);
-        MySQL_BindResultInt(stmt_loadPlayerData, 4, playerBounty);
-
-
-
-        if(MySQL_Statement_FetchRow(stmt_loadPlayerData)) {
-            
-            Player_SetKills(playerid, kills);
-            Player_SetDeaths(playerid, deaths);
-            Player_SetJob(playerid, jobID);
-            SetPlayerWantedLevel(playerid, wantedLevel);
-
-    
-            static const 
-                msg_title[] = "~g~Welcome back!",
-                msg_content[] = "Hello ~p~%p, ~w~Welcome back to ~p~%s. ~n~~n~~y~Enjoy your stay!";
-            MessageBox_ShowF(playerid, TYPE_MSGBOX, msg_title, msg_content, 8000, playerid, SERVER_NAME);
-
-            CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
-
-            gPlayerLoginStatus[playerid] = true;
-
-            dbg("player", "player successfully logged in", 
-                _p("username", playerid), 
-                _i("uid", Player_GetAccountID(playerid)));
-        }
-    }
-
-    MySQL_BindInt(stmt_loadPlayerData, 0, Player_GetAccountID(playerid));
-    MySQL_ExecuteParallel_Inline(stmt_loadPlayerData, using inline OnDataLoad);
+static Account_NotifySuccess(playerid) {
+    static const 
+        msg_title[] = "~g~Welcome back!",
+        msg_content[] = "Hello ~p~%p, ~w~Welcome back to ~p~%s. ~n~~n~~y~Enjoy your stay!";
+    MessageBox_ShowF(playerid, TYPE_MSGBOX, msg_title, msg_content, 8000, playerid, SERVER_NAME);
 }
 
 // Bcrypt Callback
@@ -101,16 +59,13 @@ static Account_LoadData(playerid) {
 #define MAX_PASSWORD_ATTEMPT (5)
 
 static 
-    Player_Attempts[MAX_PLAYERS];
+    PlayerAttempts[MAX_PLAYERS];
 
- forward OnPasswordVerify(playerid, bool:success);
- public OnPasswordVerify(playerid, bool:success) {
-
+forward OnPasswordVerify(playerid, bool:success);
+public OnPasswordVerify(playerid, bool:success) {
     if(!success) {
-        SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", Player_Attempts, MAX_PASSWORD_ATTEMPT);
-        Account_PromptLogin(playerid, gPlayerHash[playerid]);
-
-        if(Player_Attempts[playerid] >= MAX_PASSWORD_ATTEMPT) {
+        PlayerAttempts[playerid] ++;
+        if(PlayerAttempts[playerid] >= MAX_PASSWORD_ATTEMPT) {
             SendErrorMsg(playerid, "You have been kicked from the server for attempting to login numerous times.");
             Kick(playerid);
 
@@ -121,21 +76,73 @@ static
             return;
         }
 
+        Account_PromptLogin(playerid, gPlayerHash[playerid]);
+        SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", PlayerAttempts[playerid], MAX_PASSWORD_ATTEMPT);
+        
         dbg("player", "player failed to login",
-            _i("attemps", Player_Attempts[playerid]),
+            _i("attemps", PlayerAttempts[playerid]),
             _p("username", playerid),
             _i("uid", Player_GetAccountID(playerid))
-		);
-
-        Player_Attempts[playerid] ++;
+        );
         return;
     }
 
-    Account_LoadData(playerid);
-    Player_Attempts[playerid] = 0;
- }
+    dbg("player", "player successfully logged in", 
+        _p("username", playerid), 
+        _i("uid", Player_GetAccountID(playerid))
+    );
+
+    PlayerAttempts[playerid] = 0;
+    Account_NotifySuccess(playerid);
+    CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
+    
+    // Force Spawn Player
+    SetSpawnInfo(playerid, NO_TEAM, Player_GetSavedSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+    SpawnPlayer(playerid);
+}
+
+static 
+    Statement: stmt_updatePlayerSkin;
+
+hook OnMySQLConnected() {
+    stmt_updatePlayerSkin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET skin = ? WHERE u_id = ?");
+    return 1;
+}
+
+hook OnPlayeLogin(playerid) {
+    gPlayerLoginStatus[playerid] = true;
+    return 1;
+}
+
+hook OnPlayerSpawn(playerid) {
+    if(Player_New(playerid)) {
+        Player_SetSavedSkin(playerid, GetPlayerSkin(playerid));
+        MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
+        MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
+        MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
+        Class_SelectionState(playerid, false);
+        Player_SetNew(playerid, false);
+    }
+    return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    // save money
+    // save skin (if changed)
+    return 1;
+}
+
+CMD:kill(playerid) {
+    SetPlayerHealth(playerid, 0);
+    return 1;
+}
 
  // API
 Player_IsLoggedIn(playerid) {
     return gPlayerLoginStatus[playerid];
+}
+
+Player_SetLoginStatus(playerid, bool:status) {
+    return gPlayerLoginStatus[playerid] = status;
 }

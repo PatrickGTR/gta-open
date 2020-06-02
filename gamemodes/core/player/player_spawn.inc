@@ -70,7 +70,7 @@ hook OnPlayerSpawn(playerid) {
 		PlayerLastSpawn[playerid] = id;
         Player_GiveJobWeapons(playerid);
     }
-	if(Player_GetClass(playerid) == TEAM_MEDIC) {
+	else if(Player_GetClass(playerid) == TEAM_MEDIC) {
 		id = random(sizeof(Medic_SpawnPoints));
 
 		x = Medic_SpawnPoints[id][0];
@@ -78,7 +78,7 @@ hook OnPlayerSpawn(playerid) {
 		z = Medic_SpawnPoints[id][2];
 		ang = Medic_SpawnPoints[id][3];	
 	}
-	if(Player_GetClass(playerid) == TEAM_POLICE) {
+	else if(Player_GetClass(playerid) == TEAM_POLICE) {
 		id = random(sizeof(Police_SpawnPoints));
 
 		x = Police_SpawnPoints[id][0];
