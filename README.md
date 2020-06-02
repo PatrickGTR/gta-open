@@ -4,7 +4,8 @@
 
 Run this gamemode in two line!
 ```bash
-sampctl package install
+sampctl package ensure
+sampctl package build
 sampctl package run
 ```
 
