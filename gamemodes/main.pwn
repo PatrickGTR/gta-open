@@ -31,6 +31,7 @@
 #include <user-interface>
 #include <account>
 #include <player>
+#include <houses>
 #include <admin> 
 #include <system>
 #include <chat> // chat & messaging

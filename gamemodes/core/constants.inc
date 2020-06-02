@@ -30,6 +30,12 @@
     (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
 
 enum {
+    ENEX_STREAMER_IDENTIFIER = 100,     // Entrance/Exits around San Fierro
+    HOUSES_STREAMER_IDENTIFIER,         // Entrance/Exit for houses around San Andreas.
+    FURNITURE_STREAMER_IDENTIFIER       // Furniture Objects
+}
+
+enum {
     TYPE_NO_JOB = -1,
     TYPE_DRUGDEALER = 0,
     TYPE_WEAPONDEALER,
