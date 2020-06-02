@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 hook OnMySQLConnected() {
-    mysql_tquery(sqlHandle,
+    mysql_tquery(MySQL_GetHandle(),
         "CREATE TABLE IF NOT EXISTS \
         player_houses(\
         house_id SMALLINT NOT NULL DEFAULT 0, \
@@ -13,11 +13,12 @@ hook OnMySQLConnected() {
         entrance_x FLOAT NOT NULL, \
         entrance_y FLOAT NOT NULL, \
         entrance_z FLOAT NOT NULL, \
-        entrace_a FLOAT NOT NULL, \
+        entrance_a FLOAT NOT NULL, \
         interior_id TINYINT(4) NOT NULL, \
         virtual_world MEDIUMINT NOT NULL, \
         PRIMARY KEY (house_id), \
         FOREIGN KEY(u_id) REFERENCES players(u_id) ON DELETE SET NULL ON UPDATE CASCADE)"
     );
+     log("setting up 'player_houses' table...");
     return 1;
 }

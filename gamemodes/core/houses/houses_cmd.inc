@@ -17,18 +17,41 @@ CMD:buyhouse(playerid, params[]) {
     if(Player_GetTotalHouses(playerid) >= MAX_HOUSES_PER_PLAYER) {
         return SendErrorMsg(playerid, "You reached the limit of houses you can own.");
     }
-
-    House_Buy(playerid, houseid);
     GivePlayerMoney(playerid, -House_GetPrice(houseid));
+    SendServerMsgF(playerid, "Congratulations! You have bought the house for "C_GREEN"$%i", House_GetPrice(houseid));
+    House_Buy(playerid, houseid);
+    return 1;
+}
+
+CMD:descriptionhouse(playerid, params[]) {
+    if(isnull(params)) {
+        return SendErrorMsg(playerid, "/hdescription <new description>");
+    }
+
+    new 
+        houseid = Player_GetInHouseID(playerid);
+
+    if(!Player_IsInsideHouse(playerid)) {
+        return SendErrorMsg(playerid, "You need to be inside a house you own.");
+    }
+
+    if(!House_PlayerIsOwner(playerid, houseid)) {
+        return SendErrorMsg(playerid, "You do not own this house.");
+    }
+
+    new 
+        ret = House_UpdateDescription(playerid, houseid, params);
+    if(!ret) {
+        return SendErrorMsg(playerid, "Descrption must not have more than 32 characters.");
+    }
+
+    SendServerMsgF(playerid, "You have successfully changed your house description to "C_GREY"%s", params);
     return 1;
 }
 
 
 ACMD:[4]hcreate(playerid, params[])
 {
-    if (House_GetTotal() == MAX_HOUSES)
-        return SendErrorMsg(playerid, "MAX_HOUSES reached its limit.");
-
     new 
         price, 
         interior;
@@ -41,7 +64,6 @@ ACMD:[4]hcreate(playerid, params[])
         return SendErrorMsgF(playerid, "Please insert a value between 0 and %i", House_GetInteriorArraySize());
     }
 
-
     new 
         Float:x,
         Float:y,
@@ -51,15 +73,37 @@ ACMD:[4]hcreate(playerid, params[])
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, a);
 
-    House_Create(
+    new 
+        ret = House_Create(
         x, 
         y, 
         z,
         a,
         GetPlayerVirtualWorld(playerid),
         price,
-        interior
+        interior,
+        .save = true
     );
 
+    if(ret == -1) {
+        return SendErrorMsg(playerid, "Can't create more houses, please increase the size of MAX_HOUSES");
+    }
     return true;
+}
+
+CMD:hdelete(playerid, params[]) {
+
+    if(isnull(params)) {
+        return SendErrorMsg(playerid, "/hdelete <house id>");
+    }
+
+    if(!isnumeric(params)) {
+        return SendErrorMsg(playerid, "invalid input.");
+    }
+
+    new 
+        houseid = strval(params);
+
+    House_Delete(playerid, houseid);
+    return 1;
 }

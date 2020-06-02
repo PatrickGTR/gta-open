@@ -5,10 +5,23 @@
 #include <houses_cmd>
 
 #if SETUP_TABLE
-    #include <house_setup-table>
+    #include <houses_setup-table>
 #endif 
 
 #include <YSI_Coding\y_hooks>
+
+static 
+    BitArray: PlayerInsideAHouse<MAX_PLAYERS>;
+
+stock Player_IsInsideHouse(playerid) {
+    return Bit_Get(PlayerInsideAHouse, playerid);
+}
+
+hook OnMySQLConnected() {
+    House_Load();
+    return 1;
+}
+
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if(PRESSED(KEY_SECONDARY_ATTACK)) {
         new 
@@ -43,6 +56,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
                 SetPlayerVirtualWorld(playerid, House_GetWorld(houseid));
                 SetPlayerPos(playerid, x, y, z);
                 SetCameraBehindPlayer(playerid);
+
+                Bit_Set(PlayerInsideAHouse, playerid, true);
             }
         }
 
@@ -51,7 +66,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
                     playerid, 
                     TYPE_MSGBOX, 
                     "~r~Goodbye",
-                    "You will be missed."
+                    "See you soon."
                 );
 
             new 
@@ -67,6 +82,8 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             SetPlayerVirtualWorld(playerid, 0);
             SetPlayerPos(playerid, x, y, z);
             SetPlayerFacingAngle(playerid, a);
+
+            Bit_Set(PlayerInsideAHouse, playerid, false);
         }
     }
     return 1;   
