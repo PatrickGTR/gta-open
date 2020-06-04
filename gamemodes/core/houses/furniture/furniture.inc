@@ -207,9 +207,7 @@ hook OnPlayerSelectDynObj(playerid, objectid, modelid, Float:x, Float:y, Float:z
 
             // first cell -> house index ID
             // second cell -> furniture index ID
-            
             Streamer_GetArrayData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_EXTRA_ID, arr);
-
             Furniture_Delete(arr[0], arr[1]);
             CancelEdit(playerid);
             DestroyDynamicObject(objectid);

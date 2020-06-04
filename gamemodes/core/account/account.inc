@@ -30,56 +30,11 @@ hook OnMySQLConnected() {
     stmt_checkPlayer = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT u_id, password FROM players WHERE username=?");
 }
 
-hook OnPlayerConnect(playerid) {
+hook OnPlayerLogin(playerid) {
+    Player_SetLoginStatus(playerid, true);
+}
 
-    new res = Ban_Check(playerid);
-    if(res) {
-
-        new 
-            banName[MAX_PLAYER_NAME],
-            banIP[20], 
-            currIP[20],
-            banAdmin[MAX_PLAYER_NAME],
-            banReason[MAX_BAN_REASON],
-            banDate[40],
-            unbanDate[40]
-        ;
-
-        GetPlayerIp(playerid, currIP, sizeof(currIP));
-
-        new expired = Ban_GetData(playerid, banName, banIP, banReason, banAdmin, banDate, unbanDate);
-        if(!expired) {
-            
-            new banInfo[512];
-            format(
-                banInfo, sizeof(banInfo), "\
-                "C_WHITE"Username: "C_GREY"%s\n\
-                "C_WHITE"Banned IP: "C_GREY"%s\n\
-                "C_WHITE"Current IP: "C_GREY"%s\n\
-                "C_WHITE"Banned By: "C_GREY"%s\n\
-                "C_WHITE"Reason of Ban: "C_GREY"%s\n\
-                "C_WHITE"Date of Ban: "C_GREY"%s\n\
-                "C_WHITE"Date of Unban: "C_GREY"%s", 
-                banName,
-                banIP, 
-                currIP, 
-                banAdmin, 
-                banReason, 
-                banDate, 
-                unbanDate
-            );
-            Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Ban Information", banInfo, "Close", "");
-            
-            Kick(playerid);
-            return;
-        }
-        SendMsgF(playerid, COLOR_WHITE, "Your ban expired on "C_GREY"%s "C_WHITE"\nWelcome back %p(%i), don't break any rules again", 
-        unbanDate, playerid, playerid);
-        
-        Ban_RemoveUser(banName, INVALID_PLAYER_ID);
-    }
-
-
+hook OnPlayerPassedBanCheck(playerid) {
     inline OnDataLoad() {
         new 
             playerUID, 

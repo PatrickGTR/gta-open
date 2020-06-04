@@ -8,7 +8,8 @@
 // Custom Callbacks
 // OnPlayerLogin(playerid) -> called when player successfully logged in.
 // OnPlayerRegister(playerid) -> called when player successfully registered.
-// OnPlayerSecondUpdate -> called every second per player (like OnPlayerUpdate but not as intensive.)
+// OnPlayerPassedBanCheck(playerid) -> called when player's ip/name/gcpi wasn't found in the ban database.
+// OnPlayerSecondUpdate(playerid) -> called every second per player (like OnPlayerUpdate but not as intensive.)
 
 // TextdrawLetterSize Rule -> Thanks to DamianC
 // Letter-size-y = letter-size-x * 4
@@ -58,8 +59,10 @@ public OnGameModeInit() {
 	return 1;
 }
 
+
 CMD:gmoney(playerid) {
 	GivePlayerMoney(playerid, 1000000);
+	SendMsgF(playerid, -1, "Received %m", 1000000);
 	return 1;
 }
 

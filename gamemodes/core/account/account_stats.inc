@@ -44,7 +44,6 @@ hook OnPlayerRegister(playerid) {
     // insert stats default data.
     MySQL_BindInt(stmt_insertPlayerStats, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_insertPlayerStats);
-    #pragma unused stmt_insertPlayerStats
 }
 
 static Account_LoadStats(playerid) {

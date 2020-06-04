@@ -55,9 +55,24 @@ static _FurnitureTypeDialog(playerid, page) {
 
 	PlayerCurrentChoice[playerid] = page;
 
- 	inline DialogFurniture(pid, dialogid, response, listitem, string:inputtext[]) {
-    	#pragma unused pid, dialogid, inputtext
+	for(new i = 0; i < Furniture_GetArraySize(); i++) {
+		if(Furniture_GetType(i)  == page) {
+			format(tmp_string, sizeof(tmp_string), "%i(0.0, 0.0, 0.0, 1.5, 0, 6)\t~w~%s:%s%m\n", 
+				Furniture_GetObjectID(i), 
+				Furniture_GetName(i), 
+				((GetPlayerMoney(playerid) < Furniture_GetPrice(i)) ? ("~r~") : ("~g~")),
+				Furniture_GetPrice(i)
+			);
+			strcat(big_string, tmp_string);
+		}
+	}
 
+	ShowPlayerDialog(playerid, 1337, DIALOG_STYLE_PREVIEW_MODEL, "Furniture Shop - Choose Furniture", big_string, "Select", "Go back");
+	return 1;
+}
+
+hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
+	if(dialogid == 1337) {
 		if(!response) {
 			return Furniture_ShowDialog(playerid);
         }
@@ -82,20 +97,6 @@ static _FurnitureTypeDialog(playerid, page) {
 		PlayerCurrentChoice[playerid] = -1;
 
 	}
-
-	strcat(big_string, "Furniture Name\tFurniture Price\n");
-	for(new i = 0; i < Furniture_GetArraySize(); i++) {
-		if(Furniture_GetType(i)  == page) {
-			format(tmp_string, sizeof(tmp_string), ""C_WHITE"%s\t"C_GREEN"$%i\n", Furniture_GetName(i), Furniture_GetPrice(i));
-			strcat(big_string, tmp_string);
-		}
-	}
-	Dialog_ShowCallback(playerid, using inline DialogFurniture,
-		DIALOG_STYLE_TABLIST_HEADERS,
-		"Furniture Shop - Choose Furniture",
-		big_string,
-		"Select",
-		 "Go Back");
 	return 1;
 }
 
