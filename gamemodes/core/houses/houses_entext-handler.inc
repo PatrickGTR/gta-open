@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-new 
+static 
     PlayerInHouseID[MAX_PLAYERS];
 
 stock Player_GetInHouseID(playerid) {
@@ -26,7 +26,6 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid) {
         new index = arr[1];
         if (checkpointid == House_GetEntranceCPHandler(index)) {
             PlayerInHouseID[playerid] = index;
-            //ply_houseCheckpointID[playerid] = checkpointid;
         }
     }
     return 1;

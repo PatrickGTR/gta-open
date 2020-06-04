@@ -45,7 +45,8 @@
 				"gamemodes/core/admin",
 				"gamemodes/core/systems",
 				"gamemodes/core/commands",
-				"gamemodes/core/houses"
+				"gamemodes/core/houses",
+				"gamemodes/core/houses/furniture"
 			],
 			"constants": {
 				"DEV_BUILD": "1"

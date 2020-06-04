@@ -19,6 +19,6 @@ hook OnMySQLConnected() {
         PRIMARY KEY (house_id), \
         FOREIGN KEY(u_id) REFERENCES players(u_id) ON DELETE SET NULL ON UPDATE CASCADE)"
     );
-     log("setting up 'player_houses' table...");
+    log("setting up 'player_houses' table...");
     return 1;
 }

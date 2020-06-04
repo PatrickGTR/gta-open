@@ -8,6 +8,8 @@
     #include <houses_setup-table>
 #endif 
 
+#include <furniture>
+
 #include <YSI_Coding\y_hooks>
 
 static 

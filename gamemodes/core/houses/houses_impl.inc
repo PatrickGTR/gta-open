@@ -94,6 +94,24 @@ hook OnMySQLConnected() {
     return 1;
 }
 
+static 
+    PlayerHouseCheckpointID[MAX_PLAYERS];
+
+hook OnPlayerEnterDynamicCP(playerid, checkpointid) {
+    new
+        arr[2];
+
+    Streamer_GetArrayData(STREAMER_TYPE_CP, checkpointid, E_STREAMER_EXTRA_ID, arr);
+
+    if (arr[0] == HOUSES_STREAMER_IDENTIFIER) {
+        new index = arr[1];
+        if (checkpointid == House_GetEntranceCPHandler(index)) {
+            PlayerHouseCheckpointID[playerid] = checkpointid;
+        }
+    }
+    return 1;
+}
+
 static
     Iterator:HouseIndex<MAX_HOUSES>,
     Text3D:HouseEntranceLabel[MAX_HOUSES],
@@ -411,6 +429,23 @@ stock Player_GetTotalHouses(playerid) {
     }
     return count;
 }
+
+stock Player_GetInHouseVWorld(playerid) {
+    new
+        arr[2];
+
+    Streamer_GetArrayData(STREAMER_TYPE_CP, PlayerHouseCheckpointID[playerid], E_STREAMER_EXTRA_ID, arr);
+    return HouseVWorld[arr[1]];
+}
+
+stock Player_GetInHouseInt(playerid) {
+    new
+        arr[2];
+
+    Streamer_GetArrayData(STREAMER_TYPE_CP, PlayerHouseCheckpointID[playerid], E_STREAMER_EXTRA_ID, arr);
+    return HouseInteriorID[arr[1]];
+}
+
 
 CMD:x(playerid, params[]) {
     SetPlayerPos(playerid, 1942.12, -1790, 13.3828);
