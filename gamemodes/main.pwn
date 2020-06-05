@@ -62,45 +62,6 @@ public OnGameModeInit() {
 	return 1;
 }
 
-
-CMD:gmoney(playerid) {
-	GivePlayerMoney(playerid, 1000000);
-	SendMsgF(playerid, -1, "Received %m", 1000000);
-	return 1;
-}
-
-CMD:givewanted(playerid) {
-	PLAYER_SetPlayerWantedLevel(playerid, 3);
-	return 1;
-}
-
-CMD:c4(playerid, params[]) {
-	Player_SetC4(playerid, 10);
-	return 1;
-}
-
-CMD:goto(playerid, params[]) {
-	SetPlayerPos(playerid, 846.610,-986.346,1093.492);
-	return 1;
-}
-
-
-CMD:veh(playerid,params[])
-{
-	new car;
-	new string[128];
-	new Float:X, Float:Y, Float:Z;
-	GetPlayerPos(playerid, Float:X, Float:Y, Float:Z);
-	if(sscanf(params,"i", car)) return SendClientMessage(playerid,0xff0000ff,"USAGE: /Veh <Vehicle ID 400 - 611>");
-	if(car < 400 || car >611) return SendClientMessage(playerid, 0xff0000ff, "ERROR: Cannot go under 400 or above 611.");
-
-	new vehicle = CreateVehicle(car, X, Y, Z + 2.0, 0, -1, -1, 1);
-	format(string,sizeof(string),"You Have Spawned Vehicle ID %i",car);
-	SendClientMessage(playerid, 0xffffffff, string);
-	PutPlayerInVehicle(playerid, vehicle, 0);
-	return 1;
-}
-
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.
 public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bodypart )
