@@ -81,6 +81,7 @@ static Account_InsertToDatabase(playerid, const hash[]) {
         CallLocalFunction("OnPlayerRegister", "i", playerid);
         PlayerFirstTime[playerid] = true;
         Player_SetLoginStatus(playerid, true);
+        Class_SelectionState(playerid, true);
     }
 
     new

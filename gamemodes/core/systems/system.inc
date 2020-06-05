@@ -4,3 +4,5 @@
 #include <stores_system>
 #include <police_system>
 #include <jailcell_system>
+#include <cityhall_system>
+#include <hospital_system>
