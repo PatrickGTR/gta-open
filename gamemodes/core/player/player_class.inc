@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     PlayerClass[MAX_PLAYERS];
 
 hook OnGameModeInit() {
@@ -48,8 +48,8 @@ hook OnGameModeInit() {
 	AddPlayerClass( 276, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 }
 
-static 
-	bool:PlayerClassState[MAX_PLAYERS];
+static
+	bool:PlayerClassState[MAX_PLAYERS] = true;
 
 stock Class_SelectionStatus(playerid) {
 	return PlayerClassState[playerid];
@@ -67,7 +67,7 @@ hook OnPlayerRequestClass(playerid, classid) {
 	if(!PlayerClassState[playerid]) {
 		defer ForceSpawnPlayer(playerid);
 
-		dbg("player", "F4 attempted, skipping class selection", 
+		dbg("player", "F4 attempted, skipping class selection",
 			_p("username", playerid)
     	);
 		return 1;
@@ -108,6 +108,11 @@ timer ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
 
 hook OnPlayerLogin(playerid) {
 	PlayerClassState[playerid] = false;
+	return 1;
+}
+
+hook OnPlayerRegister(playerid) {
+	PlayerClassState[playerid] = true;
 	return 1;
 }
 
