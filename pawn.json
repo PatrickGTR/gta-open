@@ -38,6 +38,7 @@
 				"gamemodes/core/chat",
 				"gamemodes/core/anti-cheat",
 				"gamemodes/core/server",
+				"gamemodes/core/server/dealership",
 				"gamemodes/core/account",
 				"gamemodes/core/player",
 				"gamemodes/core/player/job",

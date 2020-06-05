@@ -3,6 +3,8 @@
 #include <server_entrances>
 #include <server_wanted-level>
 
+#include <dealership>
+
 enum E_ENTRANCE_DATA
 {
 	E_INTERIOR_ID,
@@ -10,11 +12,11 @@ enum E_ENTRANCE_DATA
     E_STORE_NAME[MAX_STORE_NAME],
     Float:E_ENTRANCE_POS[3],
     Float:E_EXIT_POS[3],
-} 
+}
 
-static 
+static
 	const storeData[][E_ENTRANCE_DATA] =
-{ 
+{
 	{5, 54, 	"[GYM]", 				    {2229.9028, -1721.258, 13.5612}, {772.3065, -5.51570, 1000.7285}},
 	{11, 49, 	"[TEN GREEN BOTTLES]",	    {2309.987548, -1643.436279, 14.827047}, {501.9013, -67.5635, 998.7578}},
 	{9, 14, 	"[CLUCKING BELL]", 	    	{2397.816650, -1899.185058, 13.546875}, {364.9896, -11.8441, 1001.8516}},
@@ -53,7 +55,7 @@ static
 hook OnGameModeInit() {
 
 	// Init Entrances
-    new 
+    new
 		entID,
 		Float:enX,
 		Float:enY,
@@ -76,9 +78,9 @@ hook OnGameModeInit() {
 		exZ = storeData[i][E_EXIT_POS][2];
 		intID = storeData[i][E_INTERIOR_ID];
 		vwID = i; // unique vw id.
-        
+
 		entID = Entrance_Create(enX, enY, enZ, angle, exX, exY, exZ, angle, vwID, intID);
-		
+
         Entrance_SetIcon(entID, storeData[i][E_MAP_ICON]);
         Entrance_SetName(entID, storeData[i][E_STORE_NAME]);
     }

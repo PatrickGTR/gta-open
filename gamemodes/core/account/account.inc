@@ -20,7 +20,7 @@
 
 
 
-static 
+static
     Player_UID[MAX_PLAYERS],
     Player_Kills[MAX_PLAYERS],
     Player_Deaths[MAX_PLAYERS],
@@ -36,12 +36,12 @@ hook OnPlayerLogin(playerid) {
 
 hook OnPlayerPassedBanCheck(playerid) {
     inline OnDataLoad() {
-        new 
-            playerUID, 
+        new
+            playerUID,
             playerHash[250];
 
         // retrieve u_id and password data and store them to local variable.
-        MySQL_BindResultInt(stmt_checkPlayer, 0, playerUID); 
+        MySQL_BindResultInt(stmt_checkPlayer, 0, playerUID);
         MySQL_BindResult(stmt_checkPlayer, 1, playerHash, sizeof(playerHash));
 
         if(MySQL_Statement_FetchRow(stmt_checkPlayer)) {
@@ -52,7 +52,7 @@ hook OnPlayerPassedBanCheck(playerid) {
             Account_PromptRegister(playerid);
         }
     }
-    
+
     new playerName[MAX_PLAYER_NAME];
     GetPlayerName(playerid, playerName, MAX_PLAYER_NAME);
 

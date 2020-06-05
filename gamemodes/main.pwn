@@ -1,4 +1,4 @@
-// Patrick Dave Subang (c) 2020 April 
+// Patrick Dave Subang (c) 2020 April
 // Github -> https://github.com/PatrickGTR
 
 // Credits to these people, made the production easier.
@@ -20,19 +20,21 @@
 #define MYSQL_PREPARE_DEBUG 	(false)
 #define MAX_STATEMENTS 32
 
+#define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
+
 // Set to true if table aren't set up.
-#define SETUP_TABLE 			(false)	
+#define SETUP_TABLE 			(false)
 
 #include <constants>
 #include <init>
 #include <utils>
 #include <anti-cheat_main> // w.i.p
-#include <server>
 #include <user-interface>
+#include <server>
 #include <account>
 #include <player>
 #include <houses>
-#include <admin> 
+#include <admin>
 #include <system>
 #include <chat> // chat & messaging
 #include <cmds>
@@ -80,5 +82,9 @@ CMD:c4(playerid, params[]) {
 // not in use.
 public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bodypart )
 {
+	if(Player_GetClass(playerid) == Player_GetClass(issuerid) && Player_GetClass(playerid) != TEAM_CIVILIAN) {
+		return 0; // no team damage.
+	}
+
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
 }
