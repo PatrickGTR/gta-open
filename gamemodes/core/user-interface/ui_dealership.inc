@@ -108,6 +108,7 @@ UI_HideDealershipTextDraw(playerid)
 	PlayerTextDrawHide(playerid, gVehModelPrice[playerid]);
 
     Bit_Set(gHasDealershipOpened, playerid, false);
+	CancelSelectTextDraw(playerid);
 	return 1;
 }
 

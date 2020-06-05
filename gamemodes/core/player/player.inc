@@ -7,11 +7,12 @@
 
 #include <attachment>
 #include <job>
+#include <vehicle>
 
 #include <YSI_Coding\y_hooks>
 #include <YSI_Data\y_bit>
 
-new 
+new
     BitArray:PlayerSpawnState<MAX_PLAYERS>;
 
 hook OnPlayerSpawn(playerid) {

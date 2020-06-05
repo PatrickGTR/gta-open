@@ -17,12 +17,13 @@
 		"Southclaws/samp-logger",
 		"PatrickGTR/MySQL-Prepared-Statements",
 		"samp-incognito/samp-streamer-plugin",
-		"PatrickGTR/actor_robbery",
-		"kristoisberg/samp-map-zones"
+		"kristoisberg/samp-map-zones",
+		"PatrickGTR/actor_robbery"
 	],
 	"local": true,
 	"builds": [
 		{
+			"name": "",
 			"version": "3.10.10",
 			"args": [
 				"-;+",
@@ -42,6 +43,7 @@
 				"gamemodes/core/account",
 				"gamemodes/core/player",
 				"gamemodes/core/player/job",
+				"gamemodes/core/player/vehicle",
 				"gamemodes/core/player/attachment",
 				"gamemodes/core/admin",
 				"gamemodes/core/systems",

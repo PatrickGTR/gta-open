@@ -6,7 +6,7 @@
 #include <mysql_prepared>
 
 
-static 
+static
     Statement:stmt_insertPlayerAccount,
     bool:PlayerFirstTime[MAX_PLAYERS];
 
@@ -73,11 +73,11 @@ static Account_InsertToDatabase(playerid, const hash[]) {
     inline const OnRegister() {
         Player_SetAccountID(playerid, cache_insert_id());
 
-        static const 
+        static const
                 msg_title[] = "~g~Welcome!",
                 msg_content[] = "Hello ~p~%p, ~w~You have just registered to our server! You have been automatically logged in!~n~~n~~y~Enjoy your stay!";
         MessageBox_ShowF(playerid, TYPE_MSGBOX, msg_title, msg_content, 8000, playerid, SERVER_NAME);
-        
+
         CallLocalFunction("OnPlayerRegister", "i", playerid);
         PlayerFirstTime[playerid] = true;
         Player_SetLoginStatus(playerid, true);

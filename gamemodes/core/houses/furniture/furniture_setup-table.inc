@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 hook OnMySQLConnected() {
-    mysql_tquery(sqlHandle,
+    mysql_tquery(MySQL_GetHandle(),
         "CREATE TABLE IF NOT EXISTS \
             house_furniture \
             (furniture_id INT(11) AUTO_INCREMENT, \

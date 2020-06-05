@@ -72,3 +72,8 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
 
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
 }
+
+CMD:mone(playerid, params[]) {
+	GivePlayerMoney(playerid, 9999999);
+	return 1;
+}

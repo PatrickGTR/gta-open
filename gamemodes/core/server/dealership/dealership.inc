@@ -3,6 +3,17 @@
 static
 	plyCurrentChoice[MAX_PLAYERS];
 
+#define SPAWN_AIRX 			(-1665.9714)
+#define SPAWN_AIRY 			(1210.7313)
+#define SPAWN_AIRZ 			(32.9239)
+#define SPAWN_AIRA 			(280.6097)
+
+#define SPAWN_NORMALX  		(-1643.3745)
+#define SPAWN_NORMALY  		(1213.0620)
+#define SPAWN_NORMALZ  		(6.8095)
+#define SPAWN_NORMALA  		(225.2126)
+
+
 CMD:dealership(playerid, params[]) {
 
     UI_ShowDealershipUI(playerid);
@@ -27,7 +38,6 @@ public OnPlayerClickDealershipTextdraw(playerid, type)
 {
 	new
 		index = 0;
-	// FIX -> OOB Issue
 	if(type == BTN_RIGHT)
 	{
 		index = plyCurrentChoice[playerid];
@@ -64,8 +74,25 @@ public OnPlayerClickDealershipTextdraw(playerid, type)
 	{
 		index = plyCurrentChoice[playerid];
 
-		if (GetPlayerMoney(playerid) < Dealership_GetVehiclePrice(index))
+		if (GetPlayerMoney(playerid) < Dealership_GetVehiclePrice(index)) {
 			return SendErrorMsg(playerid, "You don't have enough money to buy this vehicle!");
+		}
+
+		if (Vehicle_GetPlayerTotal(playerid) >= MAX_VEHICLE_PER_PLAYER) {
+			return SendErrorMsgF(playerid, "You have reached the limit of vehicles you can own. "C_GREY"LIMIT: %i", MAX_VEHICLE_PER_PLAYER);
+		}
+
+		if (Dealership_GetVehicleType(index) == TYPE_AIR)
+		{
+			Vehicle_Create(playerid, Dealership_GetVehicleModel(index), SPAWN_AIRX, SPAWN_AIRY, SPAWN_AIRZ, SPAWN_AIRA);
+		}
+		else
+		{
+			Vehicle_Create(playerid, Dealership_GetVehicleModel(index), SPAWN_NORMALX, SPAWN_NORMALY, SPAWN_NORMALZ, SPAWN_NORMALA);
+		}
+
+		UI_HideDealershipTextDraw(playerid);
+		GivePlayerMoney(playerid, Dealership_GetVehiclePrice(index));
 	}
 	else if(type == BTN_CLOSE)
 	{
