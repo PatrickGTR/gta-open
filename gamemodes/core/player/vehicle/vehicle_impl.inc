@@ -21,7 +21,8 @@ static
 
 static
     Statement: stmt_insertVehicle,
-    Statement: stmt_checkVehicle;
+    Statement: stmt_checkVehicle,
+    Statement: stmt_checkComponent;
 
 
 hook OnMySQLConnected() {
@@ -56,13 +57,67 @@ hook OnMySQLConnected() {
     ";
     stmt_checkVehicle = MySQL_PrepareStatement(MySQL_GetHandle(), selectQuery);
 
+    static const componentQuery[] = "\
+        SELECT \
+            component_id \
+        FROM \
+            vehicle_components \
+        WHERE vehicle_id = ? \
+    ";
+    stmt_checkComponent = MySQL_PrepareStatement(MySQL_GetHandle(), componentQuery);
+    return 1;
+}
+
+hook OnVehicleMod(playerid, vehicleid, componentid)
+{
+	foreach(new i : Vehicle)
+	{
+		if(!Bit_Get(vehicle_created, i))
+			continue;
+
+		if (VehicleHandler[i] == vehicleid)
+		{
+
+			new
+				slot = GetVehicleComponentType(componentid),
+				qString[256]
+			;
+
+			mysql_format(MySQL_GetHandle(), qString, sizeof(qString), "\
+				INSERT INTO vehicle_components (vehicle_id, component_id, slot) VALUES (%i, %i, %i) ON DUPLICATE KEY UPDATE component_id = %i",
+				VehicleID[i], componentid, slot, componentid);
+			mysql_tquery(MySQL_GetHandle(), qString);
+
+			//This assigns the new value to our variable.
+			VehicleMods[i][slot] = componentid;
+		}
+	}
+    return 1;
+}
+
+hook OnVehicleRespray(playerid, vehicleid, color1, color2) {
+	foreach(new i : Vehicle)
+	{
+		if(!Bit_Get(vehicle_created, i))
+			continue;
+
+		if (VehicleHandler[i] == vehicleid)
+		{
+            new
+                qString[256];
+            mysql_format(MySQL_GetHandle(), qString, sizeof(qString), "UPDATE player_vehicles SET color_1 = %i, color_2 = %i WHERE vehicle_id = %i", color1, color2, VehicleID[i]);
+            mysql_tquery(MySQL_GetHandle(), qString);
+
+            VehicleColor1[i] = color1;
+            VehicleColor2[i] = color2;
+
+        }
+    }
     return 1;
 }
 
 hook OnPlayerLogin(playerid) {
-
     inline const OnLoadCreatedVehicle() {
-
     new
         vehicleID,
         ownerID,
@@ -88,14 +143,10 @@ hook OnPlayerLogin(playerid) {
     MySQL_BindResultInt(stmt_checkVehicle, 8, intID);
     MySQL_BindResultInt(stmt_checkVehicle, 9, VWorld);
 
-
-
     while(MySQL_Statement_FetchRow(stmt_checkVehicle)) {
-            foreach(new i : Vehicle)
-            {
+            foreach(new i : Vehicle) {
                 if(Bit_Get(vehicle_created, i)) {
-                    // skip created vehicles in this API.
-                    // we need a free id.
+                    // skip created vehicles that are created by vehicles_ api.
                     continue;
                 }
                 VehicleOwnerID[i] 	    = ownerID;
@@ -119,20 +170,29 @@ hook OnPlayerLogin(playerid) {
                 SetVehicleVirtualWorld(VehicleHandler[i], VehicleVWorld[i]);
                 ChangeVehicleColor(VehicleHandler[i], VehicleColor1[i], VehicleColor2[i]);
 
-                printf("ownerid: %i - vehicleid", ownerID, vehicleID);
-                printf("modelid: %i", modelID);
-                printf("x %0.2f y %0.2f z %0.2f rot %0.2f", x, y, z, rot);
-                printf("color 1 %i - color 2 %i", color_1, color_2);
-                printf("interiorid %i - worldid %i", intID, VWorld);
-
                 Bit_Let(vehicle_created, i);
+
+                new
+                    component_id,
+                    index = 0;
+                MySQL_BindResultInt(stmt_checkComponent, 0, component_id);
+                inline const OnLoadVehicleComponent() {
+                    while(MySQL_Statement_FetchRow(stmt_checkComponent)) {
+
+                        VehicleMods[i][index] = component_id;
+
+                        AddVehicleComponent(VehicleHandler[i], VehicleMods[i][index]);
+                        index ++;
+                    }
+                }
+                MySQL_BindInt(stmt_checkComponent, 0, VehicleID[i]);
+                MySQL_ExecuteThreaded_Inline(stmt_checkComponent, using inline OnLoadVehicleComponent);
+
+                // break once vehicle_created isn't skipped.
                 break;
-                // mysql_tquery(sqlHandle,
-                //     sprintf("SELECT "COMPONENT_VEHICLE_ID", "COMPONENT_VEHICLE_ID_FK", "COMPONENT_SLOT_ID" FROM "TABLE_VEHICLE_COMPONENT" WHERE "COMPONENT_VEHICLE_ID_FK" = %i", vehData[i][VEH_ID]), "OnLoadPlayerVehicleComponents", "i", i);
             }
         }
     }
-
     MySQL_BindInt(stmt_checkVehicle, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_checkVehicle, using inline OnLoadCreatedVehicle);
     return 1;
@@ -219,8 +279,27 @@ timer PutPlayerInSaveVehicle[1000](playerid, vehicleid)
 	PutPlayerInVehicle(playerid, vehicleid, 0);
 }
 
-stock ParkVehicle(playerid, vehicleid)
-{
+stock Vehicle_Park(playerid) {
+
+    new
+        vehicleid,
+        index,
+        playerInVehicleID = GetPlayerVehicleID(playerid);
+    foreach(new i : Vehicle) {
+
+        if(!Bit_Get(vehicle_created, i)) {
+            continue;
+        }
+
+        if(VehicleHandler[i] != playerInVehicleID) {
+            continue;
+        }
+
+        vehicleid = VehicleHandler[i];
+        index = i;
+        break;
+    }
+
 	new
 		Float: x,
 		Float: y,
@@ -231,15 +310,22 @@ stock ParkVehicle(playerid, vehicleid)
 	GetVehiclePos(vehicleid, x, y, z);
 	GetVehicleZAngle(vehicleid, a);
 
-	mysql_format(sqlHandle, qString, sizeof(qString), "UPDATE "TABLE_PLAYER_VEHICLES" SET \
-		"VEHICLE_POSX" = %0.4f, \
-		"VEHICLE_POSY" = %0.4f, \
-		"VEHICLE_POSZ" = %0.4f , \
-		"VEHICLE_POSROT" = %0.4f WHERE "VEHICLE_OWNERID" = %i AND "VEHICLE_ID" = %i", x, y, z, a, GetPlayerAccountID(playerid), vehData[vehicleid][VEH_ID]);
+	mysql_format(MySQL_GetHandle(), qString, sizeof(qString), "\
+    UPDATE \
+        player_vehicles \
+    SET \
+		x = %0.4f, \
+		y = %0.4f, \
+		z = %0.4f , \
+		rot = %0.4f \
+    WHERE \
+        u_id = %i \
+    AND \
+        vehicle_id = %i", x, y, z, a, Player_GetAccountID(playerid), VehicleID[index]);
 
-	mysql_tquery(sqlHandle, qString);
+	mysql_tquery(MySQL_GetHandle(), qString);
 
-	SendServerMessage(playerid, "Vehicle parked, position saved!");
+	SendServerMsg(playerid, "Vehicle parked, position saved!");
 	return 1;
 }
 
@@ -250,17 +336,25 @@ stock IsPlayerInPersonalVehicle(playerid)
 
 	foreach(new i : Vehicle)
 	{
-		if(vehData[i][VEH_DATA] != ply_vehicleID)
+        if(!Bit_Get(vehicle_created, i)) {
+            continue;
+        }
+
+		if(VehicleHandler[i] != ply_vehicleID) {
 			continue;
+        }
 
-		if(!IsVehicleStreamedIn(vehData[i][VEH_DATA], playerid))
+		if(!IsVehicleStreamedIn(VehicleHandler[i], playerid)) {
 			return 0;
+        }
 
-		if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
+		if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) {
 			return 0;
+        }
 
-		if(vehData[i][VEH_OWNERID] == GetPlayerAccountID(playerid))
+		if(VehicleOwnerID[i] == Player_GetAccountID(playerid)) {
 			return 1;
+        }
 	}
 	return 0;
 }

@@ -3,15 +3,15 @@
 static
 	plyCurrentChoice[MAX_PLAYERS];
 
-#define SPAWN_AIRX 			(-1665.9714)
-#define SPAWN_AIRY 			(1210.7313)
-#define SPAWN_AIRZ 			(32.9239)
-#define SPAWN_AIRA 			(280.6097)
+#define SPAWN_AIRX 			(542.2044)
+#define SPAWN_AIRY 			(-1299.0394)
+#define SPAWN_AIRZ 			(32.7165)
+#define SPAWN_AIRA 			(359.5135)
 
-#define SPAWN_NORMALX  		(-1643.3745)
-#define SPAWN_NORMALY  		(1213.0620)
-#define SPAWN_NORMALZ  		(6.8095)
-#define SPAWN_NORMALA  		(225.2126)
+#define SPAWN_NORMALX  		(556.0718)
+#define SPAWN_NORMALY  		(-1282.3813)
+#define SPAWN_NORMALZ  		(16.8717)
+#define SPAWN_NORMALA  		(0.0165)
 
 
 CMD:dealership(playerid, params[]) {

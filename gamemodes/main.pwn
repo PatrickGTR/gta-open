@@ -77,3 +77,8 @@ CMD:mone(playerid, params[]) {
 	GivePlayerMoney(playerid, 9999999);
 	return 1;
 }
+
+CMD:goto(playerid, params[]) {
+	SetPlayerPos(playerid, 556.072, -1282.38, 16.8717);
+	return 1;
+}
