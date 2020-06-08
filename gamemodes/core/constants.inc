@@ -1,7 +1,9 @@
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 50
 #define BCRYPT_COST 12
+#define MAX_PLATE_NAME (24)
 #define MAX_BAN_REASON (32)
+#define MAX_VEHICLE_PER_PLAYER (2)
 
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_VERSION_CHECK
@@ -28,6 +30,12 @@
 
 #define PRESSED(%0) \
     (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
+
+enum {
+    ENEX_STREAMER_IDENTIFIER = 100,     // Entrance/Exits around San Fierro
+    HOUSES_STREAMER_IDENTIFIER,         // Entrance/Exit for houses around San Andreas.
+    FURNITURE_STREAMER_IDENTIFIER       // Furniture Objects
+}
 
 enum {
     TYPE_NO_JOB = -1,

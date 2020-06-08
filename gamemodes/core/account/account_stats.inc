@@ -20,10 +20,10 @@ hook OnMySQLConnected() {
         kills, \
         deaths, \
         job_id, \
+        class_id, \
         wanted_level, \
         money, \
-        skin, \
-        class_id \
+        skin \
     FROM \
         player_stats \
     WHERE \
@@ -44,7 +44,6 @@ hook OnPlayerRegister(playerid) {
     // insert stats default data.
     MySQL_BindInt(stmt_insertPlayerStats, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_insertPlayerStats);
-    #pragma unused stmt_insertPlayerStats
 }
 
 static Account_LoadStats(playerid) {
@@ -60,10 +59,10 @@ static Account_LoadStats(playerid) {
         MySQL_BindResultInt(stmt_loadPlayerStats, 0, kills);
         MySQL_BindResultInt(stmt_loadPlayerStats, 1, deaths);
         MySQL_BindResultInt(stmt_loadPlayerStats, 2, jobID);
-        MySQL_BindResultInt(stmt_loadPlayerStats, 3, wantedLevel);
-        MySQL_BindResultInt(stmt_loadPlayerStats, 4, playerMoney);
-        MySQL_BindResultInt(stmt_loadPlayerStats, 5, playerSkin);
-        MySQL_BindResultInt(stmt_loadPlayerStats, 6, playerClass);
+        MySQL_BindResultInt(stmt_loadPlayerStats, 3, playerClass);
+        MySQL_BindResultInt(stmt_loadPlayerStats, 4, wantedLevel);
+        MySQL_BindResultInt(stmt_loadPlayerStats, 5, playerMoney);
+        MySQL_BindResultInt(stmt_loadPlayerStats, 6, playerSkin);
 
         if(MySQL_Statement_FetchRow(stmt_loadPlayerStats)) { 
             Player_SetKills(playerid, kills);

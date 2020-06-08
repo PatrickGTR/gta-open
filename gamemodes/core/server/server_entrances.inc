@@ -5,7 +5,6 @@
 // Definitions
 #define MAX_ENTRANCES               (128)
 #define MAX_STORE_NAME              (30)
-#define ENEX_STREAMER_IDENTIFIER    (10)
 
 // Declarations
 static

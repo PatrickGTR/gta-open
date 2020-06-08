@@ -2,6 +2,29 @@
 
 #include <admin_ban-cmd>
 
+static 
+    Statement: stmt_checkBan;
+
+hook OnMySQLConnected() {
+
+    static const checkQuery[] = "\
+        SELECT \
+            *,  DATE_FORMAT(ban_date,'"SQL_DATETIME_FORMAT"') AS date_ban, \
+            DATE_FORMAT(unban_date,'"SQL_DATETIME_FORMAT"') AS date_unban, \
+            TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP(), unban_date) AS expired \
+        FROM \
+            bans \
+        WHERE \
+            username = ? OR gcpi = ? OR ip = ? LIMIT 1\
+    ";
+    stmt_checkBan = MySQL_PrepareStatement (MySQL_GetHandle(), checkQuery);
+}
+
+hook OnPlayerConnect(playerid) {
+    Ban_CheckUser(playerid);
+    return 1;
+}
+
 // Create a new entry on the database.
 // allows you to ban player from day, month upto a year.
 // returns whether the query was sent successfully.
@@ -78,54 +101,7 @@ Ban_RemoveUser(username[], playerid = INVALID_PLAYER_ID) {
     return MySQL_TQueryInline(MySQL_GetHandle(), using inline OnPlayerRemoveBan, query, username, playerid);
 }
 
-// check if player is banned by username, ip or gcpi.
-// returns whether the query count(*) returns a row.
-Ban_Check(playerid) {
-
-    new
-        playerIP[20],
-        playerGCPI[60],
-        playerName[MAX_PLAYER_NAME]
-    ;
-    GetPlayerIp(playerid, playerIP, sizeof(playerIP));
-    gpci(playerid, playerGCPI, sizeof(playerGCPI));
-    GetPlayerName(playerid, playerName, sizeof(playerName));
-
-    static const query[] = "\
-        SELECT \
-            COUNT(*) \
-        FROM \
-            bans \
-        WHERE \
-            username = '%e' OR gcpi = '%e' OR ip = '%e' LIMIT 1"
-    ;
-
-    new string[128 + MAX_PLAYER_NAME + 20];
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, playerName, playerGCPI, playerIP);
-    new Cache:res = mysql_query(MySQL_GetHandle(), string);
-    new bool:ret = false;
-    cache_get_value_index_int(0, 0, ret);
-    cache_delete(res);
-    return ret;
-}
-
-
-// retrieves the player's ban details.
-// username, ip, admin who banned the user, reason, unban date, ban date.
-// this callback returns whether the ban has expired or not.
-Ban_GetData(playerid, username[], ip[], reason[], admin[], bandate[], unbandate[]) {
-
-    static const query[] = "\
-        SELECT \
-        *,  DATE_FORMAT(ban_date,'"SQL_DATETIME_FORMAT"') AS date_ban, \
-            DATE_FORMAT(unban_date,'"SQL_DATETIME_FORMAT"') AS date_unban, \
-            TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP(), unban_date) AS expired \
-        FROM \
-            bans \
-        WHERE \
-            username = '%e' OR gcpi = '%e' OR ip = '%e' LIMIT 1"
-    ;
-
+Ban_CheckUser(playerid) {
     new
         playerIP[20],
         playerGCPI[60],
@@ -134,28 +110,53 @@ Ban_GetData(playerid, username[], ip[], reason[], admin[], bandate[], unbandate[
     gpci(playerid, playerGCPI, sizeof(playerGCPI));
     GetPlayerName(playerid, playerName, sizeof(playerName));
 
+    inline OnPlayerBanLoad() {
+        new
+            banIP[16 + 1],
+            banName[MAX_PLAYER_NAME],
+            banAdmin[MAX_PLAYER_NAME],
+            banReason[MAX_BAN_REASON],
+            banDate[40],
+            unbanDate[40],
+            expired;
 
-    new
-        expired,
-        string[512];
+        if (cache_num_rows()) {
+            cache_get_value_name(0, "username", banName, MAX_PLAYER_NAME);
+            cache_get_value_name(0, "ip",  banIP, 20);
+            cache_get_value_name(0, "admin", banAdmin, MAX_PLAYER_NAME);
+            cache_get_value_name(0, "reason", banReason, MAX_BAN_REASON);
 
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, playerName, playerGCPI, playerIP);
-    new Cache:res = mysql_query(MySQL_GetHandle(), string);
+            cache_get_value_name(0, "date_ban", banDate, 40);
+            cache_get_value_name(0, "date_unban", unbanDate, 40);
 
-    if (cache_num_rows()) {
-        cache_get_value_name(0, "username", username, MAX_PLAYER_NAME);
-        cache_get_value_name(0, "ip",  ip, 20);
-        cache_get_value_name(0, "admin", admin, MAX_PLAYER_NAME);
-        cache_get_value_name(0, "reason", reason, MAX_BAN_REASON);
+            cache_get_value_name_int(0, "expired", expired);
 
-        cache_get_value_name(0, "date_ban", bandate, 40);
-        cache_get_value_name(0, "date_unban", unbandate, 40);
-
-        cache_get_value_name_int(0, "expired", expired);
-
+            if (expired <= 0) {
+                SendMsgF(playerid, COLOR_WHITE, "Your ban expired on "C_GREY"%s "C_WHITE"\nWelcome back %p(%i), don't break any rules again", unbanDate, playerid, playerid);
+                Ban_RemoveUser(banName, INVALID_PLAYER_ID);
+            }
+            else {
+                new string[512];
+                format(string, sizeof(string), "\
+                    "C_WHITE"Username: "C_GREY"%s\n\
+                    "C_WHITE"Banned IP: "C_GREY"%s\n\
+                    "C_WHITE"Current IP: "C_GREY"%s\n\
+                    "C_WHITE"Banned By: "C_GREY"%s\n\
+                    "C_WHITE"Reason of Ban: "C_GREY"%s\n\
+                    "C_WHITE"Date of Ban: "C_GREY"%s\n\
+                    "C_WHITE"Date of Unban: "C_GREY"%s", banName, banIP, playerIP, banAdmin, banReason, banDate, unbanDate);
+                Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Ban Information", string, "Close", "");
+                Kick(playerid);
+            }
+        } else {
+            CallLocalFunction("OnPlayerPassedBanCheck", "i", playerid);
+        }
     }
-    cache_delete(res);
-    return (expired <= 0);
-}
 
+    MySQL_Bind(stmt_checkBan, 0, playerName);
+    MySQL_Bind(stmt_checkBan, 1, playerGCPI);
+    MySQL_Bind(stmt_checkBan, 2, playerIP);
+
+    MySQL_ExecuteParallel_Inline(stmt_checkBan, using inline OnPlayerBanLoad);
+}
 

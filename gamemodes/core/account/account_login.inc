@@ -93,13 +93,11 @@ static Account_NotifySuccess(playerid) {
     MessageBox_ShowF(playerid, TYPE_MSGBOX, msg_title, msg_content, 8000, playerid, SERVER_NAME);
 }
 
-// Bcrypt Callback
-
 #define MAX_PASSWORD_ATTEMPT (5)
 
 static 
     PlayerAttempts[MAX_PLAYERS];
-
+    
 static 
     Statement: stmt_updatePlayerSkin;
 
@@ -121,6 +119,13 @@ hook OnPlayerSpawn(playerid) {
         MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
         Class_SelectionState(playerid, false);
         Player_SetNew(playerid, false);
+    }
+    if(Player_BoughtSkin(playerid)) {
+        Player_SetSavedSkin(playerid, GetPlayerSkin(playerid));
+        MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
+        MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
+        MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
+        Class_SelectionState(playerid, false);
     }
     return 1;
 }

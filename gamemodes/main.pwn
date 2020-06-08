@@ -1,4 +1,4 @@
-// Patrick Dave Subang (c) 2020 April 
+// Patrick Dave Subang (c) 2020 April
 // Github -> https://github.com/PatrickGTR
 
 // Credits to these people, made the production easier.
@@ -8,7 +8,8 @@
 // Custom Callbacks
 // OnPlayerLogin(playerid) -> called when player successfully logged in.
 // OnPlayerRegister(playerid) -> called when player successfully registered.
-// OnPlayerSecondUpdate -> called every second per player (like OnPlayerUpdate but not as intensive.)
+// OnPlayerPassedBanCheck(playerid) -> called when player's ip/name/gcpi wasn't found in the ban database.
+// OnPlayerSecondUpdate(playerid) -> called every second per player (like OnPlayerUpdate but not as intensive.)
 
 // TextdrawLetterSize Rule -> Thanks to DamianC
 // Letter-size-y = letter-size-x * 4
@@ -19,22 +20,26 @@
 #define MYSQL_PREPARE_DEBUG 	(false)
 #define MAX_STATEMENTS 32
 
+#define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
+
 // Set to true if table aren't set up.
-#define SETUP_TABLE 			(false)	
+#define SETUP_TABLE 			(false)
 
 #include <constants>
 #include <init>
-
 #include <utils>
 #include <anti-cheat_main> // w.i.p
-#include <server>
 #include <user-interface>
+#include <server>
 #include <account>
 #include <player>
-#include <admin> 
+#include <houses>
+#include <admin>
 #include <system>
 #include <chat> // chat & messaging
 #include <cmds>
+#include <mapping>
+
 
 // Will be called after the rest ^
 public OnGameModeInit() {
@@ -57,24 +62,23 @@ public OnGameModeInit() {
 	return 1;
 }
 
-CMD:gmoney(playerid) {
-	GivePlayerMoney(playerid, 1000000);
-	return 1;
-}
-
-CMD:givewanted(playerid) {
-	PLAYER_SetPlayerWantedLevel(playerid, 3);
-	return 1;
-}
-
-CMD:c4(playerid, params[]) {
-	Player_SetC4(playerid, 10);
-	return 1;
-}
-
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.
 public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bodypart )
 {
+	if(Player_GetClass(playerid) == Player_GetClass(issuerid) && Player_GetClass(playerid) != TEAM_CIVILIAN) {
+		return 0; // no team damage.
+	}
+
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
+}
+
+CMD:mone(playerid, params[]) {
+	GivePlayerMoney(playerid, 9999999);
+	return 1;
+}
+
+CMD:goto(playerid, params[]) {
+	SetPlayerPos(playerid, 556.072, -1282.38, 16.8717);
+	return 1;
 }
