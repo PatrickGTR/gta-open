@@ -10,11 +10,11 @@ main() {
 }
 
 
-static 
+static
     MySQL:MySQL_ConHandle;
 
 // TODO: move to environment var or .ini config.
-static const 
+static const
     MYSQL_HOST[]    = "localhost",
     MYSQL_PW[]      = "",
     MYSQL_DB[]      = "gta-open",
@@ -33,7 +33,6 @@ hook OnGameModeInit() {
     }
 
     log("MySQL connection is successful.");
-
     CallLocalFunction("OnMySQLConnected", "");
     return 1;
 }

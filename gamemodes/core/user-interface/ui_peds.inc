@@ -66,13 +66,22 @@ hook OnGameModeInit() {
     }
 }
 
+static
+    LastRobberyMsgShown[MAX_PLAYERS];
+
 public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently)
 {
     if(robbed_recently)
     {
+        if(gettime() - LastRobberyMsgShown[playerid] < 2) {
+            // this stops the spamming everytime the player aims.
+            return 1;
+        }
+
         SendServerMsg(playerid, "This store have been robbed recently!");
-        return 0;
+        LastRobberyMsgShown[playerid] = gettime();
     }
+
     return 1;
 }
 

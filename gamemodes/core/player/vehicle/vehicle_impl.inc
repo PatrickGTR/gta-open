@@ -2,21 +2,23 @@
 #include <YSI_Data\y_bit>
 #include <mysql_prepared>
 
+#define MAX_OWNED_VEHICLES (MAX_PLAYERS * MAX_VEHICLE_PER_PLAYER)
+
 static
-    VehicleHandler[MAX_VEHICLES],
-    VehicleOwnerID[MAX_VEHICLES],
-    VehicleID[MAX_VEHICLES],
-    VehicleModelID[MAX_VEHICLES],
-    Float:VehicleX[MAX_VEHICLES],
-    Float:VehicleY[MAX_VEHICLES],
-    Float:VehicleZ[MAX_VEHICLES],
-    Float:VehicleRot[MAX_VEHICLES],
-    VehicleColor1[MAX_VEHICLES],
-    VehicleColor2[MAX_VEHICLES],
-    VehicleInteriorID[MAX_VEHICLES],
-    VehicleVWorld[MAX_VEHICLES],
-    VehicleMods[MAX_VEHICLES][16],
-    VehiclePlate[MAX_VEHICLES][MAX_PLATE_NAME],
+    VehicleHandler[MAX_OWNED_VEHICLES],
+    VehicleOwnerID[MAX_OWNED_VEHICLES],
+    VehicleID[MAX_OWNED_VEHICLES],
+    VehicleModelID[MAX_OWNED_VEHICLES],
+    Float:VehicleX[MAX_OWNED_VEHICLES],
+    Float:VehicleY[MAX_OWNED_VEHICLES],
+    Float:VehicleZ[MAX_OWNED_VEHICLES],
+    Float:VehicleRot[MAX_OWNED_VEHICLES],
+    VehicleColor1[MAX_OWNED_VEHICLES],
+    VehicleColor2[MAX_OWNED_VEHICLES],
+    VehicleInteriorID[MAX_OWNED_VEHICLES],
+    VehicleVWorld[MAX_OWNED_VEHICLES],
+    VehicleMods[MAX_OWNED_VEHICLES][16],
+    VehiclePlate[MAX_OWNED_VEHICLES][MAX_PLATE_NAME],
     BitArray:vehicle_created<MAX_VEHICLES>;
 
 static
@@ -367,7 +369,7 @@ stock Vehicle_Load(playerid) {
 
                         VehicleMods[i][index] = component_id;
 
-                        defer DelayAddVehicleComponent(VehicleHandler[i], VehicleMods[i][index], 500 + (index * 100));
+                        //defer DelayAddVehicleComponent(VehicleHandler[i], VehicleMods[i][index], 500 + (index * 100));
                         index ++;
                     }
                 }
@@ -383,10 +385,10 @@ stock Vehicle_Load(playerid) {
     MySQL_ExecuteThreaded_Inline(stmt_checkVehicle, using inline OnLoadCreatedVehicle);
 }
 
-timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
-    #pragma unused seconds
-    AddVehicleComponent(vehicleid, componentid);
-}
+// timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
+//     #pragma unused seconds
+//     AddVehicleComponent(vehicleid, componentid);
+// }
 
 stock Vehicle_IsPlayer(playerid)
 {
