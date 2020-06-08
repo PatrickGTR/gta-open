@@ -111,7 +111,6 @@ hook OnPlayeLogin(playerid) {
 
 hook OnPlayerSpawn(playerid) {
     if(Player_New(playerid)) {
-        Player_SetSavedSkin(playerid, GetPlayerSkin(playerid));
         MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
         MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
         MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
@@ -119,7 +118,6 @@ hook OnPlayerSpawn(playerid) {
         Player_SetNew(playerid, false);
     }
     if(Player_BoughtSkin(playerid)) {
-        Player_SetSavedSkin(playerid, GetPlayerSkin(playerid));
         MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
         MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
         MySQL_ExecuteThreaded(stmt_updatePlayerSkin);

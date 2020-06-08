@@ -3,42 +3,16 @@
 
 #include <YSI_Coding\y_hooks>
 
-const 
+const
     MAX_WANTED_LEVEL = 1024;
 
-static 
+static
     PlayerWantedLevel[MAX_PLAYERS];
-
-// wrapper - change function name for consistency.
-stock Player_GetWantedLevel(playerid) {
-    if(!IsPlayerConnected(playerid)) {
-        return 0;
-    }
-
-    return GetPlayerWantedLevel(playerid);
-}
-
-stock Player_GiveWantedLevel(playerid, level)  {
-    if(!IsPlayerConnected(playerid)) {
-        return 0;
-    }
-    new 
-        currentLevel = Player_GetWantedLevel(playerid),
-        newLevel = currentLevel + level;
-    
-    PLAYER_SetPlayerWantedLevel(playerid, newLevel);
-    return 1;
-}
-
-hook OnPlayerDeath(playerid, killerid, reason) {
-    SetPlayerWantedLevel(playerid, 0);
-    return 1;
-}
 
 // Purpose:
 // to return the server-sided wanted level instead of the client side.
 stock PLAYER_GetPlayerWantedLevel(playerid) {
-	return PlayerWantedLevel[playerid]; 
+	return PlayerWantedLevel[playerid];
 }
 
 #if defined _ALS_GetPlayerWantedLevel
@@ -76,3 +50,29 @@ stock PLAYER_SetPlayerWantedLevel(playerid, level) {
 #endif
 
 #define SetPlayerWantedLevel PLAYER_SetPlayerWantedLevel
+
+// wrapper - change function name for consistency.
+stock Player_GetWantedLevel(playerid) {
+    if(!IsPlayerConnected(playerid)) {
+        return 0;
+    }
+
+    return GetPlayerWantedLevel(playerid);
+}
+
+stock Player_GiveWantedLevel(playerid, level)  {
+    if(!IsPlayerConnected(playerid)) {
+        return 0;
+    }
+    new
+        currentLevel = Player_GetWantedLevel(playerid),
+        newLevel = currentLevel + level;
+
+    PLAYER_SetPlayerWantedLevel(playerid, newLevel);
+    return 1;
+}
+
+hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+    SetPlayerWantedLevel(playerid, 0);
+    return 1;
+}

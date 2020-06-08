@@ -152,6 +152,29 @@ hook OnVehicleRespray(playerid, vehicleid, color1, color2) {
     return 1;
 }
 
+hook OnVehicleStreamIn(vehicleid, forplayerid) {
+
+    foreach(new i : Vehicle) {
+        if(!Bit_Get(vehicle_created, i)) {
+            continue;
+        }
+
+        if (VehicleHandler[i] != vehicleid) {
+            continue;
+        }
+
+        for(new x = 0; x < sizeof(VehicleMods[]); x ++) {
+            if(!IS_IN_RANGE(VehicleMods[i][x], 1000, 1193)) {
+                continue;
+            }
+            AddVehicleComponent(VehicleHandler[i], VehicleMods[i][x]);
+            printf("adding component %i to vehicle id %i", VehicleMods[i][x], VehicleHandler[i]);
+        }
+    }
+    printf("vehicle id %i streamed in", vehicleid);
+    return 1;
+}
+
 Vehicle_GetPlayerTotal(playerid) {
     new
         count = 0;
@@ -344,7 +367,7 @@ stock Vehicle_Load(playerid) {
 
                         VehicleMods[i][index] = component_id;
 
-                        defer DelayAddVehicleComponent(VehicleHandler[i], VehicleMods[i][index], 10000 + (index * 100));
+                        defer DelayAddVehicleComponent(VehicleHandler[i], VehicleMods[i][index], 500 + (index * 100));
                         index ++;
                     }
                 }
@@ -362,7 +385,6 @@ stock Vehicle_Load(playerid) {
 
 timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
     #pragma unused seconds
-    printf("AddVehicleComponent(%i, %i);", vehicleid, componentid);
     AddVehicleComponent(vehicleid, componentid);
 }
 

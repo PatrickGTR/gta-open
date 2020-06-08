@@ -1,8 +1,5 @@
 #include <YSI_Coding\y_hooks>
 
-static
-    PlayerClass[MAX_PLAYERS];
-
 hook OnGameModeInit() {
     // Civilian Skin
     AddPlayerClass(56,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -46,25 +43,15 @@ hook OnGameModeInit() {
 	AddPlayerClass( 274, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	AddPlayerClass( 275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	AddPlayerClass( 276, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-}
-
-static
-	bool:PlayerClassState[MAX_PLAYERS] = true;
-
-stock Class_SelectionStatus(playerid) {
-	return PlayerClassState[playerid];
-}
-
-stock Class_SelectionState(playerid, bool:status) {
-
-	PlayerClassState[playerid] = status;
+	return 1;
 }
 
 hook OnPlayerRequestClass(playerid, classid) {
 
 	// F4 Detection.
-	// bypass this action.
-	if(!PlayerClassState[playerid]) {
+	// bypass this action if PlayerClassState is set to false.
+	// it's true by default.
+	if(!Class_SelectionStatus(playerid)) {
 		defer ForceSpawnPlayer(playerid);
 
 		dbg("player", "F4 attempted, skipping class selection",
@@ -104,13 +91,12 @@ timer ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
     SpawnPlayer(playerid);
 }
 
+static
+	bool:PlayerClassState[MAX_PLAYERS] = true,
+	 PlayerClass[MAX_PLAYERS];
+
 hook OnPlayerLogin(playerid) {
 	PlayerClassState[playerid] = false;
-	return 1;
-}
-
-hook OnPlayerRegister(playerid) {
-	PlayerClassState[playerid] = true;
 	return 1;
 }
 
@@ -120,8 +106,15 @@ hook OnPlayerConnect(playerid) {
 	return 1;
 }
 
-stock Player_SetClass(playerid, classid) {
+stock Class_SelectionStatus(playerid) {
+	return PlayerClassState[playerid];
+}
 
+stock void:Class_SelectionState(playerid, bool:status) {
+	PlayerClassState[playerid] = status;
+}
+
+stock void:Player_SetClass(playerid, classid) {
 	if(PlayerClass[playerid] != classid) {
 		new query[64];
 
