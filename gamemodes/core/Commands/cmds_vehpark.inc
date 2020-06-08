@@ -5,7 +5,7 @@ CMD:v(playerid, params[])
 
 	if(!strcmp(params, "park"))
 	{
-		if(!IsPlayerInPersonalVehicle(playerid))
+		if(!Vehicle_IsPlayer(playerid))
 			return SendErrorMsg(playerid, "You must be in one of your personal vehicle to use "C_GREY"/v park");
 
 		Vehicle_Park(playerid);

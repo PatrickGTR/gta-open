@@ -388,7 +388,7 @@ timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
     AddVehicleComponent(vehicleid, componentid);
 }
 
-stock IsPlayerInPersonalVehicle(playerid)
+stock Vehicle_IsPlayer(playerid)
 {
     new
         ply_vehicleID = GetPlayerVehicleID(playerid);
