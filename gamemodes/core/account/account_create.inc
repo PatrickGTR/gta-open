@@ -2,7 +2,6 @@
 #include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
 #include <formatex>
-#include <samp_bcrypt>
 #include <mysql_prepared>
 
 
@@ -64,9 +63,9 @@ static Account_Create(playerid, const password[]) {
 
     inline const OnPasswordHash(string:hash[])
     {
-        Account_InsertToDatabase(playerid, hash);        
+        Account_InsertToDatabase(playerid, hash);
     }
-    BCrypt_HashInline(password, BCRYPT_COST, using inline OnPassswordHash);
+    BCrypt_HashInline(password, BCRYPT_COST, using inline OnPasswordHash);
 }
 
 // only used internally, when all checks passed this function will be called.

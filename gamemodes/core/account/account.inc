@@ -1,4 +1,4 @@
-
+#include <samp_bcrypt>
 #include <account_create>
 #include <account_login>
 #include <account_vip>

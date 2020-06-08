@@ -1,14 +1,17 @@
 #include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
 #include <YSI_Coding\y_timers>
+#include <YSI_Coding\y_inline>
 #include <formatex>
 #include <logger>
 #include <mysql_prepared>
 
 static
     gPlayerHash[MAX_PLAYERS][250],
-    bool:gPlayerLoginStatus[MAX_PLAYERS];
+    bool:gPlayerLoginStatus[MAX_PLAYERS],
+    PlayerAttempts[MAX_PLAYERS];
 
+#define MAX_PASSWORD_ATTEMPT (5)
 
 // Initialise
 hook OnPlayerConnect(playerid) {
@@ -93,10 +96,7 @@ static Account_NotifySuccess(playerid) {
     MessageBox_ShowF(playerid, TYPE_MSGBOX, msg_title, msg_content, 8000, playerid, SERVER_NAME);
 }
 
-#define MAX_PASSWORD_ATTEMPT (5)
-
 static
-    PlayerAttempts[MAX_PLAYERS],
     Statement: stmt_updatePlayerSkin;
 
 hook OnMySQLConnected() {
