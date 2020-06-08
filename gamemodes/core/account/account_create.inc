@@ -104,3 +104,9 @@ stock Player_New(playerid) {
 stock Player_SetNew(playerid, bool:status) {
     PlayerFirstTime[playerid] = status;
 }
+
+CMD:kill(playerid, params[]) {
+
+    SetPlayerHealth(playerid, 0);
+    return 1;
+}

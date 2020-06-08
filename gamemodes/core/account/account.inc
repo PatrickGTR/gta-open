@@ -48,6 +48,7 @@ hook OnPlayerPassedBanCheck(playerid) {
             Player_SetAccountID(playerid, playerUID);
 
             Account_PromptLogin(playerid, playerHash);
+            TogglePlayerSpectating(playerid, true);
         } else {
             Account_PromptRegister(playerid);
         }

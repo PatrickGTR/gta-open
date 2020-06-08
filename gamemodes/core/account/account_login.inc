@@ -20,7 +20,7 @@ hook OnPlayerConnect(playerid) {
 }
 
 // Global
-Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
+void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
     if(isnull(gPlayerHash[playerid])) {
         strcat(gPlayerHash[playerid], password, len);
     }
@@ -70,8 +70,8 @@ Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
             CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
 
             // Force Spawn Player
-            SetSpawnInfo(playerid, NO_TEAM, Player_GetSavedSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
-            SpawnPlayer(playerid);
+            TogglePlayerSpectating(playerid, false);
+            //SpawnPlayer(playerid);
         }
         BCrypt_CheckInline(inputtext, gPlayerHash[playerid], using inline OnPasswordVerify);
     }
@@ -89,7 +89,7 @@ Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
 }
 
 // Local
-static Account_NotifySuccess(playerid) {
+static void:Account_NotifySuccess(playerid) {
     static const
         msg_title[] = "~g~Welcome back!",
         msg_content[] = "Hello ~p~%p, ~w~Welcome back to ~p~%s. ~n~~n~~y~Enjoy your stay!";
@@ -132,11 +132,6 @@ hook OnPlayerDisconnect(playerid, reason)
 {
     // save money
     // save skin (if changed)
-    return 1;
-}
-
-CMD:kill(playerid) {
-    SetPlayerHealth(playerid, 0);
     return 1;
 }
 

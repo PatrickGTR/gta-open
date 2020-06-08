@@ -70,7 +70,6 @@ hook OnPlayerRequestClass(playerid, classid) {
 		dbg("player", "F4 attempted, skipping class selection",
 			_p("username", playerid)
     	);
-		return 1;
 	} else {
 		SetPlayerPos(playerid, 180.892608, 1830.717895, 23.242187);
 		SetPlayerFacingAngle(playerid, 255.810241);
@@ -102,7 +101,6 @@ hook OnPlayerRequestClass(playerid, classid) {
 }
 
 timer ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
-    SetSpawnInfo(playerid, NO_TEAM, Player_GetSavedSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
     SpawnPlayer(playerid);
 }
 
