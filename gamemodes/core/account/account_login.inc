@@ -31,7 +31,46 @@ Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
             return;
         }
 
-        bcrypt_verify(playerid, "OnPasswordVerify", inputtext, gPlayerHash[playerid]);
+        inline const OnPasswordVerify(bool: success)
+        {
+            if(!success) {
+                PlayerAttempts[playerid] ++;
+                if(PlayerAttempts[playerid] >= MAX_PASSWORD_ATTEMPT) {
+                    SendErrorMsg(playerid, "You have been kicked from the server for attempting to login numerous times.");
+                    Kick(playerid);
+
+                    dbg("player", "player has been kicked for too many login attempts", 
+                        _p("username", playerid), 
+                        _i("uid", Player_GetAccountID(playerid)) 
+                    );
+                    return;
+                }
+
+                Account_PromptLogin(playerid, gPlayerHash[playerid]);
+                SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", PlayerAttempts[playerid], MAX_PASSWORD_ATTEMPT);
+                
+                dbg("player", "player failed to login",
+                    _i("attemps", PlayerAttempts[playerid]),
+                    _p("username", playerid),
+                    _i("uid", Player_GetAccountID(playerid))
+                );
+                return;
+            }
+
+            dbg("player", "player successfully logged in", 
+                _p("username", playerid), 
+                _i("uid", Player_GetAccountID(playerid))
+            );
+
+            PlayerAttempts[playerid] = 0;
+            Account_NotifySuccess(playerid);
+            CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
+            
+            // Force Spawn Player
+            SetSpawnInfo(playerid, NO_TEAM, Player_GetSavedSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+            SpawnPlayer(playerid);
+        }
+        BCrypt_CheckInline(inputtext, gPlayerHash[playerid], using inline OnPasswordVerify);
     }
 
     new string[MAX_PLAYER_NAME + 35];
@@ -60,46 +99,6 @@ static Account_NotifySuccess(playerid) {
 
 static 
     PlayerAttempts[MAX_PLAYERS];
-
-forward OnPasswordVerify(playerid, bool:success);
-public OnPasswordVerify(playerid, bool:success) {
-    if(!success) {
-        PlayerAttempts[playerid] ++;
-        if(PlayerAttempts[playerid] >= MAX_PASSWORD_ATTEMPT) {
-            SendErrorMsg(playerid, "You have been kicked from the server for attempting to login numerous times.");
-            Kick(playerid);
-
-            dbg("player", "player has been kicked for too many login attempts", 
-                _p("username", playerid), 
-                _i("uid", Player_GetAccountID(playerid)) 
-            );
-            return;
-        }
-
-        Account_PromptLogin(playerid, gPlayerHash[playerid]);
-        SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", PlayerAttempts[playerid], MAX_PASSWORD_ATTEMPT);
-        
-        dbg("player", "player failed to login",
-            _i("attemps", PlayerAttempts[playerid]),
-            _p("username", playerid),
-            _i("uid", Player_GetAccountID(playerid))
-        );
-        return;
-    }
-
-    dbg("player", "player successfully logged in", 
-        _p("username", playerid), 
-        _i("uid", Player_GetAccountID(playerid))
-    );
-
-    PlayerAttempts[playerid] = 0;
-    Account_NotifySuccess(playerid);
-    CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
-    
-    // Force Spawn Player
-    SetSpawnInfo(playerid, NO_TEAM, Player_GetSavedSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
-    SpawnPlayer(playerid);
-}
 
 static 
     Statement: stmt_updatePlayerSkin;
