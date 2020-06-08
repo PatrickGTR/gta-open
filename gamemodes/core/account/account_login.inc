@@ -16,7 +16,7 @@ hook OnPlayerConnect(playerid) {
     gPlayerLoginStatus[playerid] = false;
 }
 
-// Global 
+// Global
 Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
     if(isnull(gPlayerHash[playerid])) {
         strcat(gPlayerHash[playerid], password, len);
@@ -37,9 +37,9 @@ Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
     new string[MAX_PLAYER_NAME + 35];
     format(string, sizeof(string), "Hello %p! Welcome back to %s", playerid, SERVER_NAME);
 
-    Dialog_ShowCallback(playerid, 
+    Dialog_ShowCallback(playerid,
         using inline PromptLoginResponse,   // Handler
-        DIALOG_STYLE_PASSWORD,              // Style  
+        DIALOG_STYLE_PASSWORD,              // Style
         "Please Login...",                  // Title
         string,                             // Content
         "Login",                            // Button Left
@@ -48,7 +48,7 @@ Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
 
 // Local
 static Account_NotifySuccess(playerid) {
-    static const 
+    static const
         msg_title[] = "~g~Welcome back!",
         msg_content[] = "Hello ~p~%p, ~w~Welcome back to ~p~%s. ~n~~n~~y~Enjoy your stay!";
     MessageBox_ShowF(playerid, TYPE_MSGBOX, msg_title, msg_content, 8000, playerid, SERVER_NAME);
@@ -58,7 +58,7 @@ static Account_NotifySuccess(playerid) {
 
 #define MAX_PASSWORD_ATTEMPT (5)
 
-static 
+static
     PlayerAttempts[MAX_PLAYERS];
 
 forward OnPasswordVerify(playerid, bool:success);
@@ -69,16 +69,16 @@ public OnPasswordVerify(playerid, bool:success) {
             SendErrorMsg(playerid, "You have been kicked from the server for attempting to login numerous times.");
             Kick(playerid);
 
-            dbg("player", "player has been kicked for too many login attempts", 
-                _p("username", playerid), 
-                _i("uid", Player_GetAccountID(playerid)) 
+            dbg("player", "player has been kicked for too many login attempts",
+                _p("username", playerid),
+                _i("uid", Player_GetAccountID(playerid))
             );
             return;
         }
 
         Account_PromptLogin(playerid, gPlayerHash[playerid]);
         SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", PlayerAttempts[playerid], MAX_PASSWORD_ATTEMPT);
-        
+
         dbg("player", "player failed to login",
             _i("attemps", PlayerAttempts[playerid]),
             _p("username", playerid),
@@ -87,20 +87,20 @@ public OnPasswordVerify(playerid, bool:success) {
         return;
     }
 
-    dbg("player", "player successfully logged in", 
-        _p("username", playerid), 
+    dbg("player", "player successfully logged in",
+        _p("username", playerid),
         _i("uid", Player_GetAccountID(playerid))
     );
 
     PlayerAttempts[playerid] = 0;
     Account_NotifySuccess(playerid);
     CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
-    
+
     // Force Spawn Player
     SpawnPlayer(playerid);
 }
 
-static 
+static
     Statement: stmt_updatePlayerSkin;
 
 hook OnMySQLConnected() {

@@ -108,14 +108,14 @@ hook OnMySQLConnected() {
 }
 
 hook OnVehicleMod(playerid, vehicleid, componentid) {
-	foreach(new i : Vehicle) {
-		if(!Bit_Get(vehicle_created, i)) {
-			continue;
+    foreach(new i : Vehicle) {
+        if(!Bit_Get(vehicle_created, i)) {
+            continue;
         }
 
-		if (VehicleHandler[i] == vehicleid) {
-			new
-				slot = GetVehicleComponentType(componentid);
+        if (VehicleHandler[i] == vehicleid) {
+            new
+                slot = GetVehicleComponentType(componentid);
 
             MySQL_BindInt(stmt_insertUpdateComponent, 0, VehicleID[i]);
             MySQL_BindInt(stmt_insertUpdateComponent, 1, componentid);
@@ -124,19 +124,19 @@ hook OnVehicleMod(playerid, vehicleid, componentid) {
             MySQL_BindInt(stmt_insertUpdateComponent, 3, componentid);
             MySQL_ExecuteThreaded(stmt_insertUpdateComponent);
 
-			//This assigns the new value to our variable.
-			VehicleMods[i][slot] = componentid;
-		}
-	}
+            //This assigns the new value to our variable.
+            VehicleMods[i][slot] = componentid;
+        }
+    }
     return 1;
 }
 
 hook OnVehicleRespray(playerid, vehicleid, color1, color2) {
-	foreach(new i : Vehicle) {
-		if(!Bit_Get(vehicle_created, i))
-			continue;
+    foreach(new i : Vehicle) {
+        if(!Bit_Get(vehicle_created, i))
+            continue;
 
-		if (VehicleHandler[i] == vehicleid) {
+        if (VehicleHandler[i] == vehicleid) {
 
             MySQL_BindInt(stmt_updateColor, 0, color1);
             MySQL_BindInt(stmt_updateColor, 1, color1);
@@ -170,8 +170,7 @@ Vehicle_GetPlayerTotal(playerid) {
 }
 
 
-Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot)
-{
+Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot) {
     inline const OnSaveCreatedVehicle() {
         foreach(new i : Vehicle) {
             if(Bit_Get(vehicle_created, i)) {
@@ -222,18 +221,16 @@ Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot)
     MySQL_BindFloat(stmt_insertVehicle, 3, y);
     MySQL_BindFloat(stmt_insertVehicle, 4, z);
     MySQL_BindFloat(stmt_insertVehicle, 5, rot);
-	MySQL_ExecuteThreaded_Inline(stmt_insertVehicle, using inline OnSaveCreatedVehicle);
+    MySQL_ExecuteThreaded_Inline(stmt_insertVehicle, using inline OnSaveCreatedVehicle);
 }
 
-timer PutPlayerInSaveVehicle[1000](playerid, vehicleid)
-{
+timer PutPlayerInSaveVehicle[1000](playerid, vehicleid) {
     SetPlayerInterior(playerid, 0);
     SetPlayerVirtualWorld(playerid, 0);
-	PutPlayerInVehicle(playerid, vehicleid, 0);
+    PutPlayerInVehicle(playerid, vehicleid, 0);
 }
 
 stock Vehicle_Park(playerid) {
-
     new
         vehicleid,
         index,
@@ -253,14 +250,14 @@ stock Vehicle_Park(playerid) {
         break;
     }
 
-	new
-		Float: x,
-		Float: y,
-		Float: z,
-		Float: a;
+    new
+        Float: x,
+        Float: y,
+        Float: z,
+        Float: a;
 
-	GetVehiclePos(vehicleid, x, y, z);
-	GetVehicleZAngle(vehicleid, a);
+    GetVehiclePos(vehicleid, x, y, z);
+    GetVehicleZAngle(vehicleid, a);
 
 
     MySQL_BindFloat(stmt_updatePosition, 0, x);
@@ -271,8 +268,8 @@ stock Vehicle_Park(playerid) {
     MySQL_BindInt(stmt_updatePosition, 4, Player_GetAccountID(playerid));
     MySQL_BindInt(stmt_updatePosition, 5, VehicleID[index]);
 
-	MySQL_ExecuteThreaded(stmt_updatePosition);
-	return 1;
+    MySQL_ExecuteThreaded(stmt_updatePosition);
+    return 1;
 }
 
 stock Vehicle_Load(playerid) {
@@ -371,33 +368,33 @@ timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
 
 stock IsPlayerInPersonalVehicle(playerid)
 {
-	new
-		ply_vehicleID = GetPlayerVehicleID(playerid);
+    new
+        ply_vehicleID = GetPlayerVehicleID(playerid);
 
-	foreach(new i : Vehicle)
-	{
+    foreach(new i : Vehicle) {
         if(!Bit_Get(vehicle_created, i)) {
             continue;
         }
 
-		if(VehicleHandler[i] != ply_vehicleID) {
-			continue;
+        if(VehicleHandler[i] != ply_vehicleID) {
+            continue;
         }
 
-		if(!IsVehicleStreamedIn(VehicleHandler[i], playerid)) {
-			return 0;
+        if(!IsVehicleStreamedIn(VehicleHandler[i], playerid)) {
+            return 0;
         }
 
-		if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) {
-			return 0;
+        if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) {
+            return 0;
         }
 
-		if(VehicleOwnerID[i] == Player_GetAccountID(playerid)) {
-			return 1;
+        if(VehicleOwnerID[i] == Player_GetAccountID(playerid)) {
+            return 1;
         }
-	}
-	return 0;
+    }
+    return 0;
 }
+
 
 stock Vehicle_Destroy(playerid) {
     dbg(PLAYER_DEBUG_HANDLER, "owned vehicle destroyed",
@@ -406,11 +403,11 @@ stock Vehicle_Destroy(playerid) {
         _i("total", Vehicle_GetPlayerTotal(playerid))
     );
 
-	foreach(new i : Vehicle) {
-		if(!Bit_Get(vehicle_created, i)) {
+    foreach(new i : Vehicle) {
+        if(!Bit_Get(vehicle_created, i)) {
             continue;
         }
-		if(VehicleOwnerID[i] != Player_GetAccountID(playerid)) {
+        if(VehicleOwnerID[i] != Player_GetAccountID(playerid)) {
             continue;
         }
 
@@ -428,5 +425,5 @@ stock Vehicle_Destroy(playerid) {
 
         DestroyVehicle(VehicleHandler[i]);
         Bit_Vet(vehicle_created, i);
-	}
+    }
 }
