@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
 		Statement: stmt_deleteFurniture;
 
 hook OnMySQLConnected() {
@@ -57,9 +57,9 @@ static _FurnitureTypeDialog(playerid, page) {
 
 	for(new i = 0; i < Furniture_GetArraySize(); i++) {
 		if(Furniture_GetType(i)  == page) {
-			format(tmp_string, sizeof(tmp_string), "%i(0.0, 0.0, 0.0, 1.5, 0, 6)\t~w~%s:%s%m\n", 
-				Furniture_GetObjectID(i), 
-				Furniture_GetName(i), 
+			format(tmp_string, sizeof(tmp_string), "%i(0.0, 0.0, 0.0, 1.5, 0, 6)\t~w~%s:%s%m\n",
+				Furniture_GetObjectID(i),
+				Furniture_GetName(i),
 				((GetPlayerMoney(playerid) < Furniture_GetPrice(i)) ? ("~r~") : ("~g~")),
 				Furniture_GetPrice(i)
 			);
@@ -67,12 +67,8 @@ static _FurnitureTypeDialog(playerid, page) {
 		}
 	}
 
-	ShowPlayerDialog(playerid, 1337, DIALOG_STYLE_PREVIEW_MODEL, "Furniture Shop - Choose Furniture", big_string, "Select", "Go back");
-	return 1;
-}
-
-hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
-	if(dialogid == 1337) {
+	inline const _response(pid, dialogid, response, listitem, string:inputtext[]) {
+		#pragma unused pid, inputtext, dialogid
 		if(!response) {
 			return Furniture_ShowDialog(playerid);
         }
@@ -97,8 +93,19 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		PlayerCurrentChoice[playerid] = -1;
 
 	}
+
+	Dialog_ShowCallback(
+		playerid,
+		using inline _response,
+		DIALOG_STYLE_PREVIEW_MODEL,
+		"Furniture Shop - Choose Furniture",
+		big_string,
+		"Select",
+		"Go back"
+	);
 	return 1;
 }
+
 
 Furniture_ShowDialog(playerid) {
     inline DialogFurnitureType(pid, dialogid, response, listitem, string:inputtext[]) {

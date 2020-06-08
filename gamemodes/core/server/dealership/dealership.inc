@@ -13,12 +13,38 @@ static
 #define SPAWN_NORMALZ  		(16.8717)
 #define SPAWN_NORMALA  		(0.0165)
 
+static
+	DealershipArea;
 
-CMD:dealership(playerid, params[]) {
+#include <YSI_Coding\y_hooks>
+hook OnGameModeInit() {
 
-    UI_ShowDealershipUI(playerid);
-    return 1;
+	const
+		Float:x = 814.2134,
+		Float:y = -973.8203,
+		Float:z = 1090.0890;
+
+	CreateDynamic3DTextLabel("Press "C_YELLOW"Y "C_WHITE"to view services", -1, x, y, z, 40.0);
+	DealershipArea = CreateDynamicSphere(x, y, z, 5.0);
+	return 1;
 }
+
+
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+	if(PRESSED(KEY_YES) && IsPlayerInDynamicArea(playerid, DealershipArea)) {
+		UI_ShowDealershipUI(playerid);
+	}
+	return 1;
+}
+
+hook OnPlayerLeaveDynArea(playerid, areaid) {
+	if(areaid == DealershipArea) {
+		UI_HideDealershipTextDraw(playerid);
+	}
+	return 1;
+}
+
 
 UI_ShowDealershipUI(playerid)
 {

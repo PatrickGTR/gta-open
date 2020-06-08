@@ -1,10 +1,10 @@
-#include <YSI_Coding\y_hooks>
 
 #include <server_entrances>
 #include <server_wanted-level>
 
 #include <dealership>
 
+#include <YSI_Coding\y_hooks>
 enum E_ENTRANCE_DATA
 {
 	E_INTERIOR_ID,

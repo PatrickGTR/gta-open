@@ -15,45 +15,48 @@ static
     VehicleColor2[MAX_VEHICLES],
     VehicleInteriorID[MAX_VEHICLES],
     VehicleVWorld[MAX_VEHICLES],
-    VehicleMods[MAX_VEHICLES][14],
+    VehicleMods[MAX_VEHICLES][16],
     VehiclePlate[MAX_VEHICLES][MAX_PLATE_NAME],
     BitArray:vehicle_created<MAX_VEHICLES>;
 
 static
     Statement: stmt_insertVehicle,
     Statement: stmt_checkVehicle,
-    Statement: stmt_checkComponent;
+    Statement: stmt_checkComponent,
+    Statement: stmt_updatePosition,
+    Statement: stmt_updateColor,
+    Statement: stmt_insertUpdateComponent;
 
 
 hook OnMySQLConnected() {
 
     static const insertQuery[] = "\
-    INSERT INTO \
-        player_vehicles (u_id, model_id, x, y, z, rot) \
-    VALUES \
-        (?, ?, ?, ?, ?, ?) \
+        INSERT INTO \
+            player_vehicles (u_id, model_id, x, y, z, rot) \
+        VALUES \
+            (?, ?, ?, ?, ?, ?) \
     ";
     stmt_insertVehicle = MySQL_PrepareStatement(MySQL_GetHandle(), insertQuery);
 
     static const selectQuery[] = "\
-    SELECT \
-        vehicle_id, \
-        u_id, \
-        model_id, \
-        x, \
-        y, \
-        z, \
-        rot, \
-        color_1, \
-        color_2, \
-        intid, \
-        vworld \
-    FROM \
-        player_vehicles \
-    WHERE \
-        u_id = ? \
-    ORDER BY \
-        vehicle_id DESC \
+        SELECT \
+            vehicle_id, \
+            u_id, \
+            model_id, \
+            x, \
+            y, \
+            z, \
+            rot, \
+            color_1, \
+            color_2, \
+            intid, \
+            vworld \
+        FROM \
+            player_vehicles \
+        WHERE \
+            u_id = ? \
+        ORDER BY \
+            vehicle_id DESC \
     ";
     stmt_checkVehicle = MySQL_PrepareStatement(MySQL_GetHandle(), selectQuery);
 
@@ -65,28 +68,61 @@ hook OnMySQLConnected() {
         WHERE vehicle_id = ? \
     ";
     stmt_checkComponent = MySQL_PrepareStatement(MySQL_GetHandle(), componentQuery);
+
+    static const updatePositionQuery[] = "\
+        UPDATE \
+            player_vehicles \
+        SET \
+            x = ?, \
+            y = ?, \
+            z = ? , \
+            rot = ? \
+        WHERE \
+            u_id = ? \
+        AND \
+            vehicle_id = ? \
+    ";
+    stmt_updatePosition = MySQL_PrepareStatement(MySQL_GetHandle(), updatePositionQuery);
+
+    static const updateColorQuery[] = "\
+        UPDATE \
+            player_vehicles \
+        SET \
+            color_1 = ?, \
+            color_2 = ? \
+        WHERE \
+            vehicle_id = ? \
+    ";
+    stmt_updateColor = MySQL_PrepareStatement(MySQL_GetHandle(), updateColorQuery);
+
+    static const insertUpdateComponentQuery[] = "\
+        INSERT INTO \
+            vehicle_components (vehicle_id, component_id, slot) \
+        VALUES \
+            (?, ?, ?) \
+        ON DUPLICATE KEY UPDATE \
+            component_id = ? \
+    ";
+    stmt_insertUpdateComponent = MySQL_PrepareStatement(MySQL_GetHandle(), insertUpdateComponentQuery);
     return 1;
 }
 
-hook OnVehicleMod(playerid, vehicleid, componentid)
-{
-	foreach(new i : Vehicle)
-	{
-		if(!Bit_Get(vehicle_created, i))
+hook OnVehicleMod(playerid, vehicleid, componentid) {
+	foreach(new i : Vehicle) {
+		if(!Bit_Get(vehicle_created, i)) {
 			continue;
+        }
 
-		if (VehicleHandler[i] == vehicleid)
-		{
-
+		if (VehicleHandler[i] == vehicleid) {
 			new
-				slot = GetVehicleComponentType(componentid),
-				qString[256]
-			;
+				slot = GetVehicleComponentType(componentid);
 
-			mysql_format(MySQL_GetHandle(), qString, sizeof(qString), "\
-				INSERT INTO vehicle_components (vehicle_id, component_id, slot) VALUES (%i, %i, %i) ON DUPLICATE KEY UPDATE component_id = %i",
-				VehicleID[i], componentid, slot, componentid);
-			mysql_tquery(MySQL_GetHandle(), qString);
+            MySQL_BindInt(stmt_insertUpdateComponent, 0, VehicleID[i]);
+            MySQL_BindInt(stmt_insertUpdateComponent, 1, componentid);
+            MySQL_BindInt(stmt_insertUpdateComponent, 2, slot);
+
+            MySQL_BindInt(stmt_insertUpdateComponent, 3, componentid);
+            MySQL_ExecuteThreaded(stmt_insertUpdateComponent);
 
 			//This assigns the new value to our variable.
 			VehicleMods[i][slot] = componentid;
@@ -96,17 +132,17 @@ hook OnVehicleMod(playerid, vehicleid, componentid)
 }
 
 hook OnVehicleRespray(playerid, vehicleid, color1, color2) {
-	foreach(new i : Vehicle)
-	{
+	foreach(new i : Vehicle) {
 		if(!Bit_Get(vehicle_created, i))
 			continue;
 
-		if (VehicleHandler[i] == vehicleid)
-		{
-            new
-                qString[256];
-            mysql_format(MySQL_GetHandle(), qString, sizeof(qString), "UPDATE player_vehicles SET color_1 = %i, color_2 = %i WHERE vehicle_id = %i", color1, color2, VehicleID[i]);
-            mysql_tquery(MySQL_GetHandle(), qString);
+		if (VehicleHandler[i] == vehicleid) {
+
+            MySQL_BindInt(stmt_updateColor, 0, color1);
+            MySQL_BindInt(stmt_updateColor, 1, color1);
+
+            MySQL_BindInt(stmt_updateColor, 2, VehicleID[i]);
+            MySQL_ExecuteThreaded(stmt_updateColor);
 
             VehicleColor1[i] = color1;
             VehicleColor2[i] = color2;
@@ -116,95 +152,11 @@ hook OnVehicleRespray(playerid, vehicleid, color1, color2) {
     return 1;
 }
 
-hook OnPlayerLogin(playerid) {
-    inline const OnLoadCreatedVehicle() {
-    new
-        vehicleID,
-        ownerID,
-        modelID,
-        Float:x,
-        Float:y,
-        Float:z,
-        Float:rot,
-        color_1,
-        color_2,
-        intID,
-        VWorld;
-
-    MySQL_BindResultInt(stmt_checkVehicle, 0, vehicleID);
-    MySQL_BindResultInt(stmt_checkVehicle, 1, ownerID);
-    MySQL_BindResultInt(stmt_checkVehicle, 2, modelID);
-    MySQL_BindResultFloat(stmt_checkVehicle, 3, x);
-    MySQL_BindResultFloat(stmt_checkVehicle, 4, y);
-    MySQL_BindResultFloat(stmt_checkVehicle, 5, z);
-    MySQL_BindResultFloat(stmt_checkVehicle, 6, rot);
-    MySQL_BindResultInt(stmt_checkVehicle, 7, color_1);
-    MySQL_BindResultInt(stmt_checkVehicle, 7, color_2);
-    MySQL_BindResultInt(stmt_checkVehicle, 8, intID);
-    MySQL_BindResultInt(stmt_checkVehicle, 9, VWorld);
-
-    while(MySQL_Statement_FetchRow(stmt_checkVehicle)) {
-            foreach(new i : Vehicle) {
-                if(Bit_Get(vehicle_created, i)) {
-                    // skip created vehicles that are created by vehicles_ api.
-                    continue;
-                }
-                VehicleOwnerID[i] 	    = ownerID;
-                VehicleID[i]	        = vehicleID;
-                VehicleModelID[i]		= modelID;
-                VehicleX[i]	            = x;
-                VehicleY[i]	            = y;
-                VehicleZ[i]	            = z;
-                VehicleRot[i]		    = rot;
-
-                // generate random colour.
-                VehicleColor1[i]	    = color_1;
-                VehicleColor2[i]	    = color_2;
-
-                VehicleInteriorID[i]	= intID;
-                VehicleVWorld[i]	    = VWorld;
-
-                VehicleHandler[i] = CreateVehicle(modelID, x, y, z, rot, -1, -1, -1, 0);
-                SetVehicleNumberPlate(VehicleHandler[i], VehiclePlate[i]);
-                LinkVehicleToInterior(VehicleHandler[i], VehicleInteriorID[i]);
-                SetVehicleVirtualWorld(VehicleHandler[i], VehicleVWorld[i]);
-                ChangeVehicleColor(VehicleHandler[i], VehicleColor1[i], VehicleColor2[i]);
-
-                Bit_Let(vehicle_created, i);
-
-                new
-                    component_id,
-                    index = 0;
-                MySQL_BindResultInt(stmt_checkComponent, 0, component_id);
-                inline const OnLoadVehicleComponent() {
-                    while(MySQL_Statement_FetchRow(stmt_checkComponent)) {
-
-                        VehicleMods[i][index] = component_id;
-
-                        AddVehicleComponent(VehicleHandler[i], VehicleMods[i][index]);
-                        index ++;
-                    }
-                }
-                MySQL_BindInt(stmt_checkComponent, 0, VehicleID[i]);
-                MySQL_ExecuteThreaded_Inline(stmt_checkComponent, using inline OnLoadVehicleComponent);
-
-                // break once vehicle_created isn't skipped.
-                break;
-            }
-        }
-    }
-    MySQL_BindInt(stmt_checkVehicle, 0, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded_Inline(stmt_checkVehicle, using inline OnLoadCreatedVehicle);
-    return 1;
-}
-
 Vehicle_GetPlayerTotal(playerid) {
-
     new
         count = 0;
 
     foreach(new i : Vehicle) {
-
         if(!Bit_Get(vehicle_created, i))  {
             // skip vehicles that aren't created using this API.
             continue;
@@ -231,12 +183,13 @@ Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot)
             VehicleOwnerID[i] 	    = Player_GetAccountID(playerid);
             VehicleID[i]	        = cache_insert_id();
             VehicleModelID[i]		= modelid;
+
             VehicleX[i]	            = x;
             VehicleY[i]	            = y;
             VehicleZ[i]	            = z;
             VehicleRot[i]		    = rot;
 
-            // generate random colour.
+
             VehicleColor1[i]	    = -1;
             VehicleColor2[i]	    = -1;
 
@@ -247,7 +200,7 @@ Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot)
                 VehicleMods[i][mod_id] = 0;
             }
 
-            strcopy(VehiclePlate[i], "[AM]SFCNR");
+            strcpy(VehiclePlate[i], "GTA-OPEN");
 
             VehicleHandler[i] = CreateVehicle(modelid, x, y, z, rot, -1, -1, -1, 0);
             SetVehicleNumberPlate(VehicleHandler[i], VehiclePlate[i]);
@@ -304,29 +257,116 @@ stock Vehicle_Park(playerid) {
 		Float: x,
 		Float: y,
 		Float: z,
-		Float: a,
-		qString[256];
+		Float: a;
 
 	GetVehiclePos(vehicleid, x, y, z);
 	GetVehicleZAngle(vehicleid, a);
 
-	mysql_format(MySQL_GetHandle(), qString, sizeof(qString), "\
-    UPDATE \
-        player_vehicles \
-    SET \
-		x = %0.4f, \
-		y = %0.4f, \
-		z = %0.4f , \
-		rot = %0.4f \
-    WHERE \
-        u_id = %i \
-    AND \
-        vehicle_id = %i", x, y, z, a, Player_GetAccountID(playerid), VehicleID[index]);
 
-	mysql_tquery(MySQL_GetHandle(), qString);
+    MySQL_BindFloat(stmt_updatePosition, 0, x);
+    MySQL_BindFloat(stmt_updatePosition, 1, y);
+    MySQL_BindFloat(stmt_updatePosition, 2, z);
+    MySQL_BindFloat(stmt_updatePosition, 3, a);
 
-	SendServerMsg(playerid, "Vehicle parked, position saved!");
+    MySQL_BindInt(stmt_updatePosition, 4, Player_GetAccountID(playerid));
+    MySQL_BindInt(stmt_updatePosition, 5, VehicleID[index]);
+
+	MySQL_ExecuteThreaded(stmt_updatePosition);
 	return 1;
+}
+
+stock Vehicle_Load(playerid) {
+    inline const OnLoadCreatedVehicle() {
+    new
+        vehicleID,
+        ownerID,
+        modelID,
+        Float:x,
+        Float:y,
+        Float:z,
+        Float:rot,
+        color_1,
+        color_2,
+        intID,
+        VWorld;
+
+    MySQL_BindResultInt(stmt_checkVehicle, 0, vehicleID);
+    MySQL_BindResultInt(stmt_checkVehicle, 1, ownerID);
+    MySQL_BindResultInt(stmt_checkVehicle, 2, modelID);
+    MySQL_BindResultFloat(stmt_checkVehicle, 3, x);
+    MySQL_BindResultFloat(stmt_checkVehicle, 4, y);
+    MySQL_BindResultFloat(stmt_checkVehicle, 5, z);
+    MySQL_BindResultFloat(stmt_checkVehicle, 6, rot);
+    MySQL_BindResultInt(stmt_checkVehicle, 7, color_1);
+    MySQL_BindResultInt(stmt_checkVehicle, 8, color_2);
+    MySQL_BindResultInt(stmt_checkVehicle, 9, intID);
+    MySQL_BindResultInt(stmt_checkVehicle, 10, VWorld);
+
+    while(MySQL_Statement_FetchRow(stmt_checkVehicle)) {
+            foreach(new i : Vehicle) {
+                if(Bit_Get(vehicle_created, i)) {
+                    // skip created vehicles that are created by vehicles_ api.
+                    continue;
+                }
+
+                VehicleOwnerID[i] 	    = ownerID;
+                VehicleID[i]	        = vehicleID;
+                VehicleModelID[i]		= modelID;
+                VehicleX[i]	            = x;
+                VehicleY[i]	            = y;
+                VehicleZ[i]	            = z;
+                VehicleRot[i]		    = rot;
+
+                // generate random colour.
+                VehicleColor1[i]	    = color_1;
+                VehicleColor2[i]	    = color_2;
+
+                VehicleInteriorID[i]	= intID;
+                VehicleVWorld[i]	    = VWorld;
+
+                VehicleHandler[i] = CreateVehicle(modelID, x, y, z, rot, -1, -1, -1, 0);
+                SetVehicleNumberPlate(VehicleHandler[i], VehiclePlate[i]);
+                LinkVehicleToInterior(VehicleHandler[i], VehicleInteriorID[i]);
+                SetVehicleVirtualWorld(VehicleHandler[i], VehicleVWorld[i]);
+                ChangeVehicleColor(VehicleHandler[i], VehicleColor1[i], VehicleColor2[i]);
+
+                Bit_Let(vehicle_created, i);
+
+                dbg(PLAYER_DEBUG_HANDLER, "owned vehicle loaded",
+                    _p("username", playerid),
+                    _i("uid", Player_GetAccountID(playerid)),
+                    _i("vehicle id", VehicleID[i])
+                );
+
+                new
+                    component_id,
+                    index = 0;
+                MySQL_BindResultInt(stmt_checkComponent, 0, component_id);
+                inline const OnLoadVehicleComponent() {
+                    while(MySQL_Statement_FetchRow(stmt_checkComponent)) {
+
+                        VehicleMods[i][index] = component_id;
+
+                        defer DelayAddVehicleComponent(VehicleHandler[i], VehicleMods[i][index], 10000 + (index * 100));
+                        index ++;
+                    }
+                }
+                MySQL_BindInt(stmt_checkComponent, 0, VehicleID[i]);
+                MySQL_ExecuteThreaded_Inline(stmt_checkComponent, using inline OnLoadVehicleComponent);
+
+                // break once vehicle_created isn't skipped.
+                break;
+            }
+        }
+    }
+    MySQL_BindInt(stmt_checkVehicle, 0, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded_Inline(stmt_checkVehicle, using inline OnLoadCreatedVehicle);
+}
+
+timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
+    #pragma unused seconds
+    printf("AddVehicleComponent(%i, %i);", vehicleid, componentid);
+    AddVehicleComponent(vehicleid, componentid);
 }
 
 stock IsPlayerInPersonalVehicle(playerid)
@@ -360,7 +400,6 @@ stock IsPlayerInPersonalVehicle(playerid)
 }
 
 stock Vehicle_Destroy(playerid) {
-
     dbg(PLAYER_DEBUG_HANDLER, "owned vehicle destroyed",
         _p("username", playerid),
         _i("uid", Player_GetAccountID(playerid)),
