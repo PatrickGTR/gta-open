@@ -1,4 +1,4 @@
-#include <a_samp>
+#include <map-zones>
 #include <actor_robbery>
 
 #define MAX_PED_NAME              (60)
@@ -66,41 +66,62 @@ hook OnGameModeInit() {
     }
 }
 
-public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently)
-{
-    if(robbed_recently)
-    {
+static
+    LastRobberyMsgShown[MAX_PLAYERS];
+
+public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently) {
+    if(robbed_recently) {
+        if(gettime() - LastRobberyMsgShown[playerid] < 2) {
+            // this stops the spamming everytime the player aims.
+            return 1;
+        }
+
         SendServerMsg(playerid, "This store have been robbed recently!");
-        return 0;
+        LastRobberyMsgShown[playerid] = gettime();
+        return 1;
     }
+
+    new
+        location[MAX_MAP_ZONE_NAME];
+    Player_GetLocation(playerid, location, sizeof(location));
+
+    // Notify Players.
+    SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"began robbing a shop in "C_GREY"%s.", playerid, playerid, location);
     return 1;
 }
 
 public OnPlayerRequestRobbery(playerid, actorid)
 {
     if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
-        SendServerMsg(playerid, "Only Civilians can rob stores!");
         return 0;
     }
     return 1;
 }
 
-public OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type)
-{
-    switch(type)
-    {
+public OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type) {
+    switch(type) {
         case TYPE_SUCCESS:
         {
-            SendServerMsgF(playerid, "You've robbed this store succesfully %d", robbedmoney);
+
+            new
+                string[MAX_MAP_ZONE_NAME];
+            format(string, sizeof(string), "~g~+ ~w~%m", robbedmoney);
+            GameTextForPlayer(playerid, string, 6000, 1);
+
+
+            Player_GetLocation(playerid, string, sizeof(string));
+            SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from a shop in "C_GREY"%s.", playerid, playerid, robbedmoney, string);
+
             GivePlayerMoney(playerid, robbedmoney);
         }
         case TYPE_FAILED:
         {
-            SendServerMsg(playerid, "Robbery failed cashier refused to give money!");
+            GameTextForPlayer(playerid, "~r~Robbery Failed", 6000, 1);
         }
         case TYPE_UNFINISHED:
         {
-            SendServerMsg(playerid, "You have gone too far away from the actor, he managed to call 911! RUN!");
+            GameTextForPlayer(playerid, "~r~Robbery Failed", 6000, 1);
+            SendServerMsg(playerid, "You have gone too far away from the shop keeper, he managed to call 911! RUN!");
         }
     }
     Player_GiveWantedLevel(playerid, 2);

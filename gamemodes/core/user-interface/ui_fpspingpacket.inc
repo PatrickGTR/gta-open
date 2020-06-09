@@ -10,14 +10,14 @@ hook OnPlayerConnect(playerid) {
 	PlayerTextDrawColor(playerid, FPSPingPacket[playerid], 16711935);
 	PlayerTextDrawSetOutline(playerid, FPSPingPacket[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, FPSPingPacket[playerid], 1);
-	PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], 1); 
+	PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], 1);
 }
 
 hook OnPlayerSpawn(playerid) {
     PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
 }
 
-hook OnPlayerDeath(playerid, killerid, reason) {
+hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
     PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
 }
 

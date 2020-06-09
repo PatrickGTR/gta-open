@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 #include <formatex>
 
-static 
+static
     Text: LeaveJoinTD,
     joinString[5][32]
 ;
@@ -29,7 +29,7 @@ hook OnPlayerConnect(playerid) {
     strcpy(joinString[2], joinString[1]);
     strcpy(joinString[1], joinString[0]);
 
-    new 
+    new
         string[sizeof(joinString[]) * 5];
 
     format(joinString[0], sizeof(joinString[]), "~g~JOIN: ~w~%p (%i)~n~", playerid, playerid);
@@ -49,26 +49,26 @@ hook OnPlayerDisconnect(playerid, reason) {
     strcpy(joinString[2], joinString[1]);
     strcpy(joinString[1], joinString[0]);
 
-    new 
+    new
         leave_reason[16];
 
-    switch(reason) { 
-        case 0: leave_reason = "~y~LOST" ; 
-        case 1: leave_reason = "~r~QUIT"; 
+    switch(reason) {
+        case 0: leave_reason = "~y~LOST" ;
+        case 1: leave_reason = "~r~QUIT";
         case 2: leave_reason = "~p~KICK" ;
     }
 
-    new 
+    new
         string[128];
 
     format(joinString[0], sizeof(joinString[]), "%s: ~w~%p (%i)~n~", leave_reason, playerid, playerid);
-    
+
     strcat(string, joinString[4], sizeof(string));
     strcat(string, joinString[3], sizeof(string));
     strcat(string, joinString[2], sizeof(string));
     strcat(string, joinString[1], sizeof(string));
     strcat(string, joinString[0], sizeof(string));
-    
+
     TextDrawSetString(LeaveJoinTD, string);
 }
 
@@ -77,6 +77,6 @@ hook OnPlayerSpawn(playerid) {
     TextDrawShowForPlayer(playerid, LeaveJoinTD);
 }
 
-hook OnPlayerDeath(playerid, killerid) {
+hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
     TextDrawHideForPlayer(playerid, LeaveJoinTD);
 }

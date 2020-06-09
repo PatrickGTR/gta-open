@@ -37,17 +37,17 @@ hook OnPlayerConnect(playerid) {
 	Bit_Set(dmg_AlreadyShowing, playerid, false);
 	foreach(new i : Player) {
 		dmg_TotalRecieved[playerid][i] =
-		dmg_TotalGiven[playerid][i]    = 0.0;	
+		dmg_TotalGiven[playerid][i]    = 0.0;
 	}
 	return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason) {
+hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
 	// If the player who has the damage UI present died, hide the damage UI.
 	if(Bit_Get(dmg_AlreadyShowing, playerid)) {
 		defer HideGiveDamageUI(playerid, INVALID_PLAYER_ID, 5000);
 		defer HideTakeDamageUI(playerid, INVALID_PLAYER_ID, 5000);
-		Bit_Set(dmg_AlreadyShowing, playerid, true);
+		Bit_Set(dmg_AlreadyShowing, playerid, false);
 
 		foreach(new i : Player) {
 			dmg_TotalRecieved[playerid][i] =
@@ -110,8 +110,7 @@ hook OnPlayerDamagePlayer(playerid, damagedid, Float: amount, weaponid, bodypart
 	return 1;
 }
 
-hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
-{
+hook OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart) {
 	if(weaponid == WEAPON_COLLISION) { // Collision (Mainly fall damage)
 		ProcessTakeDamageUI(playerid, INVALID_PLAYER_ID, amount);
 	}

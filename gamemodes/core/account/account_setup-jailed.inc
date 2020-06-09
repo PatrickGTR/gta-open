@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 hook OnMySQLConnected()
-{   
+{
     static const query[] = "\
         CREATE TABLE IF NOT EXISTS jailed \
         (\
@@ -14,8 +14,8 @@ hook OnMySQLConnected()
             ON DELETE CASCADE \
             ON UPDATE RESTRICT \
         )";
-    mysql_tquery(MySQL_GetHandle(), query); 
+    mysql_tquery(MySQL_GetHandle(), query);
 
-    log("setting up 'player_jailed' table...");
+    log("setting up 'jailed' table...");
     return 1;
 }

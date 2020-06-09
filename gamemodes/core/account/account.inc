@@ -1,4 +1,4 @@
-
+#include <samp_bcrypt>
 #include <account_create>
 #include <account_login>
 #include <account_vip>
@@ -28,19 +28,20 @@ static
 
 hook OnMySQLConnected() {
     stmt_checkPlayer = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT u_id, password FROM players WHERE username=?");
+    return 1;
 }
 
 hook OnPlayerLogin(playerid) {
     Player_SetLoginStatus(playerid, true);
+    return 1;
 }
 
 hook OnPlayerPassedBanCheck(playerid) {
-    inline OnDataLoad() {
+    inline const OnDataLoad() {
         new
             playerUID,
             playerHash[250];
 
-        // retrieve u_id and password data and store them to local variable.
         MySQL_BindResultInt(stmt_checkPlayer, 0, playerUID);
         MySQL_BindResult(stmt_checkPlayer, 1, playerHash, sizeof(playerHash));
 
@@ -48,7 +49,15 @@ hook OnPlayerPassedBanCheck(playerid) {
             Player_SetAccountID(playerid, playerUID);
 
             Account_PromptLogin(playerid, playerHash);
-        } else {
+
+            // Reasoning behind this
+            // Allows the smooth transition between Login menu
+            // and when it forces Spawn the player, this work-around
+            // fixes the issue where you can see OnPlayerRequestClas for
+            // a split second.
+            TogglePlayerSpectating(playerid, true);
+        }
+        else {
             Account_PromptRegister(playerid);
         }
     }

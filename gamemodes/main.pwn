@@ -10,6 +10,8 @@
 // OnPlayerRegister(playerid) -> called when player successfully registered.
 // OnPlayerPassedBanCheck(playerid) -> called when player's ip/name/gcpi wasn't found in the ban database.
 // OnPlayerSecondUpdate(playerid) -> called every second per player (like OnPlayerUpdate but not as intensive.)
+// OnMySQLConnected() -> called when MySQL successfully connects. (this is used to setup tables & prepared statements)
+// OnMySQLPreClose() -> called before MySQL disconnect (before mysql_close specifically.)
 
 // TextdrawLetterSize Rule -> Thanks to DamianC
 // Letter-size-y = letter-size-x * 4

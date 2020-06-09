@@ -1,17 +1,10 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     Statement:stmt_loadPlayerStats,
-    Statement:stmt_insertPlayerStats,
-    PlayerSkin[MAX_PLAYERS];
+    Statement:stmt_insertPlayerStats;
 
-stock Player_GetSavedSkin(playerid) {
-    return PlayerSkin[playerid];
-}
 
-stock Player_SetSavedSkin(playerid, amount) {
-    PlayerSkin[playerid] = amount;
-}
 
 hook OnMySQLConnected() {
 
@@ -29,9 +22,9 @@ hook OnMySQLConnected() {
     WHERE \
         u_id = ?";
 
-   
+
     stmt_loadPlayerStats = MySQL_PrepareStatement(MySQL_GetHandle(), loadQuery);
-    
+
     stmt_insertPlayerStats = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT INTO player_stats (u_id) VALUES (?)");
 }
 
@@ -48,10 +41,10 @@ hook OnPlayerRegister(playerid) {
 
 static Account_LoadStats(playerid) {
     inline OnDataLoad() {
-        new 
-            kills, 
+        new
+            kills,
             deaths,
-            jobID, 
+            jobID,
             wantedLevel,
             playerMoney,
             playerSkin,
@@ -64,15 +57,13 @@ static Account_LoadStats(playerid) {
         MySQL_BindResultInt(stmt_loadPlayerStats, 5, playerMoney);
         MySQL_BindResultInt(stmt_loadPlayerStats, 6, playerSkin);
 
-        if(MySQL_Statement_FetchRow(stmt_loadPlayerStats)) { 
+        if(MySQL_Statement_FetchRow(stmt_loadPlayerStats)) {
             Player_SetKills(playerid, kills);
             Player_SetDeaths(playerid, deaths);
             Player_SetJob(playerid, jobID);
             SetPlayerWantedLevel(playerid, wantedLevel);
             GivePlayerMoney(playerid, playerMoney);
             SetPlayerSkin(playerid, playerSkin);
-
-            PlayerSkin[playerid] = playerSkin;
             Player_SetClass(playerid, playerClass);
         }
     }
