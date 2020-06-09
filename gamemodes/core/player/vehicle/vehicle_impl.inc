@@ -6,6 +6,7 @@
 
 static
     VehicleHandler[MAX_OWNED_VEHICLES],
+    VehicleOwnerName[MAX_OWNED_VEHICLES][MAX_PLAYER_NAME],
     VehicleOwnerID[MAX_OWNED_VEHICLES],
     VehicleID[MAX_OWNED_VEHICLES],
     VehicleModelID[MAX_OWNED_VEHICLES],
@@ -18,8 +19,12 @@ static
     VehicleInteriorID[MAX_OWNED_VEHICLES],
     VehicleVWorld[MAX_OWNED_VEHICLES],
     VehicleMods[MAX_OWNED_VEHICLES][16],
-    VehiclePlate[MAX_OWNED_VEHICLES][MAX_PLATE_NAME],
+    VehiclePlate[MAX_OWNED_VEHICLES][MAX_PLATE_NAME];
+
+stock
     BitArray:vehicle_created<MAX_VEHICLES>;
+
+#define foreach_PersonalVehicles(%1) foreach(new %1 : Vehicle) if(!Bit_Get(vehicle_created, %1)) continue; else
 
 static
     Statement: stmt_insertVehicle,
@@ -43,7 +48,7 @@ hook OnMySQLConnected() {
     static const selectQuery[] = "\
         SELECT \
             vehicle_id, \
-            u_id, \
+            pv.u_id, \
             model_id, \
             x, \
             y, \
@@ -52,11 +57,16 @@ hook OnMySQLConnected() {
             color_1, \
             color_2, \
             intid, \
-            vworld \
+            vworld, \
+            p.username \
         FROM \
-            player_vehicles \
+            player_vehicles pv \
+        INNER JOIN \
+            players p \
+        ON \
+            p.u_id = pv.u_id \
         WHERE \
-            u_id = ? \
+            pv.u_id = ? \
         ORDER BY \
             vehicle_id DESC \
     ";
@@ -170,10 +180,8 @@ hook OnVehicleStreamIn(vehicleid, forplayerid) {
                 continue;
             }
             AddVehicleComponent(VehicleHandler[i], VehicleMods[i][x]);
-            printf("adding component %i to vehicle id %i", VehicleMods[i][x], VehicleHandler[i]);
         }
     }
-    printf("vehicle id %i streamed in", vehicleid);
     return 1;
 }
 
@@ -193,7 +201,6 @@ Vehicle_GetPlayerTotal(playerid) {
     }
     return count;
 }
-
 
 Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot) {
     inline const OnSaveCreatedVehicle() {
@@ -226,6 +233,12 @@ Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot) {
 
             strcpy(VehiclePlate[i], "GTA-OPEN");
 
+            new
+                playerName[MAX_PLAYER_NAME];
+            GetPlayerName(playerid, playerName);
+
+            strcpy(VehicleOwnerName[i], playerName);
+
             VehicleHandler[i] = CreateVehicle(modelid, x, y, z, rot, -1, -1, -1, 0);
             SetVehicleNumberPlate(VehicleHandler[i], VehiclePlate[i]);
             LinkVehicleToInterior(VehicleHandler[i], VehicleInteriorID[i]);
@@ -253,6 +266,10 @@ timer PutPlayerInSaveVehicle[1000](playerid, vehicleid) {
     SetPlayerInterior(playerid, 0);
     SetPlayerVirtualWorld(playerid, 0);
     PutPlayerInVehicle(playerid, vehicleid, 0);
+}
+
+stock Vehicle_GetHandler(index) {
+    return VehicleHandler[index];
 }
 
 stock Vehicle_Park(playerid) {
@@ -310,7 +327,8 @@ stock Vehicle_Load(playerid) {
         color_1,
         color_2,
         intID,
-        VWorld;
+        VWorld,
+        ownerName[MAX_PLAYER_NAME];
 
     MySQL_BindResultInt(stmt_checkVehicle, 0, vehicleID);
     MySQL_BindResultInt(stmt_checkVehicle, 1, ownerID);
@@ -323,6 +341,7 @@ stock Vehicle_Load(playerid) {
     MySQL_BindResultInt(stmt_checkVehicle, 8, color_2);
     MySQL_BindResultInt(stmt_checkVehicle, 9, intID);
     MySQL_BindResultInt(stmt_checkVehicle, 10, VWorld);
+    MySQL_BindResult(stmt_checkVehicle, 11, ownerName);
 
     while(MySQL_Statement_FetchRow(stmt_checkVehicle)) {
             foreach(new i : Vehicle) {
@@ -345,6 +364,8 @@ stock Vehicle_Load(playerid) {
 
                 VehicleInteriorID[i]	= intID;
                 VehicleVWorld[i]	    = VWorld;
+
+                strcpy(VehicleOwnerName[i], ownerName);
 
                 VehicleHandler[i] = CreateVehicle(modelID, x, y, z, rot, -1, -1, -1, 0);
                 SetVehicleNumberPlate(VehicleHandler[i], VehiclePlate[i]);
@@ -369,7 +390,10 @@ stock Vehicle_Load(playerid) {
 
                         VehicleMods[i][index] = component_id;
 
-                        //defer DelayAddVehicleComponent(VehicleHandler[i], VehicleMods[i][index], 500 + (index * 100));
+                        // we still need this somehow in order to fix the component bugs.
+                        // no clue why, but just leave it here, it does no harm.
+                        defer DelayAddVehicleComponent(VehicleHandler[i], VehicleMods[i][index], 500 + (index * 100));
+
                         index ++;
                     }
                 }
@@ -385,10 +409,10 @@ stock Vehicle_Load(playerid) {
     MySQL_ExecuteThreaded_Inline(stmt_checkVehicle, using inline OnLoadCreatedVehicle);
 }
 
-// timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
-//     #pragma unused seconds
-//     AddVehicleComponent(vehicleid, componentid);
-// }
+timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
+    #pragma unused seconds
+    AddVehicleComponent(vehicleid, componentid);
+}
 
 stock Vehicle_IsPlayer(playerid)
 {
@@ -417,6 +441,10 @@ stock Vehicle_IsPlayer(playerid)
         }
     }
     return 0;
+}
+
+Vehicle_GetOwnerName(index) {
+    return VehicleOwnerName[index];
 }
 
 

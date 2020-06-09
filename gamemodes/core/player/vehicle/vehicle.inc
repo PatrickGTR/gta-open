@@ -16,13 +16,19 @@ hook OnPlayerLogin(playerid) {
     return 1;
 }
 
-CMD:rfc(playerid, params[]) {
-    AddVehicleComponent(559, 1109);
-    AddVehicleComponent(559, 1116);
-    AddVehicleComponent(559, 1117);
-    AddVehicleComponent(559, 1083);
-    AddVehicleComponent(559, 1113);
-    AddVehicleComponent(559, 1010);
-    AddVehicleComponent(559, 1119);
+hook OnPlayerStateChange(playerid, newstate, oldstate) {
+
+    if(newstate == PLAYER_STATE_DRIVER) {
+        if(Vehicle_IsPlayer(playerid)) {
+            SendMsgF(playerid, COLOR_SAMPBLUE, "Welcome back to your personal vehicle.");
+            return 1;
+        }
+
+        foreach_PersonalVehicles(i) {
+            if(Vehicle_GetHandler(i) == GetPlayerVehicleID(playerid)) {
+                SendMsgF(playerid, COLOR_SAMPBLUE, "This vehicle is owned by "C_GREY"%s", Vehicle_GetOwnerName(i));
+            }
+        }
+    }
     return 1;
 }

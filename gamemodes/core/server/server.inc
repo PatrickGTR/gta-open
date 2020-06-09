@@ -50,7 +50,7 @@ static
 	{0, 52,     "[BANK]",                   {595.6651, -1250.7883, 18.2999}, {2306.1572, -16.2888, 26.7496}},
 	{12, 25,    "[CASINO]",                 {1022.6512, -1121.8951, 23.8719}, {1133.2094, -15.3630, 1000.6797}},
 	{5, 26,     "[XomoX's Mansion]",        {1298.3035, -798.7736, 84.1406}, {1299.0386,-796.7242,1084.0078}},
-	{0, 55,		"[GROTTI]",					{541.9629, -1293.5179, 17.2414}, {849.4232, -973.6054, 1090.1021}}
+	{1, 55,		"[GROTTI]",					{541.9629, -1293.5179, 17.2414}, {849.4232, -973.6054, 1090.1021}}
 };
 
 hook OnGameModeInit() {
@@ -89,29 +89,45 @@ hook OnGameModeInit() {
 		if(!strcmp("[GROTTI]", storeData[i][E_STORE_NAME], true)) {
 			// populate grotti dealership.
 			log("populating [GROTTI] with vehicles.");
+
 			vehicleid = CreateVehicle(411,846.7003,-966.7253,1089.8379,154.6938, 1, 1, (60 * 2), 0); // Infernus
 			SetVehicleVirtualWorld(vehicleid, vwID);
+			LinkVehicleToInterior(vehicleid, intID);
 			SetVehicleParamsEx(vehicleid, 0, 1, 0, 1, 0, 0, 0);
+
 			vehicleid = CreateVehicle(429,846.8061,-981.0212,1089.7911,31.8394, 1, 1, (60 * 2), 0); // Banshee
 			SetVehicleVirtualWorld(vehicleid, vwID);
+			LinkVehicleToInterior(vehicleid, intID);
 			SetVehicleParamsEx(vehicleid, 0, 1, 0, 1, 0, 0, 0);
+
 			vehicleid = CreateVehicle(434,836.0557,-981.4208,1090.0729,358.1186, 1, 1, (60 * 2), 0); // HotKnife
 			SetVehicleVirtualWorld(vehicleid, vwID);
+			LinkVehicleToInterior(vehicleid, intID);
 			SetVehicleParamsEx(vehicleid, 0, 1, 0, 1, 0, 0, 0);
+
 			vehicleid = CreateVehicle(451,836.3260,-966.7363,1089.8171,180.5268, 1, 1, (60 * 2), 0); // Turismo
 			SetVehicleVirtualWorld(vehicleid, vwID);
+			LinkVehicleToInterior(vehicleid, intID);
 			SetVehicleParamsEx(vehicleid, 0, 1, 0, 1, 0, 0, 0);
+
 			vehicleid = CreateVehicle(522,813.9284,-966.6889,1089.6785,239.2200, 1, 1, (60 * 2), 0); // NRG
 			SetVehicleVirtualWorld(vehicleid, vwID);
+			LinkVehicleToInterior(vehicleid, intID);
 			SetVehicleParamsEx(vehicleid, 0, 1, 0, 1, 0, 0, 0);
+
 			vehicleid = CreateVehicle(521,813.7883,-981.1411,1089.6801,297.5581, 1, 1, (60 * 2), 0); // FCR
 			SetVehicleVirtualWorld(vehicleid, vwID);
+			LinkVehicleToInterior(vehicleid, intID);
 			SetVehicleParamsEx(vehicleid, 0, 1, 0, 1, 0, 0, 0);
+
 			vehicleid = CreateVehicle(535,826.3376,-980.8220,1089.8749,4.6079, 1, 1, (60 * 2), 0); // Slamvan
+			LinkVehicleToInterior(vehicleid, intID);
 			SetVehicleVirtualWorld(vehicleid, vwID);
 			SetVehicleParamsEx(vehicleid, 0, 1, 0, 1, 0, 0, 0);
+
 			vehicleid = CreateVehicle(579,826.4156,-966.4870,1090.0450,175.3807, 1, 1, (60 * 2), 0); // Huntley
 			SetVehicleVirtualWorld(vehicleid, vwID);
+			LinkVehicleToInterior(vehicleid, intID);
 			SetVehicleParamsEx(vehicleid, 0, 1, 0, 1, 0, 0, 0);
 
 

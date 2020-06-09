@@ -1,37 +1,34 @@
 #include <map-zones>
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     MapZone:PlayerLastZoneID[MAX_PLAYERS] = INVALID_MAP_ZONE_ID,
     MapZone:PlayerInteriorZoneID[MAX_PLAYERS] = INVALID_MAP_ZONE_ID;
 
 
 stock Player_GetLocation(playerid, string[], len = sizeof(string)) {
 
-    new 
+    new
         MapZone: zoneid = GetPlayerMapZone(playerid),
         location[MAX_MAP_ZONE_NAME + 12];
 
     if(GetPlayerInterior(playerid) > 0) {
         zoneid = PlayerInteriorZoneID[playerid];
-
-        strcat(string, "(Interior)", len);
-        strcat(string, " ", len); // space e.g `(Interior) Downton` instead of `(Interior)Downton`
     }
-    
+
     GetMapZoneName(zoneid, location);
 
-    strcat(string, location, len);
+    strcpy(string, location, len);
     return 1;
 }
 
 hook OnPlayerSecondUpdate(playerid) {
-    new 
+    new
         MapZone:zoneID = GetPlayerMapZone(playerid);
-    
+
     // only update if last zone id is not the same as current ID.
     if(PlayerLastZoneID[playerid] != zoneID) {
-        new 
+        new
             zoneName[MAX_MAP_ZONE_NAME];
         Player_GetLocation(playerid, zoneName);
         UI_SetLocation(playerid, zoneName);
