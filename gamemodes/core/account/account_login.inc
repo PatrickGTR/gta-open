@@ -70,8 +70,7 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
             CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
 
             // Force Spawn Player
-            TogglePlayerSpectating(playerid, false);
-            //SpawnPlayer(playerid);
+            defer ForceSpawnPlayer(playerid);
         }
         BCrypt_CheckInline(inputtext, gPlayerHash[playerid], using inline OnPasswordVerify);
     }

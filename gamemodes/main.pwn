@@ -20,7 +20,7 @@
 #include <a_samp>
 
 #define MYSQL_PREPARE_DEBUG 	(false)
-#define MAX_STATEMENTS 32
+#define MAX_STATEMENTS 64
 
 #define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
 

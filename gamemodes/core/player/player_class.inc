@@ -46,15 +46,52 @@ hook OnGameModeInit() {
 	return 1;
 }
 
+
+static
+	Statement: stmt_loadPlayerSkin,
+	PlayerSkin[MAX_PLAYERS],
+	bool:PlayerClassState[MAX_PLAYERS] = true,
+	PlayerClass[MAX_PLAYERS];
+
+hook OnMySQLConnected() {
+	stmt_loadPlayerSkin = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT skin FROM player_stats WHERE u_id = ?");
+	return 1;
+}
+
+hook OnPlayerLogin(playerid) {
+
+	inline const OnSkinLoad() {
+
+		new
+			playerSkin;
+
+		MySQL_BindResultInt(stmt_loadPlayerSkin, 0, playerSkin);
+
+		if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
+
+			PlayerSkin[playerid] = playerSkin;
+			printf("skin loaded %i", PlayerSkin[playerid]);
+		}
+
+	}
+
+	MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
+	MySQL_ExecuteParallel_Inline(stmt_loadPlayerSkin, using inline OnSkinLoad);
+
+	PlayerClassState[playerid] = false;
+	return 1;
+}
+
 hook OnPlayerRequestClass(playerid, classid) {
 
 	// F4 Detection.
 	// bypass this action if PlayerClassState is set to false.
 	// it's true by default.
 	if(!Class_SelectionStatus(playerid)) {
+		TogglePlayerSpectating(playerid, true);
 		defer ForceSpawnPlayer(playerid);
 
-		dbg("player", "F4 attempted, skipping class selection",
+		dbg("player", "skipping class selection",
 			_p("username", playerid)
     	);
 	} else {
@@ -87,17 +124,10 @@ hook OnPlayerRequestClass(playerid, classid) {
 	return 1;
 }
 
-timer ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
-    SpawnPlayer(playerid);
-}
-
-static
-	bool:PlayerClassState[MAX_PLAYERS] = true,
-	 PlayerClass[MAX_PLAYERS];
-
-hook OnPlayerLogin(playerid) {
-	PlayerClassState[playerid] = false;
-	return 1;
+timer void:ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
+	TogglePlayerSpectating(playerid, false);
+	SetSpawnInfo(playerid, 0, PlayerSkin[playerid], 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+	SpawnPlayer(playerid);
 }
 
 hook OnPlayerConnect(playerid) {

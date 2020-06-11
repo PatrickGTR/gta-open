@@ -15,8 +15,7 @@ hook OnMySQLConnected() {
         job_id, \
         class_id, \
         wanted_level, \
-        money, \
-        skin \
+        money \
     FROM \
         player_stats \
     WHERE \
@@ -47,7 +46,6 @@ static Account_LoadStats(playerid) {
             jobID,
             wantedLevel,
             playerMoney,
-            playerSkin,
             playerClass;
         MySQL_BindResultInt(stmt_loadPlayerStats, 0, kills);
         MySQL_BindResultInt(stmt_loadPlayerStats, 1, deaths);
@@ -55,7 +53,6 @@ static Account_LoadStats(playerid) {
         MySQL_BindResultInt(stmt_loadPlayerStats, 3, playerClass);
         MySQL_BindResultInt(stmt_loadPlayerStats, 4, wantedLevel);
         MySQL_BindResultInt(stmt_loadPlayerStats, 5, playerMoney);
-        MySQL_BindResultInt(stmt_loadPlayerStats, 6, playerSkin);
 
         if(MySQL_Statement_FetchRow(stmt_loadPlayerStats)) {
             Player_SetKills(playerid, kills);
@@ -63,7 +60,6 @@ static Account_LoadStats(playerid) {
             Player_SetJob(playerid, jobID);
             SetPlayerWantedLevel(playerid, wantedLevel);
             GivePlayerMoney(playerid, playerMoney);
-            SetPlayerSkin(playerid, playerSkin);
             Player_SetClass(playerid, playerClass);
         }
     }
