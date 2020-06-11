@@ -7,7 +7,7 @@
 #define MAX_HOUSE_DESCRIPTION   (24)
 #define INVALID_HOUSE_ID        (-1)
 
-static 
+static
     Statement: stmt_InsertHouse,
     Statement: stmt_LoadHouse,
     Statement: stmt_updateDescription,
@@ -94,7 +94,7 @@ hook OnMySQLConnected() {
     return 1;
 }
 
-static 
+static
     PlayerHouseCheckpointID[MAX_PLAYERS];
 
 hook OnPlayerEnterDynamicCP(playerid, checkpointid) {
@@ -134,7 +134,7 @@ static
 // !! PLEASE NOTE !!
 // Interior -> The actual mapping interior of the house.
 // InteriorID -> Used to set the player's interior depending on ID.
-// this function returns 
+// this function returns
 // -1 if there are no slots left.
 // new house id on success
 stock House_Create(Float:x, Float:y, Float:z, Float:a, vworld, price, interior, description[MAX_HOUSE_DESCRIPTION] = "", ownerName[MAX_PLAYER_NAME] = "", ownerID = -1, bool:save = false)
@@ -146,7 +146,7 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, vworld, price, interior, 
         return -1;
     }
 
-    new  
+    new
         string[128 + MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION];
 
     description = (isnull(description) ? ("For Sale!") : (description));
@@ -165,7 +165,7 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, vworld, price, interior, 
 
     HouseEntranceLabel[houseid] = CreateDynamic3DTextLabel(string, COLOR_ORANGE, x, y, z, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, -1, -1, -1, 25.0);
     HouseEntranceCP[houseid] = CreateDynamicCP(x, y, z, 1.0, -1, -1, -1, 25.0);
-    
+
     new
         Float:ex,
         Float:ey,
@@ -177,7 +177,7 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, vworld, price, interior, 
     HouseExitLabel[houseid] = CreateDynamic3DTextLabel("Exit", COLOR_ORANGE, ex, ey, ez, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, vworld, intid, -1, 25.0);
     HouseExitCP[houseid] = CreateDynamicCP(ex, ey, ez, 1.0, vworld, intid, -1, 25.0);
 
-    new 
+    new
         arr[2];
 
     arr[0] = HOUSES_STREAMER_IDENTIFIER;
@@ -260,7 +260,7 @@ stock House_InsertToDatabase(houseid) {
 // Change the description to 'SOLD TO BuyerName!'
 // returns N/A
 stock House_Buy(playerid, houseid) {
-    new 
+    new
         description[MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION],
         name[MAX_PLAYER_NAME];
 
@@ -300,7 +300,7 @@ House_UpdateDescription(playerid, houseid, const description[]) {
         return -1;
     }
 
-    new 
+    new
         string[128 + MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION],
         name[MAX_PLAYER_NAME];
 
@@ -313,7 +313,7 @@ House_UpdateDescription(playerid, houseid, const description[]) {
         "C_ORANGE"Description: "C_WHITE"%s\n\
         "C_ORANGE"Owner: "C_WHITE"%s\n\
         "C_ORANGE"Price: "C_GREEN"$%i",
-        HouseID[houseid], 
+        HouseID[houseid],
         HouseDescription[houseid],
         name,
         HousePrice[houseid]
@@ -331,18 +331,18 @@ House_UpdateDescription(playerid, houseid, const description[]) {
 House_Load() {
 
     inline const OnHouseLoad() {
-        new 
+        new
             houseid,
             ownerID,
             description[MAX_HOUSE_DESCRIPTION],
             price,
-            money_stored, 
+            money_stored,
             interior,
             Float:x,
             Float:y,
             Float:z,
-            Float:a, 
-            vworld, 
+            Float:a,
+            vworld,
             intid,
             ownerName[MAX_PLAYER_NAME];
 
@@ -360,7 +360,7 @@ House_Load() {
         MySQL_BindResultInt(stmt_LoadHouse, 11, intid);
         MySQL_BindResult(stmt_LoadHouse, 12, ownerName);
 
-   
+
         while(MySQL_Statement_FetchRow(stmt_LoadHouse)) {
             House_Create(x, y, z, a, vworld, price, interior, description, ownerName, ownerID);
         }
@@ -414,7 +414,7 @@ stock House_GetTotal() {
 
 
 stock Player_GetTotalHouses(playerid) {
-    new 
+    new
         count = 0;
 
     foreach(new i : HouseIndex) {
@@ -444,10 +444,4 @@ stock Player_GetInHouseInt(playerid) {
 
     Streamer_GetArrayData(STREAMER_TYPE_CP, PlayerHouseCheckpointID[playerid], E_STREAMER_EXTRA_ID, arr);
     return HouseInteriorID[arr[1]];
-}
-
-
-CMD:x(playerid, params[]) {
-    SetPlayerPos(playerid, 1942.12, -1790, 13.3828);
-    return 1;
 }

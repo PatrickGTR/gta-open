@@ -6,17 +6,22 @@
 
 #if SETUP_TABLE
     #include <houses_setup-table>
-#endif 
+#endif
 
 #include <furniture>
 
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     BitArray: PlayerInsideAHouse<MAX_PLAYERS>;
 
 stock Player_IsInsideHouse(playerid) {
     return Bit_Get(PlayerInsideAHouse, playerid);
+}
+
+hook OnPlayerConnect(playerid) {
+    Bit_Set(PlayerInsideAHouse, playerid, false);
+    return 1;
 }
 
 hook OnMySQLConnected() {
@@ -26,31 +31,31 @@ hook OnMySQLConnected() {
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if(PRESSED(KEY_SECONDARY_ATTACK)) {
-        new 
+        new
             houseid = Player_GetInHouseID(playerid);
         if(Player_InHouseEntrance(playerid, houseid)) {
             if(House_PlayerIsOwner(playerid, houseid)) {
                 MessageBox_Show(
-                    playerid, 
-                    TYPE_MSGBOX, 
+                    playerid,
+                    TYPE_MSGBOX,
                     "~g~Welcome home!",
                     "Home is where the heart is."
                 );
 
-                new 
+                new
                     Float: x,
                     Float: y,
                     Float: z,
                     interiorid,
                     bool:unused;
-                
+
                 House_GetInteriorData(
-                    House_GetInterior(houseid), 
+                    House_GetInterior(houseid),
                     x,
-                    y, 
+                    y,
                     z,
-                    interiorid, 
-                    unused, 
+                    interiorid,
+                    unused,
                     unused
                 );
 
@@ -64,14 +69,19 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         }
 
         if(Player_InHouseExit(playerid, houseid)) {
+
+            if(!(Player_IsInsideHouse(playerid))) {
+                return 1;
+            }
+
             MessageBox_Show(
-                    playerid, 
-                    TYPE_MSGBOX, 
+                    playerid,
+                    TYPE_MSGBOX,
                     "~r~Goodbye",
                     "See you soon."
                 );
 
-            new 
+            new
                 Float: x,
                 Float: y,
                 Float: z,
@@ -88,5 +98,5 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             Bit_Set(PlayerInsideAHouse, playerid, false);
         }
     }
-    return 1;   
+    return 1;
 }
