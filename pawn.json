@@ -18,7 +18,8 @@
 		"PatrickGTR/MySQL-Prepared-Statements",
 		"samp-incognito/samp-streamer-plugin:v2.9.4",
 		"kristoisberg/samp-map-zones",
-		"PatrickGTR/actor_robbery"
+		"PatrickGTR/actor_robbery",
+		"Southclaws/progress2"
 	],
 	"local": true,
 	"builds": [

@@ -22,12 +22,16 @@ public OnPlayerCommandText(playerid, cmdtext[])
     static prefix[4] = {'c', 'm', 'd', '_'}, cmd[28];
     static params[126];
 
-    params = "\1";
+
     sscanf(cmdtext[1], "s[28]s[126]", cmd, params);
 
     for (new i = strlen(cmd); --i != -1;)
     {
         cmd[i] |= 0x20;
+    }
+
+    if(params[0] == EOS) {
+        strcat((params[0] = EOS, params), "\1");
     }
 
     #if defined OnPlayerCommandReceived

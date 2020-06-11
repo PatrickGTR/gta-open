@@ -26,7 +26,8 @@ static
     // Other
     Iterator: entranceID<MAX_ENTRANCES>,
     playerEnExCoolDown[MAX_PLAYERS],
-    getShopName[MAX_PLAYERS][MAX_STORE_NAME];
+    getShopName[MAX_PLAYERS][MAX_STORE_NAME],
+    entranceFreezePlayer[MAX_PLAYERS];
 
 // Attach a map icon to assigned entranceid.
 stock Entrance_SetIcon(id, iconid) {
@@ -61,18 +62,27 @@ stock Entrance_PlayerIn(playerid) {
     return (!isnull(getShopName[playerid])) ? getShopName[playerid] : "None";
 }
 
+stock Entrance_EnableFreeze(id, bool:status) {
+    if(!Iter_Contains(entranceID, id)) {
+        return 0;
+    }
+
+    entranceFreezePlayer[id] = status;
+    return 1;
+}
+
 
 //Create an entrance with exit on specificied coordinates.
 stock Entrance_Create(Float:enx, Float:eny, Float:enz, Float:enang, Float:exx, Float:exy, Float:exz, Float:exang, vwid, intid) {
 
-    new 
+    new
         entid = Iter_Alloc(entranceID),
         arr[2]
     ;
 
     arr[0] = ENEX_STREAMER_IDENTIFIER;
     arr[1] = entid;
-    
+
     entranceCheckpoint[entid] = CreateDynamicCP(enx, eny, enz + 0.50, 1.5, .streamdistance = CHECKPOINT_STREAMDISTANCE);
     exitCheckpoint[entid] = CreateDynamicCP(exx, exy, exz + 0.50, 1.5, vwid, intid, .streamdistance = CHECKPOINT_STREAMDISTANCE);
 
@@ -105,6 +115,11 @@ stock Entrance_SetPlayerCD(playerid, time) {
     return playerEnExCoolDown[playerid] = time;
 }
 
+timer void:EntranceUnfreezePlayer[seconds](playerid, seconds) {
+    #pragma unused seconds
+    TogglePlayerControllable(playerid, true);
+}
+
 // Checkpoint Handler
 hook OnPlayerEnterDynamicCP(playerid, checkpointid)
 {
@@ -120,7 +135,14 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
         if (gettime() < Entrance_GetPlayerCD(playerid)) {
             return 1;
         }
+
         if (checkpointid == entranceCheckpoint[entid]) {
+
+            if(entranceFreezePlayer[entid]) {
+                TogglePlayerControllable(playerid, false);
+                defer EntranceUnfreezePlayer(playerid, 1200 + GetPlayerPing(playerid));
+            }
+
             Entrance_SetPlayerCD(playerid, gettime() + 2);
 
             SetPlayerVirtualWorld(playerid, exitVirtualID[entid]);
@@ -138,9 +160,12 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
 
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
+            TogglePlayerControllable(playerid, true);
+
 
             SetPlayerPos(playerid, entranceX[entid], entranceY[entid], entranceZ[entid]);
             SetPlayerFacingAngle(playerid, entranceAng[entid]);
+
 
             SetCameraBehindPlayer(playerid);
 
