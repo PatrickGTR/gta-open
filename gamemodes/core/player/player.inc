@@ -15,6 +15,10 @@
 new
     BitArray:PlayerSpawnState<MAX_PLAYERS>;
 
+hook OnPlayerConnect(playerid) {
+    Bit_Set(PlayerSpawnState, playerid, false);
+}
+
 hook OnPlayerSpawn(playerid) {
     Bit_Set(PlayerSpawnState, playerid, true);
     return 1;

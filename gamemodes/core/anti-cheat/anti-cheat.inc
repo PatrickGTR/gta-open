@@ -66,10 +66,10 @@ hook OnPlayerUpdate( playerid )
 
 		if( iState != PLAYER_STATE_SPECTATING )
 		{
-        	// AC_CheckForAirbrake			( playerid, p_acUpdateTime[ playerid ], iState );
-			// AC_CheckForHealthHacks		( playerid, p_acUpdateTime[ playerid ] );
-        	// AC_CheckForFlyHacks			( playerid, p_acUpdateTime[ playerid ] );
-        	// AC_CheckPlayerRemoteJacking ( playerid );
+        	AC_CheckForAirbrake			( playerid, p_acUpdateTime[ playerid ], iState );
+			AC_CheckForHealthHacks		( playerid, p_acUpdateTime[ playerid ] );
+        	AC_CheckForFlyHacks			( playerid, p_acUpdateTime[ playerid ] );
+        	AC_CheckPlayerRemoteJacking ( playerid );
 		}
 	}
 	return 1;
@@ -157,19 +157,19 @@ stock AC_SetPlayerSpawned( playerid, bool: spawned ) {
 }
 
 /* ** Modules (remove to disable) ** */
-//#include "money.pwn"
-//#include "thermal_vision.pwn"
-//#include "player_bugger.pwn"
-//#include "bot_attack.pwn"
+#include <anti-cheat_money>
+#include <anti-cheat_thermal-vision>
+#include <anti-cheat_player-bugger>
+#include <anti-cheat_bot-attack>
 #include <anti-cheat_server-side-dmg>
-//#include "weapon.pwn"
-//#include "carmod_checker.pwn"
-//#include "airbrake.pwn"
+#include <anti-cheat_weapon>
+#include <anti-cheat_carmod>
+#include <anti-cheat_airbreak>
 //#include "proaim.pwn"
 //#include "autocbug.pwn"
-//#include "flying.pwn"
-//#include "remotejack.pwn"
+#include <anti-cheat_flying>
+#include <anti-cheat_remotejack>
 //#include "rapidfire.pwn"
-//#include "carwarp.pwn"
+#include <anti-cheat_carwarp>
 //#include "car_particle_spam.pwn"
 //#include "pickup_spam.pwn"

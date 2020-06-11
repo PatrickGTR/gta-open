@@ -11,13 +11,14 @@
 #endif
 
 /* ** Includes ** */
-#include 							< YSI\y_hooks >
+#include 							< YSI_Coding\y_hooks >
+#include <streamer>
 
 /* ** Definitions ** */
 #define AC_VENDING_MACHINE_COST 	( 500 )
 
 /* ** Variables ** */
-enum E_VENDING_MACHINE
+static enum E_VENDING_MACHINE
 {
 	E_MODEL,
 	E_INTERIOR,
@@ -133,7 +134,7 @@ hook OnPlayerKeyStateChange( playerid, newkeys, oldkeys )
 
 			GetPlayerHealth( playerid, fHealth );
 
-			if ( GetPlayerCash( playerid ) <= 0 || fHealth >= 100.0 )
+			if ( GetPlayerMoney(playerid) <= 0 || fHealth >= 100.0 )
 				bFailed = true;
 
 			for ( new i = 0; i < sizeof( g_VendingMachines ); i++ )
@@ -151,7 +152,7 @@ hook OnPlayerKeyStateChange( playerid, newkeys, oldkeys )
 
 					if ( GetPlayerPos( playerid, Z, Z, Z ) )
 					{
-						GivePlayerCash( playerid, -AC_VENDING_MACHINE_COST );
+						GivePlayerMoney( playerid, -AC_VENDING_MACHINE_COST );
 
 						p_VendingUseTimer[ playerid ] = SetTimerEx( "VendingMachineUsed", 2500, false, "if", playerid, health_given );
 

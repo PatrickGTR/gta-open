@@ -6,7 +6,7 @@
  */
 
 /* ** Includes ** */
-#include 							< YSI\y_hooks >
+#include 							< YSI_Coding\y_hooks >
 
 /* ** Definitions ** */
 #if !defined MAX_CLASSES
@@ -127,14 +127,6 @@ hook OnPlayerKeyStateChange( playerid, newkeys, oldkeys )
 	}
 	return 1;
 }
-
-/*
-hook OnPlayerPickUpDynPickup( playerid, pickupid ) {
-	if ( 0 <= playerid < MAX_PLAYERS && GetGVarType( "ac_WeaponPickup", pickupid ) != GLOBAL_VARTYPE_NONE ) {
-		p_PlayerHasWeapon[ playerid ] { GetGVarInt( "ac_WeaponPickup", pickupid ) } = true;
-	}
-	return 1;
-} */
 
 hook OnPlayerRequestClass( playerid, classid ) {
 	if ( 0 <= playerid < MAX_PLAYERS ) {
@@ -278,27 +270,3 @@ stock AC_AddPlayerClassEx( teamid, skin, Float:x, Float:y, Float:z, Float:Angle,
     #define _ALS_AddPlayerClassEx
 #endif
 #define AddPlayerClassEx AC_AddPlayerClassEx
-
-// Function Hook (CreateDynamicPickup)
-
-
-stock AC_CreateDynamicPickup( modelid, type, Float: x, Float: y, Float: z, worldid = -1, interiorid = -1, playerid = -1, Float: streamdistance = 100.0 )
-{
-	new
-		id = CreateDynamicPickup( modelid, type, x, y, z, worldid, interiorid, playerid, streamdistance );
-
-	if( type == 2 || type == 3 || type == 15 || type == 22 )
-	{
-        for( new i = 0; i < AC_MAX_WEAPONS; i ++ )
-        	if( GetWeaponModel( i ) == modelid )
-        		SetGVarInt( "ac_WeaponPickup", i, id );
-	}
-	return id;
-}
-
-#if defined _ALS_CreateDynamicPickup
-    #undef CreateDynamicPickup
-#else
-    #define _ALS_CreateDynamicPickup
-#endif
-#define CreateDynamicPickup AC_CreateDynamicPickup

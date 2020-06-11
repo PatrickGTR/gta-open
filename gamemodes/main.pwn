@@ -30,7 +30,7 @@
 #include <constants>
 #include <init>
 #include <utils>
-#include <anti-cheat_main> // w.i.p
+#include <anti-cheat> // w.i.p
 #include <user-interface>
 #include <server>
 #include <account>

@@ -415,7 +415,7 @@ hook OnPlayerGiveDamage( playerid, damagedid, Float: amount, weaponid, bodypart 
 		//p_LastWeaponIssuer[ damagedid ] = weaponid;
 		//p_LastDamageIssued[ damagedid ] = amount;
 
-		
+
 		if(CallLocalFunction("OnPlayerTakePlayerDamage", "iifii", damagedid, playerid, amount, weaponid, bodypart))
 		{
 			new
@@ -619,5 +619,5 @@ stock ForcePlayerKill( playerid, killerid, weaponid )
 
 /* ** Modules ** */
 #if defined __ac__money
-	#include "anticheat\vending_machines.pwn"
+	#include <anti-cheat_vending-machines>
 #endif
