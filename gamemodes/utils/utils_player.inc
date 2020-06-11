@@ -1,5 +1,5 @@
 
-static 
+static
     lastDrunkLevel[MAX_PLAYERS],
     currFPS[MAX_PLAYERS];
 
@@ -26,9 +26,9 @@ GetPlayerFPS(playerid) {
     return 0;
 }
 
-Player_IsInAmmu(playerid) 
+Player_IsInAmmu(playerid)
 {
-    if(GetPlayerVirtualWorld(playerid) == 7 || GetPlayerVirtualWorld(playerid) == 8) {
+    if(GetPlayerVirtualWorld(playerid) == 6 || GetPlayerVirtualWorld(playerid) == 7) {
         new const ammunationInteriors[] = {
             1, 4, 6, 7
         };
@@ -42,23 +42,23 @@ Player_IsInAmmu(playerid)
 }
 
 Float:Player_GetArmour(playerid) {
-    new 
+    new
         Float:playerArmour;
-    
-    GetPlayerArmour(playerid, playerArmour);    
+
+    GetPlayerArmour(playerid, playerArmour);
     return playerArmour;
 }
 
 stock Player_IsNearPlayer(playerid, targetid, Float:radius)
 {
-	new 
-        Float:x, 
-        Float:y, 
+	new
+        Float:x,
+        Float:y,
         Float:z;
 
 	GetPlayerPos(playerid, x, y, z);
 
-    new 
+    new
         matchingVW = GetPlayerVirtualWorld(playerid) == GetPlayerVirtualWorld(targetid),
         matchingInt = GetPlayerInterior(playerid) == GetPlayerInterior(targetid),
         inRange = IsPlayerInRangeOfPoint(targetid, radius, x, y, z);
