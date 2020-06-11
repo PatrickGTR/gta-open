@@ -3,7 +3,7 @@
 
 static
     Text: LeaveJoinTD,
-    joinString[5][32]
+    joinString[5][MAX_PLAYER_NAME + 9 /* Colours */ +  6 /* brackets + ID */ ]
 ;
 
 hook OnGameModeInit() {
