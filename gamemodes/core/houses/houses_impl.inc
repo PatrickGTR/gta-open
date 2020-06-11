@@ -219,13 +219,13 @@ House_Delete(playerid, houseid) {
                 SendServerMsgF(playerid, "You successfully deleted house id "C_GREY"%i", houseid);
             }
 
+            Streamer_RemoveArrayData(STREAMER_TYPE_CP, HouseEntranceCP[houseid], E_STREAMER_EXTRA_ID, houseid);
+            Streamer_RemoveArrayData(STREAMER_TYPE_CP, HouseExitCP[houseid], E_STREAMER_EXTRA_ID, houseid);
+
             DestroyDynamicCP(HouseEntranceCP[houseid]);
             DestroyDynamicCP(HouseExitCP[houseid]);
             DestroyDynamic3DTextLabel(HouseEntranceLabel[houseid]);
             DestroyDynamic3DTextLabel(HouseExitLabel[houseid]);
-
-            Streamer_RemoveArrayData(STREAMER_TYPE_CP, HouseEntranceCP[houseid], E_STREAMER_EXTRA_ID, houseid);
-            Streamer_RemoveArrayData(STREAMER_TYPE_CP, HouseExitCP[houseid], E_STREAMER_EXTRA_ID, houseid);
 
             Iter_Remove(HouseIndex, houseid);
         }
