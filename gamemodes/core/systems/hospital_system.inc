@@ -41,7 +41,7 @@ public TextMenuHospital(playerid, listitem) {
             if(health >= 100.0) {
                 return SendErrorMsg(playerid, "You have full health can't heal right now.");
             }
-            SetPlayerHealth(playerid, 1);
+            SetPlayerHealth(playerid, 100);
             GivePlayerMoney(playerid, -HOSPITAL_HEAL_PRICE);
         }
         case 2: {
