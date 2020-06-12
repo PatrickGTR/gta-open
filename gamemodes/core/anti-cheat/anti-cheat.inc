@@ -55,7 +55,7 @@ forward bool: AC_IsPlayerSpawned( playerid );
 hook OnPlayerUpdate( playerid )
 {
 	if( ! AC_IsPlayerSpawned( playerid ) )
-		return Y_HOOKS_BREAK_RETURN_0; // Not Spawned, No SYNC!
+		return 0; // Not Spawned, No SYNC!
 
 	if( !IsPlayerNPC( playerid ) )
 	{

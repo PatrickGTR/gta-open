@@ -1,7 +1,7 @@
 
 DeleteAttachment(playerid, slot)
 {
-	new 
+	new
 		empty_data[E_ATTACHMENT_DATA];
 
     new query[128];
@@ -14,88 +14,113 @@ DeleteAttachment(playerid, slot)
 	Iter_Remove(gAttachmentIndex[playerid], slot);
 }
 
-#define NEXT_BUTTON ""C_YELLOW"NEXT >>"
-#define BACK_BUTTON ""C_RED"<< BACK"
-ShowAttachmentsList(playerid, slot)
-{
-	new 
-		string[1024], 
+static void:_AttachmentList(playerid, page) {
+	new
 		name[MAX_ATTACHMENT_NAME];
-	
-	// Format 
-	// Index | Attachment 		 | Price
-	// 0	 | Green Hockey Mask | $2,500
-	strcat(string, "Index\tAttachment\tPrice\n");
-	for(new i = slot; i < slot + NEXT_PAGE; i++) {
-		if (i < Attachment_GetTotalModels()) {
 
-			Attachment_GetModelName(Attachment_GetModelID(i), name, sizeof(name));
+	inline const dialogAttachment(pid, dialogid, response, listitem, string:inputtext[]) {
+		#pragma unused pid, dialogid, listitem
 
-			format(string, sizeof(string), "%s%d\t%s\t%C$%d\n", 
-				string, 
-				i, 
-				name, 
-				(GetPlayerMoney(playerid) < Attachment_GetModelPrice(i)) ? (COLOR_RED) : (COLOR_GREEN),
-				Attachment_GetModelPrice(i)
-			);
-		}
-	}
-
-	if(!((slot + NEXT_PAGE) > Attachment_GetTotalModels())) {
-		strcat(string, ""NEXT_BUTTON"\n");
-	}
-	// do not add the go back page if we are on 
-	// the first page.
-	if((slot + NEXT_PAGE) -1 != (NEXT_PAGE - 1)) {
-		strcat(string, ""BACK_BUTTON"\n");
-	}
-
-	inline const dialogAttachment(pid, dialogid, response, listitem, string:inputtext[])
-	{
-    	#pragma unused pid, dialogid
-
-    	if (!response) {
-			return 1; 
+		if (!response) {
+			ShowAttachmentsList(playerid);
+			return;
 		}
 
-		// Next page
-		if(!strcmp(inputtext, NEXT_BUTTON, false)) {
-			ShowAttachmentsList(playerid, slot + NEXT_PAGE);
-			return 1;
-		}
-
-		// Go back
-		if(!strcmp(inputtext, BACK_BUTTON, false)) {
-			ShowAttachmentsList(playerid, slot - NEXT_PAGE);
-			return 1;
-		}
-
-		new 
-			idx = slot + listitem,
+		new
+			index = 0,
+			modelid = strval(inputtext),
 			freeslot = Iter_Free(gAttachmentIndex[playerid]);
+
+
+		for(new i = 0; i < Attachment_GetTotalModels(); i++) {
+			if(Attachment_GetModelID(i) == modelid) {
+				index = i;
+				break;
+			}
+		}
 
 		if (freeslot == ITER_NONE) {
 			SendErrorMsg(playerid, "You have used all of your attachment slots.");
-			return 1;
+			return;
 		}
 
-		if(GetPlayerMoney(playerid) < Attachment_GetModelPrice(idx)) {
-			SendErrorMsgF(playerid, "You don't have "C_GREEN"%m "C_WHITE"to buy "C_GREY"%s");
-			return 1;
+		Attachment_GetModelName(Attachment_GetModelID(index), name, sizeof(name));
+		if(GetPlayerMoney(playerid) < Attachment_GetModelPrice(index)) {
+			SendErrorMsgF(playerid, "You don't have "C_GREEN"%m "C_WHITE"to buy "C_GREY"%s", Attachment_GetModelPrice(index), name);
+			return;
 		}
 
-		SetPlayerAttachedObject(playerid, freeslot, Attachment_GetModelID(idx), Attachment_GetModelBoneID(idx));
+		SetPlayerAttachedObject(playerid, freeslot, Attachment_GetModelID(index), Attachment_GetModelBoneID(index));
 		EditAttachedObject(playerid, freeslot);
 
-		new attachmentName[MAX_ATTACHMENT_NAME];
-		Attachment_GetModelName(Attachment_GetModelID(idx), attachmentName, sizeof(attachmentName));
-
 		// Notify
-		SendServerMsgF(playerid, "You bought a "C_GREY"%s "C_WHITE"for "C_GREEN"%m", attachmentName, Attachment_GetModelPrice(idx));
-			
+		SendServerMsgF(playerid, "You bought a "C_GREY"%s "C_WHITE"for "C_GREEN"%m", name, Attachment_GetModelPrice(index));
+
 		// Assign
-		gAttachmentPrice[playerid] = Attachment_GetModelPrice(idx);
-    }
-	Dialog_ShowCallback(playerid, using inline dialogAttachment, DIALOG_STYLE_TABLIST_HEADERS, "Attachment Store", string, "Purchase", "Leave");
-	return 1;
-} 
+		gAttachmentPrice[playerid] = Attachment_GetModelPrice(index);
+	}
+
+	new
+		tempString[64],
+		bigString[2048];
+
+	for(new i = 0; i < Attachment_GetTotalModels(); i++) {
+		if(Attachment_GetType(i) != page) {
+			continue;
+		}
+
+		Attachment_GetModelName(Attachment_GetModelID(i), name, sizeof(name));
+		format(tempString, sizeof(tempString), "%i\t~w~%s~n~%s%m\n",
+			Attachment_GetModelID(i),
+			name,
+			(GetPlayerMoney(playerid) < Attachment_GetModelPrice(i)) ? ("~r~") : ("~g~"),
+			Attachment_GetModelPrice(i)
+		);
+		strcat(bigString, tempString, sizeof(bigString));
+	}
+	Dialog_ShowCallback(
+		playerid,
+		using inline dialogAttachment,
+		DIALOG_STYLE_PREVIEW_MODEL,
+		"Attachment Store",
+		bigString,
+		"Select",
+		"Back"
+	);
+}
+
+
+void:ShowAttachmentsList(playerid)
+{
+
+
+	inline const ChooseStyle(pid, dialogid, response, listitem, string:inputtext[]) {
+		#pragma unused pid, dialogid, inputtext
+
+
+        if (!response) {
+        	SendServerMsg(playerid, "Attachment Type Dialog, closed.");
+			return;
+        }
+
+		_AttachmentList(playerid, listitem);
+
+	}
+
+	Dialog_ShowCallback(
+		playerid,
+		using inline ChooseStyle,
+		DIALOG_STYLE_LIST,
+		"Please choose which style...",
+		"Hats \n\
+		Glasses \n\
+		Bandana \n\
+		Headphones \n\
+		Mask \n\
+		Bag \n\
+		Helmet \n\
+		Guitars",
+		"Select",
+		"Close"
+	);
+}

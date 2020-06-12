@@ -46,14 +46,14 @@ hook OnGameModeInit()
 }
 
 stock Player_GetClosestWanted(playerid) {
-    new  
-        closestID = -1, 
+    new
+        closestID = -1,
         Float: x,
         Float: y,
         Float: z;
 
     GetPlayerPos(playerid, x, y, z);
-    foreach(new i : Player) 
+    foreach(new i : Player)
     {
 
         if(playerid == i) {
@@ -63,12 +63,12 @@ stock Player_GetClosestWanted(playerid) {
         if(IsPlayerInRangeOfPoint(i, 4.0, x, y, z) && Player_GetWantedLevel(i) >= 3) {
             closestID = i;
         }
-    } 
+    }
     return closestID;
 }
 
 stock Player_SendToJail(playerid, seconds, bool:save = false) {
-    if(!UI_TimeLeft(playerid, seconds)) { 
+    if(!UI_TimeLeft(playerid, seconds)) {
         return 0;
     }
 
@@ -102,7 +102,7 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
     }
 
     if(save) {
-        new 
+        new
             string[256];
         static const query[] = "\
             INSERT INTO \
@@ -129,7 +129,7 @@ stock Player_UnJail(playerid) {
     return 1;
 }
 
-hook OnPlayerLogin(playerid) 
+hook OnPlayerLogin(playerid)
 {
     inline OnPlayerJailedTimeLoad()
     {
@@ -137,7 +137,7 @@ hook OnPlayerLogin(playerid)
             jailTime,
             bailBalance,
             playerJailed;
-            
+
         MySQL_BindResultInt(stmt_retrieveJail, 0, jailTime);
         MySQL_BindResultInt(stmt_retrieveJail, 1, bailBalance);
         MySQL_BindResultInt(stmt_retrieveJail, 2, playerJailed);

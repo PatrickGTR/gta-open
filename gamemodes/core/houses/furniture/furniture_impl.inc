@@ -24,7 +24,6 @@ enum E_EDITING_STATE
 }
 
 static
-    PlayerCurrentChoice[MAX_PLAYERS],
 	E_EDITING_STATE:g_playerEditingType[MAX_PLAYERS] = {INVALID_EDITING_TYPE, ...},
 	g_tmpPlayerObjID[MAX_PLAYERS] = {INVALID_OBJECT_ID, ...},
 BitArray: PlayerFurnitureMode<MAX_PLAYERS>;
@@ -53,45 +52,40 @@ static _FurnitureTypeDialog(playerid, page) {
 		tmp_string[128],
 		big_string[2048];
 
-	PlayerCurrentChoice[playerid] = page;
 
 	for(new i = 0; i < Furniture_GetArraySize(); i++) {
-		if(Furniture_GetType(i)  == page) {
-			format(tmp_string, sizeof(tmp_string), "%i(0.0, 0.0, 0.0, 1.5, 0, 6)\t~w~%s:%s%m\n",
-				Furniture_GetObjectID(i),
-				Furniture_GetName(i),
-				((GetPlayerMoney(playerid) < Furniture_GetPrice(i)) ? ("~r~") : ("~g~")),
-				Furniture_GetPrice(i)
-			);
-			strcat(big_string, tmp_string);
+		if(Furniture_GetType(i)  != page) {
+			continue;
 		}
+
+		format(tmp_string, sizeof(tmp_string), "%i(0.0, 0.0, 0.0, 1.5, 0, 6)\t~w~%s:%s%m\n",
+			Furniture_GetObjectID(i),
+			Furniture_GetName(i),
+			((GetPlayerMoney(playerid) < Furniture_GetPrice(i)) ? ("~r~") : ("~g~")),
+			Furniture_GetPrice(i)
+		);
+		strcat(big_string, tmp_string);
+
 	}
 
 	inline const _response(pid, dialogid, response, listitem, string:inputtext[]) {
-		#pragma unused pid, inputtext, dialogid
+		#pragma unused pid, inputtext, dialogid, listitem
 		if(!response) {
 			return Furniture_ShowDialog(playerid);
         }
 
 		new
+			objectid = strval(inputtext),
 			index = 0;
 
 		for(new i = 0; i < Furniture_GetArraySize(); i++) {
-			if (Furniture_GetType(i) != PlayerCurrentChoice[playerid]) {
-				continue;
+			if (Furniture_GetObjectID(i) == objectid) {
+				index = i;
+				break;
 			}
-
-			if (Furniture_GetListID(i) != listitem) {
-				continue;
-			}
-
-			index = i;
-			break;
 		}
 
 		Furniture_Buy(playerid, index);
-		PlayerCurrentChoice[playerid] = -1;
-
 	}
 
 	Dialog_ShowCallback(
