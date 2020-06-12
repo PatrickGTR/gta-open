@@ -136,6 +136,10 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
             return 1;
         }
 
+        if(IsPlayerInAnyVehicle(playerid)) {
+            return 1;
+        }
+
         if (checkpointid == entranceCheckpoint[entid]) {
 
             if(entranceFreezePlayer[entid]) {

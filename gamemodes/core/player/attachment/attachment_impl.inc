@@ -92,8 +92,6 @@ static void:_AttachmentList(playerid, page) {
 
 void:ShowAttachmentsList(playerid)
 {
-
-
 	inline const ChooseStyle(pid, dialogid, response, listitem, string:inputtext[]) {
 		#pragma unused pid, dialogid, inputtext
 
