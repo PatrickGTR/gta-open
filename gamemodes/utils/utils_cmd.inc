@@ -30,18 +30,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
         cmd[i] |= 0x20;
     }
 
-    if(params[0] == EOS) {
-        strcat((params[0] = EOS, params), "\1");
-    }
-
     #if defined OnPlayerCommandReceived
         if (!OnPlayerCommandReceived(playerid, cmd)) return 1;
     #endif
 
     #if defined OnPlayerCommandPerformed
-        return OnPlayerCommandPerformed(playerid, cmd, CallLocalFunction(prefix, "is", playerid, params));
+        return OnPlayerCommandPerformed(playerid, cmd, CallLocalFunction(prefix, "is", playerid, (params[0] != "\0") ? (params) :("\1")));
     #else
-        return CallLocalFunction(prefix, "is", playerid, params);
+        return CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) :( "\1"));
     #endif
 }
 
