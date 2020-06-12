@@ -121,6 +121,7 @@ timer TowerFailedToGetBC[25000](playerid)
     BurglaryInfo[playerid] = 0;
     robbingdone[playerid] = 0;
     UI_HideTimeLeft(playerid);
+    defer TowerCooldown();
     return 1;
 }
 

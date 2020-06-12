@@ -10,6 +10,7 @@ static enum {
 static 
     bool:IsPlayerTrucking[MAX_PLAYERS], 
     TruckingCooldown[MAX_PLAYERS],
+    PlayerCanTruck[MAX_PLAYERS],
     PlayerTruckingState[MAX_PLAYERS];
 
 enum E_DELIVERY_DATA
@@ -30,7 +31,7 @@ static
 };
 
 CMD:trucker(playerid) {
-    if(!IsPlayerInVehicle(playerid, 414)) {
+    if(PlayerCanTruck[playerid] != 1) {
         SendErrorMsg(playerid, "You're not in a truck!");
         return 1;
     } 
@@ -108,12 +109,16 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
             Trucker_End(playerid);
         }
     }
+    if(PlayerCanTruck[playerid] == 1) {
+        PlayerCanTruck[playerid] = 0;
+    }
     return 1;
 }
 
 hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
     if(GetVehicleModel(vehicleid) == 414) {
         SendServerMsg(playerid, "Use /trucker to start a trucker mission");
+        PlayerCanTruck[playerid] = 1;
     }
     return 1;
 }
