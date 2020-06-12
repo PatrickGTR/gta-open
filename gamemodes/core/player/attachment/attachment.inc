@@ -202,7 +202,7 @@ hook OnPlayerEditAttachedObj(playerid, response, index, modelid, boneid, Float:f
 			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEY],
 			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEZ]);
 
-	
+
         MySQL_BindInt(stmt_InsertAttachments, 0, Player_GetAccountID(playerid));
         MySQL_BindInt(stmt_InsertAttachments, 1, index);
         MySQL_BindFloat(stmt_InsertAttachments, 2, gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID]);
@@ -276,7 +276,7 @@ hook OnPlayerLogin(playerid) {
     return 1;
 }
 
-static const 
+static const
     ERR_INVALID_SLOT[] = "Invalid slot id, try again.";
 
 CMD:attachment(playerid, params[]) {
@@ -290,9 +290,9 @@ CMD:attachment(playerid, params[]) {
 		attachmentName[MAX_ATTACHMENT_NAME];
 
 	if (!strcmp(params, "buy", true, 4)) {
-		ShowAttachmentsList(playerid, 0);
+		ShowAttachmentsList(playerid);
 	}
-    
+
 	if (!strcmp(params, "delete", true, 6)) {
 		if (sscanf(params, "{s[7]}i", index)) {
             SendSyntaxMsg(playerid, "/attachments delete <slot>");

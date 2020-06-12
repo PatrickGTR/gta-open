@@ -68,15 +68,13 @@ ProcessTakeDamageUI(playerid, issuerid, Float:damage) {
 		format(string, sizeof(string), "%s~b~Collision ~r~%0.2f", string, damage);
 	}
 	else {
-
-		dmg_TotalRecieved[playerid][issuerid] += damage;
-
 		if(dmg_TotalRecieved[playerid][issuerid] != dmg_TotalRecieved[playerid][issuerid]) {
 			format(string, sizeof(string), "%s%p ~y~(%W) ~r~-%0.2f~n~", string, issuerid, GetPlayerWeapon(issuerid), dmg_TotalRecieved[playerid][issuerid]);
 		}
 		else {
 			format(string, sizeof(string), "%p ~y~(%W) ~r~-%0.2f~n~", issuerid, GetPlayerWeapon(issuerid), dmg_TotalRecieved[playerid][issuerid]);
 		}
+		dmg_TotalRecieved[playerid][issuerid] += damage;
 	}
 	PlayerTextDrawShow(playerid, dmg_Reciever[playerid]);
 	PlayerTextDrawSetString(playerid, dmg_Reciever[playerid], string);
