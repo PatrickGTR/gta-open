@@ -198,6 +198,14 @@ hook OnPlayerEnterRaceCP(playerid)
     return 1;
 }
 
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+    if(robbing[playerid] == 1){
+        Player_StopRobbery(playerid);
+    }
+    return 1;
+}
+
 CMD:robbery(playerid) {
     if(IsPlayerInRangeOfPoint(playerid, 7.0, 2306.5659, -5.1260, 26.7422)) {
         if(bankrecent == 1) {
@@ -261,7 +269,9 @@ stock Player_StopRobbery(playerid) {
     robbing[playerid] = 0;
     BurglaryInfo[playerid] = 0;
     robbingdone[playerid] = 0;
+    DisablePlayerRaceCheckpoint(playerid);
     stop burglarytimer[playerid];
+    return 1;
 }
 
 timer SetHideoutTimer[20000](playerid)
