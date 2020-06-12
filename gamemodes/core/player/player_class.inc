@@ -68,9 +68,7 @@ hook OnPlayerLogin(playerid) {
 		MySQL_BindResultInt(stmt_loadPlayerSkin, 0, playerSkin);
 
 		if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
-
 			PlayerSkin[playerid] = playerSkin;
-			printf("skin loaded %i", PlayerSkin[playerid]);
 		}
 
 	}

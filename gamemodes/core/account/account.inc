@@ -36,7 +36,14 @@ hook OnPlayerLogin(playerid) {
     return 1;
 }
 
+timer MoveCamera[500](playerid) {
+    InterpolateCameraPos(playerid, 3.1435,-1955.6364,88.1194, 2106.8354,-1270.0221,100.7057, 1000 * 25, CAMERA_MOVE);
+    InterpolateCameraLookAt(playerid, 2325.7061,-1063.7642,55.4202, 2325.7061,-1063.7642,45.4202, 1000 * 25, CAMERA_MOVE);
+}
+
 hook OnPlayerPassedBanCheck(playerid) {
+
+    defer MoveCamera(playerid);
     inline const OnDataLoad() {
         new
             playerUID,

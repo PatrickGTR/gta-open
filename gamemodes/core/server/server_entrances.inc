@@ -151,8 +151,6 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
             SetPlayerPos(playerid, exitX[entid], exitY[entid], exitZ[entid]);
             SetPlayerFacingAngle(playerid, exitAng[entid]);
 
-            SetCameraBehindPlayer(playerid);
-
             strcpy(getShopName[playerid], entranceStoreName[entid], MAX_STORE_NAME);
         }
         if (checkpointid == exitCheckpoint[entid]) {
@@ -165,9 +163,6 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
 
             SetPlayerPos(playerid, entranceX[entid], entranceY[entid], entranceZ[entid]);
             SetPlayerFacingAngle(playerid, entranceAng[entid]);
-
-
-            SetCameraBehindPlayer(playerid);
 
             getShopName[playerid][0] = EOS;
         }

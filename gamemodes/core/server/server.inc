@@ -70,8 +70,6 @@ hook OnGameModeInit() {
 		vwID,
 		vehicleid;
 
-	new const Float:angle = 90.0;
-
     for(new i = 0; i < sizeof(storeData); i++) {
 
 		enX = storeData[i][E_ENTRANCE_POS][0];
@@ -83,7 +81,7 @@ hook OnGameModeInit() {
 		intID = storeData[i][E_INTERIOR_ID];
 		vwID = i; // unique vw id.
 
-		entID = Entrance_Create(enX, enY, enZ, angle, exX, exY, exZ, angle, vwID, intID);
+		entID = Entrance_Create(enX, enY, enZ, 0.0, exX, exY, exZ, 0.0, vwID, intID);
 
         Entrance_SetIcon(entID, storeData[i][E_MAP_ICON]);
         Entrance_SetName(entID, storeData[i][E_STORE_NAME]);
