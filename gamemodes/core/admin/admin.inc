@@ -21,6 +21,8 @@
 hook OnGameModeInit() {
 
     Admin_AddCommandToList(1, "/acmds - list of admin commands");
+    Admin_AddCommandToList(1, "/get - get a player");
+    Admin_AddCommandToList(1, "/gotop - go to a player");
 
     Admin_AddCommandToList(2, "/unjail - unjail a player");
 

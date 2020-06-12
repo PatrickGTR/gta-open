@@ -34,3 +34,31 @@ ACMD:[1]acmds(playerid, params[])
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Admin Commands List", tmp_string, "Close", "");
 	return 1;
 }
+
+ACMD:[1]get(playerid, params[])
+{
+	new targetid;
+	new Float:pos[4];
+	if(sscanf(params, "u", targetid)) {
+		return SendSyntaxMsg(playerid, "/get (playerid)");
+	}
+	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
+	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
+	GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+	SetPlayerPos(targetid, pos[0], pos[1], pos[2]);
+	return 1;
+}
+
+ACMD:[1]gotop(playerid, params[])
+{
+	new target;
+	new Float:pos[4];
+	if(sscanf(params, "u", target)) {
+		return SendSyntaxMsg(playerid, "/gotop (playerid)");
+	}
+	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(target));
+	SetPlayerInterior(playerid, GetPlayerInterior(target));
+	GetPlayerPos(target, pos[0], pos[1], pos[2]);
+	SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+	return 1;
+}
