@@ -16,8 +16,8 @@ enum
 // accessed globally
 new adminCommands[5][2048];
 
-static 
-    PlayerAdminLevel[MAX_PLAYERS], 
+static
+    PlayerAdminLevel[MAX_PLAYERS],
     BitArray: adminOnDuty<MAX_PLAYERS>,
     Statement: stmt_retrieveAdmin
 ;
@@ -25,8 +25,6 @@ static
 
 
 hook OnGameModeInit() {
-    
-
     static const query_retrieveAdmin[] = "\
         SELECT \
             admin_level \
@@ -37,19 +35,25 @@ hook OnGameModeInit() {
         "
     ;
     stmt_retrieveAdmin = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveAdmin);
+    return 1;
+}
+
+hook OnPlayerConnect(playerid) {
+    PlayerAdminLevel[playerid] = 0 ;
+    return 1;
 }
 
 hook OnPlayerLogin(playerid)
 {
     inline OnPlayerAdminLoad() {
-        new 
+        new
             adminLevel;
 
         MySQL_BindResultInt(stmt_retrieveAdmin, 0, adminLevel);
 
         if(MySQL_Statement_FetchRow(stmt_retrieveAdmin)) {
             Admin_SetPlayerLevel(playerid, adminLevel);
-        }   
+        }
 
     }
     MySQL_BindInt(stmt_retrieveAdmin, 0, Player_GetAccountID(playerid));
