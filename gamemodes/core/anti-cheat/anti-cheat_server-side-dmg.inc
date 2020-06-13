@@ -347,7 +347,7 @@ hook OnPlayerTakeDamage( playerid, issuerid, Float: amount, weaponid, bodypart )
 
 				if( ( p_PlayerHealth[ playerid ] [ E_POINTS ] -= tmp_amount ) < 0.0 ) {
 					AC_SetPlayerSpawned( playerid, false );
-					CallRemoteFunction( "OnPlayerDeathEx", "ddfd", playerid, issuerid, weaponid, amount, bodypart );
+					CallRemoteFunction("OnPlayerDeathEx", "ddfd", playerid, issuerid, weaponid, amount, bodypart );
 				}
 
 				SetPlayerArmour( playerid, p_PlayerArmour[ playerid ] [ E_POINTS ] );

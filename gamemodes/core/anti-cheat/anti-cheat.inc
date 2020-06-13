@@ -54,8 +54,8 @@ forward bool: AC_IsPlayerSpawned( playerid );
 /* ** Callback Hooks ** */
 hook OnPlayerUpdate( playerid )
 {
-	if( ! AC_IsPlayerSpawned( playerid ) )
-		return 0; // Not Spawned, No SYNC!
+	if( ! AC_IsPlayerSpawned( playerid ) && Class_SelectionStatus(playerid) )
+		return ~0; // Not Spawned, No SYNC!
 
 	if( !IsPlayerNPC( playerid ) )
 	{
@@ -102,12 +102,12 @@ hook OnPlayerSpawn( playerid ) {
 	return 1;
 }
 
-hook OnPlayerRequestClass( playerid, classid ) {
-	if ( 0 <= playerid < MAX_PLAYERS ) {
-		p_acSpawned{ playerid } = false;
-	}
-	return 1;
-}
+// hook OnPlayerRequestClass( playerid, classid ) {
+// 	if ( 0 <= playerid < MAX_PLAYERS ) {
+// 		p_acSpawned{ playerid } = false;
+// 	}
+// 	return 1;
+// }
 
 /* ** Functions ** */
 stock AC_DetectedCheatToString( iDetection ) {
