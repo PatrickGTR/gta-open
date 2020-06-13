@@ -48,6 +48,12 @@ CMD:arrest(playerid, params[])
     if(!IsPlayerConnected(targetid)) {
         return SendErrorMsg(playerid, "Player is not connected!");
     }
+    if(targetid == playerid) {
+        return SendErrorMsg(playerid, "You can't arrest yourself!");
+    }
+    if(Player_GetWantedLevel(targetid) <= 3) {
+        return SendErrorMsg(playerid, "Player is not wanted!");
+    }
     if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
         SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", targetid, targetid);
         SendServerMsgF(targetid, "Officer %p (%d) has asked you to pull over!", playerid, playerid);

@@ -49,8 +49,14 @@ CMD:cuff(playerid, params[])
     if(!IsPlayerConnected(targetid)) {
         return SendErrorMsg(playerid, "Player is not connected!");
     }
+    if(targetid == playerid) {
+        return SendErrorMsg(playerid, "You can't cuff yourself");
+    }
+    if(Player_GetWantedLevel(targetid) <= 3) {
+        return SendErrorMsg(playerid, "Player is not wanted!");
+    }
     if(!IsPlayerInRangeOfPoint(targetid, 5.0, x, y, z)) {
-        return SendErrorMsg(playerid, "There's no warrant near you");
+        return SendErrorMsgF(playerid, "%p (%d) is not close to you", targetid, targetid);
     }
     if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
         SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", targetid, targetid);
