@@ -2,7 +2,7 @@
 
 #include <admin_ban-cmd>
 
-static 
+static
     Statement: stmt_checkBan;
 
 hook OnMySQLConnected() {
@@ -27,7 +27,6 @@ hook OnPlayerConnect(playerid) {
 
 // Create a new entry on the database.
 // allows you to ban player from day, month upto a year.
-// returns whether the query was sent successfully.
 Ban_AddUser(playerid, byid = INVALID_PLAYER_ID, reason[], interval_type, banduration) {
     new
         playerIP[16 + 1],
@@ -65,8 +64,7 @@ Ban_AddUser(playerid, byid = INVALID_PLAYER_ID, reason[], interval_type, bandura
 }
 
 // removes the user entry from the table by username.
-// returns whether the query was sent successfully.
-Ban_RemoveUser(username[], playerid = INVALID_PLAYER_ID) {
+void:Ban_RemoveUser(username[], playerid = INVALID_PLAYER_ID) {
     new
         string[45 + MAX_PLAYER_NAME],
         name[MAX_PLAYER_NAME];
@@ -78,10 +76,10 @@ Ban_RemoveUser(username[], playerid = INVALID_PLAYER_ID) {
             if (playerid != INVALID_PLAYER_ID) {
                 SendServerMsgF(playerid, "The account "C_GREY"(%s) "C_WHITE"you are trying to unban is not in the database.", name);
                 dbg("admin", "admin attempted to unban", _p("admin", playerid), _s("username", name));
-                return 1;
+                return;
             }
         }
-    
+
         mysql_format(MySQL_GetHandle(), string, sizeof(string), "DELETE FROM bans WHERE username = '%e'", name);
         mysql_tquery(MySQL_GetHandle(), string, "", "");
         if (playerid != INVALID_PLAYER_ID) {
@@ -98,10 +96,10 @@ Ban_RemoveUser(username[], playerid = INVALID_PLAYER_ID) {
         WHERE \
             username = '%e'"
     ;
-    return MySQL_TQueryInline(MySQL_GetHandle(), using inline OnPlayerRemoveBan, query, username, playerid);
+    MySQL_TQueryInline(MySQL_GetHandle(), using inline OnPlayerRemoveBan, query, username, playerid);
 }
 
-Ban_CheckUser(playerid) {
+void:Ban_CheckUser(playerid) {
     new
         playerIP[20],
         playerGCPI[60],
