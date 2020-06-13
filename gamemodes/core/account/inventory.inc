@@ -20,12 +20,17 @@ hook OnGameModeInit()
         "
     ;
     stmt_retrieveIfix = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveIfix);
+    return 1;
 }
 
-hook OnPlayerLogin(playerid)
-{
-    inline OnPlayerInvLoad()
-    {
+hook OnPlayerConnect(playerid) {
+    PlayerInstaFix[playerid] =
+    PlayerCrack[playerid] = 0;
+    return 1;
+}
+
+hook OnPlayerLogin(playerid) {
+    inline OnPlayerInvLoad() {
         new
             instafix;
         MySQL_BindResultInt(stmt_retrieveIfix, 0, instafix);
@@ -38,15 +43,14 @@ hook OnPlayerLogin(playerid)
     MySQL_ExecuteThreaded_Inline(stmt_retrieveIfix, using inline OnPlayerInvLoad);
 }
 
-stock Player_SetInstaFix(playerid, stocks)
-{
+stock Player_SetInstaFix(playerid, stocks) {
     PlayerInstaFix[playerid] = stocks;
 
     new string[256];
 
     static const query[] = "\
     INSERT INTO \
-        inv(u_id, instant_fix) \
+        inventory(u_id, instant_fix) \
     VALUES \
         (%i, %i) \
     ON DUPLICATE KEY UPDATE \

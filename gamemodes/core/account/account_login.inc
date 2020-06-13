@@ -17,6 +17,7 @@ static
 hook OnPlayerConnect(playerid) {
     gPlayerHash[playerid][0] = EOS;
     gPlayerLoginStatus[playerid] = false;
+    return 1;
 }
 
 // Global
@@ -122,13 +123,6 @@ hook OnPlayerSpawn(playerid) {
         MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
         Class_SelectionState(playerid, false);
     }
-    return 1;
-}
-
-hook OnPlayerDisconnect(playerid, reason)
-{
-    // save money
-    // save skin (if changed)
     return 1;
 }
 

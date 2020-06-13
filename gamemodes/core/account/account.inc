@@ -24,15 +24,34 @@ static
     Player_UID[MAX_PLAYERS],
     Player_Kills[MAX_PLAYERS],
     Player_Deaths[MAX_PLAYERS],
-    Statement: stmt_checkPlayer;
+    Statement: stmt_checkPlayer,
+    Statement: stmt_savePlayerMoney;
 
 hook OnMySQLConnected() {
     stmt_checkPlayer = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT u_id, password FROM players WHERE username=?");
+    stmt_savePlayerMoney = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET money=? WHERE u_id=?");
+    return 1;
+}
+
+hook OnPlayerConnect(playerid) {
+    Player_UID[playerid] =
+    Player_Kills[playerid] =
+    Player_Deaths[playerid] = 0;
     return 1;
 }
 
 hook OnPlayerLogin(playerid) {
     Player_SetLoginStatus(playerid, true);
+    return 1;
+}
+
+public OnPlayerMoneyChange(playerid, previous, current) {
+
+    printf("prev %i, current %i", previous, current);
+
+    MySQL_BindInt(stmt_savePlayerMoney, 0, current);
+    MySQL_BindInt(stmt_savePlayerMoney, 1, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded(stmt_savePlayerMoney);
     return 1;
 }
 

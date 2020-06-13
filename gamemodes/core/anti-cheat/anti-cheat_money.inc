@@ -204,27 +204,37 @@ static
  	PlayerCash[MAX_PLAYERS],
     PlayerOldCash[MAX_PLAYERS];
 
+hook OnPlayerConnect(playerid) {
+    PlayerCash[playerid] =
+    PlayerOldCash[playerid] = 0;
+    return 1;
+}
+
 hook OnPlayerSecondUpdate(playerid) {
 
     // if server side money does not match client side money AND client side money is more than server side money.
-    if ((PlayerCash[ playerid ] != GetPlayerMoney(playerid)) && (GetPlayerMoney(playerid) > PlayerCash[playerid])) {
+    if ((GetPlayerMoney(playerid) != PlayerCash[playerid]) && (GetPlayerMoney(playerid) > PlayerCash[playerid])) {
         PlayerOldCash[playerid] = PlayerCash[playerid];
         ResetPlayerMoney(playerid);
 
-        // We're nice enough to return player's old money instead of resetting it back to 0.
+        // we're nice enough to return player's old money instead of resetting it back to 0.
         GivePlayerMoney(playerid, PlayerOldCash[playerid]);
     }
     return 1;
 }
 
-hook native GivePlayerMoney(playerid, money) {
-    PlayerCash[ playerid ] += money;
-    return continue(playerid, PlayerCash[playerid]);
+hook native GivePlayerMoney(playerid, money)
+{
+    PlayerCash[playerid] += money;
+    if(GetPlayerMoney(playerid) != PlayerCash[playerid]) {
+        CallLocalFunction("OnPlayerMoneyChange", "iii", playerid, GetPlayerMoney(playerid), PlayerCash[playerid]);
+    }
+    return continue(playerid, money);
 }
 
 hook native ResetPlayerMoney(playerid)
 {
-    PlayerCash[ playerid ] = 0;
+    PlayerCash[playerid] = 0;
     return continue(playerid);
 }
 
@@ -244,3 +254,5 @@ hook OnVehicleRespray(playerid, vehicleid, color1, color2)
     GivePlayerMoney(playerid, -100); // costs 100 to respray
     return 1;
 }
+
+forward OnPlayerMoneyChange(playerid, previous, current);
