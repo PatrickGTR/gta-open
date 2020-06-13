@@ -30,15 +30,13 @@ enum //5 * 8 = 40 seconds to finish.
 
 hook OnGameModeInit() {
     CreateDynamic3DTextLabel("Press "C_YELLOW"N "C_WHITE"\nTo begin creating crack cocaine", COLOR_WHITE, DRUG_CREATION_POSX, DRUG_CREATION_POSY, DRUG_CREATION_POSZ, TEXTLABEL_STREAMDISTANCE, .testlos = 1);
-
+	return 1;
 }
 
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-{
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	if ((newkeys & KEY_NO) == KEY_NO
 		&& GetPlayerState(playerid) == PLAYER_STATE_ONFOOT
-		&& IsPlayerInRangeOfPoint(playerid, 2, DRUG_CREATION_POSX, DRUG_CREATION_POSY, DRUG_CREATION_POSZ))
-	{
+		&& IsPlayerInRangeOfPoint(playerid, 2, DRUG_CREATION_POSX, DRUG_CREATION_POSY, DRUG_CREATION_POSZ)) {
 
 		if(Bit_Get(HasBeganCocaineProduction, playerid))
 			return SendErrorMsg(playerid, "You already have started producing crack cocaine.");
@@ -48,11 +46,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-/* CRACK GUI */
-hook OnPlayerConnect(playerid)
-{
-
-	// Initialize Textdraw //
+hook OnPlayerConnect(playerid) {
     TD_CrackStatus = CreatePlayerProgressBar(playerid, 272.000000, 363.000000, 107.500000, 9.199998, -1347440641, 100.0000, 0);
 	TD_CrackTitle = CreatePlayerTextDraw(playerid, 270.000000, 350.000000, "Pouring gasoline");
 	PlayerTextDrawBackgroundColor(playerid, TD_CrackTitle, 255);
@@ -66,10 +60,16 @@ hook OnPlayerConnect(playerid)
    	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
+hook OnPlayerDeath(playerid, killerid, reason) {
 
-/* PRODUCING CRACK IMPLEMENTATIONS */
-Crack_Produce(playerid, seq = SEQ_ADDCOCALEAVES)
-{
+	if(P_CRACKSequence[playerid] >= 0) {
+		Crack_ResetData(playerid);
+		stop ProduceCrackUpdate(playerid);
+	}
+	return 1;
+}
+
+Crack_Produce(playerid, seq = SEQ_ADDCOCALEAVES) {
 	if(gettime() < plyJustCreatedCocaine[playerid])
 		return SendErrorMsgF(playerid, "You've just produced crack cocaine recently, please wait... "C_GREY"%i "C_WHITE"seconds", plyJustCreatedCocaine[playerid] - gettime());
 
@@ -80,10 +80,8 @@ Crack_Produce(playerid, seq = SEQ_ADDCOCALEAVES)
 		return SendErrorMsg(playerid, "You are unable to produce more crack cocaine, you've reached the maximum amount you could hold.");
 
 	P_CRACKSequence[playerid] = seq;
-	switch(seq)
-	{
-		case SEQ_ADDCOCALEAVES:
-		{
+	switch(seq) {
+		case SEQ_ADDCOCALEAVES: {
 			PlayerTextDrawSetString(playerid, TD_CrackTitle, "Pouring Cocoa...");
 			PlayerTextDrawShow(playerid, TD_CrackTitle);
 
@@ -100,56 +98,49 @@ Crack_Produce(playerid, seq = SEQ_ADDCOCALEAVES)
 			SetPlayerPos(playerid, DRUG_CREATION_POSX, DRUG_CREATION_POSY, DRUG_CREATION_POSZ);
 			ApplyAnimation(playerid, "BD_FIRE", "wash_up", 4.1, 1, 1, 1, 1, 0, 1);
 		}
-		case SEQ_POURCEMENT:
-		{
+		case SEQ_POURCEMENT: {
 			PlayerTextDrawSetString(playerid, TD_CrackTitle, "Pouring Cement...");
 			PlayerTextDrawShow(playerid, TD_CrackTitle);
 
 			ShowPlayerProgressBar(playerid, TD_CrackStatus);
 			P_CRACKSequence[playerid]= SEQ_POURCEMENT;
 		}
-		case SEQ_POURGASOLINE:
-		{
+		case SEQ_POURGASOLINE: {
 			PlayerTextDrawSetString(playerid, TD_CrackTitle, "Pouring Gasoline...");
 			PlayerTextDrawShow(playerid, TD_CrackTitle);
 
 			ShowPlayerProgressBar(playerid, TD_CrackStatus);
 			P_CRACKSequence[playerid]= SEQ_POURGASOLINE;
 		}
-		case SEQ_MIXINGREDIENTS:
-		{
+		case SEQ_MIXINGREDIENTS: {
 			PlayerTextDrawSetString(playerid, TD_CrackTitle, "Mixing Ingridients..");
 			PlayerTextDrawShow(playerid, TD_CrackTitle);
 
 			ShowPlayerProgressBar(playerid, TD_CrackStatus);
 			P_CRACKSequence[playerid]= SEQ_MIXINGREDIENTS;
 		}
-		case SEQ_FILTERGASOLINE:
-		{
+		case SEQ_FILTERGASOLINE: {
 			PlayerTextDrawSetString(playerid, TD_CrackTitle, "Filtering Gasoline");
 			PlayerTextDrawShow(playerid, TD_CrackTitle);
 
 			ShowPlayerProgressBar(playerid, TD_CrackStatus);
 			P_CRACKSequence[playerid]= SEQ_FILTERGASOLINE;
 		}
-		case SEQ_EXTRACOCOALEAVES:
-		{
+		case SEQ_EXTRACOCOALEAVES: {
 			PlayerTextDrawSetString(playerid, TD_CrackTitle, "Extracting Cocoa");
 			PlayerTextDrawShow(playerid, TD_CrackTitle);
 
 			ShowPlayerProgressBar(playerid, TD_CrackStatus);
 			P_CRACKSequence[playerid]= SEQ_EXTRACOCOALEAVES;
 		}
-		case SEQ_MARINATE:
-		{
+		case SEQ_MARINATE: {
 			PlayerTextDrawSetString(playerid, TD_CrackTitle, "Marinating Cocaine");
 			PlayerTextDrawShow(playerid, TD_CrackTitle);
 
 			ShowPlayerProgressBar(playerid, TD_CrackStatus);
 			P_CRACKSequence[playerid]= SEQ_MARINATE;
 		}
-		case SEQ_FINISHED:
-		{
+		case SEQ_FINISHED: {
 			SendClientMessage(playerid, COLOR_TEAL, "** CRACK COCAINE ** "C_WHITE"You have have produced 50 grams of crack cocaine.");
 			Player_GiveCrack(playerid, 5);
 
@@ -163,8 +154,7 @@ Crack_Produce(playerid, seq = SEQ_ADDCOCALEAVES)
 	return 1;
 }
 
-Crack_ResetData(playerid)
-{
+Crack_ResetData(playerid) {
 	plyIncrement[playerid] = 0;
 	PlayerTextDrawHide(playerid, TD_CrackTitle);
 	HidePlayerProgressBar(playerid, TD_CrackStatus);
@@ -172,10 +162,8 @@ Crack_ResetData(playerid)
 	stop crackProducingTimer[playerid];
 }
 
-timer ProduceCrackUpdate[1000](playerid)
-{
-	if (plyIncrement[playerid] >= 5)
-	{
+timer ProduceCrackUpdate[1000](playerid) {
+	if (plyIncrement[playerid] >= 5) {
 		plyIncrement[playerid] = 0;
 		PlayerTextDrawHide(playerid, TD_CrackTitle);
 		HidePlayerProgressBar(playerid, TD_CrackStatus);
