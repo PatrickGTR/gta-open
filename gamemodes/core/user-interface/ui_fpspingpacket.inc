@@ -1,6 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
-static PlayerText:FPSPingPacket[MAX_PLAYERS];
+static
+    PlayerText:FPSPingPacket[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid) {
     FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid,502.0, 1.4, "_");
@@ -11,20 +12,23 @@ hook OnPlayerConnect(playerid) {
 	PlayerTextDrawSetOutline(playerid, FPSPingPacket[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, FPSPingPacket[playerid], 1);
 	PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], 1);
+    return 1;
 }
 
 hook OnPlayerSpawn(playerid) {
     PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
+    return 1;
 }
 
 hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
     PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
+    return 1;
 }
 
-ptask OnFPSPingPacket[1000](playerid) {
-
-    new string[64];
-
+hook OnPlayerSecondUpdate(playerid) {
+    new
+        string[64];
     format(string, sizeof(string), "~w~FPS ~r~%d ~w~Ping ~r~%d ~w~PacketLoss ~r~%.2f%%", GetPlayerFPS(playerid), GetPlayerPing(playerid), NetStats_PacketLossPercent(playerid));
     PlayerTextDrawSetString(playerid, FPSPingPacket[playerid], string);
+    return 1;
 }

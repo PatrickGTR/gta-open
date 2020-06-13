@@ -1,4 +1,5 @@
 #include <YSI_Coding\y_hooks>
+#include <YSI_Data\y_bit>
 
 static
 	// Background Box

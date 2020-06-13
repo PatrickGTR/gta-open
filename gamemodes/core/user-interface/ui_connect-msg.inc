@@ -3,8 +3,7 @@
 
 static
     Text: LeaveJoinTD,
-    joinString[5][MAX_PLAYER_NAME + 9 /* Colours */ +  6 /* brackets + ID */ ]
-;
+    joinString[5][MAX_PLAYER_NAME + 9 /* Colours */ +  6 /* brackets + ID */ ];
 
 hook OnGameModeInit() {
     LeaveJoinTD = TextDrawCreate    (536.000000, 210.000000, "JOIN: PDS2K12");
@@ -16,11 +15,13 @@ hook OnGameModeInit() {
     TextDrawSetProportional         (LeaveJoinTD, 1);
     TextDrawFont                    (LeaveJoinTD, 1);
     TextDrawSetSelectable           (LeaveJoinTD, 0);
+    return 1;
 }
 
 hook OnGameModeExit()
 {
     TextDrawDestroy(LeaveJoinTD);
+    return 1;
 }
 
 hook OnPlayerConnect(playerid) {
@@ -41,6 +42,7 @@ hook OnPlayerConnect(playerid) {
     strcat(string, joinString[0], sizeof(string));
 
     TextDrawSetString(LeaveJoinTD, string);
+    return 1;
 }
 
 hook OnPlayerDisconnect(playerid, reason) {
@@ -70,13 +72,16 @@ hook OnPlayerDisconnect(playerid, reason) {
     strcat(string, joinString[0], sizeof(string));
 
     TextDrawSetString(LeaveJoinTD, string);
+    return 1;
 }
 
 
 hook OnPlayerSpawn(playerid) {
     TextDrawShowForPlayer(playerid, LeaveJoinTD);
+    return 1;
 }
 
 hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
     TextDrawHideForPlayer(playerid, LeaveJoinTD);
+    return 1;
 }

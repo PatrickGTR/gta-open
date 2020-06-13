@@ -1,9 +1,9 @@
-#include <YSI_Coding\y_hooks>
 #include <YSI_Coding\y_timers>
+#include <YSI_Coding\y_hooks>
 
 new
     PlayerText:timeLeft[MAX_PLAYERS],
-    bool:timeLeftShown[MAX_PLAYERS], 
+    bool:timeLeftShown[MAX_PLAYERS],
     timeLeftCounter[MAX_PLAYERS],
     Timer:timeLeftTimer[MAX_PLAYERS];
 
@@ -36,7 +36,7 @@ stock UI_TimeLeft(playerid, seconds) {
         return 0;
     }
 
-    new 
+    new
         string[30],
         mins,
         secs;
