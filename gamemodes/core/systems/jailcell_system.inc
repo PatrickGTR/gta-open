@@ -1,9 +1,9 @@
 #include <YSI_Coding\y_hooks>
 
-new 
+new
     JailCell1,
-    JailCell2, 
-    bool:JailCellBreached;
+    JailCell2,
+    bool:JailCellBreached = false;
 
 hook OnGameModeInit() {
     CreateDynamicObject (19302, 266.36240, 85.68930, 1001.29077, 0.00000, 0.00000, 90.00000, 16); //cell 1 left
@@ -11,7 +11,9 @@ hook OnGameModeInit() {
     CreateDynamicObject (19302, 266.36240, 81.21280, 1001.29077, 0.00000, 0.00000, 90.00000, 16); //cell 2 left
     JailCell2 = CreateDynamicObject (19302, 266.36240, 82.94550, 1001.29077, 0.00000, 0.00000, 270.00000, 16); //cell 2 right the cell that you might want to move
     CreateDynamicObject (19302, 266.36240, 78.46120, 1001.29077, 0.00000, 0.00000, 270.00000, 16);//cell 3 left
-    CreateDynamicObject (19302, 266.36240, 76.72040, 1001.29077, 0.00000, 0.00000, 90.00000, 16);//cell  3 right
+    CreateDynamicObject (19302, 266.36240, 76.72040, 1001.29077, 0.00000, 0.00000, 90.00000, 16);//cell  3 right#
+
+	return 1;
 }
 
 hook OnPlayerConnect(playerid) {
@@ -47,8 +49,8 @@ timer LSCellClose[1000 * 8]() {
 	}
 	SendMsgAllF(COLOR_ORANGE, "** JAIL BREACH ** %p (%i) "C_WHITE"managed to free all the prisoners by planting c4 and detonated it.", playerid, playerid);
 
-	MoveDynamicObject(JailCell1, 266.36240, 86.68930, 1001.29077, 0.5); 
-    MoveDynamicObject(JailCell2, 266.36240, 82.21280, 1001.29077, 0.5); 
+	MoveDynamicObject(JailCell1, 266.36240, 86.68930, 1001.29077, 0.5);
+    MoveDynamicObject(JailCell2, 266.36240, 82.21280, 1001.29077, 0.5);
 
 	JailCellBreached = true;
 	return 0;
