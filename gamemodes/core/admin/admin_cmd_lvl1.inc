@@ -39,7 +39,8 @@ ACMD:[1]get(playerid, params[])
 {
 	new targetid;
 	new Float:pos[4];
-	if(sscanf(params, "u", targetid)) return SendSyntaxMsg(playerid, "/get (playerid)");
+	if(sscanf(params, "u", targetid)) return SendSyntaxMsg(playerid, "/get [player]");
+	if(targetid == playerid) return SendErrorMsg(playerid, "You can't get yourself");
 	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
 	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
 	GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
@@ -52,6 +53,7 @@ ACMD:[1]gotop(playerid, params[])
 	new target;
 	new Float:pos[4];
 	if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/gotop (playerid)");
+	if(target == playerid) return SendErrorMsg(playerid, "You can't get yourself");
 	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(target));
 	SetPlayerInterior(playerid, GetPlayerInterior(target));
 	GetPlayerPos(target, pos[0], pos[1], pos[2]);

@@ -133,12 +133,6 @@ timer TowerCooldown[RobberyCD]()
     TowerRobbedRecently = 0;
 }
 
-CMD:forcetowercd(playerid)
-{
-    TowerCooldown();
-    return 1;
-}
-
 CMD:tower(playerid)
 {
     SetPlayerPos(playerid, 1817.1315, -1307.1591, 98.5000);

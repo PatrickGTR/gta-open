@@ -47,7 +47,7 @@ stock SetRandomHideout(playerid) {
     return 1;
 }
 
-hook OnPlayerUpdate(playerid)
+hook OnPlayerSecondUpdate(playerid)
 {
     if(robbing[playerid] == 1 && BurglaryInfo[playerid] == 1)
     {
@@ -138,12 +138,7 @@ hook OnPlayerEnterRaceCP(playerid)
             {
                 SendServerMsgF(i, "%p (%d) has robbed %d from the bank!", playerid, playerid, bmrand);
             }
-            DisablePlayerRaceCheckpoint(playerid);
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            UI_HideTimeLeft(playerid);
-            stop BurglaryFailed[playerid];
+            Player_StopRobbery(playerid);
             defer BankCooldown();
         }
         if(BurglaryInfo[playerid] == 2) //casino
@@ -154,12 +149,7 @@ hook OnPlayerEnterRaceCP(playerid)
             {
                 SendServerMsgF(i, "%p (%d) has robbed %d from the casino!", playerid, playerid, bmrand);
             }
-            DisablePlayerRaceCheckpoint(playerid);
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            UI_HideTimeLeft(playerid);
-            stop BurglaryFailed[playerid];
+            Player_StopRobbery(playerid);
             defer CasinoCooldown();
         }
         if(BurglaryInfo[playerid] == 3) //mansion
@@ -170,12 +160,7 @@ hook OnPlayerEnterRaceCP(playerid)
             {
                 SendServerMsgF(i, "%p (%d) has robbed %d from XomoX's mansion!", playerid, playerid, bmrand);
             }
-            DisablePlayerRaceCheckpoint(playerid);
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            UI_HideTimeLeft(playerid);
-            stop BurglaryFailed[playerid];
+            Player_StopRobbery(playerid);
             defer MansCooldown();
         }
         if(BurglaryInfo[playerid] == 4)
@@ -187,11 +172,7 @@ hook OnPlayerEnterRaceCP(playerid)
                 SendServerMsgF(i, "%p (%d) has robbed %d from the tower!", playerid, playerid, bmrand);
             }
             DisablePlayerRaceCheckpoint(playerid);
-            robbing[playerid] = 0;
-            BurglaryInfo[playerid] = 0;
-            robbingdone[playerid] = 0;
-            UI_HideTimeLeft(playerid);
-            stop BurglaryFailed[playerid];
+            Player_StopRobbery(playerid);
             defer TowerCooldown();
         }
     }
@@ -200,7 +181,7 @@ hook OnPlayerEnterRaceCP(playerid)
 
 hook OnPlayerDeath(playerid, killerid, reason)
 {
-    if(robbing[playerid] == 1){
+    if(BurglaryInfo[playerid] != 0){
         Player_StopRobbery(playerid);
     }
     return 1;
@@ -270,6 +251,7 @@ stock Player_StopRobbery(playerid) {
     BurglaryInfo[playerid] = 0;
     robbingdone[playerid] = 0;
     DisablePlayerRaceCheckpoint(playerid);
+    UI_HideTimeLeft(playerid);
     stop burglarytimer[playerid];
     return 1;
 }
@@ -289,9 +271,24 @@ timer SetHideoutTimer[20000](playerid)
 timer RobberyFailed[300000](playerid)
 {
     robbing[playerid] = 0;
-    BurglaryInfo[playerid] = 0;
     robbingdone[playerid] = 0;
     UI_HideTimeLeft(playerid);
+    if(BurglaryInfo[playerid] == 1) {
+        defer BankCooldown();
+        BurglaryInfo[playerid] = 0;
+    }
+    if(BurglaryInfo[playerid] == 2) {
+        defer CasinoCooldown();
+        BurglaryInfo[playerid] = 0;
+    }
+    if(BurglaryInfo[playerid] == 3) {
+        defer MansCooldown();
+        BurglaryInfo[playerid] = 0;
+    }
+    if(BurglaryInfo[playerid] == 4) {
+        defer TowerCooldown();
+        BurglaryInfo[playerid] = 0;
+    }
     return 1;
 }
 
