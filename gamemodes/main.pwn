@@ -18,6 +18,7 @@
 // For a nice font display
 
 #include <a_samp>
+#include <sscanf2>
 
 #define MYSQL_PREPARE_DEBUG 	(false)
 #define MAX_STATEMENTS 64
