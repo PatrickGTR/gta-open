@@ -22,7 +22,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
     static prefix[4] = {'c', 'm', 'd', '_'}, cmd[28];
     static params[126];
 
-
+    params = "\1";
     sscanf(cmdtext[1], "s[28]s[126]", cmd, params);
 
     for (new i = strlen(cmd); --i != -1;)
@@ -35,7 +35,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
     #endif
 
     #if defined OnPlayerCommandPerformed
-        return OnPlayerCommandPerformed(playerid, cmd, CallLocalFunction(prefix, "is", playerid, (params[0] != "\0") ? (params) :("\1")));
+        return OnPlayerCommandPerformed(playerid, cmd, CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) :("\1")));
     #else
         return CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) :( "\1"));
     #endif
