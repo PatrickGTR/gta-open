@@ -36,6 +36,9 @@ public TextMenuCityHall(playerid, listitem) {
             if(GetPlayerMoney(playerid) < CHANGE_SKILL_PRICE) {
                 return SendErrorMsg(playerid, "Not Enough Money!");
             }
+            if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+                return SendErrorMsg(playerid, "Only civilians can change skill.");
+            }
             Player_SetJob(playerid, TYPE_NO_JOB);
             Player_ShowJobMenu(playerid);
             GivePlayerMoney(playerid, -CHANGE_SKILL_PRICE);
