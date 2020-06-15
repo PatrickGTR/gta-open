@@ -146,7 +146,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         }
         new id = Player_GetClosestWanted(playerid);
 
-        if(id == -1) {
+        if(id == INVALID_PLAYER_ID) {
             return 1;
         }
 

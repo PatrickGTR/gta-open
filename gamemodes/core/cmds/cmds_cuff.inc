@@ -9,7 +9,7 @@ CMD:cuffcw(playerid)
     if(Player_GetClass(playerid) != TEAM_POLICE) {
         return SendErrorMsg(playerid, "Only cops can use this command!");
     }
-    if(targetid == -1)  {
+    if(targetid == INVALID_PLAYER_ID)  {
         return SendErrorMsg(playerid, "There's no warrant near you");
     }
     if(!IsPlayerInRangeOfPoint(targetid, 5.0, x, y, z)) {

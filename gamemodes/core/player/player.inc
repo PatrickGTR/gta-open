@@ -4,6 +4,7 @@
 #include <player_job>
 #include <player_location>
 #include <player_items>
+#include <player_arrest>
 
 #include <attachment>
 #include <job>

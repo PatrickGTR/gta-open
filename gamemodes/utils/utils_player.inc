@@ -51,7 +51,7 @@ Float:Player_GetArmour(playerid) {
 
 stock Player_GetClosestWanted(playerid) {
     new
-        closestID = -1;
+        closestID = INVALID_PLAYER_ID;
 
     foreach(new i : Player) {
 
