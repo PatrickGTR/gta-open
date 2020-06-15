@@ -76,6 +76,7 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
     Player_Cuff(playerid, false);
     SetPlayerWantedLevel(playerid, 0);
     PlayerJailTime[playerid] = seconds;
+    UI_TimeLeft(playerid, seconds);
 
     ResetPlayerWeapons(playerid);
     if(BurglaryInfo[playerid] != 0) {
