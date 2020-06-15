@@ -34,9 +34,21 @@ hook OnGameModeInit() {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-	if ((newkeys & KEY_NO) == KEY_NO
-		&& GetPlayerState(playerid) == PLAYER_STATE_ONFOOT
-		&& IsPlayerInRangeOfPoint(playerid, 2, DRUG_CREATION_POSX, DRUG_CREATION_POSY, DRUG_CREATION_POSZ)) {
+	if ((newkeys & KEY_NO) == KEY_NO) {
+
+		if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) {
+			return 1;
+		}
+
+		if(!IsPlayerInRangeOfPoint(playerid, 3.0, DRUG_CREATION_POSX, DRUG_CREATION_POSY, DRUG_CREATION_POSZ)) {
+			return 1;
+		}
+
+		if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+			SendErrorMsg(playerid, "This is only for civlians.");
+			return 1;
+		}
+
 
 		if(Bit_Get(HasBeganCocaineProduction, playerid))
 			return SendErrorMsg(playerid, "You already have started producing crack cocaine.");

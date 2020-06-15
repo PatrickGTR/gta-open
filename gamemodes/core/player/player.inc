@@ -22,6 +22,7 @@ hook OnPlayerConnect(playerid) {
 
 hook OnPlayerSpawn(playerid) {
     Bit_Set(PlayerSpawnState, playerid, true);
+    Player_UpdateColour(playerid);
     return 1;
 }
 
@@ -40,20 +41,39 @@ stock Player_IsSpawned(playerid) {
 // 4 .. 12 = orange
 // > 12 = red.
 stock Player_UpdateColour(playerid) {
-    new
-        playerWantedLevel = GetPlayerWantedLevel(playerid);
-    if (playerWantedLevel == 0) {
-        SetPlayerColor(playerid, COLOR_WHITE);
+
+    if(Player_GetClass(playerid) == TEAM_POLICE) {
+        SetPlayerColor(playerid, COLOR_BLUE);
+        return 1;
     }
-    else if (0 < playerWantedLevel < 4) {
-        SetPlayerColor(playerid, COLOR_YELLOW);
+
+    if(Player_GetClass(playerid) == TEAM_MEDIC) {
+        SetPlayerColor(playerid, COLOR_GREEN);
+        return 1;
     }
-    else if (4 <= playerWantedLevel <= 12) {
-        SetPlayerColor(playerid, COLOR_ORANGE);
+
+    if(Player_GetClass(playerid) == TEAM_ARMY) {
+        SetPlayerColor(playerid, COLOR_PURPLE);
+        return 1;
     }
-    else if (12 < playerWantedLevel) {
-        SetPlayerColor(playerid, COLOR_RED);
+
+    if(Player_GetClass(playerid) == TEAM_CIVILIAN) {
+        new
+            playerWantedLevel = GetPlayerWantedLevel(playerid);
+        if (playerWantedLevel <= 0) {
+            SetPlayerColor(playerid, COLOR_WHITE);
+        }
+        else if (0 < playerWantedLevel < 4) {
+            SetPlayerColor(playerid, COLOR_YELLOW);
+        }
+        else if (4 <= playerWantedLevel <= 12) {
+            SetPlayerColor(playerid, COLOR_ORANGE);
+        }
+        else if (12 < playerWantedLevel) {
+            SetPlayerColor(playerid, COLOR_RED);
+        }
     }
+
     return 1;
 }
 
