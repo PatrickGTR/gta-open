@@ -4,6 +4,7 @@
 #include <utils_colours>
 #include <utils_vehicles>
 #include <utils_player>
+#include <utils_cuffs>
 
 #include <YSI_Core\y_utils>
 

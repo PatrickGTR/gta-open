@@ -42,8 +42,8 @@ timer LSCellClose[1000 * 8]() {
 		return 1;
 
 	foreach(new i : Player) {
-		if(Player_IsJailed(i)) {
-			Player_SetJail(i, false);
+		if(Player_IsInJail(i)) {
+			Player_ReleaseFromJail(i, false);
 			SendMsgF(i, COLOR_ORANGE, "** JAIL BREACH ** The cell doors have been breached, the doors are open for you to escape! RUN!");
 		}
 	}

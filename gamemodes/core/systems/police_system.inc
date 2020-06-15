@@ -2,15 +2,10 @@
 #include <YSI_Data\y_iterate>
 
 static
-    Jailtime[MAX_PLAYERS],
-    BailBalance[MAX_PLAYERS],
-    Statement: stmt_retrieveJail
-;
+    PlayerJailTime[MAX_PLAYERS],
+    PlayerBailBalance[MAX_PLAYERS],
+    Statement: stmt_retrieveJail;
 
-new
-    bool:PlayerCuffed[MAX_PLAYERS],
-    bool:PlayerJailed[MAX_PLAYERS]
-;
 
 
 enum E_JAILPOS_DATA
@@ -45,28 +40,6 @@ hook OnGameModeInit()
     return 1;
 }
 
-stock Player_GetClosestWanted(playerid) {
-    new
-        closestID = -1,
-        Float: x,
-        Float: y,
-        Float: z;
-
-    GetPlayerPos(playerid, x, y, z);
-    foreach(new i : Player) {
-
-        if(playerid == i) {
-            continue;
-        }
-
-        if(IsPlayerInRangeOfPoint(i, 4.0, x, y, z) && Player_GetWantedLevel(i) >= 3) {
-            closestID = i;
-            break;
-        }
-    }
-    return closestID;
-}
-
 stock Player_SendToJail(playerid, seconds, bool:save = false) {
     if(!UI_TimeLeft(playerid, seconds)) {
         return 0;
@@ -90,13 +63,10 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
 
     ClearAnimations(playerid, 1);
 
-    Player_SetJail(playerid, true);
-    Player_SetCuffed(playerid, false);
+    Player_Cuff(playerid, false);
+    SetPlayerWantedLevel(playerid, 0);
 
     ResetPlayerWeapons(playerid);
-    RemovePlayerAttachedObject(playerid, 0);
-    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
-    PLAYER_SetPlayerWantedLevel(playerid, 0);
     if(BurglaryInfo[playerid] != 0) {
         Player_StopRobbery(playerid);
     }
@@ -119,12 +89,19 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
     return 1;
 }
 
-stock Player_UnJail(playerid) {
-    SetPlayerPos(playerid, 254.9862, 86.8028, 1002.4453);
-    SetPlayerFacingAngle(playerid, 90.9168);
-    SetPlayerVirtualWorld(playerid, 16);
-    SetPlayerInterior(playerid, 6);
-    Player_SetJail(playerid, false);
+stock Player_ReleaseFromJail(playerid, move = true) {
+
+    // this is option is to move the player out of the cell when his time finishes.
+    // we set the option to 'false' for our terrorist cell explosion system since
+    // the cell door opens and we don't need to move the player.
+    if(move) {
+        SetPlayerPos(playerid, 254.9862, 86.8028, 1002.4453);
+        SetPlayerFacingAngle(playerid, 90.9168);
+        SetPlayerVirtualWorld(playerid, 16);
+        SetPlayerInterior(playerid, 6);
+    }
+
+    PlayerJailTime[playerid] = 0;
     UI_HideTimeLeft(playerid);
     return 1;
 }
@@ -134,18 +111,15 @@ hook OnPlayerLogin(playerid)
     inline OnPlayerJailedTimeLoad()
     {
         new
-            jailTime,
-            bailBalance,
-            playerJailed;
+            time,
+            balance;
 
-        MySQL_BindResultInt(stmt_retrieveJail, 0, jailTime);
-        MySQL_BindResultInt(stmt_retrieveJail, 1, bailBalance);
-        MySQL_BindResultInt(stmt_retrieveJail, 2, playerJailed);
+        MySQL_BindResultInt(stmt_retrieveJail, 0, time);
+        MySQL_BindResultInt(stmt_retrieveJail, 1, balance);
 
         if(MySQL_Statement_FetchRow(stmt_retrieveJail)) {
-            Jailtime[playerid] = jailTime;
-            BailBalance[playerid] = bailBalance;
-            Player_SetJail(playerid, bool:playerJailed);
+            PlayerJailTime[playerid] = time;
+            PlayerBailBalance[playerid] = balance;
         }
     }
     MySQL_BindInt(stmt_retrieveJail, 0, Player_GetAccountID(playerid));
@@ -163,10 +137,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             return 1;
         }
 
-        if(PlayerCuffed[id] == false) {
+        if(!Player_IsCuffed(id)) {
             return cmd_cuffcw(playerid);
         }
-        else if(PlayerCuffed[id] == true) {
+        else {
             return cmd_arrestcw(playerid);
         }
     }
@@ -175,62 +149,29 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 hook OnPlayerSpawn(playerid)
 {
-    if(Player_IsJailed(playerid)) {
-        Player_SendToJail(playerid, 300, true);
+    if(PlayerJailTime[playerid] > 0) {
+        Player_SendToJail(playerid, PlayerJailTime[playerid], true);
     }
     return 1;
 }
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-    if(PlayerCuffed[playerid] == true) {
+    if(Player_IsCuffed(playerid) == true) {
         Player_SendToJail(playerid, 300, true);
-        Player_SetJail(playerid, true);
     }
     return 1;
 }
 
-hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
-{
-    if(PlayerCuffed[playerid] == true) {
-        SendServerMsg(playerid, "You can't enter a vehicle while cuffed! EJECTED!");
-        RemovePlayerFromVehicle(playerid);
-    }
-    return 1;
-}
-
-stock Player_SetJail(playerid, bool:jailed)
-{
-    PlayerJailed[playerid] = jailed;
-
-    new string[256];
-
-    static const query[] = "\
-    INSERT INTO \
-        jailed(u_id, bail_required) \
-    VALUES \
-        (%i, %i) \
-    ON DUPLICATE KEY UPDATE \
-        bail_required = %i \
-    ";
-
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), jailed, jailed);
-    mysql_tquery(MySQL_GetHandle(), string);
-}
-
-stock Player_SetCuffed(playerid, bool:cuffed) {
-    return PlayerCuffed[playerid] = cuffed;
-}
-
-stock Player_IsJailed(playerid) {
-    return (PlayerJailed[playerid]);
+stock Player_IsInJail(playerid) {
+    return (PlayerJailTime[playerid] > 0);
 }
 
 stock Player_SetBailAmount(playerid, amount) {
-    BailBalance[playerid] = amount;
+    PlayerBailBalance[playerid] = amount;
     return 1;
 }
 
 stock Player_GetBailAmount(playerid) {
-    return BailBalance[playerid];
+    return PlayerBailBalance[playerid];
 }

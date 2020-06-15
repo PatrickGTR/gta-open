@@ -7,11 +7,10 @@ ACMD:[2]unjail(playerid, params[])
     if(!IsPlayerConnected(targetid)) {
         return SendErrorMsg(playerid, "The player is not connected!");
     }
-    if(!Player_IsJailed(targetid)) {
+    if(!Player_IsInJail(targetid)) {
         return SendErrorMsg(playerid, "The player is not jailed!");
     }
     SendMsgAllF(COLOR_PURPLE, "[UNJAIL]: %s %p (%d) has unjailed %p (%d)", Admin_GetRankName(playerid), playerid, playerid, targetid, targetid);
-    Player_UnJail(targetid);
-    Player_SetJail(targetid, false);
+    Player_ReleaseFromJail(targetid);
     return 1;
 }

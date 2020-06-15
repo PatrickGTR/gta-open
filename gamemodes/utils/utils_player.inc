@@ -49,6 +49,24 @@ Float:Player_GetArmour(playerid) {
     return playerArmour;
 }
 
+stock Player_GetClosestWanted(playerid) {
+    new
+        closestID = -1;
+
+    foreach(new i : Player) {
+
+        if(playerid == i) {
+            continue;
+        }
+
+        if(Player_IsNearPlayer(playerid, i, 4.0) && Player_GetWantedLevel(i) >= 3) {
+            closestID = i;
+            break;
+        }
+    }
+    return closestID;
+}
+
 stock Player_IsNearPlayer(playerid, targetid, Float:radius)
 {
 	new

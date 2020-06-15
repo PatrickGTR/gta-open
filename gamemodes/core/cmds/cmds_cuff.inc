@@ -1,7 +1,7 @@
 CMD:cuffcw(playerid)
 {
-    new ClosesWar = Player_GetClosestWanted(playerid);
     new
+        targetid = Player_GetClosestWanted(playerid),
         Float:x,
         Float:y,
         Float:z;
@@ -9,25 +9,24 @@ CMD:cuffcw(playerid)
     if(Player_GetClass(playerid) != TEAM_POLICE) {
         return SendErrorMsg(playerid, "Only cops can use this command!");
     }
-    if(ClosesWar == -1)  {
+    if(targetid == -1)  {
         return SendErrorMsg(playerid, "There's no warrant near you");
     }
-    if(!IsPlayerInRangeOfPoint(ClosesWar, 5.0, x, y, z)) {
+    if(!IsPlayerInRangeOfPoint(targetid, 5.0, x, y, z)) {
         return SendErrorMsg(playerid, "There's no warrant near you");
     }
-    if(GetPlayerState(ClosesWar) != PLAYER_STATE_ONFOOT) {
-        SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", ClosesWar, ClosesWar);
-        SendServerMsgF(ClosesWar, "%p (%d) has asked you to pull over", playerid, playerid);
+    if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
+        SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", targetid, targetid);
+        SendServerMsgF(targetid, "%p (%d) has asked you to pull over", playerid, playerid);
         return 0;
     }
-    if(PlayerCuffed[ClosesWar] == true) {
+    if(Player_IsCuffed(targetid)) {
         return SendErrorMsg(playerid, "The player is already cuffed");
     }
-    SendServerMsgF(ClosesWar, "You have been cuffed by officer %p (%d)", playerid, playerid);
-    SendServerMsgF(playerid, "You're now cuffing %p (%d)", ClosesWar, ClosesWar);
-    SetPlayerAttachedObject(ClosesWar, 0, 19418, 6, -0.011000, 0.028000, -0.022000, -15.600012, -33.699977,-81.700035, 0.891999, 1.000000, 1.168000);
-    SetPlayerSpecialAction(ClosesWar, SPECIAL_ACTION_CUFFED);
-    PlayerCuffed[ClosesWar] = true;
+    SendServerMsgF(targetid, "You have been cuffed by officer %p (%d)", playerid, playerid);
+    SendServerMsgF(playerid, "You're now cuffing %p (%d)", targetid, targetid);
+
+    Player_Cuff(targetid, true);
     return 1;
 }
 
@@ -63,13 +62,14 @@ CMD:cuff(playerid, params[])
         SendServerMsgF(targetid, "%p (%d) has asked you to pull over", playerid, playerid);
         return 0;
     }
-    if(PlayerCuffed[targetid] == true) {
+    if(Player_IsCuffed(targetid)) {
         return SendErrorMsg(playerid, "The player is already cuffed");
     }
     SendServerMsgF(targetid, "You have been cuffed by officer %p (%d)", playerid, playerid);
     SendServerMsgF(playerid, "You're now cuffing %p (%d)", targetid, targetid);
-    SetPlayerAttachedObject(targetid, 0, 19418, 6, -0.011000, 0.028000, -0.022000, -15.600012, -33.699977,-81.700035, 0.891999, 1.000000, 1.168000);
-    SetPlayerSpecialAction(targetid, SPECIAL_ACTION_CUFFED);
-    PlayerCuffed[targetid] = true;
+
+
+    Player_Cuff(targetid, true);
     return 1;
 }
+
