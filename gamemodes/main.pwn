@@ -21,6 +21,7 @@
 
 #define MYSQL_PREPARE_DEBUG 	(false)
 #define MAX_STATEMENTS 64
+#define SAMP_LOGGER_COMPAT
 
 #define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
 

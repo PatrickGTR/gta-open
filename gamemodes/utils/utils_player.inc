@@ -49,6 +49,23 @@ Float:Player_GetArmour(playerid) {
     return playerArmour;
 }
 
+stock Player_FacePlayer(playerid, giveplayerid) {
+    // function made by Nero_3D.
+    new
+        Float: pX,
+        Float: pY,
+        Float: pZ,
+        Float: gX,
+        Float: gY,
+        Float: gZ
+    ;
+    if(GetPlayerPos(playerid, pX, pY, pZ) && GetPlayerPos(giveplayerid, gX, gY, gZ)) {
+        SetPlayerFacingAngle(playerid, (pX = -atan2((gX - pX), (gY - pY))));
+        return SetPlayerFacingAngle(giveplayerid, (pX + 180.0));
+    }
+    return false;
+}
+
 stock Player_GetClosestWanted(playerid) {
     new
         closestID = INVALID_PLAYER_ID;
