@@ -4,7 +4,8 @@
 static
     PlayerJailTime[MAX_PLAYERS],
     PlayerBailBalance[MAX_PLAYERS],
-    Statement: stmt_retrieveJail;
+    Statement: stmt_retrieveJail,
+    Statement: stmt_releaseJail;
 
 
 
@@ -37,6 +38,15 @@ hook OnGameModeInit()
         "
     ;
     stmt_retrieveJail = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveBal);
+
+
+    static const queryDelete[] = "\
+        DELETE FROM \
+            jailed \
+        WHERE  \
+            u_id = ? \
+    ";
+    stmt_releaseJail = MySQL_PrepareStatement(MySQL_GetHandle(), queryDelete);
     return 1;
 }
 
@@ -103,6 +113,9 @@ stock Player_ReleaseFromJail(playerid, move = true) {
 
     PlayerJailTime[playerid] = 0;
     UI_HideTimeLeft(playerid);
+
+    MySQL_BindInt(stmt_releaseJail, 0, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded(stmt_releaseJail);
     return 1;
 }
 
