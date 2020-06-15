@@ -9,17 +9,14 @@ static
 
 
 
-enum E_JAILPOS_DATA
-{
+static enum E_JAILPOS_DATA {
     Float:E_JAILPOS_X,
     Float:E_JAILPOS_Y,
     Float:E_JAILPOS_Z,
     Float:E_JAILPOS_A,
 }
 
-static
-    const JailData[][E_JAILPOS_DATA] =
-{
+static const JailData[][E_JAILPOS_DATA] = {
     {264.2428, 86.4775, 1001.0391, 271.6097},
     {263.9785, 82.0106, 1001.0391, 269.8944}
 };
@@ -167,6 +164,12 @@ hook OnPlayerSpawn(playerid)
     if(PlayerJailTime[playerid] > 0) {
         Player_SendToJail(playerid, PlayerJailTime[playerid], true);
     }
+    return 1;
+}
+
+hook OnPlayerConnect(playerid) {
+    PlayerJailTime[playerid] =
+    PlayerBailBalance[playerid] = 0;
     return 1;
 }
 
