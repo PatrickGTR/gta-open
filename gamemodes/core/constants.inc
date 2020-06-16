@@ -12,14 +12,17 @@
 #define YSI_NO_CACHE_MESSAGE
 
 #define SERVER_NAME 			"Grand Theft Open"
-#define SERVER_VERSION			"1.0.0"
 #define SERVER_MODE 			"Cops and Robbers"
 #define SERVER_LANGUAGE			"English"
 #define SERVER_WEBSITE			"www.sa-mp.com"
 
-#define PLAYER_DEBUG_HANDLER    "player"
+#define SCRIPT_VERSION_MAJOR	1
+#define SCRIPT_VERSION_MINOR	0
+#define SCRIPT_VERSION_PATCH	0
 
-#define NEXT_PAGE (25)
+
+#define PLAYER_DEBUG_HANDLER    "player"
+#define SERVER_DEBUG_HANDLER    "server"
 
 #define TEXTLABEL_STREAMDISTANCE    (200)
 #define CHECKPOINT_STREAMDISTANCE   (200)

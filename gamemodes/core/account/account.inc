@@ -46,9 +46,6 @@ hook OnPlayerLogin(playerid) {
 }
 
 public OnPlayerMoneyChange(playerid, previous, current) {
-
-    printf("prev %i, current %i", previous, current);
-
     MySQL_BindInt(stmt_savePlayerMoney, 0, current);
     MySQL_BindInt(stmt_savePlayerMoney, 1, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_savePlayerMoney);

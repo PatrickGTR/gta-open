@@ -46,7 +46,10 @@
 
 // Will be called after the rest ^
 public OnGameModeInit() {
-	SendRconCommand("hostname "SERVER_NAME" v"SERVER_VERSION"");
+
+
+
+	SendRconCommand("hostname "#SERVER_NAME #SCRIPT_VERSION_MAJOR "." #SCRIPT_VERSION_MINOR "." #SCRIPT_VERSION_PATCH);
 	SendRconCommand("gamemodetext "SERVER_MODE"");
 	SendRconCommand("language "SERVER_LANGUAGE"");
 	SendRconCommand("weburl "SERVER_WEBSITE"");
