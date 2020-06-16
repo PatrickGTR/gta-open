@@ -1,5 +1,5 @@
 CMD:buyhouse(playerid, params[]) {
-    new 
+    new
         houseid = Player_GetInHouseID(playerid);
 
     if(!Player_InHouseEntrance(playerid, houseid)) {
@@ -23,12 +23,12 @@ CMD:buyhouse(playerid, params[]) {
     return 1;
 }
 
-CMD:descriptionhouse(playerid, params[]) {
+CMD:hdescription(playerid, params[]) {
     if(isnull(params)) {
         return SendErrorMsg(playerid, "/hdescription <new description>");
     }
 
-    new 
+    new
         houseid = Player_GetInHouseID(playerid);
 
     if(!Player_IsInsideHouse(playerid)) {
@@ -39,7 +39,7 @@ CMD:descriptionhouse(playerid, params[]) {
         return SendErrorMsg(playerid, "You do not own this house.");
     }
 
-    new 
+    new
         ret = House_UpdateDescription(playerid, houseid, params);
     if(!ret) {
         return SendErrorMsg(playerid, "Descrption must not have more than 32 characters.");
@@ -52,19 +52,19 @@ CMD:descriptionhouse(playerid, params[]) {
 
 ACMD:[4]hcreate(playerid, params[])
 {
-    new 
-        price, 
+    new
+        price,
         interior;
 
     if(sscanf(params, "ii", price, interior)) {
         return SendSyntaxMsg(playerid, "/hcreate <price> <interior id>");
     }
-    
+
     if(!(0 <= interior < House_GetInteriorArraySize())){
         return SendErrorMsgF(playerid, "Please insert a value between 0 and %i", House_GetInteriorArraySize());
     }
 
-    new 
+    new
         Float:x,
         Float:y,
         Float:z,
@@ -73,10 +73,10 @@ ACMD:[4]hcreate(playerid, params[])
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, a);
 
-    new 
+    new
         ret = House_Create(
-        x, 
-        y, 
+        x,
+        y,
         z,
         a,
         GetPlayerVirtualWorld(playerid),
@@ -91,7 +91,7 @@ ACMD:[4]hcreate(playerid, params[])
     return true;
 }
 
-CMD:hdelete(playerid, params[]) {
+ACMD:[4]hdelete(playerid, params[]) {
 
     if(isnull(params)) {
         return SendErrorMsg(playerid, "/hdelete <house id>");
@@ -101,7 +101,7 @@ CMD:hdelete(playerid, params[]) {
         return SendErrorMsg(playerid, "invalid input.");
     }
 
-    new 
+    new
         houseid = strval(params);
 
     House_Delete(playerid, houseid);

@@ -4,7 +4,7 @@ static
     chat_LastMessage[MAX_PLAYERS][144];
 
 public OnPlayerText(playerid, text[])
-{    
+{
     if(Mute_PlayerHas(playerid)) {
         SendErrorMsgF(playerid, "You can not speak in global chat, you have been muted for ~r~%i ~w~seconds!", Mute_GetPlayerDuration(playerid));
         return 0;
@@ -46,7 +46,25 @@ public OnPlayerText(playerid, text[])
         SendErrorMsg(playerid, "Do not repeat the same message.");
         return 0;
     }
+
     strcpy(chat_LastMessage[playerid], processedMessage, 144);
+
+
+    // Police Radio
+    if(processedMessage[0] == '!') {
+        if(!Player_GetClass(playerid)) {
+            return 0;
+        }
+
+        foreach(new i : Player) {
+            if(Player_GetClass(i) != TEAM_POLICE) {
+                continue;
+            }
+
+            SendMsgF(i, COLOR_BLUE, "(radio) officer %p: "C_WHITE"%s", playerid, processedMessage[1]);
+        }
+        return 0;
+    }
 
     // Normal Global Message
     SendMsgAllF(GetPlayerColor(playerid), "[%i] %p "C_WHITE": %s", playerid, playerid, processedMessage);

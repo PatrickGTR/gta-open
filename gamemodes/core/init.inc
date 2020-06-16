@@ -6,7 +6,7 @@
 main() {
 	log("gamemode initialised.");
 	logger_debug(PLAYER_DEBUG_HANDLER, true);
-	logger_debug("admin", true);
+	logger_debug(ADMIN_DEBUG_HANDLER, true);
 }
 
 

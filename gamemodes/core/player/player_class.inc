@@ -89,7 +89,7 @@ hook OnPlayerRequestClass(playerid, classid) {
 		TogglePlayerSpectating(playerid, true);
 		defer ForceSpawnPlayer(playerid);
 
-		dbg("player", "skipping class selection",
+		dbg(PLAYER_DEBUG_HANDLER, "skipping class selection",
 			_p("username", playerid)
     	);
 	} else {
