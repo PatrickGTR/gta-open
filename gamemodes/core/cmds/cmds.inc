@@ -6,7 +6,7 @@
 #include <cmds_v> // vehicle
 #include <cmds_pm> // private message
 
-
+#include <cmds_rob>
 
 #include <cmds_breakcuff>
 #include <cmds_breakout>
