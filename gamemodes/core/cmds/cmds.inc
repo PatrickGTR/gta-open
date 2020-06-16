@@ -5,7 +5,11 @@
 #include <cmds_bail>
 #include <cmds_v> // vehicle
 #include <cmds_pm> // private message
+
+
+
 #include <cmds_breakcuff>
+#include <cmds_breakout>
 
 static
 	cmd_Cooldown[MAX_PLAYERS],
@@ -105,8 +109,6 @@ ShowCommands(playerid, type)
             strcat(string, ""C_ORANGE"Bought items from 24/7\n\
                 "C_GREY"/breakcuff "C_WHITE"- Escape from cuffs using a picklock.\n\
                 "C_GREY"/breakout "C_WHITE"- Escape from jail using a picklock.\n\
-                "C_GREY"/usecondom "C_WHITE" - Protect your self from sex diseases.\n\
-                "C_GREY"/usewallet "C_WHITE" - Protect your self from robbers.\n\
                 "C_GREY"/tie "C_WHITE"- Tie a player using a rope.\n\
                 "C_GREY"/breaktie "C_WHITE"- Escape from being tied.\n\n");
 
