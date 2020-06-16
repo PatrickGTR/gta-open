@@ -5,6 +5,7 @@
 #include <cmds_bail>
 #include <cmds_v> // vehicle
 #include <cmds_pm> // private message
+#include <cmds_breakcuff>
 
 static
 	cmd_Cooldown[MAX_PLAYERS],

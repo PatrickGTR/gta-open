@@ -26,6 +26,10 @@ GetPlayerFPS(playerid) {
     return 0;
 }
 
+stock bool:RandomChance(percentage) {
+	return (percentage >= random(100) + 1);
+}
+
 Player_IsInAmmu(playerid)
 {
     if(GetPlayerVirtualWorld(playerid) == 6 || GetPlayerVirtualWorld(playerid) == 7) {

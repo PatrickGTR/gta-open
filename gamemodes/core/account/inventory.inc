@@ -4,6 +4,7 @@
 static
     PlayerInstaFix[MAX_PLAYERS],
     PlayerCrack[MAX_PLAYERS],
+    PlayerPickLock[MAX_PLAYERS],
     Statement: stmt_retrieveIfix;
 
 #pragma unused stmt_retrieveIfix
@@ -25,6 +26,7 @@ hook OnGameModeInit()
 
 hook OnPlayerConnect(playerid) {
     PlayerInstaFix[playerid] =
+    PlayerPickLock[playerid] =
     PlayerCrack[playerid] = 0;
     return 1;
 }
@@ -66,10 +68,18 @@ stock Player_GetInstaFix(playerid)
 
 
 stock void:Player_GiveCrack(playerid, amount) {
-    PlayerCrack[playerid] = amount;
+    PlayerCrack[playerid] += amount;
 }
 
 stock Player_GetCrack(playerid) {
     return PlayerCrack[playerid];
+}
+
+stock void:Player_GivePicklock(playerid, amount) {
+    PlayerPickLock[playerid] += amount;
+}
+
+stock Player_GetPicklock(playerid) {
+    return PlayerPickLock[playerid];
 }
 
