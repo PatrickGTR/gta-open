@@ -1,5 +1,5 @@
 CMD:bail(playerid) {
-    if(Player_IsInJail(playerid)) {
+    if(!Player_IsInJail(playerid)) {
         return SendErrorMsg(playerid, "You're not jailed!");
     }
     if(timeLeftCounter[playerid] != 0) {
