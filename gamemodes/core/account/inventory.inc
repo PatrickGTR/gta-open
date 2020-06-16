@@ -4,6 +4,7 @@
 static
     PlayerInstaFix[MAX_PLAYERS],
     PlayerCrack[MAX_PLAYERS],
+    PlayerWeed[MAX_PLAYERS],
     PlayerPickLock[MAX_PLAYERS],
     PlayerWallet[MAX_PLAYERS],
     Statement: stmt_retrieveIfix;
@@ -91,4 +92,12 @@ stock void:Player_GiveWallet(playerid, amount) {
 
 stock Player_GetWallet(playerid) {
     return PlayerWallet[playerid];
+}
+
+stock void:Player_GiveWeed(playerid, amount) {
+    PlayerWeed[playerid] += amount;
+}
+
+stock Player_GetWeed(playerid) {
+    return PlayerWeed[playerid];
 }

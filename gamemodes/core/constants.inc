@@ -5,6 +5,7 @@
 #define MAX_BAN_REASON (32)
 #define MAX_VEHICLE_PER_PLAYER (2)
 #define MAX_CRACK (5)
+#define MAX_WEED (5)
 
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_VERSION_CHECK
