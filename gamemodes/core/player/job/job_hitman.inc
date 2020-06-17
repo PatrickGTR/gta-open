@@ -1,6 +1,6 @@
-#include <YSI_Coding\y_hooks> 
+#include <YSI_Coding\y_hooks>
 
-static 
+static
     HitAmount[MAX_PLAYERS],
     HitReason[MAX_PLAYERS][32],
     HitPlacedBy[MAX_PLAYERS][MAX_PLAYER_NAME],
@@ -14,12 +14,12 @@ hook OnPlayerConnect(playerid) {
 
 hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart)
 {
-    if (killerid != INVALID_PLAYER_ID) {      
+    if (killerid != INVALID_PLAYER_ID) {
         if (Bit_Get(HasHit, playerid) && Player_GetJob(killerid) == TYPE_HITMAN) {
-            SendMsgAllF(COLOR_ORANGE, "** HIT **: "C_GREY"%p (%i) "C_WHITE"has completed the hit on "C_GREY"%p (%i) "C_WHITE"and recieved "C_GREEN"$%i.", killerid, killerid, playerid, playerid, HitAmount[playerid]);            
+            SendMsgAllF(COLOR_ORANGE, "** HIT **: "C_GREY"%p (%i) "C_WHITE"has completed the hit on "C_GREY"%p (%i) "C_WHITE"and recieved "C_GREEN"$%i.", killerid, killerid, playerid, playerid, HitAmount[playerid]);
             // Reward killer.
             GivePlayerMoney(killerid, HitAmount[playerid]);
-            
+
             // Reset data.
             _InitHitmanData(playerid);
 
@@ -52,33 +52,33 @@ public HitmanTextMenu(playerid, listitem) {
 	new targetid = GetPVarInt(playerid, tmpString);
 
 	if(Bit_Get(HasHit, targetid)) {
-		new 
+		new
 			location[MAX_MAP_ZONE_NAME + 12];
 		Player_GetLocation(targetid, location);
 		SendClientMessage(playerid, COLOR_YELLOW, "Tracking....");
 		SendMsgF(playerid, COLOR_GREY, "%p (%i) "C_WHITE"is near "C_GREY"%s", targetid, targetid, location);
 		SendClientMessage(playerid, COLOR_GREEN, "Tracked!");
-		
+
 	}
 	return 1;
-} 
+}
 
 CMD:hitlist(playerid, params[]) {
-	new 
+	new
 		count = 0;
 
 	if (Player_GetJob(playerid) != TYPE_HITMAN || Player_GetClass(playerid) != TEAM_CIVILIAN) {
 		return SendErrorMsg(playerid, "You are not allowed to use this command if you are not a hitman.");
     }
 
-    new 
+    new
         tmpString[100];
 
 	TextMenu_Create(playerid, "HitmanTextMenu", "~y~Hitlist");
     foreach(new i : Player) {
         if(Bit_Get(HasHit, i)) {
-            format(tmpString, sizeof(tmpString), 
-            "~y~%p(%i) ~g~$%i ~y~By: ~w~%s", 
+            format(tmpString, sizeof(tmpString),
+            "~y~%p(%i) ~g~$%i ~y~By: ~w~%s",
         	i, i, HitAmount[i], HitPlacedBy[i]);
 			TextMenu_Add(playerid, tmpString);
 
@@ -86,7 +86,7 @@ CMD:hitlist(playerid, params[]) {
 			SetPVarInt(playerid, tmpString, i);
             count ++;
 
-			
+
         }
     }
     if(count == 0) {
@@ -99,10 +99,10 @@ CMD:hitlist(playerid, params[]) {
 
 CMD:placehit(playerid, params[])
 {
-	new 
+	new
 		targetid, hitamount, reason[32];
 
-	if (Player_GetJob(playerid) == TYPE_HITMAN && Player_GetClass(playerid) == TEAM_CIVILIAN ) {	
+	if (Player_GetJob(playerid) == TYPE_HITMAN && Player_GetClass(playerid) == TEAM_CIVILIAN ) {
 		return SendErrorMsg(playerid, "You are not allowed to place hit on others if you are a hitman.");
 	}
 
@@ -110,8 +110,12 @@ CMD:placehit(playerid, params[])
 		return SendSyntaxMsg(playerid, "/placehit <playerid> <Amount> <Reason>");
 	}
 
+	if(targetid == playerid) {
+		return SendErrorMsg(playerid, "You can't place a hit on yourself.");
+	}
+
 	if(strlen(reason) > 32) {
-		return SendErrorMsg(playerid, "Reason too lon, shorten it. "C_YELLOW"TIP: "C_GREY"MAX 32 characters.");
+		return SendErrorMsg(playerid, "Reason too long, shorten it. "C_YELLOW"TIP: "C_GREY"MAX 32 characters.");
 	}
 
 	if (!IsPlayerConnected(targetid)) {
@@ -134,7 +138,7 @@ CMD:placehit(playerid, params[])
 		return SendErrorMsg(playerid, "The player you are placing hit on already has one.");
 	}
 
-	new 
+	new
 		name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
 
