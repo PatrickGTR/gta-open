@@ -32,4 +32,5 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(4, "/setvip");
 
     Admin_AddCommandToList(5, "/setadmin");
+    Admin_AddCommandToList(5, "/settester");
 }

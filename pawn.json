@@ -51,7 +51,8 @@
 				"gamemodes/core/cmds",
 				"gamemodes/core/houses",
 				"gamemodes/core/houses/furniture",
-				"gamemodes/core/mapping"
+				"gamemodes/core/mapping",
+				"gamemodes/core/tester"
 			],
 			"constants": {
 				"DEV_BUILD": "1"

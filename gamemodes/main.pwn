@@ -42,6 +42,7 @@
 #include <chat> // chat & messaging
 #include <cmds>
 #include <mapping>
+#include <tester>
 
 
 // Will be called after the rest ^

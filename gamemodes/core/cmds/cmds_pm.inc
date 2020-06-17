@@ -1,7 +1,8 @@
 #include <YSI_Coding\y_hooks>
 
 static
-    BitArray:PlayerPMDisabled<MAX_PLAYERS>;
+    BitArray:PlayerPMDisabled<MAX_PLAYERS>,
+    PlayerLastPM[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid) {
     Bit_Set(PlayerPMDisabled, playerid, false);
@@ -24,7 +25,7 @@ CMD:dnd(playerid, params[]) {
 CMD:pm(playerid, params[]) {
     new
         targetid, msg[128];
-    if (sscanf(params, "is[128]", targetid, msg)) {
+    if (sscanf(params, "us[128]", targetid, msg)) {
         return SendSyntaxMsg(playerid, "/pm <playerid> <message>");
     }
 
@@ -44,5 +45,24 @@ CMD:pm(playerid, params[]) {
     SendMsgF(targetid, COLOR_YELLOW, "** PM FROM "C_GREY"%p (%i) ** "C_WHITE"%s", playerid, playerid, msg);
     PlayerPlaySound(targetid, 17802, 0.0, 0.0, 0.0);
     GameTextForPlayer(targetid, "~n~~n~~n~~y~Message Recieved", 1500, 5);
+    PlayerLastPM[targetid] = playerid;
+    return 1;
+}
+
+CMD:r(playerid, params[])
+{
+    new msg[128];
+    new targetid = PlayerLastPM[playerid];
+    if(sscanf(params, "s[128]", msg)) {
+        return SendSyntaxMsg(playerid, "/r <message>");
+    }
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "The player you are trying to PM is invalid");
+    }
+    SendMsgF(playerid, COLOR_YELLOW, "** PM TO "C_GREY"%p (%i) ** "C_WHITE"%s", targetid, targetid, msg);
+    SendMsgF(targetid, COLOR_YELLOW, "** PM FROM "C_GREY"%p (%i) ** "C_WHITE"%s", playerid, playerid, msg);
+    PlayerPlaySound(targetid, 17802, 0.0, 0.0, 0.0);
+    GameTextForPlayer(targetid, "~n~~n~~n~~y~Message Recieved", 1500, 5);
+    PlayerLastPM[targetid] = playerid;
     return 1;
 }

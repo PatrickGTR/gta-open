@@ -203,7 +203,7 @@ CMD:robbery(playerid) {
         bankrecent = 1;
         UI_TimeLeft(playerid, 20);
         SendServerMsg(playerid, "Robbing the bank stay in the red marker!");
-        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 0);
+        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 1);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 7.0, 1141.6899, 11.1338, 1000.6797)) {
@@ -221,6 +221,7 @@ CMD:robbery(playerid) {
         casinorecent = 1;
         SendServerMsg(playerid, "Robbing the casino stay in the red marker!");
         UI_TimeLeft(playerid, 20);
+        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 1);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 7.0, 1230.8403, -807.2298, 1084.0078)) {
@@ -238,6 +239,7 @@ CMD:robbery(playerid) {
         mansrecent = 1;
         SendServerMsg(playerid, "Robbing the mansion stay in the red marker!");
         UI_TimeLeft(playerid, 20);
+        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 1);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
     }
     else {
