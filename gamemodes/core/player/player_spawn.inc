@@ -31,6 +31,11 @@ static
 	{2039.6255, -1427.4698, 17.1641, 89.3143}
 };
 
+static
+	const Float:Army_SpawnPoints[][] = {
+	{1130.2200, -2037.3264, 69.0078, 272.0834}
+};
+
 static 
     PlayerLastSpawn[MAX_PLAYERS];
 
@@ -86,7 +91,14 @@ hook OnPlayerSpawn(playerid) {
 		z = Police_SpawnPoints[id][2];
 		ang = Police_SpawnPoints[id][3];
 	}
+	else if(Player_GetClass(playerid) == TEAM_ARMY) {
+		id = random(sizeof(Army_SpawnPoints));
 
+		x = Army_SpawnPoints[id][0];
+		y = Army_SpawnPoints[id][1];
+		z = Army_SpawnPoints[id][2];
+		ang = Army_SpawnPoints[id][3];
+	}
 	SetPlayerPos(playerid, x, y, z);
 	SetPlayerFacingAngle(playerid, ang);
 	SetPlayerInterior(playerid, 0);
