@@ -14,7 +14,6 @@ hook OnMySQLConnected()
             player_bounty mediumint(8) NOT NULL DEFAULT '0',\
             money int(11) NOT NULL DEFAULT '0',\
             skin smallint(4) NOT NULL DEFAULT '0',\
-            tester smallint(4) NOT NULL DEFAULT '0', \
             PRIMARY KEY (u_id), \
             FOREIGN KEY (u_id) REFERENCES players(u_id) \
             ON DELETE CASCADE \
