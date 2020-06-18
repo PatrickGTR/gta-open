@@ -8,9 +8,9 @@ static
 hook OnGameModeInit() {
     static const query_retrieveTester[] = "\
         SELECT \
-            tester \
+            tester_level \
         FROM  \
-            player_stats \
+            testers \
         WHERE \
             u_id = ? \
         "
@@ -49,7 +49,7 @@ stock SetPlayerTester(playerid, bool:level)
 
     static const query[] = "\
     INSERT INTO \
-        player_stats(u_id, tester) \
+        testers(u_id, tester_level) \
     VALUES \
         (%i, %i) \
     ON DUPLICATE KEY UPDATE \
