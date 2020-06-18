@@ -22,7 +22,8 @@ hook OnGameModeInit() {
 
     Admin_AddCommandToList(1, "/acmds - list of admin commands");
     Admin_AddCommandToList(1, "/get - get a player");
-    Admin_AddCommandToList(1, "/gotop - go to a player");
+    Admin_AddCommandToList(1, "/goto - go to a player");
+    Admin_AddCommandToList(1, "/a - admin chat");
 
     Admin_AddCommandToList(2, "/unjail - unjail a player");
 
@@ -30,6 +31,9 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(3, "/unban");
 
     Admin_AddCommandToList(4, "/setvip");
+    Admin_AddCommandToList(4, "/givemoney");
+    Admin_AddCommandToList(4, "/fine");
+    Admin_AddCommandToList(4, "/getmoney - to get someone's money info");
 
     Admin_AddCommandToList(5, "/setadmin");
     Admin_AddCommandToList(5, "/settester");

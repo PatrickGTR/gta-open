@@ -8,7 +8,7 @@ const
     HOSPITAL_SKIN_CHANGE = 50_000;
 
 hook OnGameModeInit() {
-    Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to view services", COLOR_WHITE, 1173.1469, -1323.4918, 15.3958, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to view services", COLOR_WHITE, 1173.1469, -1323.4918, 16.3958, 40.0, 0, 0);
     CreateActor(70, 1173.1469, -1323.4918, 15.3958, 270.2290);
     return 1;
 }
@@ -57,14 +57,25 @@ public TextMenuHospital(playerid, listitem) {
             ForceClassSelection(playerid);
             GivePlayerMoney(playerid, HOSPITAL_SKIN_CHANGE);
         }
+        case 3: {
+            if(GetPlayerMoney(playerid) < 3000) {
+                return SendErrorMsg(playerid, "Not enough money!");
+            }
+            if(!Disease_PlayerHas(playerid)) {
+                return SendErrorMsg(playerid, "You don't have a Disease");
+            }
+            GivePlayerMoney(playerid, -3000);
+            Disease_GivePlayer(playerid, DISEASE_NONE);
+        }
     }
     return 1;
 }
 
 stock ShowHospitalMenu(playerid) {
     TextMenu_Create(playerid, "TextMenuHospital", "Hospital");
-    TextMenu_Add(playerid, "~w~Heal [~g~$1000~w~]~n~");
-    TextMenu_Add(playerid, "~w~Change Skin [~g~$50000~w~]~w~");
+    TextMenu_Add(playerid, "~w~Heal [~g~$1000~w~]");
+    TextMenu_Add(playerid, "~w~Change Skin [~g~$50000~w~]");
+    TextMenu_Add(playerid, "~w~Cure Disease [~g~$3000~w~]");
     TextMenu_Show(playerid);
     return 1;
 }

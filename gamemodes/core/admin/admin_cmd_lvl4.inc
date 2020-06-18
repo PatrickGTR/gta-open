@@ -1,5 +1,3 @@
-
-
 ACMD:[4]setvip(playerid, params[])
 {
     new 
@@ -50,3 +48,43 @@ ACMD:[4]setvip(playerid, params[])
     }
     return true;
 } 
+
+ACMD:[4]givemoney(playerid, params[])
+{
+    new target, pmoney, reason[128];
+    if(sscanf(params, "uis[128]", target, pmoney, reason)) return SendSyntaxMsg(playerid, "/givemoney [playerid] [money] [reason]");
+    if(!IsPlayerConnected(target)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+    GivePlayerMoney(playerid, pmoney);
+    SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" Administrator gave %p (%d) $%d for", target, target, pmoney);
+    SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" reason: %s", reason);
+    return 1;
+}
+
+ACMD:[4]fine(playerid, params[])
+{
+    new target, pmoney, reason[128];
+    if(sscanf(params, "uis[128]", target, pmoney, reason)) return SendSyntaxMsg(playerid, "/fine [playerid] [money] [reason]");
+    if(!IsPlayerConnected(target)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+    if(GetPlayerMoney(playerid) < pmoney) {
+        return SendErrorMsg(playerid, "Player doesn't have that much money");
+    }
+    GivePlayerMoney(playerid, -pmoney);
+    SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" Administrator fined %p (%d) $%d for", target, target, pmoney);
+    SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" reason: %s", reason);
+    return 1;
+}
+
+ACMD:[4]getmoney(playerid, params[])
+{
+    new target;
+    if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/getmoney [playerid]");
+    if(!IsPlayerConnected(target)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+    SendServerMsgF(playerid, "%p (%d)'s money is $%d", target, target, GetPlayerMoney(playerid));
+    return 1;
+}
