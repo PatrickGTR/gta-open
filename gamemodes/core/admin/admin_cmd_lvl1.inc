@@ -48,7 +48,7 @@ ACMD:[1]get(playerid, params[])
 	return 1;
 }
 
-ACMD:[1]gotop(playerid, params[])
+ACMD:[1]goto(playerid, params[])
 {
 	new target;
 	new Float:pos[4];
@@ -58,5 +58,22 @@ ACMD:[1]gotop(playerid, params[])
 	SetPlayerInterior(playerid, GetPlayerInterior(target));
 	GetPlayerPos(target, pos[0], pos[1], pos[2]);
 	SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+	return 1;
+}
+
+ACMD:[1]a(playerid, params[])
+{
+	new msg[128];
+	if(sscanf(params, "s", msg)) return SendSyntaxMsg(playerid, "/a [message]");
+	foreach(new i : Player)
+    {
+        if (i != INVALID_PLAYER_ID)
+        {
+            if(Admin_GetPlayerLevel(i) > 0)
+            {    
+                SendMsgF(i, COLOR_BLUE, "[ADMIN] %p (%d) "C_WHITE": %s", playerid, playerid, msg);
+            }
+        }
+    }
 	return 1;
 }
