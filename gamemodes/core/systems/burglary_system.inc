@@ -291,6 +291,8 @@ timer RobberyFailed[300000](playerid)
         defer TowerCooldown();
         BurglaryInfo[playerid] = 0;
     }
+    DisablePlayerRaceCheckpoint(playerid);
+    SendServerMsg(playerid, "You have failed to deliver it to the hideout!");
     return 1;
 }
 
