@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_timers>
 #include <YSI_Coding\y_hooks>
 
-new
+static
     PlayerText:timeLeft[MAX_PLAYERS],
     bool:timeLeftShown[MAX_PLAYERS],
     timeLeftCounter[MAX_PLAYERS],
@@ -10,7 +10,7 @@ new
 hook OnPlayerConnect(playerid) {
     timeLeft[playerid] = CreatePlayerTextDraw(playerid, 130.000000, 400.000000, "Time left:~n~~g~05:55");
     PlayerTextDrawFont(playerid, timeLeft[playerid], 1);
-    PlayerTextDrawLetterSize(playerid, timeLeft[playerid], 0.270000, 1.500000);
+    PlayerTextDrawLetterSize(playerid, timeLeft[playerid], 0.270000,  0.270000 * 4);
     PlayerTextDrawTextSize(playerid, timeLeft[playerid], 200.000000, 46.500000);
     PlayerTextDrawSetOutline(playerid, timeLeft[playerid], 1);
     PlayerTextDrawSetShadow(playerid, timeLeft[playerid], 0);
