@@ -8,11 +8,10 @@ ACMD:[3]ban(playerid, params[])
     new
         targetid = INVALID_PLAYER_ID,
         reason[MAX_BAN_REASON] = '\0',
-        duration = -1,
-        interval = -1;
+        duration = -1;
 
     if (!strcmp(params, "day", true, 4)) {
-        if (sscanf(params, "{s[5]}ris[50]", targetid, duration, reason)) {
+        if (sscanf(params, "{s[5]}riS(No Reason)[32]", targetid, duration, reason)) {
             SendSyntaxMsg(playerid, "/ban day <playerid> <duration> <reason>");
             return 1;
         }
@@ -24,10 +23,10 @@ ACMD:[3]ban(playerid, params[])
             SendSyntaxMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
             return 1;
         }
-        interval = 0;
+        Ban_AddUser(targetid, playerid, reason, 0, duration);
     }
     if (!strcmp(params, "month", true, 5)) {
-        if (sscanf(params, "{s[6]}ris[50]", targetid, duration, reason))
+        if (sscanf(params, "{s[6]}riS(No Reason)[50]", targetid, duration, reason))
         {
             SendSyntaxMsg(playerid, "/ban month <playerid> <duration> <reason>");
             return 1;
@@ -43,10 +42,10 @@ ACMD:[3]ban(playerid, params[])
             return 1;
         }
 
-        interval = 1;
+        Ban_AddUser(targetid, playerid, reason, 1, duration);
     }
     if (!strcmp(params, "year", true, 4))  {
-        if (sscanf(params, "{s[5]}ris[50]", targetid, duration, reason)) {
+        if (sscanf(params, "{s[5]}riS(No Reason)[50]", targetid, duration, reason)) {
             SendSyntaxMsg(playerid, "/ban year <playerid> <duration> <reason>");
             return 1;
         }
@@ -58,29 +57,7 @@ ACMD:[3]ban(playerid, params[])
             SendSyntaxMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
             return 1;
         }
-        interval = 2;
-    }
-
-    if(targetid == INVALID_PLAYER_ID) {
-        SendErrorMsg(playerid, "Specify playeridid.");
-        return 1;
-    }
-    if(reason[0] == '\0') {
-        SendErrorMsg(playerid, "Sepcify reason");
-        return 1;
-    }
-    if(duration == -1) {
-        SendErrorMsg(playerid, "Specify duration.");
-        return 1;
-    }
-    if(interval == -1) {
-        SendErrorMsg(playerid, "interval has not been set, script bug, contact a developer ASAP");
-    }
-
-    new success = Ban_AddUser(targetid, playerid, reason, interval, duration);
-    if(!success) {
-        SendErrorMsg(playerid, "Could not add player to database, an error in the query, please contact a developer ASAP.");
-        return 1;
+        Ban_AddUser(targetid, playerid, reason, 2, duration);
     }
 
     SendMsgF(playerid, COLOR_RED, "[BANNED]: "C_WHITE"You have been banned by admin "C_GREY"%p "C_WHITE"for "C_GREY"%s", playerid, reason);
