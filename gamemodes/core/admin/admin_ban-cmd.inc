@@ -6,10 +6,10 @@ ACMD:[3]ban(playerid, params[])
     }
 
     new
-        targetid,
-        reason[MAX_BAN_REASON],
-        duration,
-        interval;
+        targetid = INVALID_PLAYER_ID,
+        reason[MAX_BAN_REASON] = '\0',
+        duration = -1,
+        interval = -1;
 
     if (!strcmp(params, "day", true, 4)) {
         if (sscanf(params, "{s[5]}ris[50]", targetid, duration, reason)) {
@@ -59,6 +59,22 @@ ACMD:[3]ban(playerid, params[])
             return 1;
         }
         interval = 2;
+    }
+
+    if(targetid == INVALID_PLAYER_ID) {
+        SendErrorMsg(playerid, "Specify playeridid.");
+        return 1;
+    }
+    if(reason[0] == '\0') {
+        SendErrorMsg(playerid, "Sepcify reason");
+        return 1;
+    }
+    if(duration == -1) {
+        SendErrorMsg(playerid, "Specify duration.");
+        return 1;
+    }
+    if(interval == -1) {
+        SendErrorMsg(playerid, "interval has not been set, script bug, contact a developer ASAP");
     }
 
     new success = Ban_AddUser(targetid, playerid, reason, interval, duration);
