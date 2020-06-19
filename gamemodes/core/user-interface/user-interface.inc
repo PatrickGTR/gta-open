@@ -10,3 +10,4 @@
 #include <ui_location>
 #include <ui_prev-dialog>
 #include <ui_dealership>
+#include <ui_gametime>

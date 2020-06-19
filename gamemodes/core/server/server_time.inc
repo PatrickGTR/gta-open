@@ -1,0 +1,48 @@
+#include <YSI_Coding\y_hooks>
+
+new
+    ServerTime = 0,
+    ServerDay = 0;
+
+hook OnServerSecondUpdate() {
+
+    new
+        timestring[24],
+        daystring[11];
+
+	new
+        seconds = ServerTime % 60,
+	    minutes = (ServerTime - seconds) / 60;
+
+	ServerTime ++;
+
+	if(ServerDay == 6 && ServerTime == 1440) { // New Week
+		ServerDay = 0;
+		ServerTime = 0;
+
+        CallLocalFunction("OnServerWeekReset", "");
+	}
+	if(ServerTime == 1440) {
+		ServerDay ++;
+		ServerTime = 0;
+        CallLocalFunction("OnServerDayReset", "");
+	}
+
+	foreach(new i : Player) {
+		SetPlayerTime(i, minutes, seconds);
+	}
+
+    new dayName[] = {
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    };
+
+    format(timestring, sizeof (timestring), "%02d:%02d", minutes, seconds);
+	format(daystring, sizeof (daystring), "%s", dayName[clamp(ServerDay, 0, sizeof(dayName))]);
+    UI_SetDayTime(timestring, daystring);
+}

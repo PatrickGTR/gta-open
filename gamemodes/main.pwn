@@ -12,6 +12,8 @@
 // OnPlayerSecondUpdate(playerid) -> called every second per player (like OnPlayerUpdate but not as intensive.)
 // OnMySQLConnected() -> called when MySQL successfully connects. (this is used to setup tables & prepared statements)
 // OnMySQLPreClose() -> called before MySQL disconnect (before mysql_close specifically.)
+// OnServerWeekReset() -> called when the in-game week resets.
+// OnServerDayReset() -> called when it's a new in-game day.
 
 // TextdrawLetterSize Rule -> Thanks to DamianC
 // Letter-size-y = letter-size-x * 4
@@ -47,9 +49,6 @@
 
 // Will be called after the rest ^
 public OnGameModeInit() {
-
-
-
 	SendRconCommand("hostname "#SERVER_NAME " v" #SCRIPT_VERSION_MAJOR "." #SCRIPT_VERSION_MINOR "." #SCRIPT_VERSION_PATCH);
 	SendRconCommand("gamemodetext "SERVER_MODE"");
 	SendRconCommand("language "SERVER_LANGUAGE"");
