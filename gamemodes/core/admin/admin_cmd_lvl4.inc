@@ -56,7 +56,7 @@ ACMD:[4]givemoney(playerid, params[])
     if(!IsPlayerConnected(target)) {
         return SendErrorMsg(playerid, "Player is not connected");
     }
-    GivePlayerMoney(playerid, pmoney);
+    GivePlayerMoney(target, pmoney);
     SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" Administrator gave %p (%d) $%d for", target, target, pmoney);
     SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" reason: %s", reason);
     return 1;
@@ -72,7 +72,7 @@ ACMD:[4]fine(playerid, params[])
     if(GetPlayerMoney(playerid) < pmoney) {
         return SendErrorMsg(playerid, "Player doesn't have that much money");
     }
-    GivePlayerMoney(playerid, -pmoney);
+    GivePlayerMoney(target, -pmoney);
     SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" Administrator fined %p (%d) $%d for", target, target, pmoney);
     SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" reason: %s", reason);
     return 1;
@@ -85,6 +85,6 @@ ACMD:[4]getmoney(playerid, params[])
     if(!IsPlayerConnected(target)) {
         return SendErrorMsg(playerid, "Player is not connected");
     }
-    SendServerMsgF(playerid, "%p (%d)'s money is $%d", target, target, GetPlayerMoney(playerid));
+    SendServerMsgF(playerid, "%p (%d)'s money is $%d", target, target, GetPlayerMoney(target));
     return 1;
 }
