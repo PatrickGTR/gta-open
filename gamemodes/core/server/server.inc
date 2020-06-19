@@ -1,8 +1,10 @@
 
 #include <server_entrances>
 #include <server_wanted-level>
+#include <server_time>
 
 #include <dealership>
+
 
 #include <YSI_Coding\y_hooks>
 enum E_ENTRANCE_DATA
@@ -137,8 +139,9 @@ hook OnGameModeInit() {
 	return 1;
 }
 
-
-
+static task _ServerSecondTimer[1000]() {
+	CallLocalFunction("OnServerSecondUpdate", "");
+}
 
 
 

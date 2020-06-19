@@ -2,9 +2,6 @@ CMD:bail(playerid) {
     if(!Player_IsInJail(playerid)) {
         return SendErrorMsg(playerid, "You're not jailed!");
     }
-    if(timeLeftCounter[playerid] != 0) {
-        return SendErrorMsg(playerid, "You've not served your sentence!");
-    }
     if(GetPlayerMoney(playerid) < Player_GetBailAmount(playerid)) {
         return SendErrorMsgF(playerid, "You don't have "C_GREEN"$%i "C_WHITE"to pay for your bail.", Player_GetBailAmount(playerid));
     }

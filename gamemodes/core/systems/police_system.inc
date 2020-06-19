@@ -3,6 +3,7 @@
 
 static
     PlayerJailTime[MAX_PLAYERS],
+    PlayerJailTick[MAX_PLAYERS],
     PlayerBailBalance[MAX_PLAYERS],
     Statement: stmt_retrieveJail,
     Statement: stmt_releaseJail;
@@ -73,6 +74,7 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
     Player_Cuff(playerid, false);
     SetPlayerWantedLevel(playerid, 0);
     PlayerJailTime[playerid] = seconds;
+    PlayerJailTick[playerid] = gettime();
     UI_TimeLeft(playerid, seconds);
 
     ResetPlayerWeapons(playerid);
@@ -169,6 +171,7 @@ hook OnPlayerSpawn(playerid)
 
 hook OnPlayerConnect(playerid) {
     PlayerJailTime[playerid] =
+    PlayerJailTick[playerid] =
     PlayerBailBalance[playerid] = 0;
     return 1;
 }
@@ -182,7 +185,7 @@ hook OnPlayerDisconnect(playerid, reason)
 }
 
 stock Player_IsInJail(playerid) {
-    return (PlayerJailTime[playerid] > 0);
+    return (PlayerJailTime[playerid] > 0 && (gettime() -  PlayerJailTick[playerid]) < PlayerJailTime[playerid]);
 }
 
 stock Player_SetBailAmount(playerid, amount) {
