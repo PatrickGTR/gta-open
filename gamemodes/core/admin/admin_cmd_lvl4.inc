@@ -24,6 +24,7 @@ ACMD:[4]setvip(playerid, params[])
 
         VIP_GivePlayer(targetid, level, 0, month);
 
+        SendAdminCmdUsage(playerid, "/setvip", params);
         SendMsgF(targetid, COLOR_LIGHTGREEN, "** VIP ** "C_WHITE"Your VIP level has been set to "C_GREY"%i "C_WHITE"by admin "C_GREY"%p(%i)", level, playerid, playerid);
         SendAdminMsgF("ADMIN "C_GREY"%p "C_WHITE"sets "C_GREY"%p "C_WHITE"VIP level to "C_GREY"%i", playerid, targetid, level);
     }
@@ -43,6 +44,8 @@ ACMD:[4]setvip(playerid, params[])
 
         VIP_GivePlayer(targetid, level, 1, 20);
 
+        SendAdminCmdUsage(playerid, "/setvip", params);
+
         SendMsgF(targetid, COLOR_LIGHTGREEN, "** VIP ** "C_WHITE"Your VIP level has been set to "C_GREY"%i "C_WHITE"by admin "C_GREY"%p(%i)", level, playerid, playerid);
         SendAdminMsgF("ADMIN "C_GREY"%p "C_WHITE"sets "C_GREY"%p "C_WHITE"VIP level to "C_GREY"%i", playerid, targetid, level);
     }
@@ -56,6 +59,7 @@ ACMD:[4]givemoney(playerid, params[])
     if(!IsPlayerConnected(target)) {
         return SendErrorMsg(playerid, "Player is not connected");
     }
+    SendAdminCmdUsage(playerid, "/givemoney", params);
     GivePlayerMoney(target, pmoney);
     SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" Administrator gave %p (%d) $%d for", target, target, pmoney);
     SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" reason: %s", reason);
@@ -72,6 +76,7 @@ ACMD:[4]fine(playerid, params[])
     if(GetPlayerMoney(playerid) < pmoney) {
         return SendErrorMsg(playerid, "Player doesn't have that much money");
     }
+    SendAdminCmdUsage(playerid, "/fine", params);
     GivePlayerMoney(target, -pmoney);
     SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" Administrator fined %p (%d) $%d for", target, target, pmoney);
     SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" reason: %s", reason);
@@ -85,6 +90,7 @@ ACMD:[4]getmoney(playerid, params[])
     if(!IsPlayerConnected(target)) {
         return SendErrorMsg(playerid, "Player is not connected");
     }
+    SendAdminCmdUsage(playerid, "/getmoney", params);
     SendServerMsgF(playerid, "%p (%d)'s money is $%d", target, target, GetPlayerMoney(target));
     return 1;
 }
