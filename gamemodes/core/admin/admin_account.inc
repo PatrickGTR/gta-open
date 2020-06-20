@@ -142,21 +142,6 @@ stock Admin_GetRankName(playerid)
     return admin_RankNames[Admin_GetPlayerLevel(playerid)];
 }
 
-stock SendAdminCmdUsage(playerid, const cmd[], const cmdparam[])
-{
-    if(Admin_GetPlayerLevel(playerid) == 5) {
-        return 0;
-    }
-    foreach(new i : Player)
-    {
-        if (i != INVALID_PLAYER_ID && Admin_GetPlayerLevel(i) > 0)
-        {
-            SendMsgF(i, COLOR_LIGHTGREEN, "[ADMINCMD]: %p (%d) used %s %s", playerid, playerid, cmd, cmdparam);
-        }
-    }
-    return 1;
-}
-
 Admin_GetPlayerLevel(playerid)
     return PlayerAdminLevel[playerid];
 

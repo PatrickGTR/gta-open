@@ -223,19 +223,6 @@ hook OnPlayerUpdate(playerid)
         }
         TextMenu_HideSpecific(playerid, "TextMenuMechanic");
     }
-    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1156.6572, -2052.0520, 69.1159))
-    {
-        TextMenu_HideSpecific(playerid, "TextMenuArmyVehicle");
-    }
-    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1157.1663, -2019.1108, 69.1159))
-    {
-        TextMenu_HideSpecific(playerid, "TextMenuArmyMedical");
-    }
-    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1202.7822, -2019.3701, 69.4189))
-    {
-        TextMenu_HideSpecific(playerid, "TextMenuArmyWeapon");
-        TextMenu_HideSpecific(playerid, "TextMenuArmyWeaponInfo");
-    }
     return 1;
 }
 
