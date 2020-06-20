@@ -45,6 +45,7 @@
 #include <cmds>
 #include <mapping>
 #include <tester>
+#include <discord>
 
 
 // Will be called after the rest ^

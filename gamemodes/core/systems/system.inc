@@ -9,3 +9,4 @@
 #include <crack_system>
 #include <weed_system>
 #include <slot-machine_system>
+#include <army_system>

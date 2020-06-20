@@ -19,7 +19,8 @@
 		"samp-incognito/samp-streamer-plugin:v2.9.4",
 		"kristoisberg/samp-map-zones",
 		"PatrickGTR/actor_robbery",
-		"Southclaws/progress2"
+		"Southclaws/progress2",
+		"maddinat0r/samp-discord-connector"
 	],
 	"local": true,
 	"builds": [
@@ -52,7 +53,8 @@
 				"gamemodes/core/houses",
 				"gamemodes/core/houses/furniture",
 				"gamemodes/core/mapping",
-				"gamemodes/core/tester"
+				"gamemodes/core/tester",
+				"gamemodes/core/discord"
 			],
 			"constants": {
 				"DEV_BUILD": "1"
@@ -71,6 +73,7 @@
 		"mapname": "San Andreas",
 		"weburl": "www.sa-mp.com",
 		"gamemodetext": "Unknown",
+		"filterscripts": ["ls_elevator"],
 		"announce": true,
 		"lanmode": false,
 		"query": true,
@@ -96,6 +99,9 @@
 		"db_log_queries": false,
 		"conncookies": true,
 		"cookielogging": false,
-		"output": true
+		"output": true,
+		"extra": {
+			"discord_bot_token": "NzIzNjQ0NjQ3ODY3NDE2Njg3.Xu4Ttw.aDH2-ppJJcHSh9gO_7L-ffLsaNo"
+		}
 	}
 }
