@@ -1,4 +1,4 @@
-#include <samp_bcrypt>
+
 #include <account_create>
 #include <account_login>
 #include <account_vip>
@@ -15,10 +15,6 @@
 #endif
 
 #include <YSI_Coding\y_hooks>
-#include <YSI_Coding\y_inline>
-#include <mysql_prepared>
-
-
 
 static
     Player_UID[MAX_PLAYERS],

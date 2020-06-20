@@ -1,6 +1,5 @@
 #include <YSI_Coding\y_hooks>
 #include <YSI_Data\y_bit>
-#include <mysql_prepared>
 
 #define MAX_OWNED_VEHICLES (MAX_PLAYERS * MAX_VEHICLE_PER_PLAYER)
 

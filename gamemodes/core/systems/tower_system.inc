@@ -1,5 +1,4 @@
 #include <YSI_Coding\y_hooks>
-#include <YSI_Coding\y_timers>
 #include <YSI_Data\y_iterate>
 
 static
@@ -45,7 +44,7 @@ hook OnGameModeInit()
 
 hook OnPlayerEnterDynamicCP(playerid, checkpointid)
 {
-    if(checkpointid == TowerCP) 
+    if(checkpointid == TowerCP)
     {
         if(robbing[playerid] == 1) return 0;
         SendServerMsg(playerid, "Use /towerrobbery to rob the tower!");
@@ -69,8 +68,8 @@ hook OnPlayerLeaveDynamicCP(playerid, checkpointid)
 
 hook OnPlayerPickUpPickup(playerid, pickupid) {
     if(pickupid == BriefCase) {
-        SetHideoutTimer(playerid); 
-        
+        SetHideoutTimer(playerid);
+
         DestroyPickup(BriefCase);
 
         stop FindingTimer[playerid];

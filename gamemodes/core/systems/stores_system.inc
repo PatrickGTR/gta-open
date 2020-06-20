@@ -1,5 +1,3 @@
-#include <YSI_Coding\y_timers>
-
 #define MENU_MECH       (3)
 
 static
@@ -227,7 +225,7 @@ hook OnPlayerUpdate(playerid)
 }
 
 stock Ammunation_ShowMenu(playerid, bool:next = false) {
-    
+
     if(!next) {
         TextMenu_Create(playerid, "TextMenuAmmunationMain", "Ammunation");
         TextMenu_Add(playerid, "~w~Tec 9 500 ammo [~g~$50,000~w~]");
@@ -257,7 +255,7 @@ stock Ammunation_ShowMenu(playerid, bool:next = false) {
     return 1;
 }
 
-stock ShowMechServices(playerid) 
+stock ShowMechServices(playerid)
 {
     TextMenu_Create(playerid, "TextMenuMechanic", "Mechanic Services");
     TextMenu_Add(playerid, "~w~Fix your vehicle [~g~1520~w~]");

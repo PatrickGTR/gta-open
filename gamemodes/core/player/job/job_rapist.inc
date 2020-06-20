@@ -1,6 +1,6 @@
 #include <job_rapist-impl>
 
-static 
+static
     HasJustUseRape[MAX_PLAYERS];
 
 CMD:rape(playerid, params[])
@@ -13,7 +13,7 @@ CMD:rape(playerid, params[])
 		return SendSyntaxMsg(playerid, "/rape <playerid>");
     }
 
-	new 
+	new
 		targetid = strval(params);
 
 	if (targetid == INVALID_PLAYER_ID) {
@@ -40,9 +40,9 @@ CMD:rape(playerid, params[])
 		return SendErrorMsgF(playerid, "Please wait "C_GREY"%i seconds "C_WHITE"before using the command again.", gettime() - HasJustUseRape[playerid]);
     }
 
-	if (Player_GetCondom(playerid) > 0)
+	if (Player_GetCondom(targetid) > 0)
 	{
-		Player_SetCondom(playerid, Player_GetCondom(playerid) - 1);
+		Player_GiveCondom(targetid, -1);
 		SendMsgF(playerid, COLOR_LIGHTGREEN, "** RAPE **: "C_GREY"You tried to rape "C_GREY"%p (%i) "C_WHITE"but failed because he had Condoms.", targetid, targetid);
   	 	SendMsgF(targetid, COLOR_LIGHTGREEN, "** RAPE **: "C_GREY"%p(%i) "C_WHITE"tried to rape you, luckily you have a condom, you have "C_GREY"%i "C_WHITE"condoms left", playerid, playerid, Player_GetCondom(playerid));
   	 	return true;

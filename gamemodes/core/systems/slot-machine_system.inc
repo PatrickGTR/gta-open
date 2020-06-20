@@ -6,7 +6,6 @@
 // bar 2    x 2000
 
 #include <YSI_Coding\y_hooks>
-#include <YSI_Coding\y_timers>
 
 #define WIN_MULTIPLIER_GLOBAL 	(1.0)
 

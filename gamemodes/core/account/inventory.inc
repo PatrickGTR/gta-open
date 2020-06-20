@@ -3,10 +3,6 @@
 
 static
     PlayerInstaFix[MAX_PLAYERS],
-    PlayerCrack[MAX_PLAYERS],
-    PlayerWeed[MAX_PLAYERS],
-    PlayerPickLock[MAX_PLAYERS],
-    PlayerWallet[MAX_PLAYERS],
     Statement: stmt_retrieveIfix;
 
 #pragma unused stmt_retrieveIfix
@@ -27,10 +23,7 @@ hook OnGameModeInit()
 }
 
 hook OnPlayerConnect(playerid) {
-    PlayerInstaFix[playerid] =
-    PlayerPickLock[playerid] =
-    PlayerWallet[playerid] =
-    PlayerCrack[playerid] = 0;
+    PlayerInstaFix[playerid] = 0;
     return 1;
 }
 
@@ -70,34 +63,3 @@ stock Player_GetInstaFix(playerid)
     return PlayerInstaFix[playerid];
 
 
-stock void:Player_GiveCrack(playerid, amount) {
-    PlayerCrack[playerid] += amount;
-}
-
-stock Player_GetCrack(playerid) {
-    return PlayerCrack[playerid];
-}
-
-stock void:Player_GivePicklock(playerid, amount) {
-    PlayerPickLock[playerid] += amount;
-}
-
-stock Player_GetPicklock(playerid) {
-    return PlayerPickLock[playerid];
-}
-
-stock void:Player_GiveWallet(playerid, amount) {
-    PlayerWallet[playerid] += amount;
-}
-
-stock Player_GetWallet(playerid) {
-    return PlayerWallet[playerid];
-}
-
-stock void:Player_GiveWeed(playerid, amount) {
-    PlayerWeed[playerid] += amount;
-}
-
-stock Player_GetWeed(playerid) {
-    return PlayerWeed[playerid];
-}

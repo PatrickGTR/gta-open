@@ -2,7 +2,6 @@
 #include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
 #include <formatex>
-#include <mysql_prepared>
 
 
 static

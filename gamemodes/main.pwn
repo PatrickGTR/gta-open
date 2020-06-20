@@ -30,7 +30,16 @@
 // Set to true if table aren't set up.
 #define SETUP_TABLE 			(false)
 
+
+
 #include <constants>
+
+#include <samp_bcrypt>
+#include <a_mysql>
+#include <YSI_Coding\y_inline>
+#include <YSI_Coding\y_timers>
+#include <mysql_prepared>
+
 #include <init>
 #include <utils>
 #include <anti-cheat> // w.i.p

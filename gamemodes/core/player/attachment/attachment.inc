@@ -32,7 +32,6 @@ static
 
 #include <YSI_Coding\y_hooks>
 #include <a_mysql>
-#include <mysql_prepared>
 
 static
     Statement: stmt_LoadAttachments,

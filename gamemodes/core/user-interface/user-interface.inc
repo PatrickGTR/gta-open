@@ -8,6 +8,9 @@
 #include <ui_tdmenu>
 #include <ui_time-left>
 #include <ui_location>
+
 #include <ui_prev-dialog>
+#include <YSI_Visual\y_dialog>
+
 #include <ui_dealership>
 #include <ui_gametime>

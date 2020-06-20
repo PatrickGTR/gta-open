@@ -1,5 +1,4 @@
 #include <YSI_Coding\y_hooks>
-#include <YSI_Coding\y_timers>
 
 #define RobberyCD 300000
 
@@ -7,19 +6,19 @@ new
     Timer:burglarytimer[MAX_PLAYERS]
 ;
 
-static 
-    bankcp, 
-    casinocp, 
+static
+    bankcp,
+    casinocp,
     manscp;
 
-new 
+new
     robbing[MAX_PLAYERS],
     robbingdone[MAX_PLAYERS],
     BurglaryInfo[MAX_PLAYERS],
     Timer:BurglaryFailed[MAX_PLAYERS]
 ;
 
-static 
+static
     bankrecent,
     casinorecent,
     mansrecent
@@ -109,7 +108,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     return 1;
 }
 
-hook OnPlayerEnterDynamicCP(playerid, checkpointid) 
+hook OnPlayerEnterDynamicCP(playerid, checkpointid)
 {
     if(checkpointid == bankcp) {
         if(robbing[playerid] == 1) return 0;

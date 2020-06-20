@@ -1,10 +1,7 @@
 #include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
-#include <YSI_Coding\y_timers>
-#include <YSI_Coding\y_inline>
 #include <formatex>
 #include <logger>
-#include <mysql_prepared>
 
 static
     gPlayerHash[MAX_PLAYERS][250],
