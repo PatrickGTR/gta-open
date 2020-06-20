@@ -62,20 +62,3 @@ ACMD:[1]goto(playerid, params[])
 	SendAdminCmdUsage(playerid, "/goto", params);
 	return 1;
 }
-
-ACMD:[1]a(playerid, params[])
-{
-	new msg[128];
-	if(sscanf(params, "s", msg)) return SendSyntaxMsg(playerid, "/a [message]");
-	foreach(new i : Player)
-    {
-        if (i != INVALID_PLAYER_ID)
-        {
-            if(Admin_GetPlayerLevel(i) > 0)
-            {    
-                SendMsgF(i, COLOR_BLUE, "[ADMIN] %p (%d) "C_WHITE": %s", playerid, playerid, msg);
-            }
-        }
-    }
-	return 1;
-}
