@@ -8,3 +8,4 @@
 #include <hospital_system>
 #include <crack_system>
 #include <weed_system>
+#include <slot-machine_system>
