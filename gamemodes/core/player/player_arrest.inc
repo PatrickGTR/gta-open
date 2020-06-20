@@ -65,7 +65,7 @@ stock void:Player_AwardArrest(playerid, targetid, bool:notify = true) {
     SetPlayerScore(targetid, GetPlayerScore(targetid) - 1);
 
     if(notify) {
-        SendMsgF(playerid, COLOR_YELLOW, "REWARD! "C_WHITE"You have been rewarded "C_GREEN"%m for arresting "C_GREY"%p[%i] "C_WHITE"with "C_GREY"%i "C_WHITE"wanted level.", money, targetid, targetid, level);
+        SendMsgF(playerid, COLOR_YELLOW, "REWARD! "C_WHITE"You have been rewarded "C_GREEN"%m "C_WHITE"for arresting "C_GREY"%p[%i] "C_WHITE"with "C_GREY"%i "C_WHITE"wanted level.", money, targetid, targetid, level);
     }
 
     if(money > 40000) {

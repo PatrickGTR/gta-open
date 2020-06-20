@@ -25,6 +25,19 @@ hook OnServerSecondUpdate() {
 	if(ServerTime == 1440) {
 		ServerDay ++;
 		ServerTime = 0;
+
+        new dayName[][] = {
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+        };
+        format(daystring, sizeof (daystring), "%s", dayName[clamp(ServerDay, 0, sizeof(dayName) - 1)]);
+        UI_SetDay(daystring);
+
         CallLocalFunction("OnServerDayReset", "");
 	}
 
@@ -32,17 +45,8 @@ hook OnServerSecondUpdate() {
 		SetPlayerTime(i, minutes, seconds);
 	}
 
-    new dayName[] = {
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-    };
+
 
     format(timestring, sizeof (timestring), "%02d:%02d", minutes, seconds);
-	format(daystring, sizeof (daystring), "%s", dayName[clamp(ServerDay, 0, sizeof(dayName))]);
-    UI_SetDayTime(timestring, daystring);
+    UI_SetTime(timestring);
 }

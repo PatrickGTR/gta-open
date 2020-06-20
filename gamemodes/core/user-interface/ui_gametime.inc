@@ -47,7 +47,10 @@ hook OnPlayerDeath(playerid, killerid, reason) {
     return 1;
 }
 
-void:UI_SetDayTime(const time[], const day[]) {
+void:UI_SetDay(const day[]) {
+	TextDrawSetString(DayTD, day);
+}
+
+void:UI_SetTime(const time[]) {
     TextDrawSetString(TimeTD, time);
-    TextDrawSetString(DayTD, day);
 }
