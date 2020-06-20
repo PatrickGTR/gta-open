@@ -17,7 +17,7 @@ public SendDC(const channel[], const fmat[], va_args<>)
 {
     new
         str[145];
-    va_format(str, sizeof (str), fmat, va_start<2>);
+    formatex(str, sizeof (str), fmat, va_start<2>);
 	new 
 		DCC_Channel:BotChannel = DCC_FindChannelById(channel);
     return DCC_SendChannelMessage(BotChannel, str);

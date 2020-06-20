@@ -230,7 +230,7 @@ public TextMenuArmyWeapon(playerid, listitem)
 
 stock ShowArmyVehicleMenu(playerid)
 {
-    TextMenu_Create(playerid, "TextMenuArmyMedical", "Army Vehicles");
+    TextMenu_Create(playerid, "TextMenuArmyVehicle", "Army Vehicles");
     TextMenu_Add(playerid, "~w~Hydra [~g~$100,000~w~]");
     TextMenu_Add(playerid, "~w~Hunter [~g~$100,000~w~]");
     TextMenu_Show(playerid);
@@ -239,7 +239,7 @@ stock ShowArmyVehicleMenu(playerid)
 
 stock ShowArmyMedicalMenu(playerid)
 {
-    TextMenu_Create(playerid, "TextMenuArmyVehicle", "Army Medical Services");
+    TextMenu_Create(playerid, "TextMenuArmyMedical", "Army Medical Services");
     TextMenu_Add(playerid, "~w~Heal [~g~500~w~]");
     TextMenu_Show(playerid);
 }
