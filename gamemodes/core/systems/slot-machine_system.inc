@@ -41,6 +41,26 @@ static
 	PlayerBet[MAX_PLAYERS],
 	PlayerBalance[MAX_PLAYERS];
 
+enum E_SLOT_MACHINE_DATA {
+	Float:E_SLOT_MACHINE_X,
+	Float:E_SLOT_MACHINE_Y,
+	Float:E_SLOT_MACHINE_Z
+}
+
+
+static const SlotMachinePositions[][E_SLOT_MACHINE_DATA] = {
+	{1127.9076, 3.0072, 1000.6797},
+	{1126.9175, 3.0073, 1000.6797},
+	{1125.9094, 3.0071, 1000.6797},
+	{1124.8423, 3.0051, 1000.6797},
+	{1132.8978, -1.6904, 1000.6797},
+	{1134.9930, 0.6149, 1000.6797},
+	{1135.1012, -3.8726, 1000.6797}
+};
+
+static
+	SlotMachineArea[sizeof(SlotMachinePositions)];
+
 PlayerText:CreatePlayerGamblingSprite(playerid, Float:x, Float:y, const td_name[], Float:width, Float:height)
 {
 
@@ -94,6 +114,20 @@ hook OnGameModeInit() {
 		TextDrawSetSelectable(slot_ControlsTD[i], 0);
 
 		slot_BoxTD[i] = CreateGamblingBox(194.0, Y - 20, 3 * 64.0 + 3 * 20, 84, 0x00000099);
+	}
+
+	new
+		Float:x,
+		Float:y,
+		Float:z;
+	for(new i = 0; i < sizeof(SlotMachinePositions); i++) {
+
+		x = SlotMachinePositions[i][E_SLOT_MACHINE_X];
+		y = SlotMachinePositions[i][E_SLOT_MACHINE_Y];
+		z = SlotMachinePositions[i][E_SLOT_MACHINE_Z];
+
+		SlotMachineArea[i] = CreateDynamicSphere(x, y, z, 0.5);
+		CreateDynamic3DTextLabel("Press "C_YELLOW"Y "C_WHITE"to play in this slot", COLOR_WHITE, x, y, z, TEXTLABEL_STREAMDISTANCE, .testlos = false);
 	}
 	return 1;
 }
@@ -253,6 +287,55 @@ SlotMachine_Exit(playerid) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+
+	if(PRESSED(KEY_YES)) {
+
+		new
+			bool:isNearSlot = false;
+
+		for(new i = 0; i < sizeof(SlotMachinePositions); i++) {
+			if(IsPlayerInDynamicArea(playerid, SlotMachineArea[i])) {
+				isNearSlot = true;
+			}
+		}
+
+		if(!isNearSlot) {
+			return 1;
+		}
+
+		inline const _response(pid, dialogid, response, listitem, string:inputtext[]) {
+			#pragma unused pid, dialogid, listitem
+
+			if(!response) {
+				return 1;
+			}
+
+			new
+				money = strval(inputtext);
+
+			if (money < MIN_BET)
+				return SendClientMessage(playerid,-1,"You have to put more money into the Slot Machine!");
+
+			if (money > GetPlayerMoney(playerid))
+			return SendClientMessage(playerid,-1,"You don't have enough money!");
+
+			if (money < 0)
+				return SendClientMessage(playerid,-1,"Invalid amount!");
+
+			SlotMachine_Use(playerid, _, money);
+		}
+
+		Dialog_ShowCallback(
+			playerid,
+			using inline _response,
+			DIALOG_STYLE_INPUT,
+			"Slot Machine...",
+			"Insert the amount of money you want to gamble in the slot machine.",
+			"Proceed",
+			"Cancel"
+		);
+	}
+
 	if(PRESSED(KEY_SPRINT)) {
 	    // Randomize if in Slotmachine
 	    if(PlayerGamblingState[playerid] == G_STATE_READY) {
@@ -289,7 +372,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
 	if(PRESSED(KEY_JUMP)) {
 	    if(PlayerGamblingState[playerid] == G_STATE_READY) {
-	    	PlayerBet[playerid] = GetNextValidBet(PlayerBet[playerid]);
+	    	PlayerBet[playerid] = SlotMachine_NextValidBet(PlayerBet[playerid]);
 	    	Updateslot_BetTD(playerid);
 	    }
 	}
@@ -355,8 +438,10 @@ timer PlayerBeginGambling[GAMBLE_TIMER](playerid)
 	            case 5: multiplier = 2000;  // Double Bars
 	        }
 
-	        new money = floatround(PlayerBet[playerid] * multiplier * WIN_MULTIPLIER_GLOBAL);
-	        new str[128];
+	        new
+				money = floatround(PlayerBet[playerid] * multiplier * WIN_MULTIPLIER_GLOBAL),
+				str[32];
+
 	        format(str,sizeof(str),"~w~Winner~n~~g~%m", money);
 	        GameTextForPlayer(playerid,str,5000,4);
 
@@ -364,7 +449,11 @@ timer PlayerBeginGambling[GAMBLE_TIMER](playerid)
 
 	        Updateslot_BetTD(playerid);
 
-	        PlayerSlotID[playerid][0] = random(5); // Randomize the slots again
+			// Notify the players.
+			SendMsgAllF(COLOR_FUCHSIA, "(slot machine) "C_GREY"%p[%i] "C_WHITE"has won "C_GREEN"%m "C_WHITE"from the gambling machine!", playerid, playerid, money);
+
+			// Randomize the slots again
+	        PlayerSlotID[playerid][0] = random(5);
 			PlayerSlotID[playerid][1] = random(5);
 			PlayerSlotID[playerid][2] = random(5);
 	    }
@@ -395,7 +484,7 @@ timer PlayerPlaySlotAgain[DISPLAY_TIME](playerid) {
 
 
 
-GetNextValidBet(value) {
+SlotMachine_NextValidBet(value) {
 	return (value + BET_SETP > MAX_BET) ? (MIN_BET) : (value + BET_SETP);
 }
 
@@ -412,23 +501,4 @@ Updateslot_BetTD(playerid) {
 
     format(str,sizeof(str),"~w~Balance ~g~%s%m ~w~Your Bet ~g~%m", prefix, PlayerBalance[playerid], PlayerBet[playerid]);
 	PlayerTextDrawSetString(playerid, slot_BetTD[playerid],str);
-}
-
-CMD:gamble(playerid, params[]) {
-	if (isnull(params))
-		return SendClientMessage(playerid,-1,"Use /gamble [money] to put money into the Slot Machine!");
-
-    new money = strval(params);
-
-    if (money < MIN_BET)
-    	return SendClientMessage(playerid,-1,"You have to put more money into the Slot Machine!");
-
-    if (money > GetPlayerMoney(playerid))
-     return SendClientMessage(playerid,-1,"You don't have enough money!");
-
-    if (money < 0)
-    	return SendClientMessage(playerid,-1,"Invalid amount!");
-
-	SlotMachine_Use(playerid, _, money);
-	return 1;
 }

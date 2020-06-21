@@ -10,3 +10,4 @@
 #include <weed_system>
 #include <slot-machine_system>
 #include <army_system>
+#include <lotto_system>

@@ -154,9 +154,19 @@ stock MessageBox_Show(playerid, type, const caption[], const info[], interval = 
     return 1;
 }
 
-stock MessageBox_ShowF(playerid, type, const caption[], const info[], interval = 6000, {Float,_}:...)
+stock void:MessageBox_ShowF(playerid, type, const caption[], const info[], interval = 6000, {Float,_}:...)
 {
     new string[256];
     formatex(string, sizeof(string), info, ___(5));
-    return MessageBox_Show(playerid, type, caption, string, interval);
+    MessageBox_Show(playerid, type, caption, string, interval);
+}
+
+stock void:MessageBox_ShowAllF(type, const caption[], const info[], interval = 6000, {Float,_}:...)
+{
+    new string[256];
+    formatex(string, sizeof(string), info, ___(4));
+
+    foreach(new i : Player) {
+        MessageBox_Show(i, type, caption, string, interval);
+    }
 }
