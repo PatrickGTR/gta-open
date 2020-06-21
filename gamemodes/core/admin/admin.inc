@@ -20,7 +20,6 @@
 #include <fly_cmd>
 
 hook OnGameModeInit() {
-    FlyTimer();
     Admin_AddCommandToList(1, "/acmds - list of admin commands");
     Admin_AddCommandToList(1, "/get - get a player");
     Admin_AddCommandToList(1, "/goto - go to a player");
