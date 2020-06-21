@@ -76,8 +76,8 @@ hook OnServerSecondUpdate() {
                 "~y~Lotto Information",
                 "There was no lotto winner for this draw. The jackpot will go up to ~g~%m~n~\
                 ~w~use ~p~/lotto [1 - %i] ~w~to buy a ticket and get the chance to win the money!",
-                    _,
-                    LottoJackpot
+                _,
+                LottoJackpot
             );
         }
         lottoDrawCounter = 0;
@@ -98,14 +98,10 @@ hook OnServerSecondUpdate() {
 	return 1;
 }
 
-CMD:lotto(playerid, params[])
-{
-    if(isnull(params) || !isnumeric(params))
-    {
-        SendClientMessage(playerid, COLOR_YELLOW, "*** Lotto information ***");
-        SendMsgF(playerid, COLOR_YELLOW, "Pick a number between 1 and %i with /lotto [1 - %i]", MAX_LOTTO_INPUT, MAX_LOTTO_INPUT);
-      	SendMsgF(playerid, COLOR_YELLOW, "The current Jackpot is "C_GREEN"%m", LottoJackpot);
-      	SendClientMessage(playerid, COLOR_YELLOW, "*** Lotto information ***");
+CMD:lotto(playerid, params[]) {
+    if(isnull(params) || !isnumeric(params)) {
+      	SendMsgF(playerid, COLOR_YELLOW, "Usage: "C_WHITE"/lotto <1 - %i>", MAX_LOTTO_INPUT);
+      	SendMsgF(playerid, COLOR_WHITE, "The current Jackpot is "C_GREEN"%m", LottoJackpot);
         return 1;
     }
 
@@ -135,8 +131,7 @@ CMD:lotto(playerid, params[])
 
     GivePlayerMoney(playerid, -TICKET_PRICE); //Takes away the ticket cost.
 
-    SendMsgF(playerid, COLOR_YELLOW, "** LOTTO * "C_WHITE"You have bought a lottery ticket! Your lotto "C_GREY"#%i"C_WHITE", just wait for the next draw for reults!", lottoID);
+    SendMsgF(playerid, COLOR_YELLOW, "** LOTTO ** "C_WHITE"You have bought a lottery ticket! Your lotto "C_GREY"#%i"C_WHITE", just wait for the next draw for reults!", lottoID);
     SendMsgF(playerid, COLOR_YELLOW, "** LOTTO ** "C_WHITE"Draws are held every "C_GREY"10 "C_WHITE"minutes and the winners are announced. The current jackpot is "C_GREEN"%m", LottoJackpot);
-    LottoJackpot = LottoJackpot + random(LOTTO_MAX_JACKPOT - LOTTO_MIN_JACKPOT) + LOTTO_MIN_JACKPOT; //Ads to the lotto jackpot
     return 1;
 }
