@@ -1,7 +1,7 @@
 #include <discord-connector>
 #include <discord_channels>
 
-#define CMD_PREFIX "!"
+#define CMD_PREFIX "/"
 #define BOT_CHANNEL "tester-chat-logs"
 #define BOT_NAME "ProHelper"
 #define CHANNEL_ID "723648604945776721"
@@ -16,17 +16,23 @@ public OnDCCommandPerformed(const args[], success)
     return 1;
 }
 
-DC_CMD:m(DCC_User:user, const args[])
+DC_CMD:admins(DCC_User:user, const args[])
 {
-    if(isnull(args)) {
-        return SendDC(CHANNEL_ID, "```!m [message]```");
+    new onlineadmins = 0;
+    foreach(new i : Player)
+    {
+        if(i != INVALID_PLAYER_ID)
+        {
+            if(Admin_GetPlayerLevel(i) > 0)
+            {
+                SendDC(CHANNEL_ID, "Admin:%p (%d) AdminLevel:%s", i, i, Admin_GetRankName(i));
+                onlineadmins++;
+            }
+        }
     }
-    if(strlen(args) > 145) {
-        return SendDC(CHANNEL_ID, "```Error: message too long```");
-    } 
-
-    new user_name[32 + 1];
-    DCC_GetUserName(user, user_name, 32);
-    SendDC(CHANNEL_ID, "```%s : %s```", user_name, args);
+    if(onlineadmins == 0)
+    {
+        SendDC(CHANNEL_ID, "No Admins Online!");
+    }
     return 1;
 }
