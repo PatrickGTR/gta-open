@@ -8,6 +8,9 @@
 #include <hospital_system>
 #include <crack_system>
 #include <weed_system>
-#include <slot-machine_system>
 #include <army_system>
+
+// mini games & fun
+#include <slot-machine_system>
 #include <lotto_system>
+#include <moneybag_system>

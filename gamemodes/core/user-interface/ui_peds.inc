@@ -1,4 +1,3 @@
-#include <map-zones>
 #include <actor_robbery>
 
 #define MAX_PED_NAME              (60)

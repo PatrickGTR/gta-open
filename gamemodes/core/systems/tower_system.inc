@@ -29,7 +29,7 @@ Briefcase_SetRandomLoc(playerid) {
     new rand = random(sizeof(RandomBriefCase));
     robbingdone[playerid] = 1;
     DestroyPickup(BriefCase);
-    BriefCase = CreatePickup(1210, 2, RandomBriefCase[rand][E_BRIEFCASE_X], RandomBriefCase[rand][E_BRIEFCASE_Y], RandomBriefCase[rand][E_BRIEFCASE_Z], 0);
+    BriefCase = CreateDynamicPickup(1210, 2, RandomBriefCase[rand][E_BRIEFCASE_X], RandomBriefCase[rand][E_BRIEFCASE_Y], RandomBriefCase[rand][E_BRIEFCASE_Z], 0);
 }
 
 hook OnGameModeInit()
@@ -66,7 +66,7 @@ hook OnPlayerLeaveDynamicCP(playerid, checkpointid)
     return 1;
 }
 
-hook OnPlayerPickUpPickup(playerid, pickupid) {
+hook OnPlayerPickUpDynPickup(playerid, pickupid) {
     if(pickupid == BriefCase) {
         SetHideoutTimer(playerid);
 

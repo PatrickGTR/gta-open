@@ -15,6 +15,15 @@ new
 
 #include <YSI_Coding\y_hooks>
 
+hook OnGameModeInit() {
+
+    // initiate the global data on start up.
+    lottoLastTick = gettime();
+    lottoDrawCounter = 0;
+    LottoJackpot = LOTTO_START;
+    return 1;
+}
+
 hook OnPlayerConnect(playerid) {
     PlayerLottoNumber[playerid] = 0;
     Bit_Set(PlayerBoughtTicket, playerid, false);

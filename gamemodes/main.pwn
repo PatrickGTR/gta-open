@@ -39,6 +39,7 @@
 #include <YSI_Coding\y_inline>
 #include <YSI_Coding\y_timers>
 #include <mysql_prepared>
+#include <map-zones>
 
 #include <init>
 #include <utils>
