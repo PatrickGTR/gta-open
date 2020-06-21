@@ -82,7 +82,7 @@ stock void:Player_GiveScissors(playerid, amount) {
     PlayerScissors[playerid] += amount;
 }
 
-stock Player_GetScissors(playerid, amount) {
+stock Player_GetScissors(playerid) {
     return PlayerScissors[playerid];
 }
 
