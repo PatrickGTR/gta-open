@@ -9,20 +9,17 @@ new
 	LottoJackpot = LOTTO_START,
 	BitArray:lottoUsedNumbers<MAX_LOTTO_INPUT>,
 	BitArray:PlayerBoughtTicket<MAX_PLAYERS>,
-	PlayerLottoNumber[MAX_PLAYERS],
-    lottoDrawCounter,
+	PlayerLottoNumber[MAX_PLAYERS] = {0, ...},
+    lottoDrawCounter = 0,
     lottoLastTick = 0;
 
 #include <YSI_Coding\y_hooks>
 
-CMD:draw(playerid, params[]) {
-
-    lottoDrawCounter = 5;
-    lottoLastTick = 0;
-    CallLocalFunction("OnServerSecondUpdate", "");
+hook OnPlayerConnect(playerid) {
+    PlayerLottoNumber[playerid] = 0;
+    Bit_Set(PlayerBoughtTicket, playerid, false);
     return 1;
 }
-
 
 hook OnServerSecondUpdate() {
 
@@ -54,7 +51,7 @@ hook OnServerSecondUpdate() {
         if(winnerID != INVALID_PLAYER_ID) {
             MessageBox_ShowAllF(
                 TYPE_INFORMATION,
-                "~y~Lotto Information",
+                "~y~Lotto Informataion",
                 "~w~WINNER WINNER CHICKEN DINNER! ~p~%p[%d] won ~g~%m ~w~from the lottery!~n~\
                 Make sure you get a ticket for next draw ~p~/lotto [1 - %i]",
                 _,
@@ -77,7 +74,7 @@ hook OnServerSecondUpdate() {
                 "There was no lotto winner for this draw. The jackpot will go up to ~g~%m~n~\
                 ~w~use ~p~/lotto [1 - %i] ~w~to buy a ticket and get the chance to win the money!",
                 _,
-                LottoJackpot
+                LottoJackpot, MAX_LOTTO_INPUT
             );
         }
         lottoDrawCounter = 0;
