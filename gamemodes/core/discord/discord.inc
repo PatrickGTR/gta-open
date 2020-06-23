@@ -50,8 +50,8 @@ hook DCC_OnMessageCreate(DCC_Message:message)
 
 ACMD:[1]a(playerid, params[])
 {
-	new msg[512], msg2[512];
-	if(sscanf(params, "s[512]", msg)) return SendSyntaxMsg(playerid, "/a [message]");
+	new msg[128], msg2[128];
+	if(sscanf(params, "s[128]", msg)) return SendSyntaxMsg(playerid, "/a [message]");
 	foreach(new i : Player)
     {
         if (i != INVALID_PLAYER_ID)
