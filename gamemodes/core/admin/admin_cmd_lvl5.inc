@@ -59,3 +59,9 @@ ACMD:[5]settester(playerid, params[])
     }
     return 1;
 }
+
+ACMD:[5]restart(playerid, params[])
+{
+    SendRconCommand("exit");
+    return 1;
+}
