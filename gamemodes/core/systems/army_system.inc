@@ -84,12 +84,15 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
     return 1;
 }
 
-hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
-    if(IsArmyVehicle(vehicleid) && Player_GetClass(playerid) != TEAM_ARMY)
+    if(newstate == PLAYER_STATE_DRIVER)
     {
-        SendErrorMsg(playerid, "You're not a Army You can't enter this vehicle!");
-        RemovePlayerFromVehicle(playerid);
+        new playercar = GetPlayerVehicleID(playerid);
+        if(IsArmyVehicle(playercar) && Player_GetClass(playerid) != TEAM_ARMY){
+            SendErrorMsg(playerid, "You're not a Army You can't enter this vehicle!");
+            RemovePlayerFromVehicle(playerid);
+        } 
     }
     return 1;
 }
