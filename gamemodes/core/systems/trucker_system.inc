@@ -7,10 +7,15 @@ static enum {
     STATE_DELIVER
 }
 
+static
+    Timer:TruckingPickupTimer[MAX_PLAYERS],
+    Timer:TruckingDeliveryTimer[MAX_PLAYERS]
+;
+
 static 
     bool:IsPlayerTrucking[MAX_PLAYERS], 
     TruckingCooldown[MAX_PLAYERS],
-    PlayerCanTruck[MAX_PLAYERS],
+    bool:PlayerCanTruck[MAX_PLAYERS],
     PlayerTruckingState[MAX_PLAYERS];
 
 enum E_DELIVERY_DATA
@@ -31,11 +36,15 @@ static
 };
 
 CMD:trucker(playerid) {
-    if(PlayerCanTruck[playerid] != 1) {
-        SendErrorMsg(playerid, "You're not in a truck!");
-        return 1;
+    if(!PlayerCanTruck[playerid]) {
+        return SendErrorMsg(playerid, "You're not in a truck!");
     } 
-        
+    if(Player_GetWantedLevel(playerid) != 0) {
+        return SendErrorMsg(playerid, "Only innocents can start a trucking mission");
+    }
+    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+        return SendErrorMsg(playerid, "Only Civilians can start a trucking mission");
+    }
     Trucker_Pickup(playerid);
     return 1;
 }
@@ -50,6 +59,9 @@ Trucker_Pickup(playerid) {
     DisablePlayerRaceCheckpoint(playerid);
     SetPlayerRaceCheckpoint(playerid, 1, 2174.6182, -2266.6165, 13.3797, 2174.6182, -2266.6165, 13.3797, 3.0);
     
+    UI_TimeLeft(playerid, 300);
+    TruckingPickupTimer[playerid] = defer TruckingPickup(playerid);
+
     SendServerMsg(playerid, "You're trucking now please pick up goods!");
     return 1;
 }
@@ -71,6 +83,10 @@ Trucker_Begin(playerid) {
     DisablePlayerRaceCheckpoint(playerid);
     SetPlayerRaceCheckpoint(playerid, 1, x, y, z, x, y, z, 3.0);
 
+    stop TruckingPickupTimer[playerid];
+    UI_TimeLeft(playerid, 300);
+    TruckingDeliveryTimer[playerid] = defer TruckingDelivery(playerid);
+
     SendServerMsgF(playerid, "Go to %s and deliver the goods", storeName);
     SendServerMsg(playerid, "On Duty!, don't exit the vehicle!");
     return 1;
@@ -81,6 +97,7 @@ Trucker_End(playerid) {
     TruckingCooldown[playerid] = gettime() + 20;
 
     DisablePlayerRaceCheckpoint(playerid);
+    UI_HideTimeLeft(playerid);
     return 1;
 }
 
@@ -94,9 +111,13 @@ hook OnPlayerEnterRaceCP(playerid)
             Trucker_End(playerid);
             SendServerMsg(playerid, "You've finished trucking!");
             SendServerMsgF(playerid, "And The Store gave you %d!", randm);
+            stop TruckingDeliveryTimer[playerid];
         }
         if(PlayerTruckingState[playerid] == STATE_PICKUP) {
-            Trucker_Begin(playerid);
+            SendServerMsg(playerid, "The staff is putting the goods in your truck!");
+            UI_TimeLeft(playerid, 10);
+            TogglePlayerControllable(playerid, false);
+            defer TruckingStandBy(playerid);
         }
     }
     return 1;
@@ -108,18 +129,39 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
             SendServerMsg(playerid, "Failed! you've exited the vehicle!");
             Trucker_End(playerid);
         }
+        if(PlayerCanTruck[playerid]) {
+            PlayerCanTruck[playerid] = false;
+        }
     }
-    if(PlayerCanTruck[playerid] == 1) {
-        PlayerCanTruck[playerid] = 0;
-    }
-    return 1;
-}
-
-hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
-    if(GetVehicleModel(vehicleid) == 414) {
-        SendServerMsg(playerid, "Use /trucker to start a trucker mission");
-        PlayerCanTruck[playerid] = 1;
+    if(newstate == PLAYER_STATE_DRIVER) {
+        new pvehid = GetPlayerVehicleID(playerid);
+        if(GetVehicleModel(pvehid) == 414) {
+            defer TruckerMsg(playerid);
+        }
     }
     return 1;
 }
 
+timer TruckingPickup[300000](playerid)
+{
+    SendServerMsg(playerid, "You have failed to pickup the goods");
+    Trucker_End(playerid);
+}
+
+timer TruckingDelivery[300000](playerid)
+{
+    SendServerMsg(playerid, "You have failed to deliver the goods");
+    Trucker_End(playerid);
+}
+
+timer TruckingStandBy[10000](playerid)
+{
+    Trucker_Begin(playerid);
+    TogglePlayerControllable(playerid, true);
+}
+
+timer TruckerMsg[1000](playerid)
+{
+    SendServerMsg(playerid, "Use /trucker to start a trucker mission");
+    PlayerCanTruck[playerid] = true;
+}

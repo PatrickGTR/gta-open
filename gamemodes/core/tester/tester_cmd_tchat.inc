@@ -2,7 +2,7 @@
 
 TCMD:tchat(playerid, params[])
 {
-    new msg[512], msg2[512];
+    new msg[128], msg2[128];
     if(sscanf(params, "s[128]", msg)) return SendSyntaxMsg(playerid, "/tchat <message>");
     foreach(new i : Player)
     {

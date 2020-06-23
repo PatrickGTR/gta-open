@@ -9,7 +9,6 @@ static Float:fx, Float:fy, Float:fz, Float:fangle;
 
 forward Float:GetXYInFrontOfPlayer(playerid, &Float:q, &Float:w, Float:distance);
 forward Float:GetXYBehindPlayer(playerid, &Float:q, &Float:w, Float:distance);
-forward FlyTimer();
 
 hook OnPlayerConnect(playerid)
 {
@@ -77,103 +76,95 @@ Float:GetXYBehindPlayer(playerid, &Float:q, &Float:w, Float:distance)
     return a;
 }
 
-task FlyTimer[100]()
+hook OnPlayerUpdate(playerid)
 {
     new keys, updown, leftright;
-    for(new playerid = 0; playerid < MAX_PLAYERS; playerid++)
+    if(!IsPlayerConnected(playerid)) {
+        return 0;
+    }
+    if(fly[playerid] == true)
     {
-        if(!IsPlayerConnected(playerid)) {
-            return 0;
+        GetPlayerKeys(playerid,keys,updown,leftright);
+        if(updown == KEY_UP) {
+            if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
+                GetPlayerPos(playerid, fx, fy, fz);
+                GetXYInFrontOfPlayer(playerid, fx, fy, 15.0);
+                SetPlayerPos(playerid, fx, fy, fz);
+                SetCameraBehindPlayer(playerid);
+            }
+            else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+                new playercar = GetPlayerVehicleID(playerid);
+                GetVehiclePos(playercar, fx, fy, fz);
+                GetXYInFrontOfPlayer(playerid, fx, fy, 15.0);
+                SetVehiclePos(playercar, fx, fy, fz);
+                SetCameraBehindPlayer(playerid);
+            }
         }
-        if(fly[playerid] == true)
-        {
-            GetPlayerKeys(playerid,keys,updown,leftright);
-            if(updown == KEY_UP) {
-                if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
-                    GetPlayerPos(playerid, fx, fy, fz);
-                    GetXYInFrontOfPlayer(playerid, fx, fy, 5.0);
-                    SetPlayerPos(playerid, fx, fy, fz);
-                    SetCameraBehindPlayer(playerid);
-                }
-                else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
-                {
-                    new playercar = GetPlayerVehicleID(playerid);
-                    GetVehiclePos(playercar, fx, fy, fz);
-                    GetXYInFrontOfPlayer(playerid, fx, fy, 5.0);
-                    SetVehiclePos(playercar, fx, fy, fz);
-                    SetCameraBehindPlayer(playerid);
-                }
+        else if(updown == KEY_DOWN) {
+            if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
+                GetPlayerPos(playerid, fx, fy, fz);
+                GetXYBehindPlayer(playerid, fx, fy, 15.0);
+                SetPlayerPos(playerid, fx, fy, fz);
+                SetCameraBehindPlayer(playerid);
             }
-            else if(updown == KEY_DOWN)
-            {
-                if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
-                    GetPlayerPos(playerid, fx, fy, fz);
-                    GetXYBehindPlayer(playerid, fx, fy, 5.0);
-                    SetPlayerPos(playerid, fx, fy, fz);
-                    SetCameraBehindPlayer(playerid);
-                }
-                else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-                    new playercar = GetPlayerVehicleID(playerid);
-                    GetVehiclePos(playercar, fx, fy, fz);
-                    GetXYBehindPlayer(playerid, fx, fy, 5.0);
-                    SetVehiclePos(playercar, fx, fy, fz);
-                    SetCameraBehindPlayer(playerid);
-                }
+            else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+                new playercar = GetPlayerVehicleID(playerid);
+                GetVehiclePos(playercar, fx, fy, fz);
+                GetXYBehindPlayer(playerid, fx, fy, 15.0);
+                SetVehiclePos(playercar, fx, fy, fz);
+                SetCameraBehindPlayer(playerid);
             }
-            if(leftright == KEY_LEFT)
-            {
-                if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
-                    GetPlayerFacingAngle(playerid, fangle);
-                    SetPlayerFacingAngle(playerid, fangle+10);
-                    SetCameraBehindPlayer(playerid);
-                }
-                else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-                    new playercar = GetPlayerVehicleID(playerid);
-                    GetVehiclePos(playercar, fx, fy, fz);
-                    GetXYBehindPlayer(playerid, fx, fy, 5.0);
-                    SetVehiclePos(playercar, fx, fy, fz);
-                    SetCameraBehindPlayer(playerid);
-                }
+        }
+        if(leftright == KEY_LEFT) {
+            if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
+                GetPlayerFacingAngle(playerid, fangle);
+                SetPlayerFacingAngle(playerid, fangle+10);
+                SetCameraBehindPlayer(playerid);
             }
-            else if(leftright == KEY_RIGHT)
-            {
-                if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
-                    GetPlayerFacingAngle(playerid, fangle);
-                    SetPlayerFacingAngle(playerid, fangle-10);
-                    SetCameraBehindPlayer(playerid);
-                }
-                else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-                    new playercar = GetPlayerVehicleID(playerid);
-                    GetVehicleZAngle(playercar, fangle);
-                    SetVehicleZAngle(playercar, fangle-10);
-                    SetCameraBehindPlayer(playerid);
-                }
+            else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+                new playercar = GetPlayerVehicleID(playerid);
+                GetVehicleZAngle(playercar, fangle);
+                SetVehicleZAngle(playercar, fangle+10);
+                SetCameraBehindPlayer(playerid);
             }
-            if(keys == KEY_JUMP) {
-                if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
-                    GetPlayerPos(playerid, fx, fy, fz);
-                    SetPlayerPos(playerid, fx, fy, fz+5);
-                    SetCameraBehindPlayer(playerid);
-                }
-                else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-                    new playercar = GetPlayerVehicleID(playerid);
-                    GetVehiclePos(playercar, fx, fy, fz);
-                    SetVehiclePos(playercar, fx, fy, fz+5);
-                    SetCameraBehindPlayer(playerid);
-                }
+        }
+        else if(leftright == KEY_RIGHT) {
+            if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
+                GetPlayerFacingAngle(playerid, fangle);
+                SetPlayerFacingAngle(playerid, fangle-10);
+                SetCameraBehindPlayer(playerid);
             }
-            else if(keys == KEY_SPRINT) {
-                if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
-                    GetPlayerPos(playerid, fx, fy, fz);
-                    SetPlayerPos(playerid, fx, fy, fz-5);
-                    SetCameraBehindPlayer(playerid);
-                }
-                else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-                    new playercar = GetPlayerVehicleID(playerid);
-                    GetVehiclePos(playercar, fx, fy, fz);
-                    SetVehiclePos(playercar, fx, fy, fz-5);
-                    SetCameraBehindPlayer(playerid);
-                }
+            else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+                new playercar = GetPlayerVehicleID(playerid);
+                GetVehicleZAngle(playercar, fangle);
+                SetVehicleZAngle(playercar, fangle-10);
+                SetCameraBehindPlayer(playerid);
+            }
+        }
+        if(keys == KEY_JUMP) {
+            if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
+                GetPlayerPos(playerid, fx, fy, fz);
+                SetPlayerPos(playerid, fx, fy, fz+10);
+                SetCameraBehindPlayer(playerid);
+            }
+            else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+                new playercar = GetPlayerVehicleID(playerid);
+                GetVehiclePos(playercar, fx, fy, fz);
+                SetVehiclePos(playercar, fx, fy, fz+10);
+                SetCameraBehindPlayer(playerid);
+            }
+        }
+        else if(keys == KEY_SPRINT) {
+            if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
+                GetPlayerPos(playerid, fx, fy, fz);
+                SetPlayerPos(playerid, fx, fy, fz-10);
+                SetCameraBehindPlayer(playerid);
+            }
+            else if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+                new playercar = GetPlayerVehicleID(playerid);
+                GetVehiclePos(playercar, fx, fy, fz);
+                SetVehiclePos(playercar, fx, fy, fz-10);
+                SetCameraBehindPlayer(playerid);
             }
         }
     }
