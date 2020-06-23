@@ -184,8 +184,12 @@ hook OnPlayerDisconnect(playerid, reason)
     return 1;
 }
 
+stock Player_HasFinishedJailSentence(playerid) {
+    return ((gettime() -  PlayerJailTick[playerid]) > PlayerJailTime[playerid]);
+}
+
 stock Player_IsInJail(playerid) {
-    return (PlayerJailTime[playerid] > 0 && (gettime() -  PlayerJailTick[playerid]) < PlayerJailTime[playerid]);
+    return (PlayerJailTime[playerid] > 0 && Player_HasFinishedJailSentence(playerid));
 }
 
 stock Player_SetBailAmount(playerid, amount) {

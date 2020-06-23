@@ -30,6 +30,12 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
+CMD:lnum(playerid, params[]) {
+    lottoDrawCounter = 5;
+    lottoLastTick = 0;
+    return 1;
+}
+
 hook OnServerSecondUpdate() {
 
     // only show the message every 2 minutes
@@ -41,19 +47,22 @@ hook OnServerSecondUpdate() {
     // draw every 10 minutes.
     if(lottoDrawCounter == 5) {
         new
-            genRandomNum = random(MAX_LOTTO_INPUT - 1) + 1,
+            genRandomNum = 10,//random(MAX_LOTTO_INPUT - 1) + 1,
             winnerID = INVALID_PLAYER_ID;
 
         foreach(new i : Player) {
+
+            // set winner id.
             if(PlayerLottoNumber[i] == genRandomNum) {
                 winnerID = i;
-                PlayerLottoNumber[i] = 0;
-                Bit_Vet(PlayerBoughtTicket, i);
-                break;
             }
+
+            // reset all data
+            PlayerLottoNumber[i] = 0;
+            Bit_Vet(PlayerBoughtTicket, i);
         }
 
-        for(new i; i < sizeof(lottoUsedNumbers); i++) {
+        for(new i; i < MAX_LOTTO_INPUT; i++) {
             Bit_Vet(lottoUsedNumbers, i);
         }
 
@@ -61,14 +70,16 @@ hook OnServerSecondUpdate() {
             MessageBox_ShowAllF(
                 TYPE_INFORMATION,
                 "~y~Lotto Informataion",
-                "~w~WINNER WINNER CHICKEN DINNER! ~p~%p[%d] won ~g~%m ~w~from the lottery!~n~\
-                Make sure you get a ticket for next draw ~p~/lotto [1 - %i]",
+                "~y~WINNER WINNER CHICKEN DINNER! ~p~%p ~w~won ~g~%m ~w~from the lottery!~n~\
+                ~w~Make sure you get a ticket for next draw ~p~/lotto [1 - %i]",
                 _,
-                LottoJackpot, MAX_LOTTO_INPUT
+                winnerID, LottoJackpot, MAX_LOTTO_INPUT
             );
 
             GivePlayerMoney(winnerID, LottoJackpot);
             LottoJackpot = LOTTO_START;
+
+            ApplyAnimation(winnerID, "OTB", "wtchrace_win", 4.1, 0, 1, 1, 0, 3300); // Winning animation
         }
 
         if(winnerID == INVALID_PLAYER_ID) {
@@ -118,7 +129,7 @@ CMD:lotto(playerid, params[]) {
     	return SendErrorMsg(playerid, "You don't have enough money to buy a ticket!");
     }
 
-    if(lottoID <= 0 && lottoID > MAX_LOTTO_INPUT) {
+    if(lottoID <= 0 || lottoID > MAX_LOTTO_INPUT) {
     	return SendErrorMsgF(playerid, "You can only pick a number between 1 and %i", MAX_LOTTO_INPUT);
     }
 
