@@ -98,6 +98,8 @@ Pizza_End(playerid) {
 
     DisablePlayerRaceCheckpoint(playerid);
     UI_HideTimeLeft(playerid);
+    stop PizzaDeliveryTimer[playerid];
+    stop PizzaPickupTimer[playerid];
     return 1;
 }
 
