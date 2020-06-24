@@ -15,27 +15,33 @@ hook OnPlayerConnect(playerid) {
 	TextMenuCallbackHandler[playerid][0] = EOS;
 	TextMenuItems[playerid][0] = EOS;
 
-    TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 143.0, 130.0, "Header");
-	PlayerTextDrawLetterSize(playerid, TextMenuHeader[playerid], 0.5, 0.5 * 4);
-	PlayerTextDrawAlignment(playerid, TextMenuHeader[playerid], 2);
-	PlayerTextDrawColor(playerid, TextMenuHeader[playerid], COLOR_BLUE);
-	PlayerTextDrawSetOutline(playerid, TextMenuHeader[playerid], 1);
-	PlayerTextDrawBackgroundColor(playerid, TextMenuHeader[playerid], TD_OUTLINE_COLOUR);
+	TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 10.000000, 146.000000, "command list");
 	PlayerTextDrawFont(playerid, TextMenuHeader[playerid], 3);
+	PlayerTextDrawLetterSize(playerid, TextMenuHeader[playerid], 0.300000, 1.200000);
+	PlayerTextDrawTextSize(playerid, TextMenuHeader[playerid], 165.000000, 156.500000);
+	PlayerTextDrawSetOutline(playerid, TextMenuHeader[playerid], 0);
+	PlayerTextDrawSetShadow(playerid, TextMenuHeader[playerid], 1);
+	PlayerTextDrawAlignment(playerid, TextMenuHeader[playerid], 1);
+	PlayerTextDrawColor(playerid, TextMenuHeader[playerid], -1);
+	PlayerTextDrawBackgroundColor(playerid, TextMenuHeader[playerid], 255);
+	PlayerTextDrawBoxColor(playerid, TextMenuHeader[playerid], 50);
+	PlayerTextDrawUseBox(playerid, TextMenuHeader[playerid], 0);
 	PlayerTextDrawSetProportional(playerid, TextMenuHeader[playerid], 1);
-	
+	PlayerTextDrawSetSelectable(playerid, TextMenuHeader[playerid], 0);
 
-	TextMenuBody[playerid] = CreatePlayerTextDraw(playerid, 31.0, 130.0, "Content");
-	PlayerTextDrawLetterSize(playerid, TextMenuBody[playerid], 0.2, 0.2 * 4);
-	PlayerTextDrawTextSize(playerid, TextMenuBody[playerid], 267.0, 0.000000);
-	PlayerTextDrawAlignment(playerid, TextMenuBody[playerid], 1);
-	PlayerTextDrawColor(playerid, TextMenuBody[playerid], -1);
-	PlayerTextDrawUseBox(playerid, TextMenuBody[playerid], 1);
-	PlayerTextDrawBoxColor(playerid, TextMenuBody[playerid], 120);
-	PlayerTextDrawSetOutline(playerid, TextMenuBody[playerid], 1);
-	PlayerTextDrawBackgroundColor(playerid, TextMenuBody[playerid], TD_OUTLINE_COLOUR);
+	TextMenuBody[playerid] = CreatePlayerTextDraw(playerid, 10.000000, 160.000000, "~n~~n~~w~___________Press_~y~T_~w~Or_~y~F6~w~_and_type_option_number~n~_________________Press_~y~N_~w~to_close_this_box~n~~n~");
 	PlayerTextDrawFont(playerid, TextMenuBody[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, TextMenuBody[playerid], 0.150000, 0.600000);
+	PlayerTextDrawTextSize(playerid, TextMenuBody[playerid], 165.000000, 0.000000);
+	PlayerTextDrawSetOutline(playerid, TextMenuBody[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, TextMenuBody[playerid], 0);
+	PlayerTextDrawAlignment(playerid, TextMenuBody[playerid], 1);
+	PlayerTextDrawColor(playerid, TextMenuBody[playerid], -16776961);
+	PlayerTextDrawBackgroundColor(playerid, TextMenuBody[playerid], 255);
+	PlayerTextDrawBoxColor(playerid, TextMenuBody[playerid], 50);
+	PlayerTextDrawUseBox(playerid, TextMenuBody[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, TextMenuBody[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, TextMenuBody[playerid], 0);
 	return 1;
 }
 
@@ -101,8 +107,8 @@ stock TextMenu_Create(playerid, const callback[], const title[]) {
 	if(!IsPlayerConnected(playerid)) {
 		return 0;
 	}
-	
-	// Just to make sure everything is fresh everytime we create 
+
+	// Just to make sure everything is fresh everytime we create
 	// a new  Text Menu.
 	TextMenu_Hide(playerid);
 
@@ -124,10 +130,10 @@ stock TextMenu_Show(playerid)
 	}
 
 	new
-		string[1028];
-    format(string, sizeof(string), "~n~~n~~n~%s~n~~n~~w~___________Press_~y~T_~w~Or_~y~F6~w~_and_type_option_number~n~_________________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
+		string[1024];
+    format(string, sizeof(string), "~n~%s~n~~n~~w~___________Press_~y~T_~w~Or_~y~F6~w~_and_type_option_number~n~_________________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
 	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
-	
+
 	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);
 	PlayerTextDrawShow(playerid,TextMenuBody[playerid]);
 
@@ -145,7 +151,7 @@ stock TextMenu_Hide(playerid)
 	}
 
 	if(!TextMenuState[playerid]) {
-		return 0; 	
+		return 0;
 	}
 
 	TextMenuCallbackHandler[playerid][0] = EOS;

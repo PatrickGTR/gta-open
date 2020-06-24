@@ -4,6 +4,19 @@ new
     ServerTime = 0,
     ServerDay = 0;
 
+CMD:forcerace(playerid, params[]) {
+    ServerTime = 1440 - 65;
+    return 1;
+}
+
+stock Server_GetInGameTime() {
+    return ServerTime;
+}
+
+stock Server_GetInGameDay() {
+    return ServerDay;
+}
+
 hook OnServerSecondUpdate() {
 
     new

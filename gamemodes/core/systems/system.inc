@@ -15,3 +15,4 @@
 #include <slot-machine_system>
 #include <lotto_system>
 #include <moneybag_system>
+#include <horse-betting_system>
