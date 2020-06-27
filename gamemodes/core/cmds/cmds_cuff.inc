@@ -42,7 +42,7 @@ CMD:cuff(playerid, params[])
         return SendSyntaxMsg(playerid, "/cuff (name/id)");
     }
     GetPlayerPos(playerid, x, y, z);
-    if(Player_GetClass(playerid) != TEAM_POLICE) {
+    if(!Player_IsLEO(playerid)) {
         return SendErrorMsg(playerid, "Only cops can use this command!");
     }
     if(!IsPlayerConnected(targetid)) {

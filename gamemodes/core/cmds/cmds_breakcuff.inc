@@ -31,11 +31,13 @@ CMD:breakcuff(playerid, params[]) {
         return 1;
     }
 
-    PlayerBreakCuffTick[playerid] = gettime();
+    // Notify player
     SendServerMsg(playerid, "You have managed to picklock the cuffs! Run away from the police!");
 
+    // Set data
     Player_GivePicklock(playerid, -1);
-
     Player_Cuff(playerid, false);
-    return true;
+
+    PlayerBreakCuffTick[playerid] = gettime();
+    return 1;
 }

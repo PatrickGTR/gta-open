@@ -30,6 +30,10 @@ stock bool:RandomChance(percentage) {
 	return (percentage >= random(100) + 1);
 }
 
+Player_IsLEO(playerid) {
+    return (Player_GetClass(playerid) == TEAM_POLICE || Player_GetClass(playerid) == TEAM_ARMY);
+}
+
 Player_IsInAmmu(playerid)
 {
     if(GetPlayerVirtualWorld(playerid) == 6 || GetPlayerVirtualWorld(playerid) == 7) {

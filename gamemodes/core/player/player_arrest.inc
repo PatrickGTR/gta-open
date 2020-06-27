@@ -6,7 +6,7 @@
 // -4 (target is in car, pull over demand.)
 stock Player_Arrest(playerid, targetid) {
 
-    if(Player_GetClass(playerid) != TEAM_POLICE) {
+    if(!Player_IsLEO(playerid)) {
         return -1;
     }
 
