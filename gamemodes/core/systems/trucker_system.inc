@@ -98,6 +98,8 @@ Trucker_End(playerid) {
 
     DisablePlayerRaceCheckpoint(playerid);
     UI_HideTimeLeft(playerid);
+    stop TruckingDeliveryTimer[playerid];
+    stop TruckingPickupTimer[playerid];
     return 1;
 }
 
