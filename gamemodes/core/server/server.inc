@@ -141,7 +141,7 @@ hook OnGameModeInit() {
 }
 
 static task _ServerSecondTimer[1000]() {
-	CallLocalFunction("OnServerSecondUpdate", "");
+	CallRemoteFunction("OnServerSecondUpdate", "");
 }
 
 

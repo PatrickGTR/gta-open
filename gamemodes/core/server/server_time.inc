@@ -4,6 +4,20 @@ new
     ServerTime = 0,
     ServerDay = 0;
 
+CMD:forcerace(playerid, params[]) {
+    ServerTime = 1440 - 65;
+    return 1;
+}
+
+forward Server_GetInGameTime();
+public Server_GetInGameTime() {
+    return ServerTime;
+}
+
+stock Server_GetInGameDay() {
+    return ServerDay;
+}
+
 hook OnServerSecondUpdate() {
 
     new
@@ -20,7 +34,7 @@ hook OnServerSecondUpdate() {
 		ServerDay = 0;
 		ServerTime = 0;
 
-        CallLocalFunction("OnServerWeekReset", "");
+        CallRemoteFunction("OnServerWeekReset", "");
 	}
 	if(ServerTime == 1440) {
 		ServerDay ++;
@@ -38,7 +52,7 @@ hook OnServerSecondUpdate() {
         format(daystring, sizeof (daystring), "%s", dayName[clamp(ServerDay, 0, sizeof(dayName) - 1)]);
         UI_SetDay(daystring);
 
-        CallLocalFunction("OnServerDayReset", "");
+        CallRemoteFunction("OnServerDayReset", "");
 	}
 
 	foreach(new i : Player) {

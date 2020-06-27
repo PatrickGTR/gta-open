@@ -19,7 +19,12 @@
 // Letter-size-y = letter-size-x * 4
 // For a nice font display
 
+
+#define HORSE_BET_MASTER 1
+
 #include <a_samp>
+
+#include <YSI_Core/y_master>
 
 #define MYSQL_PREPARE_DEBUG 	(false)
 #define MAX_STATEMENTS 64

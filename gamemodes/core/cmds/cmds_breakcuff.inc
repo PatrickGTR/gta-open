@@ -9,7 +9,11 @@ hook OnPlayerConnect(playerid) {
 }
 
 CMD:breakcuff(playerid, params[]) {
-    if (Player_IsCuffed(playerid)) {
+
+    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+        return SendErrorMsg(playerid, "Only civilians can break cuff.");
+    }
+    if (!Player_IsCuffed(playerid)) {
         return SendErrorMsg(playerid, "You are not cuffed, how is that possible?");
     }
     if (gettime() - PlayerBreakCuffTick[playerid] < 60) {
