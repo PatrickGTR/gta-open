@@ -94,14 +94,20 @@ static void:Account_NotifySuccess(playerid) {
 }
 
 static
-    Statement: stmt_updatePlayerSkin;
+    Statement: stmt_updatePlayerSkin,
+    Statement: stmt_updatePlayerLastLogin;
 
 hook OnMySQLConnected() {
     stmt_updatePlayerSkin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET skin = ? WHERE u_id = ?");
+    stmt_updatePlayerLastLogin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET last_login = CURRENT_TIMESTAMP() WHERE u_id = ?");
     return 1;
 }
 
-hook OnPlayeLogin(playerid) {
+hook OnPlayerLogin(playerid) {
+
+    MySQL_BindInt(stmt_updatePlayerLastLogin, 0, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded(stmt_updatePlayerLastLogin);
+
     gPlayerLoginStatus[playerid] = true;
     return 1;
 }

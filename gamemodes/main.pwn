@@ -20,11 +20,7 @@
 // For a nice font display
 
 
-#define HORSE_BET_MASTER 1
-
 #include <a_samp>
-
-#include <YSI_Core/y_master>
 
 #define MYSQL_PREPARE_DEBUG 	(false)
 #define MAX_STATEMENTS 64
@@ -45,6 +41,7 @@
 #include <YSI_Coding\y_timers>
 #include <mysql_prepared>
 #include <map-zones>
+#include <formatex>
 
 #include <init>
 #include <utils>

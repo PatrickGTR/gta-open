@@ -1,6 +1,5 @@
 #include <YSI_Coding\y_hooks>
 
-
 static
     gPlayerUsingLoopingAnim[MAX_PLAYERS],
     Text:txtAnimHelper;
@@ -19,8 +18,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 
-hook OnPlayerDeath(playerid, killerid, reason)
-{
+hook OnPlayerDeath(playerid, killerid, reason) {
 	if(gPlayerUsingLoopingAnim[playerid]) {
         gPlayerUsingLoopingAnim[playerid] = 0;
         TextDrawHideForPlayer(playerid, txtAnimHelper);
@@ -61,7 +59,7 @@ CMD:animlist(playerid, params[])
     SendClientMessage(playerid, COLOR_YELLOW, "/fall - /fallback - /injured - /akick - /push - /lowbodypush - /handsup - /bomb - /drunk - /getarrested - /laugh - /sup\n");
     SendClientMessage(playerid, COLOR_YELLOW, "/basket - /headbutt - /medic - /spray - /robman - /taichi - /lookout - /kiss - /cellin - /cellout - /crossarms - /lay\n");
 	SendClientMessage(playerid, COLOR_YELLOW, "/deal - /crack - /smokeanim - /groundsit - /chat - /chat2 - /dance - /fucku - /strip - /hide - /vomit - /eat - /chairsit - /reload\n");
-    SendClientMessage(playerid, COLOR_YELLOW, "/koface - /kostomach - /rollfall - /carjacked1 - /carjacked2 - /rcarjack1 - /rcarjack2 - /lcarjack1 - /lcarjack2 - /bat\n");
+    SendClientMessage(playerid, COLOR_YELLOW, "/koface - /kostomach - /rollfall - /carjacked - /rcarjack1 - /rcarjack2 - /lcarjack1 - /lcarjack2 - /bat\n");
     SendClientMessage(playerid, COLOR_YELLOW, "/lifejump - /exhaust - /leftslap - /carlock - /hoodfrisked - /lightcig - /tapcig - /box - /lay2 - /chant - /finger\n");
     SendClientMessage(playerid, COLOR_YELLOW, "/shouting - /knife - /cop - /elbow - /kneekick - /airkick - /gkick - /gpunch - /fstance - /lowthrow - /highthrow - /aim\n");
     SendClientMessage(playerid, COLOR_YELLOW, "/pee - /lean - /run - /poli - /surrender - /sit - /breathless - /seat - /rap - /cross - /ped - /jiggy - /gesture\n");
@@ -86,7 +84,7 @@ CMD:surrender(playerid,params[])
 
         return SendErrorMsg(playerid, "You must be on-foot to use this animation.");
     }
-    SetPlayerSpecialAction(playerid,SPECIAL_ACTION_HANDSUP);
+    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_HANDSUP);
     return 1;
 }
 
@@ -479,411 +477,563 @@ CMD:smoke(playerid,params[]){
     return 1;
 }
 
-CMD:chora(playerid,params[]) { ApplyAnimation(playerid, "COP_AMBIENT", "Coplook_watch",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:relax(playerid,params[]) { ApplyAnimation(playerid, "CRACK", "crckidle1",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:crabs(playerid,params[]) { ApplyAnimation(playerid,"MISC","Scratchballs_01",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:greeting(playerid,params[]) { ApplyAnimation(playerid,"ON_LOOKERS","Pointup_loop",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:stop(playerid,params[]) { ApplyAnimation(playerid,"PED","endchat_01",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:wash(playerid,params[]) { ApplyAnimation(playerid,"BD_FIRE","wash_up",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:mourn(playerid,params[]) { ApplyAnimation(playerid,"GRAVEYARD","mrnF_loop",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:followme(playerid,params[]) { ApplyAnimation(playerid,"WUZI","Wuzi_follow",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:still(playerid,params[]) { ApplyAnimation(playerid,"WUZI","Wuzi_stand_loop", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:hitch(playerid,params[]) { ApplyAnimation(playerid,"MISC","Hiker_Pose", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:palmbitch(playerid,params[]) { ApplyAnimation(playerid,"MISC","bitchslap",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:cpranim(playerid,params[]) { ApplyAnimation(playerid,"MEDIC","CPR",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:giftgiving(playerid,params[]) { ApplyAnimation(playerid,"KISSING","gift_give",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:slap2(playerid,params[]) { ApplyAnimation(playerid,"SWEET","sweet_ass_slap",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:drunk(playerid,params[]) { ApplyAnimation(playerid,"PED","WALK_DRUNK",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:pump(playerid,params[]) { ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:tosteal(playerid,params[]) { ApplyAnimation(playerid,"ped", "ARRESTgun", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:laugh(playerid,params[]) { ApplyAnimation(playerid, "RAPPING", "Laugh_01", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:lookout(playerid,params[])  { ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:robman(playerid,params[]) { ApplyAnimation(playerid, "SHOP", "ROB_Loop_Threat", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:hide(playerid,params[]) { ApplyAnimation(playerid, "ped", "cower",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:vomit(playerid,params[]) { ApplyAnimation(playerid, "FOOD", "EAT_Vomit_P", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:eat(playerid,params[]) { ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:crack(playerid,params[]) { ApplyAnimation(playerid, "CRACK", "crckdeth2", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:fuck(playerid,params[]) { ApplyAnimation(playerid,"PED","fucku",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:taichi(playerid,params[]) { ApplyAnimation(playerid,"PARK","Tai_Chi_Loop", 4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:entrenar(playerid,params[]) { ApplyAnimation(playerid,"PARK","Tai_Chi_Loop", 4.1, 0, 1, 1, 1, 1, 1); return 1; } // amin para magos
-CMD:kiss(playerid,params[]) { ApplyAnimation(playerid,"KISSING","Playa_Kiss_01",4.1, 0, 1, 1, 1, 1, 1); return 1; }
-CMD:carjacked1(playerid, params[])//17, 12:58pm, 4/27/2012
-{
-	ApplyAnimation(playerid,"PED","CAR_jackedLHS",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-CMD:carjacked2(playerid, params[])//18, 12:59pm, 4/27/2012
-{
-	 ApplyAnimation(playerid,"PED","CAR_jackedRHS",4.1, 0, 1, 1, 1, 1, 1);
-     return 1;
-}
-CMD:handsup(playerid, params[])//19 1:00 pm , 4/27/2012
-{
-	//SetPlayerSpecialAction(playerid,SPECIAL_ACTION_HANDSUP);
-	ApplyAnimation(playerid, "ROB_BANK","SHP_HandsUp_Scr",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-CMD:cellin(playerid, params[]) {// 20 1:01 pm, 4/27/2012
-    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USECELLPHONE);
-    return 1;
-}
-CMD:cellout(playerid, params[])//21 1:02 pm , 4/27/2012
-{
-    SetPlayerSpecialAction(playerid,SPECIAL_ACTION_STOPUSECELLPHONE);
-    return 1;
-}
-CMD:bomb(playerid, params[])//23 4/27/2012
-{
-	ClearAnimations(playerid);
-	ApplyAnimation(playerid, "BOMBER","BOM_Plant_Loop",4.1, 0, 1, 1, 1, 1, 1); // Place Bomb
-	return 1;
-}
-CMD:getarrested(playerid, params[])//24 4/27/2012
-{
-	ApplyAnimation(playerid,"ped", "ARRESTgun", 4.1, 0, 1, 1, 1, 1, 1); // Gun Arrest
-	return 1;
-}
-CMD:crossarms(playerid, params[])//28
-{
-	ApplyAnimation(playerid, "COP_AMBIENT", "Coplook_loop", 4.1, 0, 1, 1, 1, 1, 1); // Arms crossed
+CMD:chora(playerid,params[])  {
+	ApplyAnimation(playerid, "COP_AMBIENT", "Coplook_watch",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:lay(playerid, params[])//29
-{
-	ApplyAnimation(playerid,"BEACH", "bather",4.1, 0, 1, 1, 1, 1, 1); // Lay down
+CMD:relax(playerid,params[])  {
+	ApplyAnimation(playerid, "CRACK", "crckidle1",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:foodeat(playerid, params[])//32
-{
-	ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 1, 1, 1, 1, 1); // Eat Burger
+CMD:crabs(playerid,params[])  {
+	ApplyAnimation(playerid,"MISC","Scratchballs_01",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:wave(playerid, params[])//33
-{
-	ApplyAnimation(playerid, "ON_LOOKERS", "wave_loop", 4.1, 0, 1, 1, 1, 1, 1); // Wave
+CMD:greeting(playerid,params[])  {
+	ApplyAnimation(playerid,"ON_LOOKERS","Pointup_loop",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:slapass(playerid, params[])//34
-{
-	ApplyAnimation(playerid, "SWEET", "sweet_ass_slap", 4.1, 0, 1, 1, 1, 1, 1); // Ass Slapping
- 	return 1;
-}
-
-CMD:dealer(playerid, params[])//35
-{
-	ApplyAnimation(playerid, "DEALER", "DEALER_DEAL", 4.1, 0, 1, 1, 1, 1, 1); // Deal Drugs
+CMD:stop(playerid,params[])  {
+	ApplyAnimation(playerid,"PED","endchat_01",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:groundsit(playerid, params[])//38
-{
-	ApplyAnimation(playerid,"BEACH", "ParkSit_M_loop", 4.1, 0, 1, 1, 1, 1, 1); // Sit
+CMD:wash(playerid,params[])  {
+	ApplyAnimation(playerid,"BD_FIRE","wash_up",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:chat(playerid, params[])//39
-{
-	new num;
-	if(sscanf(params, "i", num)) return SendClientMessage(playerid, COLOR_WHITE, " USAGE: /chat [1-2]");
-	if(num > 2 || num < 1) { SendClientMessage(playerid, COLOR_WHITE, " USAGE: /chat [1-2]"); }
-	if(num == 1) { ApplyAnimation(playerid,"PED","IDLE_CHAT",4.1, 0, 1, 1, 1, 1, 1); }
-	if(num == 2) { ApplyAnimation(playerid,"MISC","Idle_Chat_02",4.1, 0, 1, 1, 1, 1, 1); }
-    return 1;
-}
-
-CMD:fucku(playerid, params[])//40
-{
-	ApplyAnimation(playerid,"PED","fucku",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:chairsit(playerid, params[])//42
-{
-	ApplyAnimation(playerid,"PED","SEAT_idle",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:fall(playerid, params[])//43
-{
-	ApplyAnimation(playerid,"PED","KO_skid_front",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:fallback(playerid, params[])//44
-{
-	ApplyAnimation(playerid, "PED","FLOOR_hit_f", 4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:injured(playerid, params[])//46
-{
-	ApplyAnimation(playerid, "SWEET", "Sweet_injuredloop", 4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:sup(playerid, params[])//47
-{
-	new number;
-	if(sscanf(params, "i", number)) return SendClientMessage(playerid,0xEFEFF7AA,"USAGE: /sup [1-3]");
-	if(number < 1 || number > 3) { SendClientMessage(playerid,0xEFEFF7AA,"USAGE: /sup [1-3]"); }
-	if(number == 1) { ApplyAnimation(playerid,"GANGS","hndshkba",4.1, 0, 1, 1, 1, 1, 1); }
-	if(number == 2) { ApplyAnimation(playerid,"GANGS","hndshkda",4.1, 0, 1, 1, 1, 1, 1); }
-    if(number == 3) { ApplyAnimation(playerid,"GANGS","hndshkfa_swt",4.1, 0, 1, 1, 1, 1, 1); }
-   	return 1;
-}
-
-CMD:push(playerid, params[])// 49
-{
-	ApplyAnimation(playerid,"GANGS","shake_cara",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:akick(playerid, params)// 50
-{
-	ApplyAnimation(playerid,"POLICE","Door_Kick",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:lowbodypush(playerid, params[])// 51
-{
-	ApplyAnimation(playerid,"GANGS","shake_carSH",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:spray(playerid, params[])// 52
-{
-	ApplyAnimation(playerid,"SPRAYCAN","spraycan_full",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:headbutt(playerid, params[])//53
-{
-	ApplyAnimation(playerid,"WAYFARER","WF_Fwd",4.1, 0, 1, 1, 1, 1, 1);
+CMD:mourn(playerid,params[])  {
+	ApplyAnimation(playerid,"GRAVEYARD","mrnF_loop",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:medic(playerid, params[])//54
-{
+CMD:followme(playerid,params[])  {
+	ApplyAnimation(playerid,"WUZI","Wuzi_follow",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
+}
+
+CMD:still(playerid,params[])  {
+	ApplyAnimation(playerid,"WUZI","Wuzi_stand_loop", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
+}
+
+CMD:hitch(playerid,params[])  {
+	ApplyAnimation(playerid,"MISC","Hiker_Pose", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
+}
+
+CMD:palmbitch(playerid,params[])  {
+	ApplyAnimation(playerid,"MISC","bitchslap",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
+}
+
+CMD:cpranim(playerid,params[])  {
 	ApplyAnimation(playerid,"MEDIC","CPR",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:koface(playerid, params[])//55
-{
-	ApplyAnimation(playerid,"PED","KO_shot_face",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:kostomach(playerid, params[])//56
-{
-	ApplyAnimation(playerid,"PED","KO_shot_stom",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:lifejump(playerid, params[])//57
-{
-	ApplyAnimation(playerid,"PED","EV_dive",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:exhaust(playerid, params[])//58
-{
-	ApplyAnimation(playerid,"PED","IDLE_tired",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:leftslap(playerid, params[])//59
-{
-	ApplyAnimation(playerid,"PED","BIKE_elbowL",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:rollfall(playerid, params[])//60
-{
-	ApplyAnimation(playerid,"PED","BIKE_fallR",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:carlock(playerid, params[])//61
-{
-	ApplyAnimation(playerid,"PED","CAR_doorlocked_LHS",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:rcarjack1(playerid, params[])//62
-{
-	ApplyAnimation(playerid,"PED","CAR_pulloutL_LHS",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:lcarjack1(playerid, params[])//63
-{
-	ApplyAnimation(playerid,"PED","CAR_pulloutL_RHS",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-CMD:rcarjack2(playerid, params[])//64
-{
-	ApplyAnimation(playerid,"PED","CAR_pullout_LHS",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
-
-CMD:lcarjack2(playerid, params[])//65
-{
-	ApplyAnimation(playerid,"PED","CAR_pullout_RHS",4.1, 0, 1, 1, 1, 1, 1);
+CMD:giftgiving(playerid,params[])  {
+	ApplyAnimation(playerid,"KISSING","gift_give",4.1, 0, 1, 1, 1, 1, 1);
 	return 1;
 }
 
-CMD:hoodfrisked(playerid, params[])//66
-{
-	ApplyAnimation(playerid,"POLICE","crm_drgbst_01",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:slap2(playerid,params[])  {
+	ApplyAnimation(playerid,"SWEET","sweet_ass_slap",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:lightcig(playerid, params[])//67
-{
-	ApplyAnimation(playerid,"SMOKING","M_smk_in",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:drunk(playerid,params[])  {
+	ApplyAnimation(playerid,"PED","WALK_DRUNK",4.1, 0, 1, 1, 1, 1, 1);
+	return  1;
 }
 
-CMD:tapcig(playerid, params[])//68
-{
-	ApplyAnimation(playerid,"SMOKING","M_smk_tap",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:pump(playerid,params[]) {
+	ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:bat(playerid, params[])//69
-{
-	ApplyAnimation(playerid,"BASEBALL","Bat_IDLE",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:tosteal(playerid,params[])  {
+	ApplyAnimation(playerid,"ped", "ARRESTgun", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:box(playerid, params[])//70
-{
-	ApplyAnimation(playerid,"GYMNASIUM","GYMshadowbox",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:laugh(playerid,params[])  {
+	ApplyAnimation(playerid, "RAPPING", "Laugh_01", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:lay2(playerid, params[])//71
-{
-	ApplyAnimation(playerid,"SUNBATHE","Lay_Bac_in",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:lookout(playerid,params[])   {
+	ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:chant(playerid, params[])//72
-{
-	ApplyAnimation(playerid,"RIOT","RIOT_CHANT",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:robman(playerid,params[])  {
+	ApplyAnimation(playerid, "SHOP", "ROB_Loop_Threat", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:finger(playerid, params[])//73
-{
-	ApplyAnimation(playerid,"RIOT","RIOT_FUKU",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:hide(playerid,params[])  {
+	ApplyAnimation(playerid, "ped", "cower",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:shouting(playerid, params[])//74
-{
-	ApplyAnimation(playerid,"RIOT","RIOT_shout",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:vomit(playerid,params[])  {
+	ApplyAnimation(playerid, "FOOD", "EAT_Vomit_P", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:cop(playerid,params[])//75
-{
-	ApplyAnimation(playerid,"SWORD","sword_block",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:eat(playerid,params[])  {
+	ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:elbow(playerid, params[])//76
-{
-	ApplyAnimation(playerid,"FIGHT_D","FightD_3",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:crack(playerid,params[])  {
+	ApplyAnimation(playerid, "CRACK", "crckdeth2", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:kneekick(playerid, params[])//77
-{
-	ApplyAnimation(playerid,"FIGHT_D","FightD_2",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:fuck(playerid,params[])  {
+	ApplyAnimation(playerid,"PED","fucku",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:fstance(playerid, params[])//78
-{
-	ApplyAnimation(playerid,"FIGHT_D","FightD_IDLE",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:taichi(playerid,params[])  {
+	ApplyAnimation(playerid,"PARK","Tai_Chi_Loop", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:gpunch(playerid, params[])//79
-{
-	ApplyAnimation(playerid,"FIGHT_B","FightB_G",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:entrenar(playerid,params[])  {
+	ApplyAnimation(playerid,"PARK","Tai_Chi_Loop", 4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:airkick(playerid, params[])//80
-{
-	ApplyAnimation(playerid,"FIGHT_C","FightC_M",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
+CMD:kiss(playerid,params[])  {
+	ApplyAnimation(playerid,"KISSING","Playa_Kiss_01",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
 }
 
-CMD:gkick(playerid, params[])//81
-{
-	ApplyAnimation(playerid,"FIGHT_D","FightD_G",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
+CMD:carjacked(playerid, params[]) {
 
-CMD:lowthrow(playerid, params[])//82
-{
-	ApplyAnimation(playerid,"GRENADE","WEAPON_throwu",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
+	if(isnull(params)) {
+        return SendSyntaxMsg(playerid, "/carjacked <1-2>");
+    }
 
-CMD:highthrow(playerid, params[])//83
-{
-	ApplyAnimation(playerid,"GRENADE","WEAPON_throw",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
+    if(!isnumeric(params)) {
+        return SendErrorMsg(playerid, "Only numerical values allowed.");
+    }
 
-CMD:dealstance(playerid, params[])//84
-{
-	ApplyAnimation(playerid,"DEALER","DEALER_IDLE",4.1, 0, 1, 1, 1, 1, 1);
-    return 1;
-}
+    new
+        animID = strval(params);
 
-CMD:pee(playerid, params[]) {//85
-	SetPlayerSpecialAction(playerid, 68);
-    return 1;
-}
-
-CMD:knife(playerid, params[])//86
-{
-	new nbr;
-	if(sscanf(params, "i", nbr)) return SendClientMessage(playerid,0xEFEFF7AA,"USAGE: /knife [1-4]");
-    if(nbr < 1 || nbr > 4) return SendClientMessage(playerid,0xEFEFF7AA,"USAGE: /knife [1-4]");
-	switch(nbr)
-	{
-		case 1: { ApplyAnimation(playerid,"KNIFE","KILL_Knife_Ped_Damage",4.1, 0, 1, 1, 1, 1, 1); }
-		case 2: { ApplyAnimation(playerid,"KNIFE","KILL_Knife_Ped_Die",4.1, 0, 1, 1, 1, 1, 1); }
-		case 3: { ApplyAnimation(playerid,"KNIFE","KILL_Knife_Player",4.1, 0, 1, 1, 1, 1, 1); }
-		case 4: { ApplyAnimation(playerid,"KNIFE","KILL_Partial",4.1, 0, 1, 1, 1, 1, 1); }
+	switch(animID) {
+		case 1: {
+			ApplyAnimation(playerid,"PED","CAR_jackedLHS",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 2: {
+			ApplyAnimation(playerid,"PED","CAR_jackedRHS",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		default: return SendSyntaxMsg(playerid, "/carjacked <1-2>");
 	}
 	return 1;
 }
 
-CMD:basket(playerid, params[])//87
-{
-	new ddr;
-	if (sscanf(params, "i", ddr)) return SendClientMessage(playerid,0xEFEFF7AA,"USAGE: /basket [1-6]");
-    if(ddr < 1 || ddr > 6) return SendClientMessage(playerid,0xEFEFF7AA,"USAGE: /basket [1-6]");
-    switch(ddr)
-	{
-		case 1: { ApplyAnimation(playerid,"BSKTBALL","BBALL_idleloop",4.1, 0, 1, 1, 1, 1, 1); }
-		case 2: { ApplyAnimation(playerid,"BSKTBALL","BBALL_Jump_Shot",4.1, 0, 1, 1, 1, 1, 1); }
-		case 3: { ApplyAnimation(playerid,"BSKTBALL","BBALL_pickup",4.1, 0, 1, 1, 1, 1, 1); }
-		case 4: { ApplyAnimation(playerid,"BSKTBALL","BBALL_run",4.1, 0, 1, 1, 1, 1, 1); }
-		case 5: { ApplyAnimation(playerid,"BSKTBALL","BBALL_def_loop",4.1, 0, 1, 1, 1, 1, 1); }
-		case 6: { ApplyAnimation(playerid,"BSKTBALL","BBALL_Dnk",4.1, 0, 1, 1, 1, 1, 1); }
+CMD:handsup(playerid, params[]) {
+	ApplyAnimation(playerid, "ROB_BANK","SHP_HandsUp_Scr",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:cellin(playerid, params[]) {
+    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USECELLPHONE);
+    return 1;
+}
+
+CMD:cellout(playerid, params[]) {
+    SetPlayerSpecialAction(playerid,SPECIAL_ACTION_STOPUSECELLPHONE);
+    return 1;
+}
+
+CMD:bomb(playerid, params[]) {
+	ApplyAnimation(playerid, "BOMBER","BOM_Plant_Loop",4.1, 0, 1, 1, 1, 1, 1); // Place Bomb
+	return 1;
+}
+
+CMD:getarrested(playerid, params[]) {
+	ApplyAnimation(playerid,"ped", "ARRESTgun", 4.1, 0, 1, 1, 1, 1, 1); // Gun Arrest
+	return 1;
+}
+
+CMD:crossarms(playerid, params[]) {
+	ApplyAnimation(playerid, "COP_AMBIENT", "Coplook_loop", 4.1, 0, 1, 1, 1, 1, 1); // Arms crossed
+	return 1;
+}
+
+CMD:lay(playerid, params[]) {
+	ApplyAnimation(playerid,"BEACH", "bather",4.1, 0, 1, 1, 1, 1, 1); // Lay down
+	return 1;
+}
+
+CMD:foodeat(playerid, params[]) {
+	ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 1, 1, 1, 1, 1); // Eat Burger
+	return 1;
+}
+
+CMD:wave(playerid, params[]) {
+	ApplyAnimation(playerid, "ON_LOOKERS", "wave_loop", 4.1, 0, 1, 1, 1, 1, 1); // Wave
+	return 1;
+}
+
+CMD:slapass(playerid, params[]) {
+	ApplyAnimation(playerid, "SWEET", "sweet_ass_slap", 4.1, 0, 1, 1, 1, 1, 1); // Ass Slapping
+ 	return 1;
+}
+
+CMD:dealer(playerid, params[]) {
+	ApplyAnimation(playerid, "DEALER", "DEALER_DEAL", 4.1, 0, 1, 1, 1, 1, 1); // Deal Drugs
+	return 1;
+}
+
+CMD:groundsit(playerid, params[]) {
+	ApplyAnimation(playerid,"BEACH", "ParkSit_M_loop", 4.1, 0, 1, 1, 1, 1, 1); // Sit
+	return 1;
+}
+
+CMD:chat(playerid, params[]) {
+	if(isnull(params)) {
+        return SendSyntaxMsg(playerid, "/chat <1-2>");
+    }
+
+    if(!isnumeric(params)) {
+        return SendErrorMsg(playerid, "Only numerical values allowed.");
+    }
+
+    new
+        animID = strval(params);
+
+	switch(animID) {
+		case 1: {
+			ApplyAnimation(playerid,"PED","IDLE_CHAT",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 2: {
+			ApplyAnimation(playerid,"MISC","Idle_Chat_02",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		default: {
+			return SendSyntaxMsg(playerid, "/chat <1-2>");
+		}
+	}
+    return 1;
+}
+
+CMD:fucku(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","fucku",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:chairsit(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","SEAT_idle",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:fall(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","KO_skid_front",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:fallback(playerid, params[]) {
+	ApplyAnimation(playerid, "PED","FLOOR_hit_f", 4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:injured(playerid, params[]) {
+	ApplyAnimation(playerid, "SWEET", "Sweet_injuredloop", 4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:sup(playerid, params[]) {
+	if(isnull(params)) {
+        return SendSyntaxMsg(playerid, "/sup <1-3>");
+    }
+
+    if(!isnumeric(params)) {
+        return SendErrorMsg(playerid, "Only numerical values allowed.");
+    }
+
+    new
+        animID = strval(params);
+
+	switch(animID) {
+
+		case 1: {
+			ApplyAnimation(playerid,"GANGS","hndshkba",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 2: {
+ 			ApplyAnimation(playerid,"GANGS","hndshkda",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 3: {
+			ApplyAnimation(playerid,"GANGS","hndshkfa_swt",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		default: {
+			return SendSyntaxMsg(playerid, "/sup <1-3>");
+		}
+	}
+   	return 1;
+}
+
+CMD:push(playerid, params[]) {
+	ApplyAnimation(playerid,"GANGS","shake_cara",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:akick(playerid, params) {
+	ApplyAnimation(playerid,"POLICE","Door_Kick",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:lowbodypush(playerid, params[]) {
+	ApplyAnimation(playerid,"GANGS","shake_carSH",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:spray(playerid, params[]) {
+	ApplyAnimation(playerid,"SPRAYCAN","spraycan_full",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:headbutt(playerid, params[]) {
+	ApplyAnimation(playerid,"WAYFARER","WF_Fwd",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
+}
+
+CMD:medic(playerid, params[]) {
+	ApplyAnimation(playerid,"MEDIC","CPR",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:koface(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","KO_shot_face",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:kostomach(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","KO_shot_stom",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:lifejump(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","EV_dive",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:exhaust(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","IDLE_tired",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:leftslap(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","BIKE_elbowL",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:rollfall(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","BIKE_fallR",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:carlock(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","CAR_doorlocked_LHS",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
+}
+
+CMD:rcarjack1(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","CAR_pulloutL_LHS",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:lcarjack1(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","CAR_pulloutL_RHS",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:rcarjack2(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","CAR_pullout_LHS",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:lcarjack2(playerid, params[]) {
+	ApplyAnimation(playerid,"PED","CAR_pullout_RHS",4.1, 0, 1, 1, 1, 1, 1);
+	return 1;
+}
+
+CMD:hoodfrisked(playerid, params[]) {
+	ApplyAnimation(playerid,"POLICE","crm_drgbst_01",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:lightcig(playerid, params[]) {
+	ApplyAnimation(playerid,"SMOKING","M_smk_in",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:tapcig(playerid, params[]) {
+	ApplyAnimation(playerid,"SMOKING","M_smk_tap",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:bat(playerid, params[]) {
+	ApplyAnimation(playerid,"BASEBALL","Bat_IDLE",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:box(playerid, params[]) {
+	ApplyAnimation(playerid,"GYMNASIUM","GYMshadowbox",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:lay2(playerid, params[]) {
+	ApplyAnimation(playerid,"SUNBATHE","Lay_Bac_in",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:chant(playerid, params[]) {
+	ApplyAnimation(playerid,"RIOT","RIOT_CHANT",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:finger(playerid, params[]) {
+	ApplyAnimation(playerid,"RIOT","RIOT_FUKU",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:shouting(playerid, params[]) {
+	ApplyAnimation(playerid,"RIOT","RIOT_shout",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:cop(playerid,params[]) {
+	ApplyAnimation(playerid,"SWORD","sword_block",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:elbow(playerid, params[]) {
+	ApplyAnimation(playerid,"FIGHT_D","FightD_3",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:kneekick(playerid, params[]) {
+	ApplyAnimation(playerid,"FIGHT_D","FightD_2",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:fstance(playerid, params[]) {
+	ApplyAnimation(playerid,"FIGHT_D","FightD_IDLE",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:gpunch(playerid, params[]) {
+	ApplyAnimation(playerid,"FIGHT_B","FightB_G",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:airkick(playerid, params[]) {
+	ApplyAnimation(playerid,"FIGHT_C","FightC_M",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:gkick(playerid, params[]) {
+	ApplyAnimation(playerid,"FIGHT_D","FightD_G",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:lowthrow(playerid, params[]) {
+	ApplyAnimation(playerid,"GRENADE","WEAPON_throwu",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:highthrow(playerid, params[]) {
+	ApplyAnimation(playerid,"GRENADE","WEAPON_throw",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:dealstance(playerid, params[]) {
+	ApplyAnimation(playerid,"DEALER","DEALER_IDLE",4.1, 0, 1, 1, 1, 1, 1);
+    return 1;
+}
+
+CMD:pee(playerid, params[]) {
+	SetPlayerSpecialAction(playerid, 68);
+    return 1;
+}
+
+CMD:knife(playerid, params[]) {
+	if(isnull(params)) {
+        return SendSyntaxMsg(playerid, "/knife <1-4>");
+    }
+
+    if(!isnumeric(params)) {
+        return SendErrorMsg(playerid, "Only numerical values allowed.");
+    }
+
+    new
+        animID = strval(params);
+
+	switch(animID) {
+		case 1: {
+			ApplyAnimation(playerid,"KNIFE","KILL_Knife_Ped_Damage",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 2: {
+			ApplyAnimation(playerid,"KNIFE","KILL_Knife_Ped_Die",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 3: {
+			ApplyAnimation(playerid,"KNIFE","KILL_Knife_Player",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 4: {
+			ApplyAnimation(playerid,"KNIFE","KILL_Partial",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		default: {
+			return SendSyntaxMsg(playerid, "/knife <1-4>");
+		}
+	}
+	return 1;
+}
+
+CMD:basket(playerid, params[]) {
+	if(isnull(params)) {
+        return SendSyntaxMsg(playerid, "/basket <1-6>");
+    }
+
+    if(!isnumeric(params)) {
+        return SendErrorMsg(playerid, "Only numerical values allowed.");
+    }
+
+    new
+        animID = strval(params);
+
+    switch(animID)	{
+		case 1: {
+			ApplyAnimation(playerid,"BSKTBALL","BBALL_idleloop",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 2: {
+			ApplyAnimation(playerid,"BSKTBALL","BBALL_Jump_Shot",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 3: {
+			ApplyAnimation(playerid,"BSKTBALL","BBALL_pickup",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 4: {
+			ApplyAnimation(playerid,"BSKTBALL","BBALL_run",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 5: {
+			ApplyAnimation(playerid,"BSKTBALL","BBALL_def_loop",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		case 6: {
+			ApplyAnimation(playerid,"BSKTBALL","BBALL_Dnk",4.1, 0, 1, 1, 1, 1, 1);
+		}
+		default: {
+			return SendSyntaxMsg(playerid, "/basket <1-6>");
+		}
 	}
    	return 1;
 }
@@ -986,12 +1136,12 @@ CMD:wank(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"PAULNMAC","wank_in",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"PAULNMAC","wank_loop",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
@@ -1006,42 +1156,42 @@ CMD:sexy(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"SNM","SPANKING_IDLEW",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"SNM","SPANKING_IDLEP",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "3", true) == 0)
 	{
 		ApplyAnimation(playerid,"SNM","SPANKINGW",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "4", true) == 0)
 	{
 		ApplyAnimation(playerid,"SNM","SPANKINGP",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "5", true) == 0)
 	{
 		ApplyAnimation(playerid,"SNM","SPANKEDW",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "6", true) == 0)
 	{
 		ApplyAnimation(playerid,"SNM","SPANKEDP",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "7", true) == 0)
 	{
 		ApplyAnimation(playerid,"SNM","SPANKING_ENDW",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "8", true) == 0)
 	{
 		ApplyAnimation(playerid,"SNM","SPANKING_ENDP",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
@@ -1057,22 +1207,22 @@ CMD:bj(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"BLOWJOBZ","BJ_COUCH_START_P",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"BLOWJOBZ","BJ_COUCH_START_W",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "3", true) == 0)
 	{
 		ApplyAnimation(playerid,"BLOWJOBZ","BJ_COUCH_LOOP_P",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "4", true) == 0)
 	{
 		ApplyAnimation(playerid,"BLOWJOBZ","BJ_COUCH_LOOP_W",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
@@ -1080,27 +1230,23 @@ CMD:bj(playerid, params[])
 CMD:stand(playerid, params[])
 {
 	ApplyAnimation(playerid,"WUZI","Wuzi_stand_loop", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 
 CMD:follow(playerid, params[])
 {
 	ApplyAnimation(playerid,"WUZI","Wuzi_follow",4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
     return 1;
 }
 
 CMD:getup(playerid, params[])
 {
 	ApplyAnimation(playerid,"PED","getup",4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 CMD:slapped(playerid, params[])
 {
 	ApplyAnimation(playerid,"SWEET","ho_ass_slapped",4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
     return 1;
 }
 
@@ -1115,12 +1261,12 @@ CMD:win(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"CASINO","cards_win", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"CASINO","Roulette_win", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
@@ -1136,12 +1282,12 @@ CMD:celebrate(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"benchpress","gym_bp_celebrate", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"GYMNASIUM","gym_tread_celebrate", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
@@ -1149,7 +1295,6 @@ CMD:celebrate(playerid, params[])
 CMD:yes(playerid, params[])
 {
 	ApplyAnimation(playerid,"CLOTHES","CLO_Buy", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 
@@ -1164,12 +1309,12 @@ CMD:deal(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid, "DEALER", "DEALER_DEAL", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"DEALER","DRUGS_BUY", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
@@ -1177,7 +1322,6 @@ CMD:deal(playerid, params[])
 CMD:thankyou(playerid, params[])
 {
 	ApplyAnimation(playerid,"FOOD","SHP_Thank", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 
@@ -1192,12 +1336,12 @@ CMD:invite1(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"GANGS","Invite_Yes",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"GANGS","Invite_No",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
@@ -1205,19 +1349,16 @@ CMD:invite1(playerid, params[])
 CMD:scratch(playerid, params[])
 {
 	ApplyAnimation(playerid,"MISC","Scratchballs_01", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
     return 1;
 }
 CMD:checkout(playerid, params[])
 {
 	ApplyAnimation(playerid, "GRAFFITI", "graffiti_Chkout", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 CMD:nod(playerid, params[])
 {
 	ApplyAnimation(playerid,"COP_AMBIENT","Coplook_nod",4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 CMD:cry(playerid, params[])
@@ -1231,12 +1372,12 @@ CMD:cry(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"GRAVEYARD","mrnF_loop", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"GRAVEYARD","mrnM_loop", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
@@ -1251,54 +1392,49 @@ CMD:bed(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"INT_HOUSE","BED_In_L",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"INT_HOUSE","BED_In_R",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "3", true) == 0)
 	{
 		ApplyAnimation(playerid,"INT_HOUSE","BED_Loop_L", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "4", true) == 0)
 	{
 		ApplyAnimation(playerid,"INT_HOUSE","BED_Loop_R", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
 CMD:carsmoke(playerid, params[])
 {
 	ApplyAnimation(playerid,"PED","Smoke_in_car", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 
 CMD:angry(playerid, params[])
 {
 	ApplyAnimation(playerid,"RIOT","RIOT_ANGRY",4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 CMD:benddown(playerid, params[])
 {
 	ApplyAnimation(playerid, "BAR", "Barserve_bottle", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 CMD:shakehead(playerid, params[])
 {
 	ApplyAnimation(playerid, "MISC", "plyr_shkhead", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 CMD:cockgun(playerid, params[])
 {
 	ApplyAnimation(playerid, "SILENCED", "Silence_reload", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 CMD:bar(playerid, params[])
@@ -1312,48 +1448,45 @@ CMD:bar(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid, "BAR", "Barcustom_get", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid,"GHANDS","gsign2LH",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid, "BAR", "Barcustom_order", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "3", true) == 0)
 	{
 		ApplyAnimation(playerid, "BAR", "Barserve_give", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "4", true) == 0)
 	{
 		ApplyAnimation(playerid, "BAR", "Barserve_glass", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }
 CMD:liftup(playerid, params[])
 {
 	ApplyAnimation(playerid, "CARRY", "liftup", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 
 CMD:putdown(playerid, params[])
 {
 	ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 
 CMD:joint(playerid, params[])
 {
 	ApplyAnimation(playerid,"GANGS","smkcig_prtl",4.1, 0, 1, 1, 1, 1, 1);
-	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
 }
 CMD:die(playerid, params[])
@@ -1367,12 +1500,12 @@ CMD:die(playerid, params[])
 	if(strcmp(choice, "1", true) == 0)
 	{
 		ApplyAnimation(playerid,"KNIFE","KILL_Knife_Ped_Die",4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
 		ApplyAnimation(playerid, "PARACHUTE", "FALL_skyDive_DIE", 4.1, 0, 1, 1, 1, 1, 1);
-		SetPVarInt(playerid, "UsingAnim", 1);
+
 	}
 	return 1;
 }

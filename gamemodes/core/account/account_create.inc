@@ -1,12 +1,13 @@
 
 #include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
-#include <formatex>
-
 
 static
     Statement:stmt_insertPlayerAccount,
     bool:PlayerFirstTime[MAX_PLAYERS];
+
+static
+    const RegisterDialogMessage[] = "Hello "C_GREY"%p. "C_WHITE"Welcome to "C_YELLOW"%s";
 
 hook OnMySQLConnected() {
     stmt_insertPlayerAccount = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT INTO players (username, password) VALUES (?, ?)");
@@ -32,7 +33,7 @@ stock Account_PromptRegister(playerid) {
 
     new
         string[MAX_PLAYER_NAME + 32];
-    format(string, sizeof(string), "Hello %p. Welcome to %s", playerid, SERVER_NAME);
+    format(string, sizeof(string), RegisterDialogMessage, playerid, SERVER_NAME);
 
     Dialog_ShowCallback(playerid,
         using inline _response, // handler
