@@ -123,12 +123,22 @@ hook OnPlayerRequestClass(playerid, classid) {
 }
 
 timer void:ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
+
+	// using SetSpawnInfo fixes the kick bug when
+	// TogglePlayerSpectating is used to force spawn player but without using
+	// SetSpawnInfo the server does not know where to spawn the player.
+	SetSpawnInfo(playerid, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+
 	TogglePlayerSpectating(playerid, false);
-	SetSpawnInfo(playerid, 0, PlayerSkin[playerid], 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
-	SpawnPlayer(playerid);
+}
+
+hook OnPlayerSpawn(playerid) {
+	SetPlayerSkin(playerid, PlayerSkin[playerid]);
+	return 1;
 }
 
 hook OnPlayerConnect(playerid) {
+	PlayerSkin[playerid] = 0;
     PlayerClass[playerid] = -1;
 	PlayerClassState[playerid] = true;
 	return 1;
