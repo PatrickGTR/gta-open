@@ -20,6 +20,7 @@
 #define COLOR_PURPLE				0xC2A2DAAA
 #define COLOR_BLACK					0x000000FF
 #define COLOR_WHITE					0xFFFFFFFF
+#define COLOR_MODERATION            0xF5129FFF
 
 // Embedding Colours
 #define C_SAMPBLUE 		            "{a9c4e4}"
@@ -38,6 +39,7 @@
 #define C_TEAL						"{008080}"
 #define C_BROWN						"{A52A2A}"
 #define C_AQUA						"{F0F8FF}"
+#define C_MODERATION                "{F5129F}"
 
 #define C_BLACK						"{000000}"
 #define C_WHITE						"{FFFFFF}"

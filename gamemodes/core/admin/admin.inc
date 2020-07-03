@@ -3,6 +3,7 @@
 #if SETUP_TABLE
     #include <admin_setup-bans-table>
     #include <admin_setup-admins-table>
+    #include <admin_setup-atm-table>
 #endif
 
 #include <admin_account>
@@ -16,6 +17,7 @@
 
 #include <admin_cmd_lvl5>
 
+#include <admin_cmd-atm>
 #include <rcon_cmd>
 #include <fly_cmd>
 

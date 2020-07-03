@@ -1,4 +1,5 @@
 #include <YSI_Coding\y_hooks>
+#include <discord>
 
 static
     BitArray:PlayerPMDisabled<MAX_PLAYERS>,
@@ -21,6 +22,11 @@ CMD:dnd(playerid, params[]) {
     return 1;
 }
 
+hook OnPlayerDisconnect(playerid, reason)
+{
+    PlayerLastPM[PlayerLastPM[playerid]] = -1;
+    return 1;
+}
 
 CMD:pm(playerid, params[]) {
     new
@@ -55,6 +61,9 @@ CMD:r(playerid, params[])
     new targetid = PlayerLastPM[playerid];
     if(sscanf(params, "s[128]", msg)) {
         return SendSyntaxMsg(playerid, "/r <message>");
+    }
+    if(targetid == -1) {
+        return SendErrorMsg(playerid, "The player you are trying to PM has Disconnected");
     }
     if(!IsPlayerConnected(targetid)) {
         return SendErrorMsg(playerid, "The player you are trying to PM is invalid");
