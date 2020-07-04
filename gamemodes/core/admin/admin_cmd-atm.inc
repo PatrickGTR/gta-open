@@ -71,7 +71,6 @@ hook OnMySQLConnected()
     ";
     stmt_RemoveATM = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
 
-
 	Atm_Load();
 
 	return 1;
@@ -123,7 +122,7 @@ stock Atm_Update(atmID, Float:x, Float:y, Float:z, Float:a, wid, int)
     DestroyDynamic3DTextLabel(atm_Label[atmID]);
 	atm_Label[atmID] = CreateDynamic3DTextLabel(string, COLOR_ORANGE, x, y, z, 30.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1, -1, 30.0, -1, 0);
 
-    DestroyObject(atm_Object[atmID]);
+    DestroyDynamicObject(atm_Object[atmID]);
 	atm_Object[atmID] = CreateDynamicObject(19324, x, y, z, 0.0, 0.0, a, wid, int, -1, 300.0);
 
 	AtmID[atmID] = atmID;
@@ -133,25 +132,8 @@ stock Atm_Update(atmID, Float:x, Float:y, Float:z, Float:a, wid, int)
 	AtmPosA[atmID] = a;
     AtmWid[atmID] = wid;
     AtmInt[atmID] = int;
-    Atm_UpdateDatabase(atmID);
-}
-
-stock Atm_InsertToDatabase(atmID)
-{
-	MySQL_BindInt(stmt_InsertATM, 0, atmID);
-    MySQL_BindFloat(stmt_InsertATM, 1, AtmPosX[atmID]);
-    MySQL_BindFloat(stmt_InsertATM, 2, AtmPosY[atmID]);
-    MySQL_BindFloat(stmt_InsertATM, 3, AtmPosZ[atmID]);
-    MySQL_BindFloat(stmt_InsertATM, 4, AtmPosA[atmID]);
-    MySQL_BindInt(stmt_InsertATM, 5, AtmWid[atmID]);
-    MySQL_BindInt(stmt_InsertATM, 6, AtmInt[atmID]);
-    MySQL_ExecuteThreaded(stmt_InsertATM);
-}
-
-stock Atm_UpdateDatabase(atmID)
-{
     new
-        string[256];
+        string2[256];
     static const query[] = " \
     INSERT INTO \
         atms (atm_id, atm_x, atm_y, atm_z, atm_a, wid, interior) \
@@ -165,8 +147,20 @@ stock Atm_UpdateDatabase(atmID)
         wid = %i, \
         interior = %i \
     ";
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, atmID, AtmPosX[atmID], AtmPosY[atmID], AtmPosZ[atmID], AtmPosA[atmID], AtmWid[atmID], AtmInt[atmID], AtmPosX[atmID], AtmPosY[atmID], AtmPosZ[atmID], AtmPosA[atmID], AtmWid[atmID], AtmInt[atmID]);
-    mysql_tquery(MySQL_GetHandle(), string);
+    mysql_format(MySQL_GetHandle(), string2, sizeof(string2), query, atmID, x, y, z, a, wid, int, x, y, z, a, wid, int);
+    mysql_tquery(MySQL_GetHandle(), string2);
+}
+
+stock Atm_InsertToDatabase(atmID)
+{
+	MySQL_BindInt(stmt_InsertATM, 0, atmID);
+    MySQL_BindFloat(stmt_InsertATM, 1, AtmPosX[atmID]);
+    MySQL_BindFloat(stmt_InsertATM, 2, AtmPosY[atmID]);
+    MySQL_BindFloat(stmt_InsertATM, 3, AtmPosZ[atmID]);
+    MySQL_BindFloat(stmt_InsertATM, 4, AtmPosA[atmID]);
+    MySQL_BindInt(stmt_InsertATM, 5, AtmWid[atmID]);
+    MySQL_BindInt(stmt_InsertATM, 6, AtmInt[atmID]);
+    MySQL_ExecuteThreaded(stmt_InsertATM);
 }
 
 Atm_Load() {
