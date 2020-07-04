@@ -18,6 +18,12 @@ public OnDCCommandPerformed(const args[], success)
 
 DC_CMD:admins(DCC_User:user, const args[])
 {
+    new DCC_Channel:channel;
+    new DCC_Message:message;
+    DCC_GetMessageChannel(message, channel);
+    if(channel != tester_Discord_Chat) {
+        return 0;
+    }
     new onlineadmins = 0;
     foreach(new i : Player)
     {

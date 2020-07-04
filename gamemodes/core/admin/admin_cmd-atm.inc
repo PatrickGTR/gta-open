@@ -8,7 +8,8 @@ static
 	Statement: stmt_InsertATM,
 	Statement: stmt_LoadATM,
 	Statement: stmt_ATMExists,
-	Statement: stmt_RemoveATM;
+	Statement: stmt_RemoveATM,
+    Statement: stmt_UpdateATM;
 
 // Variables
 static
@@ -70,6 +71,21 @@ hook OnMySQLConnected()
         atm_id = ? \
     ";
     stmt_RemoveATM = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
+
+    static const updateQuery[] = "\
+    INSERT INTO \
+        atms (atm_id, atm_x, atm_y, atm_z, atm_a, wid, interior) \
+    VALUES \
+        (?,?,?,?,?,?,?) \
+    ON DUPLICATE KEY UPDATE \
+        atm_x = %f, \
+        atm_y = %f, \
+        atm_z = %f, \
+        atm_a = %f, \
+        wid = %i, \
+        interior = %i \
+    ";
+    stmt_UpdateATM = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);
 
 	Atm_Load();
 
@@ -149,24 +165,14 @@ stock Atm_InsertToDatabase(atmID)
 
 stock Atm_UpdateDatabase(atmID)
 {
-    new
-        string[256];
-    static const query[] = "\
-    INSERT INTO \
-        atms (atm_id, atm_x, atm_y, atm_z, atm_a, interior, wid) \
-    VALUES \
-        (%i, %f, %f, %f, %f) \
-    ON DUPLICATE KEY UPDATE \
-        atm_x = %f, \
-        atm_y = %f, \
-        atm_z = %f, \
-        atm_a = %f, \
-        wid = %i, \
-        interior = %i \
-    ";
-
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, atmID, AtmPosX[atmID], AtmPosY[atmID], AtmPosZ[atmID], AtmPosA[atmID], AtmWid[atmID], AtmInt[atmID], AtmPosX[atmID], AtmPosY[atmID], AtmPosZ[atmID], AtmPosA[atmID], AtmWid[atmID], AtmInt[atmID]);
-    mysql_tquery(MySQL_GetHandle(), string);
+    MySQL_BindInt(stmt_UpdateATM, 0, atmID);
+    MySQL_BindFloat(stmt_UpdateATM, 1, AtmPosX[atmID]);
+    MySQL_BindFloat(stmt_UpdateATM, 2, AtmPosY[atmID]);
+    MySQL_BindFloat(stmt_UpdateATM, 3, AtmPosZ[atmID]);
+    MySQL_BindFloat(stmt_UpdateATM, 4, AtmPosA[atmID]);
+    MySQL_BindInt(stmt_UpdateATM, 5, AtmWid[atmID]);
+    MySQL_BindInt(stmt_UpdateATM, 6, AtmInt[atmID]);
+    MySQL_ExecuteThreaded(stmt_UpdateATM);
 }
 
 Atm_Load() {
