@@ -8,8 +8,7 @@ static
 	Statement: stmt_InsertATM,
 	Statement: stmt_LoadATM,
 	Statement: stmt_ATMExists,
-	Statement: stmt_RemoveATM,
-    Statement: stmt_UpdateATM;
+	Statement: stmt_RemoveATM;
 
 // Variables
 static
@@ -72,20 +71,6 @@ hook OnMySQLConnected()
     ";
     stmt_RemoveATM = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
 
-    static const updateQuery[] = "\
-    INSERT INTO \
-        atms (atm_id, atm_x, atm_y, atm_z, atm_a, wid, interior) \
-    VALUES \
-        (?,?,?,?,?,?,?) \
-    ON DUPLICATE KEY UPDATE \
-        atm_x = %f, \
-        atm_y = %f, \
-        atm_z = %f, \
-        atm_a = %f, \
-        wid = %i, \
-        interior = %i \
-    ";
-    stmt_UpdateATM = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);
 
 	Atm_Load();
 
@@ -165,14 +150,23 @@ stock Atm_InsertToDatabase(atmID)
 
 stock Atm_UpdateDatabase(atmID)
 {
-    MySQL_BindInt(stmt_UpdateATM, 0, atmID);
-    MySQL_BindFloat(stmt_UpdateATM, 1, AtmPosX[atmID]);
-    MySQL_BindFloat(stmt_UpdateATM, 2, AtmPosY[atmID]);
-    MySQL_BindFloat(stmt_UpdateATM, 3, AtmPosZ[atmID]);
-    MySQL_BindFloat(stmt_UpdateATM, 4, AtmPosA[atmID]);
-    MySQL_BindInt(stmt_UpdateATM, 5, AtmWid[atmID]);
-    MySQL_BindInt(stmt_UpdateATM, 6, AtmInt[atmID]);
-    MySQL_ExecuteThreaded(stmt_UpdateATM);
+    new
+        string[256];
+    static const query[] = " \
+    INSERT INTO \
+        atms (atm_id, atm_x, atm_y, atm_z, atm_a, wid, interior) \
+    VALUES \
+        (%i, %f, %f, %f, %f, %i, %i) \
+    ON DUPLICATE KEY UPDATE \
+        atm_x = %f, \
+        atm_y = %f, \
+        atm_z = %f, \
+        atm_a = %f, \
+        wid = %i, \
+        interior = %i \
+    ";
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, atmID, AtmPosX[atmID], AtmPosY[atmID], AtmPosZ[atmID], AtmPosA[atmID], AtmWid[atmID], AtmInt[atmID], AtmPosX[atmID], AtmPosY[atmID], AtmPosZ[atmID], AtmPosA[atmID], AtmWid[atmID], AtmInt[atmID]);
+    mysql_tquery(MySQL_GetHandle(), string);
 }
 
 Atm_Load() {
@@ -215,7 +209,7 @@ Atm_Delete(playerid, atmID) {
                 SendServerMsgF(playerid, "You successfully deleted atm id "C_GREY"%i", atmID);
             }
 
-            DestroyObject(atm_Object[atmID]);
+            DestroyDynamicObject(atm_Object[atmID]);
             DestroyDynamic3DTextLabel(atm_Label[atmID]);
 
             Iter_Remove(atm_Iter, atmID);

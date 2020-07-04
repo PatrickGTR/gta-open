@@ -29,7 +29,7 @@
 #define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
 
 // Set to true if table aren't set up.
-#define SETUP_TABLE 			(true)
+#define SETUP_TABLE 			(false)
 
 
 
