@@ -8,7 +8,8 @@ static
 	Statement: stmt_InsertATM,
 	Statement: stmt_LoadATM,
 	Statement: stmt_ATMExists,
-	Statement: stmt_RemoveATM;
+	Statement: stmt_RemoveATM,
+    Statement: stmt_UpdateATM;
 
 // Variables
 static
@@ -71,6 +72,20 @@ hook OnMySQLConnected()
     ";
     stmt_RemoveATM = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
 
+    static const updateQuery[] = "\
+    UPDATE \
+        atms \
+    SET \
+        atm_x = ?, \
+        atm_y = ?, \
+        atm_z = ?, \
+        atm_a = ?, \
+        wid = ?, \
+        interior = ? \
+    WHERE \
+        atm_id = ?";
+    stmt_UpdateATM = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);
+
 	Atm_Load();
 
 	return 1;
@@ -132,23 +147,8 @@ stock Atm_Update(atmID, Float:x, Float:y, Float:z, Float:a, wid, int)
 	AtmPosA[atmID] = a;
     AtmWid[atmID] = wid;
     AtmInt[atmID] = int;
-    new
-        string2[256];
-    static const query[] = " \
-    INSERT INTO \
-        atms (atm_id, atm_x, atm_y, atm_z, atm_a, wid, interior) \
-    VALUES \
-        (%i, %f, %f, %f, %f, %i, %i) \
-    ON DUPLICATE KEY UPDATE \
-        atm_x = %f, \
-        atm_y = %f, \
-        atm_z = %f, \
-        atm_a = %f, \
-        wid = %i, \
-        interior = %i \
-    ";
-    mysql_format(MySQL_GetHandle(), string2, sizeof(string2), query, atmID, x, y, z, a, wid, int, x, y, z, a, wid, int);
-    mysql_tquery(MySQL_GetHandle(), string2);
+    printf("New Location ATM ATMID:%i, PosX%f, PosY:%f, PosZ:%f, Angle:%f, WorldID:%i InteriorID:%i", atmID, AtmPosX[atmID], AtmPosY[atmID], AtmPosZ[atmID], AtmPosA[atmID], AtmWid[atmID], AtmInt[atmID]);
+    Atm_UpdateDatabase(atmID);
 }
 
 stock Atm_InsertToDatabase(atmID)
@@ -161,6 +161,18 @@ stock Atm_InsertToDatabase(atmID)
     MySQL_BindInt(stmt_InsertATM, 5, AtmWid[atmID]);
     MySQL_BindInt(stmt_InsertATM, 6, AtmInt[atmID]);
     MySQL_ExecuteThreaded(stmt_InsertATM);
+}
+
+stock Atm_UpdateDatabase(atmID)
+{
+    MySQL_BindFloat(stmt_UpdateATM, 0, AtmPosX[atmID]);
+    MySQL_BindFloat(stmt_UpdateATM, 1, AtmPosY[atmID]);
+    MySQL_BindFloat(stmt_UpdateATM, 2, AtmPosZ[atmID]);
+    MySQL_BindFloat(stmt_UpdateATM, 3, AtmPosA[atmID]);
+    MySQL_BindInt(stmt_UpdateATM, 4, AtmWid[atmID]);
+    MySQL_BindInt(stmt_UpdateATM, 5, AtmInt[atmID]);
+    MySQL_BindInt(stmt_UpdateATM, 6, atmID);
+    MySQL_ExecuteThreaded(stmt_UpdateATM);
 }
 
 Atm_Load() {
