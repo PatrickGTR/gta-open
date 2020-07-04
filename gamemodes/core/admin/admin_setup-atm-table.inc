@@ -5,10 +5,10 @@ hook OnMySQLConnected() {
     CREATE TABLE IF NOT EXISTS atms \
     ( \
     	atm_id INT(11) NOT NULL, \
-    	atm_x  MEDIUMINT(11) NOT NULL, \
-        atm_y  MEDIUMINT(11) NOT NULL, \
-        atm_z  MEDIUMINT(11) NOT NULL, \
-        atm_a  MEDIUMINT(11) NOT NULL, \
+    	atm_x  FLOAT NOT NULL, \
+        atm_y  FLOAT NOT NULL, \
+        atm_z  FLOAT NOT NULL, \
+        atm_a  FLOAT NOT NULL, \
         wid TINYINT(6) NOT NULL, \
         interior TINYINT(6) NOT NULL, \
     	PRIMARY KEY (atm_id) \
