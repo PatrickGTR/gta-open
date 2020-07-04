@@ -2,6 +2,7 @@
 #include <YSI_Coding\y_iterate>
 
 #define MAX_ATMS 		(100)
+#define randomEx(%1,%2) (random(%2)+%1)
 
 // Statements
 static
@@ -28,6 +29,11 @@ static
     
     PlayerEditingATMID[MAX_PLAYERS];
 
+//Player Variables
+static 
+    PlayerRecentATMRobbed[MAX_PLAYERS],
+    ATMRecenlyRobbed[MAX_ATMS]
+;
 // Hooks
 
 hook OnMySQLConnected()
@@ -231,15 +237,25 @@ Atm_Delete(playerid, atmID) {
     MySQL_ExecuteThreaded_Inline(stmt_ATMExists, using inline OnATMRemove);
 }
 
-//IsPlayerNearATM(playerid)
-//{
-//    for(new i = 0; i < MAX_ATMS; i++) {
-//        if(IsPlayerInRangeOfPoint(playerid, 3.0, AtmPosX[i], AtmPosY[i], AtmPosZ[i])) {
-//            return 1;
-//        }
-//    }
-//    return 0;
-//}
+stock bool:IsPlayerNearATM(playerid)
+{
+    for(new i = 0; i < MAX_ATMS; i++) {
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, AtmPosX[i], AtmPosY[i], AtmPosZ[i])) {
+            return true;
+       }
+    }
+    return false;
+}
+
+GetNearestATM(playerid)
+{
+    for (new i = 0; i < MAX_ATMS; i++) {
+		if(IsPlayerInRangeOfPoint(playerid, 3.0, AtmPosX[i], AtmPosY[i], AtmPosZ[i])) {
+			return i;
+        }
+	}
+    return 0;
+}
 
 hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
@@ -337,5 +353,37 @@ TCMD:nearatm(playerid, params[])
     {
         SendServerMsg(playerid, "You're not near any atms");
     }
+    return 1;
+}
+
+CMD:hackatm(playerid)
+{
+    new SuccessChance = random(100);
+    new RandomFBIDetect = random(100);
+    new RandomPayout = randomEx(50000, 100000);
+    new nearestATM = GetNearestATM(playerid);
+    if(!IsPlayerNearATM(playerid)) {
+        return SendErrorMsg(playerid, "You're not near any atms");
+    }
+    if(gettime() - PlayerRecentATMRobbed[playerid] < 300) {
+        return SendErrorMsg(playerid, "You have recently robbed an atm machine!");
+    }
+    if(gettime() - ATMRecenlyRobbed[nearestATM] < 300) {
+        return SendErrorMsg(playerid, "This atm is recently hacked");
+    }
+    if(SuccessChance < 70) {
+        SendClientMessage(playerid, COLOR_RED, "ATM HACKING:"C_WHITE" Failed to hack the ATM.");
+        PlayerRecentATMRobbed[playerid] = gettime();
+        SendClientMessage(playerid, COLOR_RED, "FBI:"C_WHITE" Face Captured reported.");
+        PLAYER_SetPlayerWantedLevel(playerid, 6);
+        return 0;
+    }
+    if(RandomFBIDetect < 50) {
+        SendClientMessage(playerid, COLOR_RED, "FBI:"C_WHITE" Face Captured reported.");
+        PLAYER_SetPlayerWantedLevel(playerid, 6);
+    }
+    SendServerMsgF(playerid, "You have robbed %d from the atm machine!");
+    GivePlayerMoney(playerid, RandomPayout);
+    ATMRecenlyRobbed[nearestATM] = gettime();
     return 1;
 }
