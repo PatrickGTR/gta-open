@@ -61,8 +61,7 @@ ACMD:[4]givemoney(playerid, params[])
     }
     SendAdminCmdUsage(playerid, "/givemoney", params);
     GivePlayerMoney(target, pmoney);
-    SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" Administrator gave %p (%d) $%d for", target, target, pmoney);
-    SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" reason: %s", reason);
+    SendMsgAllF(COLOR_MODERATION, "[ADMIN REWARD]: Administrator gave %p (%d) $%d for reason: %s", target, target, pmoney, reason);
     return 1;
 }
 
@@ -78,8 +77,8 @@ ACMD:[4]fine(playerid, params[])
     }
     SendAdminCmdUsage(playerid, "/fine", params);
     GivePlayerMoney(target, -pmoney);
-    SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" Administrator fined %p (%d) $%d for", target, target, pmoney);
-    SendMsgAllF(COLOR_GREEN, "** ADMIN BOT **:"C_WHITE" reason: %s", reason);
+    SendMsgAllF(COLOR_MODERATION, "[ADMIN FINE]: Administrator fined %p (%d) $%d for", target, target, pmoney);
+    SendMsgAllF(COLOR_MODERATION, "[ADMIN FINE]: reason: %s", reason);
     return 1;
 }
 

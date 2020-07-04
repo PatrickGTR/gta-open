@@ -356,12 +356,15 @@ TCMD:nearatm(playerid, params[])
     return 1;
 }
 
-CMD:hackatm(playerid)
+CMD:hackatm(playerid, params[])
 {
     new SuccessChance = random(100);
     new RandomFBIDetect = random(100);
     new RandomPayout = randomEx(50000, 100000);
     new nearestATM = GetNearestATM(playerid);
+    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+        return SendErrorMsg(playerid, "Only Civilians can hack atms, Your job is to catch them");
+    } 
     if(!IsPlayerNearATM(playerid)) {
         return SendErrorMsg(playerid, "You're not near any atms");
     }

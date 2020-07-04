@@ -13,13 +13,7 @@ ACMD:[5]setadmin(playerid, params[])
         return SendErrorMsgF(playerid, "Max admin level is %d", MAX_ADMIN_LEVELS);
     }
     Admin_SetPlayerLevel(target, level);
-    foreach(new i : Player)
-    {
-        if(i != INVALID_PLAYER_ID)
-        {
-            SendServerMsgF(i, "%p (%d)'s admin level is set to %s", target, target, Admin_GetRankName(target));
-        }
-    }
+    SendMsgAllF(COLOR_MODERATION, "%p (%d)'s admin level is set to %s", target, target, Admin_GetRankName(target));
     return 1;
 }
 
@@ -41,21 +35,11 @@ ACMD:[5]settester(playerid, params[])
     }
     if(level == 1) {
         SetPlayerTester(target, true);
-        foreach(new i : Player) {
-            if(i != INVALID_PLAYER_ID) 
-            {
-                SendServerMsgF(i, "%p (%d) is now a Beta Tester!", target, target);
-            }
-        }
+        SendMsgAllF(COLOR_MODERATION, "[BETA INFO]: %p (%d) is now a Beta Tester!", target, target);
     }
     if(level == 0) {
         SetPlayerTester(target, false);
-        foreach(new i : Player) {
-            if(i != INVALID_PLAYER_ID) 
-            {
-                SendServerMsgF(i, "%p (%d) is demoted from Beta Tester to Normal Player", target, target);
-            }
-        }
+        SendMsgAllF(COLOR_MODERATION, "[BETA INFO]: %p (%d) is demoted from Beta Tester to Normal Player", target, target);
     }
     return 1;
 }

@@ -78,14 +78,14 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
 }
 
 CMD:towerrobbery(playerid) {
+    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+        return SendServerMsg(playerid, "Only Civilians can rob the Tower!");
+    }
     if(!IsPlayerInRangeOfPoint(playerid, 7.0, 1817.1315, -1307.1591, 98.5000)) {
         return SendServerMsg(playerid, "You're not near the safe!");
     }
     if(TowerRobbedRecently == 1) {
         return SendServerMsg(playerid, "The Tower is recently robbed!");
-    }
-    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
-        return SendServerMsg(playerid, "Only Civilians can rob the Bank!");
     }
     if(BurglaryInfo[playerid] != 0) {
         return SendServerMsg(playerid, "You already robbed, Please go to the hideout!");
@@ -130,10 +130,4 @@ timer TowerCooldown[RobberyCD]()
         SendServerMsg(i, "Tower CooledDown!");
     }
     TowerRobbedRecently = 0;
-}
-
-CMD:tower(playerid)
-{
-    SetPlayerPos(playerid, 1817.1315, -1307.1591, 98.5000);
-    return 1;
 }
