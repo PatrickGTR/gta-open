@@ -85,6 +85,21 @@ Player_ShowJobMenu(playerid) {
     return 1;
 }
 
+stock Player_Jobname(playerid)
+{
+    new job_rankname[6][24] = 
+    {
+        "Drug Dealer",
+        "Weapon Dealer",
+        "Hitman",
+        "Terrorist",
+        "Rapist",
+        "Mechanic"
+    };
+
+    return job_rankname[Player_GetJob(playerid)];
+}
+
 stock Player_GetJobName(playerid, jobname[], len = sizeof(jobname)) {
     switch(GetPlayerJob(playerid)) {
         case TYPE_DRUGDEALER: {

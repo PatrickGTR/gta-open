@@ -152,6 +152,19 @@ stock void:Class_SelectionState(playerid, bool:status) {
 	PlayerClassState[playerid] = status;
 }
 
+stock Player_GetClassName(playerid) 
+{
+	new class_ranknames[4][24] = 
+	{
+		"Civilian",
+		"Police",
+		"Army",
+		"Medic"
+	};
+
+	return class_ranknames[Player_GetClass(playerid)];
+}
+
 stock void:Player_SetClass(playerid, classid) {
 	if(PlayerClass[playerid] != classid) {
 		new query[64];

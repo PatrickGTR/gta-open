@@ -7,20 +7,14 @@ CMD:inv(playerid) {
     return cmd_inventory(playerid);
 }
 
-stock ShowInvMenu(playerid)
+ShowInvMenu(playerid)
 {
-    new
-        INV[600],
-        bool:form = true,
-        string[128];
-    if(form)
-    {
-        format(string, sizeof(string), "~r~Name:~w~ %p (%d)~n~", playerid, playerid);
-        strcat(INV, string);
-        format(string, sizeof(string), "~r~Instafixes:~w~ %d", Player_GetInstaFix(playerid));
-        strcat(INV, string);
-        form = false;
-    }
-    TextMenuShowForPlayer(playerid, MENU_INV, "~b~INVENTORY", INV, 0);
+    new string[128];
+    TextInfo_Create(playerid, "INV", "INVENTORY");
+    format(string, sizeof(string), "~r~Name:~w~ %p (%d)~n~", playerid, playerid);
+    TextInfo_Add(playerid, string);
+    format(string, sizeof(string), "~r~Instafixes:~w~ %d", Player_GetInstaFix(playerid));
+    TextInfo_Add(playerid, string);
+    TextInfo_Show(playerid);
     return 1;
 }

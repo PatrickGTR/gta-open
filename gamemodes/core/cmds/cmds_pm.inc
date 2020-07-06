@@ -24,7 +24,9 @@ CMD:dnd(playerid, params[]) {
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-    PlayerLastPM[PlayerLastPM[playerid]] = -1;
+    new target = PlayerLastPM[PlayerLastPM[playerid]];
+    if(IsPlayerConnected(target))
+    target = -1;
     return 1;
 }
 

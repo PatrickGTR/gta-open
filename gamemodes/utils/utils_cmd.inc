@@ -10,7 +10,7 @@
 #define ACMD:[%0]%1(%2,%3) CMD:%1(%2,%3) if (Admin_GetPlayerLevel(%2) < %0) return 0; else
 
 // TESTER 
-#define TCMD:%1(%2,%3) CMD:%1(%2,%3) if (!GetPlayerTester(%2) && Admin_GetPlayerLevel(%2) < 0) return 0; else
+#define TCMD:%1(%2,%3) CMD:%1(%2,%3) if (!GetPlayerTester(%2) && Admin_GetPlayerLevel(%2) == 0) return 0; else
 
 #if defined OnPlayerCommandReceived
     forward OnPlayerCommandReceived(playerid, cmd[]);

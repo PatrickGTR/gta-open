@@ -4,16 +4,22 @@ static
 	PlayerText:TextMenuHeader[MAX_PLAYERS],
 	PlayerText:TextMenuBody[MAX_PLAYERS],
 	TextMenuCallbackHandler[MAX_PLAYERS][32],
+	TextInfoNameHandler[MAX_PLAYERS][32],
+	TextInfoItems[MAX_PLAYERS][512],
 	TextMenuItems[MAX_PLAYERS][512],
 	TextMenuState[MAX_PLAYERS],
-	TextMenuItemCount[MAX_PLAYERS];
+	TextMenuItemCount[MAX_PLAYERS],
+	TextInfoState[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid) {
 	// reset data
 	TextMenuState[playerid] = false;
+	TextInfoState[playerid] = false;
 	TextMenuItemCount[playerid] = 0;
 	TextMenuCallbackHandler[playerid][0] = EOS;
 	TextMenuItems[playerid][0] = EOS;
+	TextInfoNameHandler[playerid][0] = EOS;
+	TextInfoItems[playerid][0] = EOS;
 
 	TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 10.000000, 146.000000, "Title");
 	PlayerTextDrawFont(playerid, TextMenuHeader[playerid], 3);
@@ -75,6 +81,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
  	    if(TextMenuState[playerid]) {
 	  		if(newkeys == KEY_NO) {
 				TextMenu_Hide(playerid);
+			}
+		}
+		if(TextInfoState[playerid]) {
+			if(newkeys == KEY_NO) {
+				TextInfo_Hide(playerid);
 			}
 		}
 	}
@@ -169,6 +180,78 @@ stock TextMenu_HideSpecific(playerid, const callback[]) {
 
 	if(!strcmp(TextMenuCallbackHandler[playerid], callback)) {
 		if(TextMenu_Hide(playerid)) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+stock TextInfo_Add(playerid, const text[]) {
+	if(!IsPlayerConnected(playerid)) {
+		return 0;
+	}
+	new tempString[128];
+	format(tempString, sizeof(tempString), "_%s~n~", text);
+	strcat(TextInfoItems[playerid], tempString, sizeof(TextMenuItems[]));
+	return 1;
+}
+
+stock TextInfo_Create(playerid, const intname[], const title[]) {
+	if(!IsPlayerConnected(playerid)) {
+		return 0;
+	}
+
+	TextMenu_Hide(playerid);
+    TextInfo_Hide(playerid);
+
+	strcpy(TextInfoNameHandler[playerid], intname, 32);
+
+	new tempString[35];
+	format(tempString, sizeof(tempString), "~b~%s", title);
+	PlayerTextDrawSetString(playerid, TextMenuHeader[playerid], tempString);
+	return 1;
+}
+
+stock TextInfo_Show(playerid)
+{
+	if(!IsPlayerConnected(playerid)) {
+		return 0;
+	}
+
+	new
+		string[1024];
+	format(string, sizeof(string), "~n~%s~n~~n~~w~___________Press_~y~N_~w~to_close_this_box~n~~n~", TextInfoItems[playerid]);
+	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
+	
+	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);
+	PlayerTextDrawShow(playerid,TextMenuBody[playerid]);
+
+	TextInfoState[playerid] = true;
+	return 1;
+}
+
+stock TextInfo_Hide(playerid)
+{
+	if(!IsPlayerConnected(playerid)) {
+		return 0;
+	}
+
+	if(!TextInfoState[playerid]) {
+		return 0;
+	}
+
+	TextInfoNameHandler[playerid][0] = EOS;
+	TextInfoState[playerid] = false;
+	TextInfoItems[playerid][0] = EOS;
+	PlayerTextDrawHide(playerid,TextMenuHeader[playerid]);
+	PlayerTextDrawHide(playerid,TextMenuBody[playerid]);
+	return 1;
+}
+
+stock TextInfo_HideSpecific(playerid, const intname[]) {
+
+	if(!strcmp(TextInfoNameHandler[playerid], callback)) {
+		if(TextInfo_Hide(playerid)) {
 			return 1;
 		}
 	}
