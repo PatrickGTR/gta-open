@@ -1,5 +1,8 @@
 #include <YSI_Coding\y_hooks>
 
+static
+	bool:SkinLoaded[MAX_PLAYERS];
+
 hook OnGameModeInit() {
     // Civilian Skin
     AddPlayerClass(56,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -69,10 +72,10 @@ hook OnPlayerLogin(playerid) {
 
 		if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
 			PlayerSkin[playerid] = playerSkin;
+			SetPlayerSkin(playerid, playerSkin);
+			SkinLoaded[playerid] = true;
 		}
-
 	}
-
 	MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
 	MySQL_ExecuteParallel_Inline(stmt_loadPlayerSkin, using inline OnSkinLoad);
 
@@ -133,7 +136,23 @@ timer void:ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
 }
 
 hook OnPlayerSpawn(playerid) {
-	SetPlayerSkin(playerid, PlayerSkin[playerid]);
+	if(SkinLoaded[playerid] == false) {
+		inline const OnSkinLoad() {
+
+			new
+				playerSkin;
+
+			MySQL_BindResultInt(stmt_loadPlayerSkin, 0, playerSkin);
+
+			if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
+				PlayerSkin[playerid] = playerSkin;
+				SetPlayerSkin(playerid, playerSkin);
+				SkinLoaded[playerid] = true;
+			}
+		}
+		MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
+		MySQL_ExecuteParallel_Inline(stmt_loadPlayerSkin, using inline OnSkinLoad);
+	}
 	return 1;
 }
 
@@ -177,4 +196,12 @@ stock void:Player_SetClass(playerid, classid) {
 
 stock Player_GetClass(playerid) {
     return PlayerClass[playerid];
+}
+
+stock Player_SetSkin(playerid, skinid) {
+	PlayerSkin[playerid] = skinid;
+}
+
+stock Player_GetSkin(playerid) {
+	return PlayerSkin[playerid];
 }

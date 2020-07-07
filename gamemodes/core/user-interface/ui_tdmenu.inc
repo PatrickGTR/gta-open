@@ -1,3 +1,16 @@
+// Manual
+// Text Menu and Text Info is different.
+// TextMenu_Create(playerid, callback, name) -> Create a text menu "Selectable".
+// TextMenu_Add(playerid, Item) -> Add an item to an text menu.
+// TextMenu_Show(playerid) -> Must be at the bottom used to show the menu created with Create and Add
+// TextMenu_Hide(playerid) -> Used for menus also work for info but doesn't reset the data of it. somehow in the script when you pressed n it will reset the data ALL of it.
+// TextMenu_HideSpecific(playerid, callback) -> You can hide specific textdraws. You will find this usefull.
+// TextInfo_Create(playerid, intname, title) -> same as the Menu_Create but this is not selectable don't use when you have TextMenu_Add in it. you will just use this if its pure Text Info.
+// TextInfo_Add(playerid, text[]) -> You will just add a text to it you can't select it. You can add this at the TextMenu_Create also
+// TextInfo_Show(playerid) -> Used for infos however when you have both TextMenu_Add use TextMenu_Add instead.
+// TextInfo_Hide(playerid) -> same as Menu_Hide but used for info.
+// TextInfo_HideSpecific(playerid, intname) -> Hide the intname. the intname means "Internal Name" which means this is the name that the script reads..
+
 #include <YSI_Coding\y_hooks>
 
 static
@@ -5,7 +18,6 @@ static
 	PlayerText:TextMenuBody[MAX_PLAYERS],
 	TextMenuCallbackHandler[MAX_PLAYERS][32],
 	TextInfoNameHandler[MAX_PLAYERS][32],
-	TextInfoItems[MAX_PLAYERS][512],
 	TextMenuItems[MAX_PLAYERS][512],
 	TextMenuState[MAX_PLAYERS],
 	TextMenuItemCount[MAX_PLAYERS],
@@ -19,7 +31,6 @@ hook OnPlayerConnect(playerid) {
 	TextMenuCallbackHandler[playerid][0] = EOS;
 	TextMenuItems[playerid][0] = EOS;
 	TextInfoNameHandler[playerid][0] = EOS;
-	TextInfoItems[playerid][0] = EOS;
 
 	TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 10.000000, 146.000000, "Title");
 	PlayerTextDrawFont(playerid, TextMenuHeader[playerid], 3);
@@ -192,7 +203,7 @@ stock TextInfo_Add(playerid, const text[]) {
 	}
 	new tempString[128];
 	format(tempString, sizeof(tempString), "_%s~n~", text);
-	strcat(TextInfoItems[playerid], tempString, sizeof(TextMenuItems[]));
+	strcat(TextMenuItems[playerid], tempString, sizeof(TextMenuItems[]));
 	return 1;
 }
 
@@ -220,7 +231,7 @@ stock TextInfo_Show(playerid)
 
 	new
 		string[1024];
-	format(string, sizeof(string), "~n~%s~n~~n~~w~___________Press_~y~N_~w~to_close_this_box~n~~n~", TextInfoItems[playerid]);
+	format(string, sizeof(string), "~n~%s~n~~n~~w~___________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
 	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
 	
 	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);
@@ -242,7 +253,7 @@ stock TextInfo_Hide(playerid)
 
 	TextInfoNameHandler[playerid][0] = EOS;
 	TextInfoState[playerid] = false;
-	TextInfoItems[playerid][0] = EOS;
+	TextMenuItems[playerid][0] = EOS;
 	PlayerTextDrawHide(playerid,TextMenuHeader[playerid]);
 	PlayerTextDrawHide(playerid,TextMenuBody[playerid]);
 	return 1;

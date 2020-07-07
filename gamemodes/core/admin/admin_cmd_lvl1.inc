@@ -35,6 +35,63 @@ ACMD:[1]acmds(playerid, params[])
 	return 1;
 }
 
+forward AdminListMenu(playerid, listitem);
+public AdminListMenu(playerid, listitem)
+{
+	new tmpString[24];
+	format(tmpString, sizeof(tmpString), "AdminCount_%i", listitem);
+	new targetid = GetPVarInt(playerid, tmpString);
+
+	if(IsPlayerConnected(targetid)) {
+		new
+			location[MAX_MAP_ZONE_NAME + 12],
+			string[128];
+		Player_GetLocation(targetid, location);
+		TextInfo_Create(playerid, "AdminList", "Player Info");
+		format(string, sizeof(string), "~r~Name: ~w~%p (%d)~n~", targetid, targetid);
+		TextInfo_Add(playerid, string);
+		format(string, sizeof(string), "~r~Location: ~w~%s~n~", location);
+		TextInfo_Add(playerid, string);
+		format(string, sizeof(string), "~r~Class: ~w~%s~n~", Player_GetClassName(targetid));
+		TextInfo_Add(playerid, string);
+		if(Player_GetClass(targetid) == TEAM_CIVILIAN)
+    	{
+        	format(string, sizeof(string), "~r~Job: ~w~%s~n~", Player_Jobname(targetid));
+	    	TextInfo_Add(playerid, string);
+    	}
+		TextInfo_Show(playerid);
+	}
+	return 1;
+}
+
+ACMD:[1]admins(playerid, params[])
+{
+	new onlineadmins = 0;
+	new tmpString[100];
+	TextMenu_Create(playerid, "AdminListMenu", "Admins");
+	foreach(new i : Player)
+	{
+		if(Admin_GetPlayerLevel(i) > 0) 
+		{
+			format(tmpString, sizeof(tmpString),
+            "%p (%d) Admin Level: %s",
+        	i, i, Admin_GetRankName(i));
+			TextMenu_Add(playerid, tmpString);
+			
+			format(tmpString, sizeof(tmpString), "AdminCount_%i", onlineadmins);
+			SetPVarInt(playerid, tmpString, i);
+			onlineadmins++;
+		}
+	}
+	if(onlineadmins == 0) {
+		return SendServerMsg(playerid, "No online admins");
+	}
+	else {
+		TextMenu_Show(playerid);
+	}
+	return true;
+}
+
 ACMD:[1]get(playerid, params[])
 {
 	new targetid;

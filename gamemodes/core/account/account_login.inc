@@ -125,6 +125,8 @@ hook OnPlayerSpawn(playerid) {
         MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
         MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
         Class_SelectionState(playerid, false);
+		Player_SetSkin(playerid, GetPlayerSkin(playerid));
+		Player_SetBoughtSkin(playerid, false);
     }
     return 1;
 }

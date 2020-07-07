@@ -15,6 +15,10 @@
 // OnServerWeekReset() -> called when the in-game week resets.
 // OnServerDayReset() -> called when it's a new in-game day.
 
+// Custom Stocks
+// Player_GiveScore(playerid, score, bool:save = false) -> give player a score.
+// Player_RemoveScore(playerid, score) -> remove a score (automatically saved).
+
 // TextdrawLetterSize Rule -> Thanks to DamianC
 // Letter-size-y = letter-size-x * 4
 // For a nice font display

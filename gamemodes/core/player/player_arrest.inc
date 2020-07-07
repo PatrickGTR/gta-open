@@ -61,8 +61,8 @@ stock void:Player_AwardArrest(playerid, targetid, bool:notify = true) {
         level =  GetPlayerWantedLevel(targetid),
         money = level * 100;
     GivePlayerMoney(playerid, money);
-    SetPlayerScore(playerid, GetPlayerScore(playerid) + 1);
-    SetPlayerScore(targetid, GetPlayerScore(targetid) - 1);
+    Player_GiveScore(playerid, 1, true);
+    Player_RemoveScore(playerid, 1);
 
     if(notify) {
         SendMsgF(playerid, COLOR_YELLOW, "REWARD! "C_WHITE"You have been rewarded "C_GREEN"%m "C_WHITE"for arresting "C_GREY"%p[%i] "C_WHITE"with "C_GREY"%i "C_WHITE"wanted level.", money, targetid, targetid, level);
