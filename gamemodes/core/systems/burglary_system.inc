@@ -254,6 +254,7 @@ stock Player_StopRobbery(playerid) {
     DisablePlayerRaceCheckpoint(playerid);
     UI_HideTimeLeft(playerid);
     stop burglarytimer[playerid];
+    stop BurglaryFailed[playerid];
     return 1;
 }
 

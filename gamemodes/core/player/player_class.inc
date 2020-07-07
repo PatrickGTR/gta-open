@@ -144,9 +144,13 @@ hook OnPlayerSpawn(playerid)
 	if(!PlayerFromSelection[playerid]) {
 		SetPlayerSkin(playerid, PlayerSkin[playerid]);
 	}
-	else {
+	if(PlayerFromSelection[playerid]) {
 		PlayerSkin[playerid] = GetPlayerSkin(playerid);
+		SetPlayerSkin(playerid, PlayerSkin[playerid]);
 		PlayerFromSelection[playerid] = false;
+	}
+	if(GetPlayerSkin(playerid) == 0) {
+		SetPlayerSkin(playerid, PlayerSkin[playerid]);
 	}
 	return 1;
 }

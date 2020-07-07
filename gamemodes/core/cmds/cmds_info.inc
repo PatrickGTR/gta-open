@@ -17,7 +17,7 @@ CMD:info(playerid, params[])
 
 ShowPlayerInfo(playerid)
 {
-    new string[128], location[MAX_MAP_ZONE_NAME + 12];
+    new string[256], location[MAX_MAP_ZONE_NAME + 12];
     Player_GetLocation(playerid, location);
     TextInfo_Create(playerid, "PlayerInfo", "Player Info");
 	format(string, sizeof(string), "~r~Name: ~w~%p (%d)~n~", playerid, playerid);
@@ -31,13 +31,19 @@ ShowPlayerInfo(playerid)
         format(string, sizeof(string), "~r~Job: ~w~%s~n~", Player_Jobname(playerid));
 	    TextInfo_Add(playerid, string);
     }
-	TextInfo_Show(playerid);
+    format(string, sizeof(string), "~r~Kills: ~w~%d~n~", Player_GetKills(playerid));
+    TextInfo_Add(playerid, string);
+    format(string, sizeof(string), "~r~Deaths: ~w~%d~n~", Player_GetDeaths(playerid));
+    TextInfo_Add(playerid, string);
+    format(string, sizeof(string), "~r~Ratio: ~w~%.2f", floatdiv(Player_GetKills(playerid), Player_GetDeaths(playerid)));
+	TextInfo_Add(playerid, string);
+    TextInfo_Show(playerid);
     return 1;
 }
 
 ShowInfoOfPlayer(playerid, target)
 {
-    new string[128], location[MAX_MAP_ZONE_NAME + 12];
+    new string[256], location[MAX_MAP_ZONE_NAME + 12];
     Player_GetLocation(target, location);
     TextInfo_Create(playerid, "PlayerInfo", "Player Info");
 	format(string, sizeof(string), "~r~Name: ~w~%p (%d)~n~", target, target);
@@ -51,6 +57,12 @@ ShowInfoOfPlayer(playerid, target)
         format(string, sizeof(string), "~r~Job: ~w~%s~n~", Player_Jobname(target));
 	    TextInfo_Add(playerid, string);
     }
-	TextInfo_Show(playerid);
+    format(string, sizeof(string), "~r~Kills: ~w~%d~n~", Player_GetKills(target));
+    TextInfo_Add(playerid, string);
+    format(string, sizeof(string), "~r~Deaths: ~w~%d~n~", Player_GetDeaths(target));
+    TextInfo_Add(playerid, string);
+    format(string, sizeof(string), "~r~Ratio: ~w~%.2f", floatdiv(Player_GetKills(target), Player_GetDeaths(target)));
+	TextInfo_Add(playerid, string);
+    TextInfo_Show(playerid);
     return 1;
 }

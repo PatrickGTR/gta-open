@@ -18,8 +18,6 @@
 
 static
     Player_UID[MAX_PLAYERS],
-    Player_Kills[MAX_PLAYERS],
-    Player_Deaths[MAX_PLAYERS],
     Statement: stmt_checkPlayer,
     Statement: stmt_savePlayerMoney;
 
@@ -30,9 +28,7 @@ hook OnMySQLConnected() {
 }
 
 hook OnPlayerConnect(playerid) {
-    Player_UID[playerid] =
-    Player_Kills[playerid] =
-    Player_Deaths[playerid] = 0;
+    Player_UID[playerid] = 0;
     return 1;
 }
 
@@ -86,22 +82,6 @@ hook OnPlayerPassedBanCheck(playerid) {
 
     MySQL_Bind(stmt_checkPlayer, 0, playerName);
     MySQL_ExecuteParallel_Inline(stmt_checkPlayer, using inline OnDataLoad);
-}
-
-stock Player_SetKills(playerid, value) {
-    return Player_Kills[playerid] = value;
-}
-
-stock Player_GetKills(playerid) {
-    return Player_Kills[playerid];
-}
-
-stock Player_SetDeaths(playerid, value) {
-    return Player_Deaths[playerid] = value;
-}
-
-stock Player_GetDeaths(playerid) {
-    return Player_Deaths[playerid];
 }
 
 stock Player_SetAccountID(playerid, value) {

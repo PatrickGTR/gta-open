@@ -68,6 +68,12 @@ public HitmanTextMenu(playerid, listitem) {
         	format(string, sizeof(string), "~r~Job: ~w~%s~n~", Player_Jobname(targetid));
 	    	TextInfo_Add(playerid, string);
     	}
+		format(string, sizeof(string), "~r~Kills: ~w~%d~n~", Player_GetKills(targetid));
+    	TextInfo_Add(playerid, string);
+    	format(string, sizeof(string), "~r~Deaths: ~w~%d~n~", Player_GetDeaths(targetid));
+    	TextInfo_Add(playerid, string);
+    	format(string, sizeof(string), "~r~Ratio: ~w~%.2f", floatdiv(Player_GetKills(targetid), Player_GetDeaths(targetid)));
+		TextInfo_Add(playerid, string);
 		TextInfo_Show(playerid);
 	}
 	return 1;

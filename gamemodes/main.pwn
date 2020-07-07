@@ -85,6 +85,12 @@ public OnGameModeInit() {
 	return 1;
 }
 
+public OnPlayerDeath(playerid, killerid, reason) {
+	Player_GiveKill(killerid, 1, true);
+	Player_SetDeaths(playerid, 1, true);
+	return 1;
+}
+
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.
 public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bodypart )

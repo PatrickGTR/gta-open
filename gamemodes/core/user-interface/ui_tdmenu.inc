@@ -131,6 +131,7 @@ stock TextMenu_Create(playerid, const callback[], const title[]) {
 	// Just to make sure everything is fresh everytime we create
 	// a new  Text Menu.
 	TextMenu_Hide(playerid);
+	TextInfo_Hide(playerid);
 
 	strcpy(TextMenuCallbackHandler[playerid], callback, 32);
 
