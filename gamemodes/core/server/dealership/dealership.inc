@@ -118,7 +118,7 @@ public OnPlayerClickDealershipTextdraw(playerid, type)
 		}
 
 		UI_HideDealershipTextDraw(playerid);
-		GivePlayerMoney(playerid, Dealership_GetVehiclePrice(index));
+		GivePlayerMoney(playerid, -Dealership_GetVehiclePrice(index));
 	}
 	else if(type == BTN_CLOSE)
 	{

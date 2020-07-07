@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 static
-	bool:SkinLoaded[MAX_PLAYERS];
+	bool:PlayerFromSelection[MAX_PLAYERS];
 
 hook OnGameModeInit() {
     // Civilian Skin
@@ -72,8 +72,6 @@ hook OnPlayerLogin(playerid) {
 
 		if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
 			PlayerSkin[playerid] = playerSkin;
-			SetPlayerSkin(playerid, playerSkin);
-			SkinLoaded[playerid] = true;
 		}
 	}
 	MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
@@ -135,23 +133,20 @@ timer void:ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
 	TogglePlayerSpectating(playerid, false);
 }
 
-hook OnPlayerSpawn(playerid) {
-	if(SkinLoaded[playerid] == false) {
-		inline const OnSkinLoad() {
+hook OnPlayerRequestSpawn(playerid)
+{
+	PlayerFromSelection[playerid] = true;
+	return 1;
+}
 
-			new
-				playerSkin;
-
-			MySQL_BindResultInt(stmt_loadPlayerSkin, 0, playerSkin);
-
-			if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
-				PlayerSkin[playerid] = playerSkin;
-				SetPlayerSkin(playerid, playerSkin);
-				SkinLoaded[playerid] = true;
-			}
-		}
-		MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
-		MySQL_ExecuteParallel_Inline(stmt_loadPlayerSkin, using inline OnSkinLoad);
+hook OnPlayerSpawn(playerid)
+{
+	if(!PlayerFromSelection[playerid]) {
+		SetPlayerSkin(playerid, PlayerSkin[playerid]);
+	}
+	else {
+		PlayerSkin[playerid] = GetPlayerSkin(playerid);
+		PlayerFromSelection[playerid] = false;
 	}
 	return 1;
 }
