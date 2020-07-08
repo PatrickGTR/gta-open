@@ -109,12 +109,6 @@ stock Atm_Create(Float: x, Float: y, Float: z, Float: a, wid, int, bool:save = f
 		return -1;
 	}
 
-	new
-		string[50];
-
-	format(string, sizeof string, "(ATM - "C_WHITE"%d"C_ORANGE")", atmID);
-	atm_Label[atmID] = CreateDynamic3DTextLabel(string, COLOR_ORANGE, x, y, z, 30.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1, -1, 30.0, -1, 0);
-
 	atm_Object[atmID] = CreateDynamicObject(19324, x, y, z, 0.0, 0.0, a, wid, int, -1, 300.0);
 
 	AtmID[atmID] = atmID;
@@ -136,13 +130,6 @@ stock Atm_Create(Float: x, Float: y, Float: z, Float: a, wid, int, bool:save = f
 
 stock Atm_Update(atmID, Float:x, Float:y, Float:z, Float:a, wid, int)
 {
-    new
-		string[50];
-
-	format(string, sizeof string, "(ATM - "C_WHITE"%d"C_ORANGE")", atmID);
-    DestroyDynamic3DTextLabel(atm_Label[atmID]);
-	atm_Label[atmID] = CreateDynamic3DTextLabel(string, COLOR_ORANGE, x, y, z, 30.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1, -1, 30.0, -1, 0);
-
     DestroyDynamicObject(atm_Object[atmID]);
 	atm_Object[atmID] = CreateDynamicObject(19324, x, y, z, 0.0, 0.0, a, wid, int, -1, 300.0);
 
@@ -204,6 +191,7 @@ Atm_Load() {
 
         while(MySQL_Statement_FetchRow(stmt_LoadATM)) {
             Atm_Create(x, y, z, a, wid, interior);
+            printf("ATM ID: %d LOADED", atmID);
         }
     }
 
@@ -214,6 +202,12 @@ Atm_Delete(playerid, atmID) {
     inline OnATMRemove()
     {
         if (MySQL_Statement_FetchRow(stmt_ATMExists)) {
+            AtmPosX[atmID] = -1;
+	        AtmPosY[atmID] = -1;
+	        AtmPosZ[atmID] = -1;
+	        AtmPosA[atmID] = -1;
+            AtmWid[atmID] = -1;
+            AtmInt[atmID] = -1;
             MySQL_BindInt(stmt_RemoveATM, 0, atmID);
             MySQL_ExecuteThreaded(stmt_RemoveATM);
 
@@ -275,7 +269,7 @@ hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z,
 }
 
 // Commands
-TCMD:createatm(playerid, params[])
+ACMD:[5]createatm(playerid, params[])
 {
 	new 
         Float:x,
@@ -304,7 +298,7 @@ TCMD:createatm(playerid, params[])
 	return 1;
 }
 
-TCMD:deleteatm(playerid, params[])
+ACMD:[5]deleteatm(playerid, params[])
 {
 
     if(isnull(params)) {
@@ -325,7 +319,7 @@ TCMD:deleteatm(playerid, params[])
     return 1;
 }
 
-TCMD:editatm(playerid, params[])
+ACMD:[5]editatm(playerid, params[])
 {
     new targetatm;
     if(sscanf(params, "i", targetatm)) return SendSyntaxMsg(playerid, "/editatm (atmid)");
@@ -340,7 +334,7 @@ TCMD:editatm(playerid, params[])
     return 1;
 }
 
-TCMD:nearatm(playerid, params[])
+ACMD:[5]nearatm(playerid, params[])
 {
     new atms = 0;
     for (new i = 0; i < MAX_ATMS; i++) {
@@ -378,14 +372,14 @@ CMD:hackatm(playerid, params[])
         SendClientMessage(playerid, COLOR_RED, "ATM HACKING:"C_WHITE" Failed to hack the ATM.");
         PlayerRecentATMRobbed[playerid] = gettime();
         SendClientMessage(playerid, COLOR_RED, "FBI:"C_WHITE" Face Captured reported.");
-        PLAYER_SetPlayerWantedLevel(playerid, 6);
+        Player_GiveWantedLevel(playerid, 6);
         return 0;
     }
     if(RandomFBIDetect < 50) {
         SendClientMessage(playerid, COLOR_RED, "FBI:"C_WHITE" Face Captured reported.");
-        PLAYER_SetPlayerWantedLevel(playerid, 6);
+        Player_GiveWantedLevel(playerid, 6);
     }
-    SendServerMsgF(playerid, "You have robbed %d from the atm machine!");
+    SendServerMsgF(playerid, "You have robbed %d from the atm machine!", RandomPayout);
     GivePlayerMoney(playerid, RandomPayout);
     ATMRecenlyRobbed[nearestATM] = gettime();
     return 1;

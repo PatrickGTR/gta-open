@@ -53,9 +53,10 @@ public TextMenuHospital(playerid, listitem) {
             }
             BoughtChangeSkin[playerid] = true;
             Class_SelectionState(playerid, true);
-            SetPlayerHealth(playerid, 0);
             ForceClassSelection(playerid);
-            GivePlayerMoney(playerid, HOSPITAL_SKIN_CHANGE);
+            TogglePlayerSpectating(playerid, true);
+            TogglePlayerSpectating(playerid, false);
+            GivePlayerMoney(playerid, -HOSPITAL_SKIN_CHANGE);
         }
         case 3: {
             if(GetPlayerMoney(playerid) < 3000) {

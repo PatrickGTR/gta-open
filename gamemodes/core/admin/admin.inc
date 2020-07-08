@@ -39,4 +39,10 @@ hook OnGameModeInit() {
 
     Admin_AddCommandToList(5, "/setadmin");
     Admin_AddCommandToList(5, "/settester");
+    Admin_AddCommandToList(5, "/setplayerdept - set a player bank's dept");
+    Admin_AddCommandToList(5, "/bankrupt - set a player bank and tax bal to 0");
+    Admin_AddCommandToList(5, "/createatm");
+    Admin_AddCommandToList(5, "/deleteatm");
+    Admin_AddCommandToList(5, "/editatm");
+    Admin_AddCommandToList(5, "/nearatm");
 }

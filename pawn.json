@@ -54,7 +54,8 @@
 				"gamemodes/core/houses/furniture",
 				"gamemodes/core/mapping",
 				"gamemodes/core/tester",
-				"gamemodes/core/discord"
+				"gamemodes/core/discord",
+				"gamemodes/core/bank"
 			],
 			"constants": {
 				"DEV_BUILD": "1"

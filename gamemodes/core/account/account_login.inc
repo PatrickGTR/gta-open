@@ -4,6 +4,9 @@
 #include <logger>
 
 static
+	bool:PlayerFromSelection[MAX_PLAYERS];
+
+static
     gPlayerHash[MAX_PLAYERS][250],
     bool:gPlayerLoginStatus[MAX_PLAYERS],
     PlayerAttempts[MAX_PLAYERS];
@@ -112,22 +115,43 @@ hook OnPlayerLogin(playerid) {
     return 1;
 }
 
+hook OnPlayerRequestSpawn(playerid)
+{
+	PlayerFromSelection[playerid] = true;
+	return 1;
+}
+
+stock bool:IsPlayerFromSelection(playerid)
+	return PlayerFromSelection[playerid];
+
+stock SetPlayerSelectionStats(playerid, bool:stats) {
+	PlayerFromSelection[playerid] = stats;
+}
+
 hook OnPlayerSpawn(playerid) {
-    if(Player_New(playerid)) {
-        MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
-        MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
-        MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
-        Class_SelectionState(playerid, false);
-        Player_SetNew(playerid, false);
-    }
-    if(Player_BoughtSkin(playerid)) {
-        MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
-        MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
-        MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
-        Class_SelectionState(playerid, false);
-		Player_SetSkin(playerid, GetPlayerSkin(playerid));
-		Player_SetBoughtSkin(playerid, false);
-    }
+    if(!IsPlayerFromSelection(playerid)) {
+		SetPlayerSkin(playerid, Player_GetSkin(playerid));
+	}
+	if(IsPlayerFromSelection(playerid)) {
+		if(Player_New(playerid)) {
+            MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
+            MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
+            MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
+            Class_SelectionState(playerid, false);
+            Player_SetNew(playerid, false);
+        }
+        if(Player_BoughtSkin(playerid)) {
+            MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
+            MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
+            MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
+            Class_SelectionState(playerid, false);
+		    Player_SetSkin(playerid, GetPlayerSkin(playerid));
+		    Player_SetBoughtSkin(playerid, false);
+        }
+		SetPlayerSelectionStats(playerid, false);
+	}
+    printf("Player Skin ID: %d", Player_GetSkin(playerid));
+    printf("Player %p Spawned with skin ID: %d", playerid, GetPlayerSkin(playerid));
     return 1;
 }
 

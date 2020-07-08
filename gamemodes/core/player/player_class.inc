@@ -1,8 +1,5 @@
 #include <YSI_Coding\y_hooks>
 
-static
-	bool:PlayerFromSelection[MAX_PLAYERS];
-
 hook OnGameModeInit() {
     // Civilian Skin
     AddPlayerClass(56,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -51,32 +48,11 @@ hook OnGameModeInit() {
 
 
 static
-	Statement: stmt_loadPlayerSkin,
 	PlayerSkin[MAX_PLAYERS],
 	bool:PlayerClassState[MAX_PLAYERS] = true,
 	PlayerClass[MAX_PLAYERS];
 
-hook OnMySQLConnected() {
-	stmt_loadPlayerSkin = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT skin FROM player_stats WHERE u_id = ?");
-	return 1;
-}
-
 hook OnPlayerLogin(playerid) {
-
-	inline const OnSkinLoad() {
-
-		new
-			playerSkin;
-
-		MySQL_BindResultInt(stmt_loadPlayerSkin, 0, playerSkin);
-
-		if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
-			PlayerSkin[playerid] = playerSkin;
-		}
-	}
-	MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
-	MySQL_ExecuteParallel_Inline(stmt_loadPlayerSkin, using inline OnSkinLoad);
-
 	PlayerClassState[playerid] = false;
 	return 1;
 }
@@ -128,31 +104,9 @@ timer void:ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
 	// using SetSpawnInfo fixes the kick bug when
 	// TogglePlayerSpectating is used to force spawn player but without using
 	// SetSpawnInfo the server does not know where to spawn the player.
-	SetSpawnInfo(playerid, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+	SetSpawnInfo(playerid, 0, Player_GetSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
 
 	TogglePlayerSpectating(playerid, false);
-}
-
-hook OnPlayerRequestSpawn(playerid)
-{
-	PlayerFromSelection[playerid] = true;
-	return 1;
-}
-
-hook OnPlayerSpawn(playerid)
-{
-	if(!PlayerFromSelection[playerid]) {
-		SetPlayerSkin(playerid, PlayerSkin[playerid]);
-	}
-	if(PlayerFromSelection[playerid]) {
-		PlayerSkin[playerid] = GetPlayerSkin(playerid);
-		SetPlayerSkin(playerid, PlayerSkin[playerid]);
-		PlayerFromSelection[playerid] = false;
-	}
-	if(GetPlayerSkin(playerid) == 0) {
-		SetPlayerSkin(playerid, PlayerSkin[playerid]);
-	}
-	return 1;
 }
 
 hook OnPlayerConnect(playerid) {

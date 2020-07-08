@@ -262,7 +262,7 @@ stock TextInfo_Hide(playerid)
 
 stock TextInfo_HideSpecific(playerid, const intname[]) {
 
-	if(!strcmp(TextInfoNameHandler[playerid], callback)) {
+	if(!strcmp(TextInfoNameHandler[playerid], intname)) {
 		if(TextInfo_Hide(playerid)) {
 			return 1;
 		}

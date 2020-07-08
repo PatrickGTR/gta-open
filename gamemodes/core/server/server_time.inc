@@ -55,6 +55,13 @@ hook OnServerSecondUpdate() {
         CallRemoteFunction("OnServerDayReset", "");
 	}
 
+    if(ServerTime == 500) {
+        print("Taxes");
+        foreach(new i : Player) {
+            Player_Tax(i);
+        }
+    }
+
 	foreach(new i : Player) {
 		SetPlayerTime(i, minutes, seconds);
 	}
@@ -63,4 +70,12 @@ hook OnServerSecondUpdate() {
 
     format(timestring, sizeof (timestring), "%02d:%02d", minutes, seconds);
     UI_SetTime(timestring);
+}
+
+ACMD:[5]settime(playerid, params[])
+{
+    new time;
+    if(sscanf(params, "i", time)) return SendSyntaxMsg(playerid, "/settime (time)");
+    ServerTime = time;
+    return 1;
 }

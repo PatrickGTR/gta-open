@@ -19,11 +19,13 @@
 static
     Player_UID[MAX_PLAYERS],
     Statement: stmt_checkPlayer,
+    Statement: stmt_loadPlayerSkin,
     Statement: stmt_savePlayerMoney;
 
 hook OnMySQLConnected() {
     stmt_checkPlayer = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT u_id, password FROM players WHERE username=?");
     stmt_savePlayerMoney = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET money=? WHERE u_id=?");
+    stmt_loadPlayerSkin = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT skin FROM player_stats WHERE u_id = ?");
     return 1;
 }
 
@@ -63,6 +65,20 @@ hook OnPlayerPassedBanCheck(playerid) {
         if(MySQL_Statement_FetchRow(stmt_checkPlayer)) {
             Player_SetAccountID(playerid, playerUID);
 
+            //The reason i did this because sometimes the player spawn comes first instead of this.
+            inline const OnSkinLoad() {
+
+		        new
+			        playerSkin;
+
+		        MySQL_BindResultInt(stmt_loadPlayerSkin, 0, playerSkin);
+
+		        if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
+			        Player_SetSkin(playerid, playerSkin);
+		        }
+	        }
+	        MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
+	        MySQL_ExecuteParallel_Inline(stmt_loadPlayerSkin, using inline OnSkinLoad);
             Account_PromptLogin(playerid, playerHash);
 
             // Reasoning behind this

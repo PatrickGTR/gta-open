@@ -62,6 +62,7 @@
 #include <mapping>
 #include <tester>
 #include <discord>
+#include <bank>
 
 
 // Will be called after the rest ^
