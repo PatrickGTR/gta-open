@@ -12,7 +12,7 @@ hook OnMySQLConnected()
             class_id tinyint(4) NOT NULL DEFAULT '0',\
             wanted_level mediumint(6) NOT NULL DEFAULT '0',\
             player_bounty mediumint(8) NOT NULL DEFAULT '0',\
-            money int(11) NOT NULL DEFAULT '0',\
+            money bigint(20) NOT NULL DEFAULT '0',\
             score int(11) NOT NULL DEFAULT '0', \
             skin smallint(4) NOT NULL DEFAULT '0',\
             PRIMARY KEY (u_id), \

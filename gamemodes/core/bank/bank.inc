@@ -107,7 +107,7 @@ stock Player_GiveBankMoney(playerid, bankmoney, bool:save = false)
         newBMoney = currentBMoney + bankmoney;
     PlayerBankMoney[playerid] = newBMoney;
     if(save) {
-        MySQL_BindInt(stmt_saveBank, 0, Player_GetBankMoney(playerid));
+        MySQL_BindInt(stmt_saveBank, 0, newBMoney);
         MySQL_BindInt(stmt_saveBank, 1, Player_GetBankTax(playerid));
         MySQL_BindInt(stmt_saveBank, 2, Player_GetBankDept(playerid));
         MySQL_BindInt(stmt_saveBank, 3, Player_GetAccountID(playerid));
@@ -121,7 +121,7 @@ stock Player_RemoveBankMoney(playerid, bankmoney)
         currentBMoney = Player_GetBankMoney(playerid),
         newBMoney = currentBMoney - bankmoney;
     PlayerBankMoney[playerid] = newBMoney;
-    MySQL_BindInt(stmt_saveBank, 0, Player_GetBankMoney(playerid));
+    MySQL_BindInt(stmt_saveBank, 0, newBMoney);
     MySQL_BindInt(stmt_saveBank, 1, Player_GetBankTax(playerid));
     MySQL_BindInt(stmt_saveBank, 2, Player_GetBankDept(playerid));
     MySQL_BindInt(stmt_saveBank, 3, Player_GetAccountID(playerid));
@@ -143,7 +143,7 @@ stock Player_AddBankDept(playerid, bankdept, bool:save = false)
     if(save) {
         MySQL_BindInt(stmt_saveBank, 0, Player_GetBankMoney(playerid));
         MySQL_BindInt(stmt_saveBank, 1, Player_GetBankTax(playerid));
-        MySQL_BindInt(stmt_saveBank, 2, Player_GetBankDept(playerid));
+        MySQL_BindInt(stmt_saveBank, 2, newPDept);
         MySQL_BindInt(stmt_saveBank, 3, Player_GetAccountID(playerid));
         MySQL_ExecuteThreaded(stmt_saveBank);
     }
@@ -155,9 +155,12 @@ stock Player_RemoveBankDept(playerid, bankdept)
         currentPDept = Player_GetBankDept(playerid),
         newPDept = currentPDept - bankdept;
     PlayerBankDept[playerid] = newPDept;
+    if(PlayerBankDept[playerid] < 0) {
+        PlayerBankDept[playerid] = 0;
+    }
     MySQL_BindInt(stmt_saveBank, 0, Player_GetBankMoney(playerid));
     MySQL_BindInt(stmt_saveBank, 1, Player_GetBankTax(playerid));
-    MySQL_BindInt(stmt_saveBank, 2, Player_GetBankDept(playerid));
+    MySQL_BindInt(stmt_saveBank, 2, newPDept);
     MySQL_BindInt(stmt_saveBank, 3, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_saveBank);
 }
@@ -170,7 +173,7 @@ stock Player_AddBankTax(playerid, banktax, bool:save = false)
     PlayerBankTax[playerid] = newPTax;
     if(save) {
         MySQL_BindInt(stmt_saveBank, 0, Player_GetBankMoney(playerid));
-        MySQL_BindInt(stmt_saveBank, 1, Player_GetBankTax(playerid));
+        MySQL_BindInt(stmt_saveBank, 1, newPTax);
         MySQL_BindInt(stmt_saveBank, 2, Player_GetBankDept(playerid));
         MySQL_BindInt(stmt_saveBank, 3, Player_GetAccountID(playerid));
         MySQL_ExecuteThreaded(stmt_saveBank);
@@ -181,10 +184,13 @@ stock Player_RemoveBankTax(playerid, banktax)
 {
     new
         currentPTax = Player_GetBankTax(playerid),
-        newPTax = currentPTax + banktax;
+        newPTax = currentPTax - banktax;
     PlayerBankTax[playerid] = newPTax;
+    if(PlayerBankTax[playerid] < 0) {
+        PlayerBankTax[playerid] = 0;
+    }
     MySQL_BindInt(stmt_saveBank, 0, Player_GetBankMoney(playerid));
-    MySQL_BindInt(stmt_saveBank, 1, Player_GetBankTax(playerid));
+    MySQL_BindInt(stmt_saveBank, 1, newPTax);
     MySQL_BindInt(stmt_saveBank, 2, Player_GetBankDept(playerid));
     MySQL_BindInt(stmt_saveBank, 3, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_saveBank);

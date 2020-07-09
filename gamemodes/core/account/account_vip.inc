@@ -10,29 +10,29 @@ static
 hook OnMySQLConnected()
 {
     static const delete_Query[] = "\
-        DELETE FROM \
-            vips \
-        WHERE \
-            u_id = ?"
+    DELETE FROM \
+        vips \
+    WHERE \
+        u_id = ?"
     ;
     stmt_deleteVIP = MySQL_PrepareStatement(MySQL_GetHandle(), delete_Query);
 
     static const insert_Query[] = "\
-        INSERT INTO \
-            vips (u_id, vip_level, vip_expire_date) \
-        VALUES \
-            (?, ?, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ? ?))"
+    INSERT INTO \
+        vips (u_id, vip_level, vip_expire_date) \
+    VALUES \
+        (?, ?, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ? ?))"
     ;
     stmt_insertVIP = MySQL_PrepareStatement(MySQL_GetHandle(), insert_Query);
 
     static const select_Query[] = "\
-        SELECT \
-            vip_level, \
-            DATE_FORMAT(vip_expire_date, '"SQL_DATETIME_FORMAT"') as expiry, \
-            TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP(), vip_expire_date) as expire \
-        FROM vips \
-        WHERE \
-            u_id = ? LIMIT 1"
+    SELECT \
+        vip_level, \
+        DATE_FORMAT(vip_expire_date, '"SQL_DATETIME_FORMAT"') as expiry, \
+        TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP(), vip_expire_date) as expire \
+    FROM vips \
+    WHERE \
+        u_id = ? LIMIT 1"
     ;
     stmt_selectVIP = MySQL_PrepareStatement(MySQL_GetHandle(), select_Query);
 }

@@ -10,7 +10,7 @@ ACMD:[4]setvip(playerid, params[])
 
     if (!strcmp(params, "month", true, 5))
     {
-        if (sscanf(params, "{s[6]}iii", targetid, level, month))
+        if (sscanf(params, "{s[6]}uii", targetid, level, month))
             return SendSyntaxMsg(playerid, "/setvip month <playerid> <Level> <Months>");
 
         if (targetid == INVALID_PLAYER_ID)

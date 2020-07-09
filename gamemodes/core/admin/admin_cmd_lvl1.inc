@@ -97,6 +97,9 @@ ACMD:[1]get(playerid, params[])
 	new targetid;
 	new Float:pos[4];
 	if(sscanf(params, "u", targetid)) return SendSyntaxMsg(playerid, "/get [player]");
+	if(!IsPlayerConnected(targetid)) {
+		return SendErrorMsg(playerid, "Player is not connected");
+	}
 	if(targetid == playerid) return SendErrorMsg(playerid, "You can't get yourself");
 	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
 	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
@@ -111,11 +114,28 @@ ACMD:[1]goto(playerid, params[])
 	new target;
 	new Float:pos[4];
 	if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/gotop (playerid)");
-	if(target == playerid) return SendErrorMsg(playerid, "You can't get yourself");
+	if(!IsPlayerConnected(target)) {
+		return SendErrorMsg(playerid, "Player is not connected");
+	}
+	if(target == playerid) return SendErrorMsg(playerid, "You can't goto yourself");
 	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(target));
 	SetPlayerInterior(playerid, GetPlayerInterior(target));
 	GetPlayerPos(target, pos[0], pos[1], pos[2]);
 	SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
 	SendAdminCmdUsage(playerid, "/goto", params);
+	return 1;
+}
+
+ACMD:[1]kick(playerid, params[])
+{
+	new target, reason[128];
+	if(sscanf(params, "us[128]", target, reason)) return SendSyntaxMsg(playerid, "/kick (name/in) (reason)");
+	if(!IsPlayerConnected(target)) {
+		return SendErrorMsg(playerid, "Player not connected");
+	}
+	SendMsgAllF(COLOR_MODERATION, "[ADMIN KICK]: %p (%d) has been kicked for: %s", target, target, reason);
+	SendMsgF(target, COLOR_MODERATION, "[ADMIN KICK]: You have Been Kicked for Reason: %s", reason);
+	defer KickTimer(target);
+	SendAdminCmdUsage(playerid, "/kick", params);
 	return 1;
 }

@@ -13,6 +13,9 @@
 
 #include <admin_cmd_lvl2>
 
+#include <admin_cmd_lvl3carscmds>
+#include <admin_cmd_lvl3>
+
 #include <admin_cmd_lvl4>
 
 #include <admin_cmd_lvl5>
@@ -22,15 +25,28 @@
 #include <fly_cmd>
 
 hook OnGameModeInit() {
-    Admin_AddCommandToList(1, "/acmds - list of admin commands");
-    Admin_AddCommandToList(1, "/get - get a player");
-    Admin_AddCommandToList(1, "/goto - go to a player");
+    Admin_AddCommandToList(1, "/acmds");
+    Admin_AddCommandToList(1, "/get");
+    Admin_AddCommandToList(1, "/kick");
+    Admin_AddCommandToList(1, "/goto");
     Admin_AddCommandToList(1, "/a - admin chat");
 
     Admin_AddCommandToList(2, "/unjail - unjail a player");
+    Admin_AddCommandToList(2, "/ban");
 
-    Admin_AddCommandToList(3, "/ban");
+    Admin_AddCommandToList(3, "/getallciv");
     Admin_AddCommandToList(3, "/unban");
+    Admin_AddCommandToList(3, "/disarm");
+    Admin_AddCommandToList(3, "/sethealth");
+    Admin_AddCommandToList(3, "/eventint - event interiors");
+    Admin_AddCommandToList(3, "/setarmour");
+    Admin_AddCommandToList(3, "/setvirtualworld - set your virtual world");
+    Admin_AddCommandToList(3, "/giveweaps");
+    Admin_AddCommandToList(3, "/veh");
+    Admin_AddCommandToList(3, "/aveh - admin vehicle");
+    Admin_AddCommandToList(3, "/dav - destroy all admin vehicle");
+    Admin_AddCommandToList(3, "/rscars - destroy all vehicle");
+    Admin_AddCommandToList(3, "/rscars - destroy all vehicle");
 
     Admin_AddCommandToList(4, "/setvip");
     Admin_AddCommandToList(4, "/givemoney");
@@ -41,6 +57,7 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(5, "/settester");
     Admin_AddCommandToList(5, "/setplayerdept - set a player bank's dept");
     Admin_AddCommandToList(5, "/bankrupt - set a player bank and tax bal to 0");
+    Admin_AddCommandToList(5, "/skick - silent kick");
     Admin_AddCommandToList(5, "/createatm");
     Admin_AddCommandToList(5, "/deleteatm");
     Admin_AddCommandToList(5, "/editatm");

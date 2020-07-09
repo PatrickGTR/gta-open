@@ -1,7 +1,7 @@
-ACMD:[3]ban(playerid, params[])
+ACMD:[2]tempban(playerid, params[])
 {
     if (isnull(params) || isnumeric(params))  {
-        return SendSyntaxMsg(playerid, "/ban <options: d(ay), m(onth), y(ear)>");
+        return SendSyntaxMsg(playerid, "/tempban <options: d(ay), m(onth), y(ear)>");
     }
 
     new
@@ -13,39 +13,38 @@ ACMD:[3]ban(playerid, params[])
 
     if (!strcmp(params, "d", true, 1)) {
         if (sscanf(params, "{s[2]}riS(Not specified)["#MAX_BAN_REASON"]", targetid, duration, reason)) {
-            return SendSyntaxMsg(playerid, "/ban d <playerid> <duration> <reason>");
+            return SendSyntaxMsg(playerid, "/tempban d <playerid> <duration> <reason>");
         }
         if (!IsPlayerConnected(targetid)) {
-            return SendSyntaxMsg(playerid, "The player you are trying to ban is not connected.");
+            return SendErrorMsg(playerid, "The player you are trying to ban is not connected.");
         }
         if (strlen(reason) > MAX_BAN_REASON) {
-            return SendSyntaxMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
+            return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
         }
         interval = 0;
-
     }
     if (!strcmp(params, "m", true, 1)) {
         if (sscanf(params, "{s[2]}riS(Not specified)["#MAX_BAN_REASON"]", targetid, duration, reason)) {
-            return SendSyntaxMsg(playerid, "/ban m <playerid> <duration> <reason>");
+            return SendSyntaxMsg(playerid, "/tempban m <playerid> <duration> <reason>");
         }
         if (!IsPlayerConnected(targetid)) {
-            return SendSyntaxMsg(playerid, "The player you are trying to ban is not connected.");
+            return SendErrorMsg(playerid, "The player you are trying to ban is not connected.");
         }
         if (strlen(reason) > MAX_BAN_REASON) {
-            return SendSyntaxMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
+            return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
         }
 
         interval = 1;
     }
     if (!strcmp(params, "y", true, 1))  {
         if (sscanf(params, "{s[2]}riS(Not specified)["#MAX_BAN_REASON"]", targetid, duration, reason)) {
-            return SendSyntaxMsg(playerid, "/ban y <playerid> <duration> <reason>");
+            return SendSyntaxMsg(playerid, "/tempban y <playerid> <duration> <reason>");
         }
         if (!IsPlayerConnected(targetid)) {
-            return SendSyntaxMsg(playerid, "The player you are trying to ban is not connected.");
+            return SendErrorMsg(playerid, "The player you are trying to ban is not connected.");
         }
         if (strlen(reason) > MAX_BAN_REASON) {
-            return SendSyntaxMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
+            return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
         }
         interval = 2;
     }
@@ -55,9 +54,10 @@ ACMD:[3]ban(playerid, params[])
     }
 
     if(success) {
-        SendServerMsgF(playerid, "You have banned "C_GREY"%p "C_WHITE"for "C_GREY"%s", targetid, reason);
-        SendMsgF(targetid, COLOR_RED, "[BANNED]: "C_WHITE"You have been banned by admin "C_GREY"%p "C_WHITE"for "C_GREY"%s", playerid, reason);
-        Kick(targetid);
+        SendMsgF(playerid, COLOR_MODERATION, "[ACCOUNT DISABLE]: You have Disabled "C_GREY"%p's account "C_WHITE"for "C_GREY"%s", targetid, reason);
+        SendMsgAllF(COLOR_MODERATION, "[ACCOUNT DISABLED]: %p (%d) has been banned for %s", targetid, targetid, reason);
+        SendMsgF(targetid, COLOR_MODERATION, "[ACCOUNT DISABLED]: You have been banned by an Admin for %s", playerid, reason);
+        defer KickTimer(targetid);
     }
     return 1;
 }

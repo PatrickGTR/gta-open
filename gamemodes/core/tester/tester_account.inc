@@ -47,17 +47,28 @@ stock SetPlayerTester(playerid, bool:level)
 
     new string[256];
 
-    static const query[] = "\
-    INSERT INTO \
-        testers(u_id, tester_level) \
-    VALUES \
-        (%i, %i) \
-    ON DUPLICATE KEY UPDATE \
-        tester = %i \
-    ";
+    if(level == true) {
+        static const query[] = "\
+        INSERT INTO \
+            testers(u_id, tester_level) \
+        VALUES \
+            (%i, %i) \
+        ";
 
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), level, level);
-    mysql_tquery(MySQL_GetHandle(), string);
+        mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), level);
+        mysql_tquery(MySQL_GetHandle(), string);
+    }
+    if(level == false) {
+        static const deletequery[] = "\
+        DELETE FROM \
+            testers \
+        WHERE \
+            u_id = %i \
+        ";
+
+        mysql_format(MySQL_GetHandle(), string, sizeof(string), deletequery, Player_GetAccountID(playerid));
+        mysql_tquery(MySQL_GetHandle(), string);
+    }
 }
 
 stock GetPlayerTester(playerid)

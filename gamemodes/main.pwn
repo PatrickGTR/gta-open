@@ -87,8 +87,12 @@ public OnGameModeInit() {
 }
 
 public OnPlayerDeath(playerid, killerid, reason) {
-	Player_GiveKill(killerid, 1, true);
-	Player_SetDeaths(playerid, 1, true);
+	if(IsPlayerConnected(killerid)) {
+		Player_GiveKill(killerid, 1, true);
+	}
+	if(IsPlayerConnected(playerid)) {
+		Player_SetDeaths(playerid, 1, true);
+	}
 	return 1;
 }
 

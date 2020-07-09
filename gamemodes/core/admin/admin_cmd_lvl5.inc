@@ -67,7 +67,18 @@ ACMD:[5]bankrupt(playerid, params[])
     SendMsgAllF(COLOR_MODERATION, "[BANKRUPT]: An Administrator bankrupted %p (%d)", target, target);
     SendMsgAllF(COLOR_MODERATION, "[BANK]: Removed %d from %p (%d)'s account", Player_GetBankMoney(playerid), target, target);
     Player_RemoveBankMoney(target, Player_GetBankMoney(target));
-    SendMsgAllF(COLOR_MODERATION, "[BANK]: Removed %p (%d)'s Tax Balance.");
+    SendMsgAllF(COLOR_MODERATION, "[BANK]: Removed %p (%d)'s Tax Balance.", target, target);
     Player_RemoveBankTax(target, Player_GetBankTax(playerid));
+    return 1;
+}
+
+ACMD:[5]skick(playerid, params[])
+{
+    new target;
+    if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/skick (name/id)");
+    if(!IsPlayerConnected(target)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+    Kick(target);
     return 1;
 }
