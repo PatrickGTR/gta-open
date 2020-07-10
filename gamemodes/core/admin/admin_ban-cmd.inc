@@ -56,7 +56,7 @@ ACMD:[2]tempban(playerid, params[])
     if(success) {
         SendMsgF(playerid, COLOR_MODERATION, "[ACCOUNT DISABLE]: You have Disabled "C_GREY"%p's account "C_WHITE"for "C_GREY"%s", targetid, reason);
         SendMsgAllF(COLOR_MODERATION, "[ACCOUNT DISABLED]: %p (%d) has been banned for %s", targetid, targetid, reason);
-        SendMsgF(targetid, COLOR_MODERATION, "[ACCOUNT DISABLED]: You have been banned by an Admin for %s", playerid, reason);
+        SendMsgF(targetid, COLOR_MODERATION, "[ACCOUNT DISABLED]: You have been banned by an Admin for %s", reason);
         defer KickTimer(targetid);
     }
     return 1;

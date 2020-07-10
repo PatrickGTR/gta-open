@@ -192,6 +192,15 @@ stock Player_IsInJail(playerid) {
     return (PlayerJailTime[playerid] > 0 && Player_HasFinishedJailSentence(playerid));
 }
 
+stock Player_InJail(playerid) 
+{
+    if(PlayerJailTime[playerid] > 0)
+    {
+        return 1;
+    }
+    return 0;
+}
+
 stock Player_SetBailAmount(playerid, amount) {
     PlayerBailBalance[playerid] = amount;
     return 1;

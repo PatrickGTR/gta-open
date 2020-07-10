@@ -1,3 +1,15 @@
+ACMD:[2]jail(playerid, params[])
+{
+    new target, seconds, reason[128];
+    if(sscanf(params, "uis[128]", target, seconds, reason)) return SendSyntaxMsg(playerid, "/jail (name/id) (seconds) (reason)");
+    Player_SendToJail(target, seconds, true);
+    SendMsgAllF(COLOR_MODERATION, "[ADMIN JAIL]: %p (%d) has been jailed for %d seconds", target, target, seconds);
+    SendMsgAllF(COLOR_MODERATION, "Reason: %s", reason);
+    SendMsgF(target, COLOR_MODERATION, "[ADMIN JAIL]: You have been jailed for %d Seconds", seconds);
+    SendAdminCmdUsage(playerid, "/jail", params);
+    return 1;
+}
+
 ACMD:[2]unjail(playerid, params[])
 {
     new targetid;
@@ -7,7 +19,7 @@ ACMD:[2]unjail(playerid, params[])
     if(!IsPlayerConnected(targetid)) {
         return SendErrorMsg(playerid, "The player is not connected!");
     }
-    if(!Player_IsInJail(targetid)) {
+    if(!Player_InJail(targetid)) {
         return SendErrorMsg(playerid, "The player is not jailed!");
     }
     SendAdminCmdUsage(playerid, "/unjail", params);

@@ -300,22 +300,22 @@ hook OnPlayerRequestClass(playerid, classid) {
 		SetPlayerCameraLookAt(playerid, 180.892608, 1830.717895, 23.242187);
 		SetPlayerCameraPos(playerid, 180.892608 + (5 * floatsin(-255.810241, degrees)), 1830.717895 + (5 * floatcos(-255.810241, degrees)), 23.242187);
 		UI_ClassSelectionTDShow(playerid);
-		if(classid <= 243) {
+		if(classid <= 242) {
 			SetPlayerColor(playerid, COLOR_WHITE);
 			Player_SetClass(playerid, TEAM_CIVILIAN);
 			UI_ClassSelectionTDUpdate(playerid, COLOR_WHITE, "Civilian", "- Rob stores and kill players to earn XP.~n~- Show them you run the streets.");
 		}
-		if(classid >= 244 && classid <= 252) {
+		if(classid >= 243 && classid <= 251) {
 			SetPlayerColor(playerid, COLOR_BLUE);
 			Player_SetClass(playerid, TEAM_POLICE);
 			UI_ClassSelectionTDUpdate(playerid, COLOR_BLUE, "Police", "- Hunt down and arrest criminals for cash and XP.~n~- Bring criminals to justice.");
 		}
-		if(classid >= 253 && classid <= 255) {
+		if(classid >= 252 && classid <= 254) {
 			SetPlayerColor(playerid, COLOR_GREEN);
 			Player_SetClass(playerid, TEAM_MEDIC);
 			UI_ClassSelectionTDUpdate(playerid, COLOR_GREEN, "Medic", "- Heal people from diseases, keeping the city clean.");
 		}
-		if(classid >= 256 && classid <= 260) {
+		if(classid >= 255 && classid <= 259) {
 			SetPlayerColor(playerid, COLOR_PURPLE);
 			Player_SetClass(playerid, TEAM_ARMY);
 			UI_ClassSelectionTDUpdate(playerid, COLOR_PURPLE, "Army", "- Hunt down and arrest criminals for cash and XP.~n~- Access powerful weaponry and machinery to kill criminals.");

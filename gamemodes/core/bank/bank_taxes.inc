@@ -15,8 +15,8 @@ stock Player_Tax(playerid)
         percentage[playerid] = (Player_GetBankMoney(playerid)/100) * 25;
         bankpercentage[playerid] = (percentage[playerid]/100) * 50;
         Player_RemoveBankMoney(playerid, percentage[playerid]);
+        TextInfo_Create(playerid, "Taxes", "Taxes");
         if(Player_GetBankDept(playerid) != 0) {
-            TextInfo_Create(playerid, "BankTax", "Taxes");
             new newPDept = percentage[playerid] - Player_GetBankDept(playerid);
             if(newPDept < 0) {
                 Player_RemoveBankDept(playerid, percentage[playerid]);

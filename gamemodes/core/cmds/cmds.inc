@@ -6,6 +6,7 @@
 #include <cmds_bail>
 #include <cmds_v> // vehicle
 #include <cmds_pm> // private message
+#include <cmds_bank>
 
 #include <cmds_rob>
 

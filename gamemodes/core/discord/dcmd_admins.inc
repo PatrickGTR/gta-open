@@ -1,38 +1,30 @@
 #include <discord-connector>
 #include <discord_channels>
-
-#define CMD_PREFIX "/"
-#define BOT_CHANNEL "tester-chat-logs"
-#define BOT_NAME "ProHelper"
-#define CHANNEL_ID "723648604945776721"
-
 #include <dcc>
 
-public OnDCCommandPerformed(const args[], success)
+DCCMD:admins(DCC_Channel:channel, DCC_User:user, const params[])
 {
-    if(!success) {
-        return SendDC(CHANNEL_ID, "```css\n'%s' command not found, try again...```", args[1]);
+    new
+        string[128],
+        onlineadmins = 0;
+    if(channel != tester_Discord_Chat) {
+        return 0;
     }
-    return 1;
-}
-
-DC_CMD:admins(DCC_User:user, const args[])
-{
-    new onlineadmins = 0;
     foreach(new i : Player)
     {
         if(i != INVALID_PLAYER_ID)
         {
             if(Admin_GetPlayerLevel(i) > 0)
             {
-                SendDC(CHANNEL_ID, "Admin:%p (%d) AdminLevel:%s", i, i, Admin_GetRankName(i));
+                format(string, sizeof(string), "Admin:%p (%d) AdminLevel:%s", i, i, Admin_GetRankName(i));
+                DCC_SendChannelMessage(tester_Discord_Chat, string);
                 onlineadmins++;
             }
         }
     }
     if(onlineadmins == 0)
     {
-        SendDC(CHANNEL_ID, "No Admins Online!");
+        DCC_SendChannelMessage(tester_Discord_Chat, "No Admins online");
     }
     return 1;
 }

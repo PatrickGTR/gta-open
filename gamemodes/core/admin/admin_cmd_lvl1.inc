@@ -139,3 +139,19 @@ ACMD:[1]kick(playerid, params[])
 	SendAdminCmdUsage(playerid, "/kick", params);
 	return 1;
 }
+
+ACMD:[1]setwanted(playerid, params[])
+{
+	new target, level;
+	if(sscanf(params, "ui", target, level)) return SendSyntaxMsg(playerid, "/setwanted (name/id) (wanted level)");
+	if(!IsPlayerConnected(target)) {
+		return SendErrorMsg(playerid, "Player is not connected");
+	}
+	if(level != 0 && Player_IsLEO(playerid)) {
+		return SendErrorMsg(playerid, "You cant give Enforcers wanted level");
+	}
+	PLAYER_SetPlayerWantedLevel(playerid, level);
+	SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s wanted level has been set to %d", target, target, level);
+	SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your wanted level has been set to %d by Admin", level);
+	return 1;
+}

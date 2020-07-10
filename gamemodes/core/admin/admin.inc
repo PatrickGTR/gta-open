@@ -33,7 +33,7 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(1, "/a - admin chat");
 
     Admin_AddCommandToList(2, "/unjail - unjail a player");
-    Admin_AddCommandToList(2, "/ban");
+    Admin_AddCommandToList(2, "/tempban");
 
     Admin_AddCommandToList(3, "/getallciv");
     Admin_AddCommandToList(3, "/unban");
@@ -52,6 +52,8 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(4, "/givemoney");
     Admin_AddCommandToList(4, "/givearmy - Allow a player to access Army skins");
     Admin_AddCommandToList(4, "/fine");
+    Admin_AddCommandToList(4, "/hcreate");
+    Admin_AddCommandToList(4, "/hdelete");
     Admin_AddCommandToList(4, "/getmoney - to get someone's money info");
 
     Admin_AddCommandToList(5, "/setadmin");

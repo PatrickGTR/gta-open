@@ -51,7 +51,7 @@ timer void:DelaySendToJail[3000 + GetPlayerPing(targetid)](targetid) {
     new
         level = GetPlayerWantedLevel(targetid),
         seconds = (level * 2);
-
+    Player_SetBailAmount(targetid, 5000);
     Player_SendToJail(targetid, seconds, true);
 }
 

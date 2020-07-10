@@ -2,6 +2,8 @@
 #include <YSI_Coding\y_hooks>
 
 #include <dcmd_admins>
+#include <dcmd_kick>
+#include <dcmd_everyone>
 
 #include <discord_channels>
 
