@@ -93,3 +93,51 @@ ACMD:[4]getmoney(playerid, params[])
     SendServerMsgF(playerid, "%p (%d)'s money is $%d", target, target, GetPlayerMoney(target));
     return 1;
 }
+
+ACMD:[4]givearmy(playerid, params[])
+{
+    new target, level, string[256];
+    if(sscanf(params, "ui", target, level)) return SendSyntaxMsg(playerid, "/givearmy (name/id) (1/0)");
+    if(!IsPlayerConnected(target)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+    if(IsPlayerBlacklisted(target)) {
+        return SendErrorMsg(playerid, "Player is Blacklisted from army");
+    }
+    if(GetPlayerScore(target) < 30000) {
+        return SendErrorMsg(playerid, "Player's score is not 30000");
+    }
+    if(level < 0 || level > 1) {
+        return SendErrorMsg(playerid, "1 = player can select army 0 = player can't select");
+    } 
+    if(level == 0) {
+        static const deleteQuery[] = "\
+        UPDATE \
+            armys \
+        SET \
+            IsArmy = %i \
+        WHERE \
+            u_id = %i \
+        ";
+        mysql_format(MySQL_GetHandle(), string, sizeof(string), deleteQuery, level, Player_GetAccountID(target));
+        mysql_tquery(MySQL_GetHandle(), string);
+        Player_SetArmy(playerid, false);
+        SendMsgAllF(COLOR_MODERATION, "[ARMY]: %p (%d) is removed from the army.", target, target);
+    }
+    if(level == 1) {
+        static const insertQuery[] = "\
+        UPDATE \
+            armys \
+        SET \
+            IsArmy = %i \
+        WHERE \
+            u_id = %i \
+        ";
+        mysql_format(MySQL_GetHandle(), string, sizeof(string), insertQuery, level, Player_GetAccountID(target), level);
+        mysql_tquery(MySQL_GetHandle(), string);
+        Player_SetArmy(playerid, true);
+        SendMsgAllF(COLOR_MODERATION, "[ARMY]: %p (%d) is accepted from the army.", target, target);
+    }
+    SendAdminCmdUsage(playerid, "/givearmy", params);
+    return 1;
+}

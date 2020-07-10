@@ -18,6 +18,7 @@
 
 #include <admin_cmd_lvl4>
 
+#include <admin_remove-account>
 #include <admin_cmd_lvl5>
 
 #include <admin_cmd-atm>
@@ -46,10 +47,10 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(3, "/aveh - admin vehicle");
     Admin_AddCommandToList(3, "/dav - destroy all admin vehicle");
     Admin_AddCommandToList(3, "/rscars - destroy all vehicle");
-    Admin_AddCommandToList(3, "/rscars - destroy all vehicle");
 
     Admin_AddCommandToList(4, "/setvip");
     Admin_AddCommandToList(4, "/givemoney");
+    Admin_AddCommandToList(4, "/givearmy - Allow a player to access Army skins");
     Admin_AddCommandToList(4, "/fine");
     Admin_AddCommandToList(4, "/getmoney - to get someone's money info");
 
@@ -58,8 +59,14 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(5, "/setplayerdept - set a player bank's dept");
     Admin_AddCommandToList(5, "/bankrupt - set a player bank and tax bal to 0");
     Admin_AddCommandToList(5, "/skick - silent kick");
+    Admin_AddCommandToList(5, "/setarmy - set army even score is not 30k");
+    Admin_AddCommandToList(5, "/blacklist - blacklist a player from the army");
+    Admin_AddCommandToList(5, "/unblacklist");
+    Admin_AddCommandToList(5, "/deleteacc - delete an acc from the database");
     Admin_AddCommandToList(5, "/createatm");
     Admin_AddCommandToList(5, "/deleteatm");
     Admin_AddCommandToList(5, "/editatm");
     Admin_AddCommandToList(5, "/nearatm");
+    Admin_AddCommandToList(5, "/givescore");
+    Admin_AddCommandToList(5, "/removescore");
 }

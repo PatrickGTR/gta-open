@@ -18,23 +18,33 @@
 
 static
     Player_UID[MAX_PLAYERS],
+    bool:PlayerArmyLvl[MAX_PLAYERS],
+    bool:Blacklist[MAX_PLAYERS],
     Statement: stmt_checkPlayer,
     Statement: stmt_loadPlayerSkin,
+    Statement: stmt_loadPlayerArmy,
+    Statement: stmt_insertPlayerArmy,
     Statement: stmt_savePlayerMoney;
 
 hook OnMySQLConnected() {
     stmt_checkPlayer = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT u_id, password FROM players WHERE username=?");
     stmt_savePlayerMoney = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET money=? WHERE u_id=?");
     stmt_loadPlayerSkin = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT skin FROM player_stats WHERE u_id = ?");
+    stmt_loadPlayerArmy = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT IsArmy, Blacklisted FROM armys WHERE u_id = ?");
+    stmt_insertPlayerArmy = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT INTO armys (u_id) VALUES (?)");
     return 1;
 }
 
 hook OnPlayerConnect(playerid) {
     Player_UID[playerid] = 0;
+    PlayerArmyLvl[playerid] = false;
+    Blacklist[playerid] = false;
     return 1;
 }
 
 hook OnPlayerLogin(playerid) {
+    MySQL_BindInt(stmt_insertPlayerArmy, 0, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded(stmt_insertPlayerArmy);
     Player_SetLoginStatus(playerid, true);
     return 1;
 }
@@ -79,12 +89,26 @@ hook OnPlayerPassedBanCheck(playerid) {
 	        }
 	        MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
 	        MySQL_ExecuteParallel_Inline(stmt_loadPlayerSkin, using inline OnSkinLoad);
+
+            inline const OnArmyLoad() {
+                new
+                    IsArmy,
+                    blacklist;
+                MySQL_BindResultInt(stmt_loadPlayerSkin, 0, IsArmy);
+
+                if(MySQL_Statement_FetchRow(stmt_loadPlayerArmy)) {
+			        Player_SetArmy(playerid, bool:IsArmy);
+                    Player_SetBlacklist(playerid, bool:blacklist);
+		        }
+            }
+            MySQL_BindInt(stmt_loadPlayerArmy, 0, Player_GetAccountID(playerid));
+	        MySQL_ExecuteParallel_Inline(stmt_loadPlayerArmy, using inline OnArmyLoad);
             Account_PromptLogin(playerid, playerHash);
 
             // Reasoning behind this
             // Allows the smooth transition between Login menu
             // and when it forces Spawn the player, this work-around
-            // fixes the issue where you can see OnPlayerRequestClas for
+            // fixes the issue where you can see OnPlayerRequestClass for
             // a split second.
             TogglePlayerSpectating(playerid, true);
         }
@@ -106,4 +130,20 @@ stock Player_SetAccountID(playerid, value) {
 
 stock Player_GetAccountID(playerid) {
     return Player_UID[playerid];
+}
+
+stock Player_SetArmy(playerid, bool:value) {
+    return PlayerArmyLvl[playerid] = value;
+}
+
+stock bool:Player_GetArmy(playerid) {
+    return PlayerArmyLvl[playerid];
+}
+
+stock Player_SetBlacklist(playerid, bool:value) {
+    return Blacklist[playerid] = value;
+}
+
+stock bool:IsPlayerBlacklisted(playerid) {
+    return Blacklist[playerid];
 }
