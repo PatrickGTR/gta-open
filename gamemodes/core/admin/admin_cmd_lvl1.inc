@@ -153,5 +153,6 @@ ACMD:[1]setwanted(playerid, params[])
 	PLAYER_SetPlayerWantedLevel(playerid, level);
 	SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s wanted level has been set to %d", target, target, level);
 	SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your wanted level has been set to %d by Admin", level);
+	SendAdminCmdUsage(playerid, "/setwanted", params);
 	return 1;
 }

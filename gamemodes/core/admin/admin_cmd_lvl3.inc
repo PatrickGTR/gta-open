@@ -33,7 +33,7 @@ ACMD:[3]sethealth(playerid, params[])
     if(sscanf(params, "uf", target, health)) return SendSyntaxMsg(playerid, "/setheatlh (name/id) (health)");
     SendMsgF(playerid, COLOR_MODERATION, "[ADMIN HEAL]: %p (%d)'s health has been set to %f", target, target, health);
     SendMsgF(target, COLOR_MODERATION, "[ADMIN HEAL]: Your health has been set to %f", health);
-    SetPlayerHealth(playerid, health);
+    SetPlayerHealth(target, health);
     SendAdminCmdUsage(playerid, "/sethealth", params);
     return 1;
 }
@@ -44,7 +44,7 @@ ACMD:[3]setarmour(playerid, params[])
     if(sscanf(params, "uf", target, armour)) return SendSyntaxMsg(playerid, "/setarmour (name/id) (armour)");
     SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s armour has been set to %f", target, target, armour);
     SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your armour has been set to %f", armour);
-    SetPlayerArmour(playerid, armour);
+    SetPlayerArmour(target, armour);
     SendAdminCmdUsage(playerid, "/setarmour", params);
     return 1;
 }
@@ -106,5 +106,6 @@ ACMD:[3]setvirtualworld(playerid, params[])
     new vm;
     if(sscanf(params, "i", vm)) return SendSyntaxMsg(playerid, "/setvirtualworld (virtual world)");
     SetPlayerVirtualWorld(playerid, vm);
+    SendAdminCmdUsage(playerid, "/setvirtualworld", params);
     return 1;
 }
