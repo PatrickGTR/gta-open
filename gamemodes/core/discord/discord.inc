@@ -1,11 +1,11 @@
 #include <discord-connector>
-#include <YSI_Coding\y_hooks>
 
 #include <dcmd_admins>
 #include <dcmd_kick>
-#include <dcmd_everyone>
+#include <dcmd_discordann>
 
 #include <discord_channels>
+#include <YSI_Coding\y_hooks>
 
 hook DCC_OnMessageCreate(DCC_Message:message)
 {
@@ -47,6 +47,26 @@ hook DCC_OnMessageCreate(DCC_Message:message)
             }
         }
     }
+    if(channel == admin_Discord_Chat && !IsBot)
+    {
+        new user_name[32 + 1];
+        DCC_GetUserName(author, user_name, 32);
+        foreach(new i : Player)
+        {
+            if(i != INVALID_PLAYER_ID)
+            {
+                SendMsgF(i, COLOR_GREEN, "[#server-echo] %s: "C_WHITE"%s", user_name, realMsg);
+            }
+        }
+    }
+    return 1;
+}
+
+hook OnPlayerText(playerid, text[])
+{
+    new msg[128];
+    format(msg, sizeof(msg), "```%p (%d): %s```", playerid, playerid, text);
+    DCC_SendChannelMessage(serverecho_Discord_Chat, msg);
     return 1;
 }
 

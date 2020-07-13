@@ -150,9 +150,70 @@ ACMD:[1]setwanted(playerid, params[])
 	if(level != 0 && Player_IsLEO(playerid)) {
 		return SendErrorMsg(playerid, "You cant give Enforcers wanted level");
 	}
-	PLAYER_SetPlayerWantedLevel(playerid, level);
+	PLAYER_SetPlayerWantedLevel(target, level);
 	SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s wanted level has been set to %d", target, target, level);
 	SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your wanted level has been set to %d by Admin", level);
 	SendAdminCmdUsage(playerid, "/setwanted", params);
+	return 1;
+}
+
+ACMD:[1]asay(playerid, params[])
+{
+	new text[128];
+	if(sscanf(params, "s[128]", text)) return SendSyntaxMsg(playerid, "/asay (text)");
+	SendMsgAllF(COLOR_MODERATION, "[ADMIN]: %s", text);
+	SendAdminCmdUsage(playerid, "/asay", params);
+	return 1;
+}
+
+ACMD:[1]respawn(playerid, params[])
+{
+	new target;
+	if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/respawn (name/id)");
+	TogglePlayerSpectating(target, true);
+	ForceSpawnPlayer(target);
+	SendAdminCmdUsage(playerid, "/respawn", params);
+	return 1;
+}
+
+ACMD:[1]freeze(playerid, params[])
+{
+	new target, level, reason[128];
+	if(sscanf(params, "uiS(No Reason)[128]", target, level, reason)) return SendSyntaxMsg(playerid, "/freeze (name/id) (1/0) (reason)");
+	if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
+	if(level < 0 || level > 1) {
+		return SendErrorMsg(playerid, "Use 0 to unfreeze the player use 1 to freeze");
+	}
+	if(level == 1) {
+		TogglePlayerControllable(playerid, false);
+		SendMsgAllF(COLOR_MODERATION, "[ADMIN FREEZE]: %p (%d) has been freeze by an Admin for: %s", target, target, reason);
+	}
+	if(level == 0) {
+		TogglePlayerControllable(playerid, true);
+		SendMsgAllF(COLOR_MODERATION, "[ADMIN UNFREEZE]: %p (%d) has been unfreezed by an Admin", target, target);
+	}
+	SendAdminCmdUsage(playerid, "/freeze", params);
+ 	return 1;
+}
+
+ACMD:[1]akill(playerid, params[])
+{
+	new target;
+	new Float:x, Float:y, Float:z;
+	if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/akill (name/id)");
+	if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
+	SetPlayerHealth(target, 0);
+	GetPlayerPos(target, x, y, z);
+	SendMsgAllF(COLOR_BROWN, "%p (%d) Has Died by the Hand Of God", target, target);
+	CreateExplosion(x, y, z, 12, 10.0);
+	SendAdminCmdUsage(playerid, "/akill", params);
+	return 1;
+}
+
+ACMD:[1]afix(playerid, params[])
+{
+	if(!IsPlayerInAnyVehicle(playerid)) return SendErrorMsg(playerid, "You're not in any vehicle");
+	RepairVehicle(GetPlayerVehicleID(playerid));
+	SendAdminCmdUsage(playerid, "/afix", params);
 	return 1;
 }

@@ -450,7 +450,7 @@ timer PlayerBeginGambling[GAMBLE_TIMER](playerid)
 	        Updateslot_BetTD(playerid);
 
 			// Notify the players.
-			SendMsgAllF(COLOR_FUCHSIA, "(slot machine) "C_GREY"%p[%i] "C_WHITE"has won "C_GREEN"%m "C_WHITE"from the gambling machine!", playerid, playerid, money);
+			SendMsgAllF(COLOR_PINK, "(slot machine) "C_GREY"%p[%i] "C_WHITE"has won "C_GREEN"%m "C_WHITE"from the gambling machine!", playerid, playerid, money);
 
 			// Randomize the slots again
 	        PlayerSlotID[playerid][0] = random(5);

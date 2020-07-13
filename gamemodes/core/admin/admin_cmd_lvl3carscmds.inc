@@ -319,6 +319,7 @@ stock SpawnVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color
 {
     new v = AddStaticVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2);
     SpawnedVehicles[SpawnedVehicleCount++] = v;
+	return v;
 }
 
 stock bool:IsSpawnedVehicle(vehicleid)
@@ -374,6 +375,24 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
     return 1;
 }
 
+static stock VehicleHasAPlayer(vehicleid)
+{
+    for(new i; i < MAX_PLAYERS; i++)
+    {
+        if(IsPlayerInAnyVehicle(i))
+        {
+            if(GetPlayerVehicleID(i) == vehicleid)
+            {
+                if(GetPlayerState(i) == PLAYER_STATE_PASSENGER || GetPlayerState(i) == PLAYER_STATE_PASSENGER)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 ACMD:[3]giveweaps(playerid, params[])
 {
     new target, wname[60], wid, ammo, wname2[60];
@@ -391,7 +410,8 @@ ACMD:[3]giveweaps(playerid, params[])
     strcpy(wname2, aWeaponNames[wid], sizeof(wname2));
     GivePlayerWeapon(target, wid, ammo);
     SendMsgF(target, COLOR_MODERATION, "[ADMIN WEAPON]: Admin gave %s [%i ammo] to you", wname2, ammo);
-    return 1;
+    SendAdminCmdUsage(target, "/giveweaps", params);
+	return 1;
 }
 
 ACMD:[3]veh(playerid, params[])
@@ -399,20 +419,22 @@ ACMD:[3]veh(playerid, params[])
     new vname[32], color1, color2;
     new Float:x, Float:y, Float:z;
     new Float:a;
-    new vehid;
-    if(sscanf(params, "s[32]D(1)D(1)", vname, color1, color2)) return SendSyntaxMsg(playerid, "/veh (vehiclename) (optional:color 1) (optional:color2)");
+    new veh;
+    if(sscanf(params, "s[32]D(1)D(color1)", vname, color1, color2)) return SendSyntaxMsg(playerid, "/veh (vehiclename) (optional:color 1) (optional:color2)");
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, a);
     GetXYInFrontOfPlayer2(playerid, x, y, 5.0);
-    vehid = GetVehicleModelIDFromName( vname );
-    if(vehid == -1)
+    veh = GetVehicleModelIDFromName( vname );
+    if(veh == -1)
     {
-        vehid = strval(vname);
-        if(vehid < 400 || vehid > 611) {
+        veh = strval(vname);
+        if(veh < 400 || veh > 611) {
             return SendErrorMsg(playerid, "Invalid Veh name");
         }
     }
-    SpawnVehicle(vehid, x, y, z, a, color1, color2);
+    new vehid = SpawnVehicle(veh, x, y, z, a, color1, color2);
+	LinkVehicleToInterior(vehid, GetPlayerInterior(playerid));
+	SetVehicleVirtualWorld(vehid, GetPlayerVirtualWorld(playerid));
     SendAdminCmdUsage(playerid, "/veh", params);
     return 1;
 }
@@ -444,7 +466,7 @@ ACMD:[3]dav(playerid, params[])
 {
     for(new i = 0; i < MAX_VEHICLES; i++)
     {
-        if(IsAdminVehicle(i))
+        if(IsAdminVehicle(i) && !VehicleHasAPlayer(i))
         {
             DestroyVehicle(i);
         }
@@ -457,11 +479,11 @@ ACMD:[3]rscars(playerid, params[])
 {
     for(new i = GetVehiclePoolSize(); i > 0; i--)
     {
-        if(IsSpawnedVehicle(i) || IsAdminVehicle(i))
+        if(IsSpawnedVehicle(i) && !VehicleHasAPlayer(i) || IsAdminVehicle(i) && !VehicleHasAPlayer(i))
         {
             DestroyVehicle(i);
         }
-        else
+        else if(!IsSpawnedVehicle(i) && !VehicleHasAPlayer(i))
         {
             SetVehicleToRespawn(i);
         }

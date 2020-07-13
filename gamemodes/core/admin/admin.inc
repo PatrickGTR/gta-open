@@ -27,12 +27,17 @@
 
 hook OnGameModeInit() {
     Admin_AddCommandToList(1, "/acmds");
+    Admin_AddCommandToList(1, "/freeze");
+    Admin_AddCommandToList(1, "/akill");
+    Admin_AddCommandToList(1, "/afix");
     Admin_AddCommandToList(1, "/get");
     Admin_AddCommandToList(1, "/kick");
     Admin_AddCommandToList(1, "/goto");
+    Admin_AddCommandToList(1, "/asay");
     Admin_AddCommandToList(1, "/a - admin chat");
 
-    Admin_AddCommandToList(2, "/unjail - unjail a player");
+    Admin_AddCommandToList(2, "/jail");
+    Admin_AddCommandToList(2, "/unjail");
     Admin_AddCommandToList(2, "/tempban");
 
     Admin_AddCommandToList(3, "/getallciv");
@@ -44,9 +49,11 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(3, "/setvirtualworld - set your virtual world");
     Admin_AddCommandToList(3, "/giveweaps");
     Admin_AddCommandToList(3, "/veh");
+    Admin_AddCommandToList(3, "/offban");
     Admin_AddCommandToList(3, "/aveh - admin vehicle");
     Admin_AddCommandToList(3, "/dav - destroy all admin vehicle");
     Admin_AddCommandToList(3, "/rscars - destroy all vehicle");
+    Admin_AddCommandToList(3, "/setname - change a player's name");
 
     Admin_AddCommandToList(4, "/setvip");
     Admin_AddCommandToList(4, "/givemoney");
@@ -71,4 +78,5 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(5, "/nearatm");
     Admin_AddCommandToList(5, "/givescore");
     Admin_AddCommandToList(5, "/removescore");
+    Admin_AddCommandToList(5, "/offsettester");
 }

@@ -2,7 +2,9 @@
 
 static
     bool:PlayerTester[MAX_PLAYERS],
-    Statement: stmt_retrieveTester
+    Statement: stmt_retrieveTester,
+    Statement: stmt_retriveUID,
+    Statement: stmt_insertTester
 ;
 
 hook OnGameModeInit() {
@@ -16,6 +18,27 @@ hook OnGameModeInit() {
         "
     ;
     stmt_retrieveTester = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveTester);
+
+    static const query_retrieveUID[] = "\
+        SELECT \
+            u_id, \
+            username \
+        FROM \
+            players \
+        WHERE \
+            username = ? \
+        "
+    ;
+    stmt_retriveUID = MySQL_PrepareStatement(MySQL_GetHandle(), query_retrieveUID);
+
+    static const insertTester[] = "\
+        INSERT INTO \
+            testers(u_id, tester_level) \
+        VALUES \
+            (?,?) \
+        "
+    ;
+    stmt_insertTester = MySQL_PrepareStatement(MySQL_GetHandle(), insertTester);
     return 1;
 }
 
@@ -69,6 +92,45 @@ stock SetPlayerTester(playerid, bool:level)
         mysql_format(MySQL_GetHandle(), string, sizeof(string), deletequery, Player_GetAccountID(playerid));
         mysql_tquery(MySQL_GetHandle(), string);
     }
+}
+
+stock OffSetTester(playerid, const username[], bool:level)
+{
+    new 
+        playername[MAX_PLAYER_NAME],
+        string[512];
+    strcpy(playername, username, sizeof(playername));
+    inline OnSetTester() {
+        new
+            useruid,
+            name[MAX_PLAYER_NAME];
+
+        MySQL_BindResultInt(stmt_retriveUID, 0, useruid);
+        MySQL_BindResult(stmt_retriveUID, 1, name);
+
+        if(MySQL_Statement_FetchRow(stmt_retriveUID))
+        {
+            if(level)
+            {
+                MySQL_BindInt(stmt_insertTester, 0, useruid);
+                MySQL_BindInt(stmt_insertTester, 1, 1);
+                MySQL_ExecuteThreaded(stmt_insertTester);
+                SendMsgF(playerid, COLOR_MODERATION, "The Account (%s) is now a Beta Tester", name);
+            }
+            if(!level)
+            {
+                mysql_format(MySQL_GetHandle(), string, sizeof(string), "DELETE FROM testers WHERE u_id = %i", useruid);
+                mysql_tquery(MySQL_GetHandle(), string);
+                SendMsgF(playerid, COLOR_MODERATION, "The Account (%s) is now Removed from the Beta Tester", name);
+            }
+        }
+        else {
+            return SendErrorMsgF(playerid, "The Account (%s) is not on the database", name);
+        }
+    }
+    MySQL_Bind(stmt_retriveUID, 0, playername);
+    MySQL_ExecuteParallel_Inline(stmt_retriveUID, using inline OnSetTester);
+    return 1;
 }
 
 stock GetPlayerTester(playerid)

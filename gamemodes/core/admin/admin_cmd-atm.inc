@@ -100,7 +100,7 @@ hook OnMySQLConnected()
 
 // Functions
 
-stock Atm_Create(Float: x, Float: y, Float: z, Float: a, wid, int, bool:save = false)
+stock Atm_Create(Float: x, Float: y, Float: z, Float: a, wid, int)
 {
 	new
 		atmID = Iter_Alloc(atm_Iter);
@@ -120,17 +120,13 @@ stock Atm_Create(Float: x, Float: y, Float: z, Float: a, wid, int, bool:save = f
     AtmInt[atmID] = int;
 
 	Iter_Add(atm_Iter, atmID);
-
-	if (save) {
-		Atm_InsertToDatabase(atmID);
-	}
+	Atm_InsertToDatabase(atmID);
 
 	return atmID;
 }
 
 stock Atm_Update(atmID, Float:x, Float:y, Float:z, Float:a, wid, int)
 {
-    DestroyDynamicObject(atm_Object[atmID]);
 	atm_Object[atmID] = CreateDynamicObject(19324, x, y, z, 0.0, 0.0, a, wid, int, -1, 300.0);
 
 	AtmID[atmID] = atmID;
@@ -140,10 +136,23 @@ stock Atm_Update(atmID, Float:x, Float:y, Float:z, Float:a, wid, int)
 	AtmPosA[atmID] = a;
     AtmWid[atmID] = wid;
     AtmInt[atmID] = int;
+    Iter_Add(atm_Iter, atmID);
     printf("New Location ATM ATMID:%i, PosX%f, PosY:%f, PosZ:%f, Angle:%f, WorldID:%i InteriorID:%i", atmID, AtmPosX[atmID], AtmPosY[atmID], AtmPosZ[atmID], AtmPosA[atmID], AtmWid[atmID], AtmInt[atmID]);
     Atm_UpdateDatabase(atmID);
 }
 
+stock LoadAtm(atmID, Float: x, Float: y, Float: z, Float: a, wid, int)
+{
+    atm_Object[atmID] = CreateDynamicObject(19324, x, y, z, 0.0, 0.0, a, wid, int, -1, 300.0);
+    AtmID[atmID] = atmID;
+	AtmPosX[atmID] = x;
+	AtmPosY[atmID] = y;
+	AtmPosZ[atmID] = z;
+	AtmPosA[atmID] = a;
+    AtmWid[atmID] = wid;
+    AtmInt[atmID] = int;
+    printf("Loaded ATM ID %d", atmID);
+}
 stock Atm_InsertToDatabase(atmID)
 {
 	MySQL_BindInt(stmt_InsertATM, 0, atmID);
@@ -190,8 +199,7 @@ Atm_Load() {
 
 
         while(MySQL_Statement_FetchRow(stmt_LoadATM)) {
-            Atm_Create(x, y, z, a, wid, interior);
-            printf("ATM ID: %d LOADED", atmID);
+            LoadAtm(atmID, x, y, z, a, wid, interior);
         }
     }
 
@@ -287,8 +295,7 @@ ACMD:[5]createatm(playerid, params[])
         z,
         a,
         GetPlayerVirtualWorld(playerid),
-        GetPlayerInterior(playerid),
-        true
+        GetPlayerInterior(playerid)
     );
 
     if(ret == -1) {

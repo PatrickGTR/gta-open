@@ -3,7 +3,8 @@
 #include <admin_ban-cmd>
 
 static
-    Statement: stmt_checkBan;
+    Statement: stmt_checkBan,
+    Statement: stmt_getUID;
 
 hook OnMySQLConnected() {
 
@@ -18,6 +19,15 @@ hook OnMySQLConnected() {
             username = ? OR gcpi = ? OR ip = ? LIMIT 1\
     ";
     stmt_checkBan = MySQL_PrepareStatement (MySQL_GetHandle(), checkQuery);
+    static const checkuidQuery[] = "\
+    SELECT \
+        username \
+    FROM \
+        players \
+    WHERE \
+        username = ? \
+    ";
+    stmt_getUID = MySQL_PrepareStatement(MySQL_GetHandle(), checkuidQuery);
 }
 
 hook OnPlayerConnect(playerid) {
@@ -61,6 +71,53 @@ Ban_AddUser(playerid, byid = INVALID_PLAYER_ID, reason[], interval_type, bandura
 
     dbg(ADMIN_DEBUG_HANDLER, "admin has banned", _p("user", playerid), _p("admin", byid));
     return mysql_tquery(MySQL_GetHandle(), string);
+}
+
+void:OffBan_AddUser(const username[], byid = INVALID_PLAYER_ID, reason[], interval_type, banduration)
+{
+    new 
+        banusername[MAX_PLAYER_NAME],
+        string[512],
+        bannerName[MAX_PLAYER_NAME],
+        banreason[MAX_BAN_REASON];
+    strcpy(banusername, username, sizeof(banusername));
+    GetPlayerName(byid, bannerName, MAX_PLAYER_NAME);
+    inline OnPlayerOffBan() {
+        new
+            playerNAME[MAX_PLAYER_NAME];
+
+        MySQL_BindResult(stmt_getUID, 0, playerNAME);
+
+        if(MySQL_Statement_FetchRow(stmt_getUID)) {
+
+            new
+                interval[6]
+            ;
+            switch(interval_type) {
+                case 0: strcpy(interval, "DAY", sizeof(interval));
+                case 1: strcpy(interval, "MONTH", sizeof(interval));
+                case 2: strcpy(interval, "YEAR", sizeof(interval));
+            }
+
+            static const query[] = "\
+            INSERT INTO bans \
+                (username, ip, gcpi, reason, admin, ban_date, unban_date) \
+            VALUES \
+                ('%e', '%e', '%e', '%e', '%e',  CURRENT_TIMESTAMP(), DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL %i %s))"
+            ;
+            mysql_format(MySQL_GetHandle(), string, sizeof(string), query, playerNAME, 0, 0, reason, bannerName, banduration, interval);
+            mysql_tquery(MySQL_GetHandle(), string);
+            SendMsgAllF(COLOR_MODERATION, "[OFFLINE ACCOUNT DISABLED]: %s has been banned for %s", playerNAME, banreason);
+        }
+        else {
+            if(byid != INVALID_PLAYER_ID) {
+                return SendErrorMsgF(byid, "The Account (%s) is not on the database", banusername);
+            }
+        }
+    }
+    MySQL_Bind(stmt_getUID, 0, banusername);
+    MySQL_ExecuteParallel_Inline(stmt_getUID, using inline OnPlayerOffBan);
+    return 1;
 }
 
 // removes the user entry from the table by username.

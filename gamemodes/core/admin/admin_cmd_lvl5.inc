@@ -44,6 +44,23 @@ ACMD:[5]settester(playerid, params[])
     return 1;
 }
 
+ACMD:[5]offsettester(playerid, params[])
+{
+    new playername[MAX_PLAYER_NAME], level;
+    if(sscanf(params, "s[24]i", playername, level)) return SendSyntaxMsg(playerid, "/offsettester (playername) (1/0)");
+    if(IsPlayerConnected(GetPlayerIdFromName(playername))) return SendErrorMsg(playerid, "Player is online use /settester instead");
+    if(level < 0 || level > 1) {
+        return SendErrorMsg(playerid, "Use 0 to demote the player use 1 to promote the player");
+    }
+    if(level == 1) {
+        OffSetTester(playerid, playername, true);
+    }
+    if(level == 0) {
+        OffSetTester(playerid, playername, false);
+    }
+    return 1;
+}
+
 ACMD:[5]setplayerdept(playerid, params[])
 {
     new target, value;

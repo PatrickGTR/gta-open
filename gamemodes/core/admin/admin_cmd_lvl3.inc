@@ -23,7 +23,7 @@ ACMD:[3]disarm(playerid, params[])
     ResetPlayerWeapons(target);
     SendMsgF(playerid, COLOR_MODERATION, "[ADMIN DISARM]: You have disarmed %p (%d)", target, target);
     SendMsgF(target, COLOR_MODERATION, "[ADMIN DISARM]: You have been disarmed by an admin");
-    SendAdminCmdUsage(playerid, "/getallciv", params);
+    SendAdminCmdUsage(playerid, "/disarm", params);
     return 1;
 }
 
@@ -107,5 +107,27 @@ ACMD:[3]setvirtualworld(playerid, params[])
     if(sscanf(params, "i", vm)) return SendSyntaxMsg(playerid, "/setvirtualworld (virtual world)");
     SetPlayerVirtualWorld(playerid, vm);
     SendAdminCmdUsage(playerid, "/setvirtualworld", params);
+    return 1;
+}
+
+ACMD:[3]setname(playerid, params[])
+{
+    new target, newname[MAX_PLAYER_NAME], string[512];
+    if(sscanf(params, "us[26]", target, newname)) return SendSyntaxMsg(playerid, "/setname (name/id) (newname)");
+    if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player not connected");
+    static const updateQuery[] = "\
+    UPDATE \
+        players \
+    SET \
+        username = %e \
+    WHERE \
+        u_id = %i \
+    ";
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), updateQuery, newname, Player_GetAccountID(target));
+    mysql_tquery(MySQL_GetHandle(), string);
+    SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your name has been changed to %s", newname);
+    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: You have set %p (%d)'s name to %s", target, target, newname);
+    SetPlayerName(target, newname);
+    SendAdminCmdUsage(playerid, "/setname", params);
     return 1;
 }

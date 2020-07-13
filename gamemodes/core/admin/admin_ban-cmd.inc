@@ -58,6 +58,57 @@ ACMD:[2]tempban(playerid, params[])
         SendMsgAllF(COLOR_MODERATION, "[ACCOUNT DISABLED]: %p (%d) has been banned for %s", targetid, targetid, reason);
         SendMsgF(targetid, COLOR_MODERATION, "[ACCOUNT DISABLED]: You have been banned by an Admin for %s", reason);
         defer KickTimer(targetid);
+        SendAdminCmdUsage(playerid, "/tempban", params);
+    }
+    return 1;
+}
+
+ACMD:[2]offban(playerid, params[])
+{
+    if (isnull(params) || isnumeric(params))  {
+        return SendSyntaxMsg(playerid, "/offban <options: d(ay), m(onth), y(ear)>");
+    }
+    new
+        targetname[MAX_PLAYER_NAME],
+        reason[MAX_BAN_REASON] = '\0',
+        duration = -1,
+        bool:success = false,
+        interval = -1;
+    if (!strcmp(params, "d", true, 1)) {
+        if (sscanf(params, "{s[2]}s[24]iS(Not specified)["#MAX_BAN_REASON"]", targetname, duration, reason)) {
+            return SendSyntaxMsg(playerid, "/offban d <playername> <duration> <reason>");
+        }
+        if (strlen(reason) > MAX_BAN_REASON) {
+            return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
+        }
+        interval = 0;
+    }
+    if (!strcmp(params, "m", true, 1)) {
+        if (sscanf(params, "{s[2]}s[24]iS(Not specified)["#MAX_BAN_REASON"]", targetname, duration, reason)) {
+            return SendSyntaxMsg(playerid, "/offban m <playername> <duration> <reason>");
+        }
+        if (strlen(reason) > MAX_BAN_REASON) {
+            return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
+        }
+
+        interval = 1;
+    }
+    if (!strcmp(params, "y", true, 1))  {
+        if (sscanf(params, "{s[2]}s[24]iS(Not specified)["#MAX_BAN_REASON"]", targetname, duration, reason)) {
+            return SendSyntaxMsg(playerid, "/offban y <playername> <duration> <reason>");
+        }
+        if (strlen(reason) > MAX_BAN_REASON) {
+            return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
+        }
+        interval = 2;
+    }
+
+    if(interval != -1) {
+        success = !!OffBan_AddUser(targetname, playerid, reason, interval, duration);
+    }
+
+    if(success) {
+        SendAdminCmdUsage(playerid, "/offban", params);
     }
     return 1;
 }
@@ -72,5 +123,6 @@ ACMD:[3]unban(playerid, params[])
     }
 
     Ban_RemoveUser(params, playerid);
+    SendAdminCmdUsage(playerid, "/unban", params);
     return 1;
 }
