@@ -11,7 +11,7 @@ DCCMD:ingamekick(DCC_Channel:channel, DCC_User:user, const params[])
     if(channel != cmdexecute_Discord_Chat) {
         return 0;
     }
-    if(sscanf(params, "us[128]", target, reason)) return DCC_SendChannelMessage(cmdexecute_Discord_Chat, "```/ingamekick (name/id) (reason)```");
+    if(sscanf(params, "us[128]", target, reason)) return DCC_SendChannelMessage(cmdexecute_Discord_Chat, "```!ingamekick (name/id) (reason)```");
     if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(cmdexecute_Discord_Chat, "```Player is not connected```");
     SendMsgAllF(COLOR_MODERATION, "[ProHelper]: %p (%d) has been kicked for %s", target, target, reason);
     format(string, sizeof(string), "You have kicked %p (%d)", target, target);

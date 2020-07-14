@@ -55,7 +55,8 @@
 				"gamemodes/core/mapping",
 				"gamemodes/core/tester",
 				"gamemodes/core/discord",
-				"gamemodes/core/bank"
+				"gamemodes/core/bank",
+				"gamemodes/core/gangs"
 			],
 			"constants": {
 				"DEV_BUILD": "1"

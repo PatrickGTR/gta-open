@@ -30,12 +30,6 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
-CMD:lnum(playerid, params[]) {
-    lottoDrawCounter = 5;
-    lottoLastTick = 0;
-    return 1;
-}
-
 hook OnServerSecondUpdate() {
 
     // only show the message every 2 minutes

@@ -29,7 +29,7 @@ Briefcase_SetRandomLoc(playerid) {
     new rand = random(sizeof(RandomBriefCase));
     robbingdone[playerid] = 1;
     DestroyPickup(BriefCase);
-    BriefCase = CreateDynamicPickup(1210, 2, RandomBriefCase[rand][E_BRIEFCASE_X], RandomBriefCase[rand][E_BRIEFCASE_Y], RandomBriefCase[rand][E_BRIEFCASE_Z], 0);
+    BriefCase = CreatePickup(1210, 1, RandomBriefCase[rand][E_BRIEFCASE_X], RandomBriefCase[rand][E_BRIEFCASE_Y], RandomBriefCase[rand][E_BRIEFCASE_Z], 0);
 }
 
 hook OnGameModeInit()
@@ -66,8 +66,8 @@ hook OnPlayerLeaveDynamicCP(playerid, checkpointid)
     return 1;
 }
 
-hook OnPlayerPickUpDynPickup(playerid, pickupid) {
-    if(pickupid == BriefCase) {
+hook OnPlayerPickUpPickup(playerid, pickupid) {
+    if(pickupid == BriefCase && BurglaryInfo[playerid] == 4) {
         SetHideoutTimer(playerid);
 
         DestroyPickup(BriefCase);
@@ -107,12 +107,12 @@ timer SetBriefCaseLoc[20000](playerid)
     robbingdone[playerid] = 1;
     Briefcase_SetRandomLoc(playerid);
     FindingTimer[playerid] = defer TowerFailedToGetBC(playerid);
-    UI_TimeLeft(playerid, 25);
-    SendServerMsg(playerid, "You have 25 seconds to get the Brief Case on the PentHouse");
+    UI_TimeLeft(playerid, 60);
+    SendServerMsg(playerid, "You have 60 seconds to get the Brief Case on the PentHouse");
     return 1;
 }
 
-timer TowerFailedToGetBC[25000](playerid)
+timer TowerFailedToGetBC[60000](playerid)
 {
     Player_GiveWantedLevel(playerid, 6);
     DestroyPickup(BriefCase);
@@ -126,8 +126,5 @@ timer TowerFailedToGetBC[25000](playerid)
 
 timer TowerCooldown[RobberyCD]()
 {
-    foreach(new i : Player) {
-        SendServerMsg(i, "Tower CooledDown!");
-    }
     TowerRobbedRecently = 0;
 }

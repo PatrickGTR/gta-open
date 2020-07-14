@@ -151,6 +151,7 @@ stock LoadAtm(atmID, Float: x, Float: y, Float: z, Float: a, wid, int)
 	AtmPosA[atmID] = a;
     AtmWid[atmID] = wid;
     AtmInt[atmID] = int;
+    Iter_Add(atm_Iter, atmID);
     printf("Loaded ATM ID %d", atmID);
 }
 stock Atm_InsertToDatabase(atmID)
@@ -202,7 +203,6 @@ Atm_Load() {
             LoadAtm(atmID, x, y, z, a, wid, interior);
         }
     }
-
     MySQL_ExecuteThreaded_Inline(stmt_LoadATM, using inline OnATMLoad);
 }
 

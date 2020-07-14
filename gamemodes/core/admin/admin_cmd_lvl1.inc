@@ -185,11 +185,11 @@ ACMD:[1]freeze(playerid, params[])
 		return SendErrorMsg(playerid, "Use 0 to unfreeze the player use 1 to freeze");
 	}
 	if(level == 1) {
-		TogglePlayerControllable(playerid, false);
+		TogglePlayerControllable(target, false);
 		SendMsgAllF(COLOR_MODERATION, "[ADMIN FREEZE]: %p (%d) has been freeze by an Admin for: %s", target, target, reason);
 	}
 	if(level == 0) {
-		TogglePlayerControllable(playerid, true);
+		TogglePlayerControllable(target, true);
 		SendMsgAllF(COLOR_MODERATION, "[ADMIN UNFREEZE]: %p (%d) has been unfreezed by an Admin", target, target);
 	}
 	SendAdminCmdUsage(playerid, "/freeze", params);

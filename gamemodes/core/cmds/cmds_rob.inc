@@ -17,6 +17,10 @@ CMD:rob(playerid, params[])
         return SendErrorMsg(playerid, "There are no players nearby to rob.");
     }
 
+    if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
+        return SendErrorMsg(playerid, "The player your trying to rob is not on foot");
+    }
+
     if (gettime() - PlayerRobTick[playerid] < 30) {
         return SendErrorMsg(playerid, "You just robbed someone recently, please try again later");
     }

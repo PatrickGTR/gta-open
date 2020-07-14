@@ -298,30 +298,18 @@ timer RobberyFailed[300000](playerid)
 
 timer BankCooldown[RobberyCD]()
 {
-    for(new i = 0; i < MAX_PLAYERS; i++)
-    {
-        SendServerMsg(i, "Bank CooledDown!");
-    }
     bankrecent = 0;
     return 1;
 }
 
 timer CasinoCooldown[RobberyCD]()
 {
-    for(new i = 0; i < MAX_PLAYERS; i++)
-    {
-        SendServerMsg(i, "Casino CooledDown!");
-    }
     casinorecent = 0;
     return 1;
 }
 
 timer MansCooldown[RobberyCD]()
 {
-    for(new i = 0; i < MAX_PLAYERS; i++)
-    {
-        SendServerMsg(i, "Mansion CooledDown!");
-    }
     mansrecent = 0;
     return 1;
 }

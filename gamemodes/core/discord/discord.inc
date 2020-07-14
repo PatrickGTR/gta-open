@@ -3,6 +3,7 @@
 #include <dcmd_admins>
 #include <dcmd_kick>
 #include <dcmd_discordann>
+#include <dcmd_players>
 
 #include <discord_channels>
 #include <YSI_Coding\y_hooks>
@@ -47,7 +48,7 @@ hook DCC_OnMessageCreate(DCC_Message:message)
             }
         }
     }
-    if(channel == admin_Discord_Chat && !IsBot)
+    if(channel == serverecho_Discord_Chat && !IsBot)
     {
         new user_name[32 + 1];
         DCC_GetUserName(author, user_name, 32);
