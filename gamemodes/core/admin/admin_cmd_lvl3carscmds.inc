@@ -420,7 +420,7 @@ ACMD:[3]veh(playerid, params[])
     new Float:x, Float:y, Float:z;
     new Float:a;
     new veh;
-    if(sscanf(params, "s[32]D(1)D(color1)", vname, color1, color2)) return SendSyntaxMsg(playerid, "/veh (vehiclename) (optional:color 1) (optional:color2)");
+    if(sscanf(params, "s[32]D(1)D(1)", vname, color1, color2)) return SendSyntaxMsg(playerid, "/veh (vehiclename) (optional:color 1) (optional:color2)");
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, a);
     GetXYInFrontOfPlayer2(playerid, x, y, 5.0);
