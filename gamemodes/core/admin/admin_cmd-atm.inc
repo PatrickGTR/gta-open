@@ -27,7 +27,8 @@ static
     AtmWid[MAX_ATMS],
     AtmInt[MAX_ATMS],
     
-    PlayerEditingATMID[MAX_PLAYERS];
+    PlayerEditingATMID[MAX_PLAYERS],
+    bool:IsPlayerEditingAtm[MAX_PLAYERS];
 
 //Player Variables
 static 
@@ -264,7 +265,7 @@ hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z,
     new Float:oldX, Float:oldY, Float:oldZ, Float:oldRotX, Float:oldRotY, Float:oldRotZ;
 	GetObjectPos(objectid, oldX, oldY, oldZ);
 	GetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
-    if(response == EDIT_RESPONSE_FINAL)
+    if(response == EDIT_RESPONSE_FINAL && IsPlayerEditingAtm[playerid])
     {
         Atm_Update(PlayerEditingATMID[playerid], x, y, z, rz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
     }
@@ -338,6 +339,7 @@ ACMD:[5]editatm(playerid, params[])
     } 
     EditDynamicObject(playerid, atm_Object[targetatm]);
     PlayerEditingATMID[playerid] = targetatm;
+    IsPlayerEditingAtm[playerid] = true;
     return 1;
 }
 

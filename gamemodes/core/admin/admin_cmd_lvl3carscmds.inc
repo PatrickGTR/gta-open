@@ -410,7 +410,7 @@ ACMD:[3]giveweaps(playerid, params[])
     strcpy(wname2, aWeaponNames[wid], sizeof(wname2));
     GivePlayerWeapon(target, wid, ammo);
     SendMsgF(target, COLOR_MODERATION, "[ADMIN WEAPON]: Admin gave %s [%i ammo] to you", wname2, ammo);
-    SendAdminCmdUsage(target, "/giveweaps", params);
+    SendAdminCmdUsage(playerid, "/giveweaps", params);
 	return 1;
 }
 
