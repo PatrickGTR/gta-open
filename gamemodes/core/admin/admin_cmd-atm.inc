@@ -128,6 +128,7 @@ stock Atm_Create(Float: x, Float: y, Float: z, Float: a, wid, int)
 
 stock Atm_Update(atmID, Float:x, Float:y, Float:z, Float:a, wid, int)
 {
+    DestroyDynamicObject(atm_Object[atmID]);
 	atm_Object[atmID] = CreateDynamicObject(19324, x, y, z, 0.0, 0.0, a, wid, int, -1, 300.0);
 
 	AtmID[atmID] = atmID;
@@ -268,9 +269,13 @@ hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z,
     if(response == EDIT_RESPONSE_FINAL && IsPlayerEditingAtm[playerid])
     {
         Atm_Update(PlayerEditingATMID[playerid], x, y, z, rz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+        IsPlayerEditingAtm[playerid] = false;
     }
     if(response == EDIT_RESPONSE_CANCEL)
     {
+        if(IsPlayerEditingAtm[playerid]) {
+            IsPlayerEditingAtm[playerid] = false;
+        }
         SetObjectPos(objectid, oldX, oldY, oldZ);
 		SetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
     }
