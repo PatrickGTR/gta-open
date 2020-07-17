@@ -71,5 +71,7 @@ stock UI_HideTimeLeft(playerid) {
     return UI_TimeLeft(playerid, 0);
 }
 
-
+stock UI_GetTimeLeft(playerid) {
+    return timeLeftCounter[playerid];
+}
 

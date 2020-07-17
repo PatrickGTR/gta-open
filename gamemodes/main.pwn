@@ -15,7 +15,7 @@
 // OnServerWeekReset() -> called when the in-game week resets.
 // OnServerDayReset() -> called when it's a new in-game day.
 
-// Custom Stocks
+// Custom Functions
 // Player_GiveScore(playerid, score, bool:save = false) -> give player a score.
 // Player_RemoveScore(playerid, score) -> remove a score (automatically saved).
 

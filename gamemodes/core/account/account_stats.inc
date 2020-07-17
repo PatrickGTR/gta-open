@@ -116,6 +116,7 @@ stock Player_GiveScore(playerid, score, bool:save = false)
         currentScore = Player_GetScore(playerid),
         newScore = currentScore + score;
     SetPlayerScore(playerid, newScore);
+    PlayerScore[playerid] = newScore;
     if(save) {
         MySQL_BindInt(stmt_savePlayerScore, 0, newScore);
         MySQL_BindInt(stmt_savePlayerScore, 1, Player_GetAccountID(playerid));
@@ -128,6 +129,7 @@ stock Player_RemoveScore(playerid, score) {
         currentScore = Player_GetScore(playerid),
         newScore = currentScore - score;
     SetPlayerScore(playerid, newScore);
+    PlayerScore[playerid] = newScore;
     MySQL_BindInt(stmt_savePlayerScore, 0, newScore);
     MySQL_BindInt(stmt_savePlayerScore, 1, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_savePlayerScore);

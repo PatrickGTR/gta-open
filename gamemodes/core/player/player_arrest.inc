@@ -1,4 +1,38 @@
 #include <logger>
+#include <YSI_Coding\y_hooks>
+new 
+    bool:PlayerIsGettingAr[MAX_PLAYERS]
+;
+
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+    if(Player_IsLEO(killerid) && Player_GetWantedLevel(playerid) >= 3)
+    {
+        if(Player_GetWantedLevel(playerid) >= 10) {
+            foreach(new i : Player) {
+                if(Player_IsLEO(i)) {
+                    SendMsgF(playerid, COLOR_BLUE, "[POLICE TAKEDOWN]: %p (%d) has taken %p (%d) with brutal force", killerid, killerid, playerid, playerid);
+                    GivePlayerMoney(playerid, 5000);
+                }
+            }
+        }
+        Player_GiveScore(killerid, 5, true);
+        Player_RemoveScore(playerid, 2);
+        DelaySendToJail(playerid);
+    }
+    new closestleo = Player_GetClosestLeo(playerid);
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(closestleo, x, y, z);
+    if(IsPlayerInRangeOfPoint(playerid, 15.0, x, y, z))
+    {
+        SendMsgF(closestleo, COLOR_BLUE, "[POLICE]: You have took down %p (%d)", playerid, playerid);
+        Player_GiveScore(closestleo, 5, true);
+        Player_RemoveScore(playerid, 2);
+        DelaySendToJail(playerid);
+    }
+    return 1;
+}
+
 // returns
 // -1 (player is not a cop)
 // -2 (target is not connected)
@@ -23,9 +57,19 @@ stock Player_Arrest(playerid, targetid) {
         return -4;
     }
 
+    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) {
+        SendServerMsg(playerid, "You must be on foot to arrest the criminal");
+        return -5;
+    }
+
     if(!Player_IsCuffed(targetid)) {
         SendErrorMsg(playerid, "You need to cuff the player first!");
-        return -5;
+        return -6;
+    }
+
+    if(PlayerIsGettingAr[targetid]) {
+        SendErrorMsg(playerid, "The player is now getting arrested");
+        return -7;
     }
 
     ApplyAnimation(targetid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);
@@ -40,6 +84,8 @@ stock Player_Arrest(playerid, targetid) {
 
     Player_AwardArrest(playerid, targetid);
 
+    PlayerIsGettingAr[targetid] = true;
+    
     SendServerMsgF(playerid, "You have arrested %p (%d)", targetid, targetid);
     SendServerMsgF(targetid, "You have been arrested by %p (%d)", playerid, playerid);
 
@@ -53,6 +99,7 @@ timer void:DelaySendToJail[3000 + GetPlayerPing(targetid)](targetid) {
         seconds = (level * 2);
     Player_SetBailAmount(targetid, 5000);
     Player_SendToJail(targetid, seconds, true);
+    PlayerIsGettingAr[targetid] = false;
 }
 
 stock void:Player_AwardArrest(playerid, targetid, bool:notify = true) {

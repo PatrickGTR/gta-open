@@ -92,6 +92,25 @@ stock Player_GetClosestWanted(playerid) {
     return closestID;
 }
 
+stock Player_GetClosestLeo(playerid) {
+    new 
+        closestID = INVALID_PLAYER_ID;
+
+    foreach(new i : Player) {
+
+        if(playerid == i) {
+            continue;
+        }
+
+        if(Player_GetClosestPlayer(playerid, 1000.0) && Player_IsLEO(i)) 
+        {
+            closestID = i;
+            break;
+        }
+    }
+    return closestID;
+}
+
 stock Player_IsNearPlayer(playerid, targetid, Float:radius)
 {
 	new

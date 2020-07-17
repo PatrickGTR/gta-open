@@ -383,7 +383,7 @@ static stock VehicleHasAPlayer(vehicleid)
         {
             if(GetPlayerVehicleID(i) == vehicleid)
             {
-                if(GetPlayerState(i) == PLAYER_STATE_PASSENGER || GetPlayerState(i) == PLAYER_STATE_PASSENGER)
+                if(GetPlayerState(i) == PLAYER_STATE_PASSENGER || GetPlayerState(i) == PLAYER_STATE_DRIVER)
                 {
                     return true;
                 }
