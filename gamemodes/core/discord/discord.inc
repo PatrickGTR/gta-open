@@ -4,7 +4,7 @@
 #include <dcmd_kick>
 #include <dcmd_discordann>
 #include <dcmd_players>
-#include <discord_richpresence>
+//#include <discord_richpresence>
 
 #include <discord_channels>
 #include <YSI_Coding\y_hooks>
