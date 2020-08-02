@@ -104,13 +104,6 @@ hook OnPlayerPassedBanCheck(playerid) {
             MySQL_BindInt(stmt_loadPlayerArmy, 0, Player_GetAccountID(playerid));
 	        MySQL_ExecuteParallel_Inline(stmt_loadPlayerArmy, using inline OnArmyLoad);
             Account_PromptLogin(playerid, playerHash);
-
-            // Reasoning behind this
-            // Allows the smooth transition between Login menu
-            // and when it forces Spawn the player, this work-around
-            // fixes the issue where you can see OnPlayerRequestClass for
-            // a split second.
-            TogglePlayerSpectating(playerid, true);
         }
         else {
             Account_PromptRegister(playerid);

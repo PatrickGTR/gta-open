@@ -6,7 +6,7 @@ new
 
 hook OnPlayerDeath(playerid, killerid, reason)
 {
-    if(Player_IsLEO(killerid) && Player_GetWantedLevel(playerid) >= 3)
+    if(killerid != INVALID_PLAYER_ID && Player_IsLEO(killerid) && Player_GetWantedLevel(playerid) >= 3)
     {
         if(Player_GetWantedLevel(playerid) >= 10) {
             foreach(new i : Player) {
