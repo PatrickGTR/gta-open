@@ -324,27 +324,23 @@ hook OnPlayerRequestClass(playerid, classid) {
 	return 1;
 }
 
-hook OnPlayerSpawn(playerid)
+hook OnPlayerRequestSpawn(playerid)
 {
-	if(Player_GetClass(playerid) == TEAM_ARMY && !Player_GetArmy(playerid))
-	{
-		Class_SelectionState(playerid, true);
-        ForceClassSelection(playerid);
-        TogglePlayerSpectating(playerid, true);
-        TogglePlayerSpectating(playerid, false);
-		Player_SetBoughtSkin(playerid, true);
-		SendServerMsg(playerid, "You're not authorised to use Army skins");
-	}
-	else if(Player_GetClass(playerid) == TEAM_ARMY && IsPlayerBlacklisted(playerid))
-	{
-		Class_SelectionState(playerid, true);
-        ForceClassSelection(playerid);
-        TogglePlayerSpectating(playerid, true);
-        TogglePlayerSpectating(playerid, false);
-		Player_SetBoughtSkin(playerid, true);
-		SendServerMsg(playerid, "You're Blacklisted from the Army Team by the Administration");
-	}
-	return 1;
+  if(Player_GetClass(playerid) == TEAM_ARMY)
+  {
+    Player_SetBoughtSkin(playerid, true);
+
+    if(!Player_GetArmy(playerid))
+    {
+      SendServerMsg(playerid, "You're not authorised to use Army skins");
+    }
+    else if(IsPlayerBlacklisted(playerid))
+    {
+      SendServerMsg(playerid, "You're Blacklisted from the Army Team by the Administration");
+    }
+    return 0;
+  }
+  return 1;
 }
 
 timer void:ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
@@ -361,6 +357,8 @@ hook OnPlayerConnect(playerid) {
 	PlayerSkin[playerid] = 0;
     PlayerClass[playerid] = -1;
 	PlayerClassState[playerid] = true;
+
+	TogglePlayerSpectating(playerid, true);
 	return 1;
 }
 

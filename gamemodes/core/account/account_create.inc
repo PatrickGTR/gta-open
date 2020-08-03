@@ -32,7 +32,7 @@ stock Account_PromptRegister(playerid) {
     }
 
     new
-        string[MAX_PLAYER_NAME + 32];
+        string[48 + MAX_PLAYER_NAME + 16];
     format(string, sizeof(string), RegisterDialogMessage, playerid, SERVER_NAME);
 
     Dialog_ShowCallback(playerid,
@@ -83,6 +83,7 @@ static Account_InsertToDatabase(playerid, const hash[]) {
 
         CallLocalFunction("OnPlayerRegister", "i", playerid);
         PlayerFirstTime[playerid] = true;
+        TogglePlayerSpectating(playerid, false);
         Player_SetLoginStatus(playerid, true);
         Class_SelectionState(playerid, true);
     }
