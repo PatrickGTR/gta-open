@@ -11,12 +11,18 @@ ACMD:[2]tempban(playerid, params[])
         bool:success = false,
         interval = -1;
 
+
+
     if (!strcmp(params, "d", true, 1)) {
         if (sscanf(params, "{s[2]}riS(Not specified)["#MAX_BAN_REASON"]", targetid, duration, reason)) {
             return SendSyntaxMsg(playerid, "/tempban d <playerid> <duration> <reason>");
         }
+
         if (!IsPlayerConnected(targetid)) {
             return SendErrorMsg(playerid, "The player you are trying to ban is not connected.");
+        }
+        if (targetid == playerid) {
+            return SendErrorMsg(playerid, "You can't ban yourself");
         }
         if (strlen(reason) > MAX_BAN_REASON) {
             return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
@@ -30,6 +36,9 @@ ACMD:[2]tempban(playerid, params[])
         if (!IsPlayerConnected(targetid)) {
             return SendErrorMsg(playerid, "The player you are trying to ban is not connected.");
         }
+        if (targetid == playerid) {
+            return SendErrorMsg(playerid, "You can't ban yourself");
+        }
         if (strlen(reason) > MAX_BAN_REASON) {
             return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");
         }
@@ -42,6 +51,9 @@ ACMD:[2]tempban(playerid, params[])
         }
         if (!IsPlayerConnected(targetid)) {
             return SendErrorMsg(playerid, "The player you are trying to ban is not connected.");
+        }
+        if (targetid == playerid) {
+            return SendErrorMsg(playerid, "You can't ban yourself");
         }
         if (strlen(reason) > MAX_BAN_REASON) {
             return SendErrorMsg(playerid, "The lenght of the reason is too long, maximum characters is 32");

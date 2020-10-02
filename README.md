@@ -9,6 +9,8 @@ sampctl package build
 sampctl package run
 ```
 
+Compile ls_elevator.pwn first!
+
 # How to contribute.
 
 ## Modules

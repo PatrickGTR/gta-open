@@ -34,8 +34,8 @@
 
 // Set to true if table aren't set up.
 #define SETUP_TABLE 			(false)
-
-
+#define DISCORD					(false)
+#define WEAPON_DEBUG			(false)
 
 #include <constants>
 
@@ -61,7 +61,9 @@
 #include <cmds>
 #include <mapping>
 #include <tester>
-#include <discord>
+#if DISCORD
+	#include <discord>
+#endif
 #include <bank>
 #include <gangs>
 

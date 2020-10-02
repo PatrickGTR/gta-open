@@ -79,7 +79,9 @@ Player_ShowJobMenu(playerid) {
             }
         }
         Player_SetJob(playerid, jobID, true);
-        Player_GiveJobWeapons(playerid);
+        if(IsPlayerNewbie(playerid)) {
+            Player_GiveJobWeapons(playerid);
+        }
     }
     Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_LIST, "Job Menu", JOB_LIST , "Choose", "Cancel");
     return 1;

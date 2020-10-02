@@ -19,7 +19,6 @@
 		"samp-incognito/samp-streamer-plugin:v2.9.4",
 		"kristoisberg/samp-map-zones",
 		"PatrickGTR/actor_robbery",
-		"Southclaws/progress2",
 		"maddinat0r/samp-discord-connector:v0.3.2"
 	],
 	"local": true,
