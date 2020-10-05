@@ -9,6 +9,13 @@ hook OnGameModeExit()
     return 1;
 }
 
+hook function GivePlayerWeapon(playerid, weaponid, ammo)
+{
+    SingleWeapon_Save(playerid, weaponid, ammo);
+    
+    continue(playerid, weaponid, ammo);
+}
+
 Weapon_Load(playerid)
 {
     new query[256];
@@ -50,6 +57,29 @@ public OnPlayerLoadWeapons(playerid)
     }
     mysql_format(MySQL_GetHandle(), query, sizeof(query), "DELETE FROM weapons WHERE u_id = %d", Player_GetAccountID(playerid));
     mysql_tquery(MySQL_GetHandle(), query);
+    return 1;
+}
+
+SingleWeapon_Save(playerid, weaponid, ammo)
+{
+    if(!IsPlayerConnected(playerid)) return 1;
+
+    new query[256];
+
+    mysql_format(MySQL_GetHandle(), query, sizeof(query), "INSERT INTO weapons (u_id, weapid, ammo) VALUES (%d, %d, %d) ON DUPLICATE KEY UPDATE ammo = %d", Player_GetAccountID(playerid), weaponid, ammo, ammo);
+    #if WEAPON_DEBUG
+        mysql_tquery(MySQL_GetHandle(), query, "OnWeaponSingleLoadingDebug", "iii", playerid, weaponid, ammo);
+    #else  
+        mysql_tquery(MySQL_GetHandle(), query);
+    #endif
+    return 1;
+}
+
+forward OnWeaponSingleLoadingDebug(playerid, weaponid, ammo);
+public OnWeaponSingleLoadingDebug(playerid, weaponid, ammo)
+{
+    print("Saved Weapon");
+    printf("u_id: %d, weaponid: %d, ammo: %d", Player_GetAccountID(playerid), weaponid, ammo);
     return 1;
 }
 

@@ -6,6 +6,23 @@ new
     Timer:burglarytimer[MAX_PLAYERS]
 ;
 
+enum {
+    ROBBERY_NONE = -1,
+    ROBBERY_FAILED = 0,
+    ROBBERY_SUCCESS
+};
+
+enum {
+    STATE_ROBBERY_NONE = -1,
+    STATE_ROBBERY_CRACKING = 0,
+    STATE_ROBBERY_DELIVERING
+}
+
+static
+    RobberyInfo[MAX_PLAYERS],
+    RobbingState[MAX_PLAYERS]
+;
+
 static
     bankcp,
     casinocp,
@@ -46,6 +63,8 @@ stock SetRandomHideout(playerid) {
     return 1;
 }
 
+
+
 hook OnPlayerSecondUpdate(playerid)
 {
     if(robbing[playerid] == 1 && BurglaryInfo[playerid] == 1)
@@ -80,6 +99,14 @@ hook OnPlayerSecondUpdate(playerid)
             UI_HideTimeLeft(playerid);
             defer MansCooldown();
         }
+    }
+    return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    if(RobbingState[playerid] == STATE_ROBBERY_DELIVERING) {
+        Player_StopRobbery(playerid);
     }
     return 1;
 }
@@ -174,6 +201,7 @@ hook OnPlayerEnterRaceCP(playerid)
             Player_StopRobbery(playerid);
             defer TowerCooldown();
         }
+        RobberyInfo[playerid] = ROBBERY_SUCCESS;
     }
     return 1;
 }
@@ -293,7 +321,10 @@ timer RobberyFailed[300000](playerid)
         BurglaryInfo[playerid] = 0;
     }
     DisablePlayerRaceCheckpoint(playerid);
-    SendServerMsg(playerid, "You have failed to deliver it to the hideout!");
+    if(RobberyInfo[playerid] == ROBBERY_FAILED) {
+        SendServerMsg(playerid, "You have failed to deliver it to the hideout!");
+    }
+    RobberyInfo[playerid] = ROBBERY_NONE;
     return 1;
 }
 

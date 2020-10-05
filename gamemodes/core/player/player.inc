@@ -7,6 +7,13 @@
 #include <player_arrest>
 #include <player_animations>
 
+#if SETUP_TABLE
+    #include <player_health-setup-table>
+#endif
+
+#include <player_armoursaving>
+#include <player_healthsaving>
+
 #include <attachment>
 #include <job>
 #include <vehicle>
