@@ -24,6 +24,8 @@
 #include <admin_cmd-atm>
 #include <rcon_cmd>
 #include <fly_cmd>
+#include <admin_player-accuracy>
+#include <admin_spec-cmd>
 
 hook OnGameModeInit() {
     Admin_AddCommandToList(1, "/acmds");
