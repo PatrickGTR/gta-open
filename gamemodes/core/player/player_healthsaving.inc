@@ -8,20 +8,12 @@ static
 
 hook OnMySQLConnected()
 {
-    static const insertQuery[] = "\
-    INSERT INTO \
-        players_health (u_id, health, armour) \
-    VALUES \
-        (?, ?, ?) \
-    ";
-    stmt_insertHealth = MySQL_PrepareStatement(MySQL_GetHandle(), insertQuery);
-
     static const loadQuery[] = "\
     SELECT \
         health, \
         armour \
     FROM \
-        players_health \
+        players \
     WHERE \
         u_id = ? \
     ";
@@ -29,7 +21,7 @@ hook OnMySQLConnected()
 
     static const updateQuery[] = "\
     UPDATE \
-        players_health \
+        players \
     SET \
         health = ? \
     WHERE \
@@ -77,7 +69,7 @@ hook function SetPlayerHealth(playerid, Float:health)
     MySQL_BindFloat(stmt_saveHealth, 0, health);
     MySQL_BindInt(stmt_saveHealth, 1, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_saveHealth);
-    continue(playerid, health);
+    return continue(playerid, health);
 }
 
 hook OnPlayerDisconnect(playerid, reason)

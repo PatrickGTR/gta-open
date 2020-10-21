@@ -3,6 +3,8 @@
 static 
     bool:gPlayerIsSpectating[MAX_PLAYERS],
     gSpectatingPlayer[MAX_PLAYERS],
+    gPlayerLastInterior[MAX_PLAYERS],
+    gPlayerLastWorld[MAX_PLAYERS],
     bool:gIsPlayerBeingSpectated[MAX_PLAYERS],
     Float:gPlayerLastPos[MAX_PLAYERS][3],
     Float:gPlayerArmour[MAX_PLAYERS],
@@ -80,6 +82,8 @@ hook OnPlayerSpawn(playerid)
         SetPlayerArmour(playerid, gPlayerArmour[playerid]);
         gPlayerIsSpectating[playerid] = false;
         SetPlayerPos(playerid, gPlayerLastPos[playerid][0], gPlayerLastPos[playerid][1], gPlayerLastPos[playerid][2]);
+        SetPlayerInterior(playerid, gPlayerLastInterior[playerid]);
+        SetPlayerVirtualWorld(playerid, gPlayerLastWorld[playerid]);
     }
     return 1;
 }
@@ -96,6 +100,8 @@ ACMD:[1]spec(playerid, params[])
     gPlayerLastPos[playerid][0] = pos[0];
     gPlayerLastPos[playerid][1] = pos[1];
     gPlayerLastPos[playerid][2] = pos[2];
+    gPlayerLastInterior[playerid] = GetPlayerInterior(playerid);
+    gPlayerLastWorld[playerid] = GetPlayerVirtualWorld(playerid);
     TogglePlayerSpectating(playerid, true);
     gPlayerIsSpectating[playerid] = true;
     gIsPlayerBeingSpectated[target] = true;

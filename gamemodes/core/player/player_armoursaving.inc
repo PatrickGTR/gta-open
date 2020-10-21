@@ -8,7 +8,7 @@ hook OnMySQLConnected()
 {
     static const updateQuery[] = "\
     UPDATE \
-        players_health \
+        players \
     SET \
         armour = ? \
     WHERE \
@@ -23,7 +23,7 @@ hook function SetPlayerArmour(playerid, Float:armour)
     MySQL_BindFloat(stmt_saveArmour, 0, armour);
     MySQL_BindInt(stmt_saveArmour, 1, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_saveArmour);
-    continue(playerid, armour);
+    return continue(playerid, armour);
 }
 
 hook OnPlayerDisconnect(playerid, reason)
