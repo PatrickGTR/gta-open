@@ -26,17 +26,7 @@
 
 #include <a_samp>
 
-#define MYSQL_PREPARE_DEBUG 	(false)
-#define MAX_STATEMENTS 100
-#define SAMP_LOGGER_COMPAT
-
-#define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
-
-// Set to true if table aren't set up.
-#define SETUP_TABLE 			(false)
-#define DISCORD					(false)
-#define WEAPON_DEBUG			(true)
-
+// Main
 #include <constants>
 
 #include <samp_bcrypt>
@@ -61,9 +51,11 @@
 #include <cmds>
 #include <mapping>
 #include <tester>
+
 #if DISCORD
 	#include <discord>
 #endif
+
 #include <bank>
 #include <gangs>
 

@@ -6,12 +6,6 @@
 
 #include <dealership>
 
-#if SETUP_TABLE
-	#include <server_weap-setup-table>
-#endif
-
-#include <server_savingweap>
-
 #include <YSI_Coding\y_hooks>
 enum E_ENTRANCE_DATA
 {

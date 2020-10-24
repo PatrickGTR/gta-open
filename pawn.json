@@ -74,7 +74,6 @@
 		"mapname": "San Andreas",
 		"weburl": "www.sa-mp.com",
 		"gamemodetext": "Unknown",
-		"filterscripts": ["ls_elevator"],
 		"announce": true,
 		"lanmode": false,
 		"query": true,

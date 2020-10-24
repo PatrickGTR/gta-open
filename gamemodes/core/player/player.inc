@@ -10,6 +10,8 @@
 #include <player_armoursaving>
 #include <player_healthsaving>
 
+#include <player_weapon-save>
+
 #include <attachment>
 #include <job>
 #include <vehicle>

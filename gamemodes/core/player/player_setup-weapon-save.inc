@@ -3,7 +3,7 @@
 hook OnMySQLConnected()
 {
     static const query[] = "\
-        CREATE TABLE IF NOT EXISTS weapons \
+        CREATE TABLE IF NOT EXISTS player_weapons \
         (\
             u_id int(11) NOT NULL AUTO_INCREMENT,\
             weapid int(11) NOT NULL,\
@@ -15,6 +15,6 @@ hook OnMySQLConnected()
         )";
     mysql_tquery(MySQL_GetHandle(), query);
 
-    log("setting up 'weapons' table...");
+    log("setting up 'player_weapons' table...");
     return 1;
 }   
