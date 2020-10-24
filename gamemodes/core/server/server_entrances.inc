@@ -1,7 +1,3 @@
-// Dependencies
-#include <YSI_Data\y_iterate>
-#include <streamer>
-
 // Definitions
 #define MAX_ENTRANCES               (128)
 #define MAX_STORE_NAME              (30)

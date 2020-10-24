@@ -1,5 +1,3 @@
-
-#include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
 
 static

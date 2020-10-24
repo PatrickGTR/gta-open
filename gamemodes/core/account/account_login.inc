@@ -1,7 +1,4 @@
-#include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
-#include <formatex>
-#include <logger>
 
 static
 	bool:PlayerFromSelection[MAX_PLAYERS];

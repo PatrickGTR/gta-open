@@ -1,5 +1,4 @@
 #include <YSI_Coding\y_hooks>
-#include <YSI_Coding\y_iterate>
 
 #define MAX_GANGS   (30)
 

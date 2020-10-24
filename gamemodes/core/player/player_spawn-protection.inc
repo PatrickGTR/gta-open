@@ -1,5 +1,4 @@
 #include <YSI_Coding\y_hooks>
-#include <YSI_Data\y_bit>
 
 static
 	BitArray:Player_SpawnProtection<MAX_PLAYERS>;

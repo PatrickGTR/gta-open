@@ -9,6 +9,8 @@
 #include <ui_time-left>
 #include <ui_location>
 
+// Do not change the order
+// we prioritise 'ui_prev-dialog'
 #include <ui_prev-dialog>
 #include <YSI_Visual\y_dialog>
 
