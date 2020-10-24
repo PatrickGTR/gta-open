@@ -12,13 +12,9 @@ static
     Statement:stmt_deteleWeapons
 ;
 
-
-Weapon_Save(playerid) return Weapons_Save(playerid);
-Weapon_Load(playerid) return Weapons_Load(playerid);
-
 hook OnMySQLPreClose() {
     foreach(new i : Player) {
-        Weapons_Save(i);
+        Weapon_Save(i);
     }
     return 1;
 }
@@ -58,12 +54,12 @@ hook OnMySQLConnected() {
 }
 
 hook OnPlayerSpawn(playerid) {
-    Weapons_Load(playerid);
+    Weapon_Load(playerid);
     return 1;
 }
 
 hook OnPlayerDisconnect(playerid, reason) {
-    Weapons_Save(playerid);
+    Weapon_Save(playerid);
     return 1;
 }
 
@@ -77,7 +73,7 @@ hook function GivePlayerWeapon(playerid, weaponid, ammo) {
     continue(playerid, weaponid, ammo);
 }
 
-Weapons_Load(playerid) {
+Weapon_Load(playerid) {
     inline WeaponLoad() {
         new
             weaponid,
@@ -90,7 +86,10 @@ Weapons_Load(playerid) {
 
             if(!(0 <= weaponid <= 46))  {
 
-                printf("[WARNING]: OnPlayerLoadWeapons - Unknown Weaponid '%d'. skipping", weaponid);
+                dbg(PLAYER_DEBUG_HANDLER, 
+                    "[Weapon_Load / player_weapon-save] Unkown weapon. skipping",
+                     _i("weaponid", weaponid)
+                );
 
                 MySQL_BindInt(stmt_deleteSingleWeapon, 0, Player_GetAccountID(playerid));
                 MySQL_BindInt(stmt_deleteSingleWeapon, 1, weaponid);
@@ -99,9 +98,12 @@ Weapons_Load(playerid) {
 
             GivePlayerWeapon(playerid, weaponid, ammo);
 
-            #if WEAPON_DEBUG
-                printf("weapon: %d, ammo: %d, u_id: %d", weaponid, ammo, Player_GetAccountID(playerid));
-            #endif
+            dbg(PLAYER_DEBUG_HANDLER, 
+                "[Weapon_Load / player_weapon-save] Weapon loaded",
+                    _i("weaponid", weaponid),
+                    _i("ammo", ammo),
+                    _p("username", playerid)
+            );
         }
     }
 
@@ -111,26 +113,30 @@ Weapons_Load(playerid) {
     return 1;
 }
 
-Weapons_Save(playerid) {
+Weapon_Save(playerid) {
     new
-        weapid,\
+        weaponid,
         ammo;
 
     for(new i; i < 13; i++) {
-        GetPlayerWeaponData(playerid, i, weapid, ammo);
+        GetPlayerWeaponData(playerid, i, weaponid, ammo);
         
-        if(!weapid) {
+        if(!weaponid) {
             continue;
         }
 
         MySQL_BindInt(stmt_insertWeapon, 0, Player_GetAccountID(playerid));
-        MySQL_BindInt(stmt_insertWeapon, 1, weapid);
+        MySQL_BindInt(stmt_insertWeapon, 1, weaponid);
         MySQL_BindInt(stmt_insertWeapon, 2, ammo);
         MySQL_BindInt(stmt_insertWeapon, 3, ammo);
         MySQL_ExecuteThreaded(stmt_insertWeapon);
-        #if WEAPON_DEBUG
-            printf("u_id: %d, weaponid: %d, ammo: %d", Player_GetAccountID(playerid), weapid, ammo);
-        #endif
+
+        dbg(PLAYER_DEBUG_HANDLER, 
+            "[Weapon_Save / player_weapon-save] Weapon saved",
+                _i("weaponid", weaponid),
+                _i("ammo", ammo),
+                _p("username", playerid)
+        );
     }
     return 1; 
 }

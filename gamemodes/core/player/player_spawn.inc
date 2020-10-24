@@ -70,7 +70,7 @@ hook OnPlayerSpawn(playerid) {
 		if(id == PlayerLastSpawn[playerid]) {
 			// regen new id
 			id = random(sizeof(LS_SpawnPoints));
-			dbg(PLAYER_DEBUG_HANDLER, "spawnid same as last, regenerating new spawn for player.", 
+			dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] spawnid same as last, regenerating new spawn for player.", 
 				_p("username", playerid), 
 				_i("id", playerid)
 			);
@@ -116,7 +116,7 @@ hook OnPlayerSpawn(playerid) {
 	SetPlayerVirtualWorld(playerid, 0);
 	SetCameraBehindPlayer(playerid);
     
-	dbg(PLAYER_DEBUG_HANDLER, "player spawned", 
+	dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] player spawned",
 		_p("username", playerid), 
 		_i("id", playerid), 
 		_f("x", x),
