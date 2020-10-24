@@ -38,7 +38,8 @@ static
 
 static 
     PlayerLastSpawn[MAX_PLAYERS],
-	bool:PlayerNewbie[MAX_PLAYERS] = false
+	bool:PlayerNewbie[MAX_PLAYERS] = false,
+	bool:PlayerFirstSpawn[MAX_PLAYERS] = true
 ;
 
 hook OnPlayerRegister(playerid)
@@ -49,11 +50,21 @@ hook OnPlayerRegister(playerid)
 
 hook OnPlayerConnect(playerid) {
 	PlayerNewbie[playerid] = false;
+	PlayerFirstSpawn[playerid] = true;
     PlayerLastSpawn[playerid] = -1;
 	return 1;
 }
 
 hook OnPlayerSpawn(playerid) {
+	
+	// Execute this when player spawns for the first time.
+	if(PlayerFirstSpawn[playerid]) {
+
+		dbg(SERVER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] calling OnPlayerFirstSpawn");
+		CallLocalFunction("OnPlayerFirstSpawn", "i", playerid);
+		PlayerFirstSpawn[playerid] = false;
+	}
+ 
 	new 
 		id,
 		Float: x,

@@ -7,9 +7,7 @@
 #include <player_arrest>
 #include <player_animations>
 
-#include <player_armoursaving>
-#include <player_healthsaving>
-
+#include <player_hitpoint-save>
 #include <player_weapon-save>
 
 #include <attachment>
@@ -17,7 +15,6 @@
 #include <vehicle>
 
 #include <YSI_Coding\y_hooks>
-#include <YSI_Data\y_bit>
 
 new
     BitArray:PlayerSpawnState<MAX_PLAYERS>;
@@ -86,5 +83,11 @@ stock Player_UpdateColour(playerid) {
 static ptask _PlayerPerSecondTimer[1000](playerid) {
     if(Player_IsSpawned(playerid)) {
         CallLocalFunction("OnPlayerSecondUpdate", "i", playerid);
+    }
+}
+
+static ptask _PlayerAutoSave[(1000 * 60) * 2](playerid) {
+    if(Player_IsSpawned(playerid)) {
+        CallLocalFunction("OnPlayerAutoSave", "i", playerid);
     }
 }

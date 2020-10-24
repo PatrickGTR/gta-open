@@ -14,6 +14,8 @@
 // OnMySQLPreClose() -> called before MySQL disconnect (before mysql_close specifically.)
 // OnServerWeekReset() -> called when the in-game week resets.
 // OnServerDayReset() -> called when it's a new in-game day.
+// OnPlayerFirstSpawn(playerid) -> called when player spawns for the first time after initial connection.
+// OnPlayerAutoSave(playerid) -> called every 2 minutes for datas that need to be saved frequently.
 
 // Custom Functions
 // Player_GiveScore(playerid, score, bool:save = false) -> give player a score.
@@ -106,4 +108,9 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
 	}
 
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
+}
+
+CMD:kill(playerid) {
+	SetPlayerHealth(playerid, 0.0);
+	return 1;	
 }
