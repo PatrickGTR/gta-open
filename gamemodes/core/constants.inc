@@ -40,7 +40,7 @@
 #define SERVER_NAME 			"Grand Theft Open"
 #define SERVER_MODE 			"Cops and Robbers"
 #define SERVER_LANGUAGE			"English"
-#define SERVER_WEBSITE			"www.sa-mp.com"
+#define SERVER_WEBSITE			"www.open.mp"
 
 #define SCRIPT_VERSION_MAJOR	1
 #define SCRIPT_VERSION_MINOR	0

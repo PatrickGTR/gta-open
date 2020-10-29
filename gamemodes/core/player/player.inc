@@ -88,6 +88,8 @@ static ptask _PlayerPerSecondTimer[1000](playerid) {
 
 static ptask _PlayerAutoSave[(1000 * 60) * 2](playerid) {
     if(Player_IsSpawned(playerid)) {
+
+        dbg(SERVER_DEBUG_HANDLER, "[_PlayerAutoSave / player.inc] calling OnPlayerAutoSave");
         CallLocalFunction("OnPlayerAutoSave", "i", playerid);
     }
 }

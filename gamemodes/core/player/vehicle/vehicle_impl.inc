@@ -300,6 +300,16 @@ stock Vehicle_Park(playerid) {
     GetVehiclePos(vehicleid, x, y, z);
     GetVehicleZAngle(vehicleid, a);
 
+    dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Park / vehicle_impl.inc] owned vehicle parked",
+        _p("username", playerid),
+        _i("account id", Player_GetAccountID(playerid)),
+        _i("vehicle id", VehicleID[index]),
+        _f("x", x),
+        _f("y", y),
+        _f("z", z),
+        _f("a", a)
+    );
+
 
     MySQL_BindFloat(stmt_updatePosition, 0, x);
     MySQL_BindFloat(stmt_updatePosition, 1, y);
@@ -374,9 +384,9 @@ stock Vehicle_Load(playerid) {
 
                 Bit_Let(vehicle_created, i);
 
-                dbg(PLAYER_DEBUG_HANDLER, "owned vehicle loaded",
+                dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Load / vehicle_impl.inc] owned vehicle loaded",
                     _p("username", playerid),
-                    _i("uid", Player_GetAccountID(playerid)),
+                    _i("account id", Player_GetAccountID(playerid)),
                     _i("vehicle id", VehicleID[i])
                 );
 
@@ -446,14 +456,7 @@ Vehicle_GetOwnerName(index) {
     return VehicleOwnerName[index];
 }
 
-
 stock Vehicle_Destroy(playerid) {
-    dbg(PLAYER_DEBUG_HANDLER, "owned vehicle destroyed",
-        _p("username", playerid),
-        _i("uid", Player_GetAccountID(playerid)),
-        _i("total", Vehicle_GetPlayerTotal(playerid))
-    );
-
     foreach(new i : Vehicle) {
         if(!Bit_Get(vehicle_created, i)) {
             continue;
@@ -476,5 +479,12 @@ stock Vehicle_Destroy(playerid) {
 
         DestroyVehicle(VehicleHandler[i]);
         Bit_Vet(vehicle_created, i);
+
+            
+        dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Destroy / vehicle_impl.inc] owned vehicle destroyed",
+            _p("username", playerid),
+            _i("account id", Player_GetAccountID(playerid)),
+            _i("total", Vehicle_GetPlayerTotal(playerid))
+        );
     }
 }
