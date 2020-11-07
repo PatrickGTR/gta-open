@@ -273,7 +273,6 @@ hook OnGameModeInit() {
 
 
 static
-	PlayerSkin[MAX_PLAYERS],
 	bool:PlayerClassState[MAX_PLAYERS] = true,
 	PlayerClass[MAX_PLAYERS];
 
@@ -320,6 +319,7 @@ hook OnPlayerRequestClass(playerid, classid) {
 			Player_SetClass(playerid, TEAM_ARMY);
 			UI_ClassSelectionTDUpdate(playerid, COLOR_PURPLE, "Army", "- Hunt down and arrest criminals for cash and XP.~n~- Access powerful weaponry and machinery to kill criminals.");
 		}
+		Player_SetSkin(playerid, GetPlayerSkin(playerid));
 	}
 	return 1;
 }
@@ -354,7 +354,6 @@ timer void:ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
 }
 
 hook OnPlayerConnect(playerid) {
-	PlayerSkin[playerid] = 0;
     PlayerClass[playerid] = -1;
 	PlayerClassState[playerid] = true;
 
@@ -395,12 +394,4 @@ stock void:Player_SetClass(playerid, classid) {
 
 stock Player_GetClass(playerid) {
     return PlayerClass[playerid];
-}
-
-stock Player_SetSkin(playerid, skinid) {
-	PlayerSkin[playerid] = skinid;
-}
-
-stock Player_GetSkin(playerid) {
-	return PlayerSkin[playerid];
 }

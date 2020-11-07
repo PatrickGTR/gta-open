@@ -4,10 +4,7 @@
 
 
 main() {
-	Logger_Log("gamemode initialised.");
-	Logger_ToggleDebug(PLAYER_DEBUG_HANDLER, true);
-	Logger_ToggleDebug(ADMIN_DEBUG_HANDLER, true);
-	Logger_ToggleDebug(SERVER_DEBUG_HANDLER, true);
+	print("[main] gamemode initialised.");
 }
 
 
@@ -15,6 +12,13 @@ static
     MySQL:MySQL_ConHandle;
 
 hook OnGameModeInit() {
+
+    print("[first call OnGameModeInit] setting up...");
+
+    Logger_ToggleDebug(PLAYER_DEBUG_HANDLER, true);
+	Logger_ToggleDebug(ADMIN_DEBUG_HANDLER, true);
+	Logger_ToggleDebug(SERVER_DEBUG_HANDLER, true);
+
     new 
         MySQLOpt: option_id = mysql_init_options();
 	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server 
@@ -56,8 +60,7 @@ hook OnGameModeInit() {
     MySQL_ConHandle = mysql_connect(host, username, password, database);
 
     if(MySQL_ConHandle == MYSQL_INVALID_HANDLE || mysql_errno(MySQL_ConHandle) != 0) {
-        Logger_Log("MySQL failed to connect. Server shutting down...");
-        SendRconCommand("exit");
+        Logger_Fatal("MySQL failed to connect. Server shutting down...");
         return 1;
     }
 

@@ -38,18 +38,9 @@ static
 
 static 
     PlayerLastSpawn[MAX_PLAYERS],
-	bool:PlayerNewbie[MAX_PLAYERS] = false,
 	bool:PlayerFirstSpawn[MAX_PLAYERS] = true
 ;
-
-hook OnPlayerRegister(playerid)
-{
-	PlayerNewbie[playerid] = true;
-	return 1;
-}
-
 hook OnPlayerConnect(playerid) {
-	PlayerNewbie[playerid] = false;
 	PlayerFirstSpawn[playerid] = true;
     PlayerLastSpawn[playerid] = -1;
 	return 1;
@@ -93,9 +84,6 @@ hook OnPlayerSpawn(playerid) {
 		ang = LS_SpawnPoints[id][3]; 
 
 		PlayerLastSpawn[playerid] = id;
-		if(PlayerNewbie[playerid]) {
-        	Player_GiveJobWeapons(playerid);
-		}
     }
 	else if(Player_GetClass(playerid) == TEAM_MEDIC) {
 		id = random(sizeof(Medic_SpawnPoints));
@@ -135,8 +123,4 @@ hook OnPlayerSpawn(playerid) {
 		Logger_F("z", z)
 	);
 	return 1;
-}
-
-stock IsPlayerNewbie(playerid) {
-	return PlayerNewbie[playerid];
 }

@@ -1,9 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
 static
-	bool:PlayerFromSelection[MAX_PLAYERS];
-
-static
     gPlayerHash[MAX_PLAYERS][250],
     bool:gPlayerLoginStatus[MAX_PLAYERS],
     PlayerAttempts[MAX_PLAYERS];
@@ -23,7 +20,7 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
         strcat(gPlayerHash[playerid], password, len);
     }
 
-    inline PromptLoginResponse(pid, dialogid, response, listitem, string:inputtext[]) {
+    inline const PromptLoginResponse(pid, dialogid, response, listitem, string:inputtext[]) {
          #pragma unused pid, dialogid, listitem
 
         // User clicked the 'leave' buton or pressed 'ESC' .
@@ -73,8 +70,13 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
         BCrypt_CheckInline(inputtext, gPlayerHash[playerid], using inline OnPasswordVerify);
     }
 
-    new string[MAX_PLAYER_NAME + 35];
-    format(string, sizeof(string), "Hello %p! Welcome back to %s", playerid, SERVER_NAME);
+    new 
+        string[48 + MAX_PLAYER_NAME + 16];
+
+    static const 
+        LoginMessage[] = ""C_WHITE"Hello "C_GREY"%p. "C_WHITE"Welcome back to "C_YELLOW"%s";
+
+    format(string, sizeof(string), LoginMessage, playerid, SERVER_NAME);
 
     Dialog_ShowCallback(playerid,
         using inline PromptLoginResponse,   // Handler
@@ -94,15 +96,13 @@ static void:Account_NotifySuccess(playerid) {
 }
 
 static
-    Statement: stmt_updatePlayerSkin,
     Statement: stmt_updatePlayerLastLogin;
 
 hook OnMySQLConnected() {
-    stmt_updatePlayerSkin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET skin = ? WHERE u_id = ?");
     stmt_updatePlayerLastLogin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET last_login = CURRENT_TIMESTAMP() WHERE u_id = ?");
     return 1;
 }
-
+ 
 hook OnPlayerLogin(playerid) {
 
     MySQL_BindInt(stmt_updatePlayerLastLogin, 0, Player_GetAccountID(playerid));
@@ -112,45 +112,6 @@ hook OnPlayerLogin(playerid) {
     return 1;
 }
 
-hook OnPlayerRequestSpawn(playerid)
-{
-	PlayerFromSelection[playerid] = true;
-	return 1;
-}
-
-stock bool:IsPlayerFromSelection(playerid)
-	return PlayerFromSelection[playerid];
-
-stock SetPlayerSelectionStats(playerid, bool:stats) {
-	PlayerFromSelection[playerid] = stats;
-}
-
-hook OnPlayerSpawn(playerid) {
-    if(!IsPlayerFromSelection(playerid)) {
-		SetPlayerSkin(playerid, Player_GetSkin(playerid));
-	}
-	if(IsPlayerFromSelection(playerid)) {
-		if(Player_New(playerid)) {
-            MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
-            MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
-            MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
-            Class_SelectionState(playerid, false);
-            Player_SetNew(playerid, false);
-        }
-        if(Player_BoughtSkin(playerid)) {
-            MySQL_BindInt(stmt_updatePlayerSkin, 0, GetPlayerSkin(playerid));
-            MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
-            MySQL_ExecuteThreaded(stmt_updatePlayerSkin);
-            Class_SelectionState(playerid, false);
-		    Player_SetSkin(playerid, GetPlayerSkin(playerid));
-		    Player_SetBoughtSkin(playerid, false);
-        }
-		SetPlayerSelectionStats(playerid, false);
-	}
-    printf("Player Skin ID: %d", Player_GetSkin(playerid));
-    printf("Player %p Spawned with skin ID: %d", playerid, GetPlayerSkin(playerid));
-    return 1;
-}
 
  // API
 Player_IsLoggedIn(playerid) {
