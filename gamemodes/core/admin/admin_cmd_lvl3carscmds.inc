@@ -410,7 +410,6 @@ ACMD:[3]giveweaps(playerid, params[])
     strcpy(wname2, aWeaponNames[wid], sizeof(wname2));
     GivePlayerWeapon(target, wid, ammo);
     SendMsgF(target, COLOR_MODERATION, "[ADMIN WEAPON]: Admin gave %s [%i ammo] to you", wname2, ammo);
-    SendAdminCmdUsage(playerid, "/giveweaps", params);
 	return 1;
 }
 
@@ -435,7 +434,6 @@ ACMD:[3]veh(playerid, params[])
     new vehid = SpawnVehicle(veh, x, y, z, a, color1, color2);
 	LinkVehicleToInterior(vehid, GetPlayerInterior(playerid));
 	SetVehicleVirtualWorld(vehid, GetPlayerVirtualWorld(playerid));
-    SendAdminCmdUsage(playerid, "/veh", params);
     return 1;
 }
 
@@ -458,7 +456,6 @@ ACMD:[3]aveh(playerid, params[])
         }
     }
     CreateAdminVehicle(vehid, x, y, z, a, color1, color2);
-    SendAdminCmdUsage(playerid, "/aveh", params);
     return 1;
 }
 
@@ -471,7 +468,6 @@ ACMD:[3]dav(playerid, params[])
             DestroyVehicle(i);
         }
     }
-    SendAdminCmdUsage(playerid, "/dav", params);
     return 1;
 }
 
@@ -489,6 +485,5 @@ ACMD:[3]rscars(playerid, params[])
         }
     }
     SendMsgAllF(COLOR_MODERATION, "[ADMIN RESTARTCARS]: Admin Respawned all vehicles");
-    SendAdminCmdUsage(playerid, "/rscars", params);
     return 1;
 }

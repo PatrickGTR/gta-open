@@ -9,7 +9,7 @@ void:Acc_Remove(username[], playerid = INVALID_PLAYER_ID)
         if (!cache_num_rows()) {
             if (playerid != INVALID_PLAYER_ID) {
                 SendServerMsgF(playerid, "The Account (%s) does not exist in the database", name);
-                dbg(PLAYER_DEBUG_HANDLER, "Attempted to remove Account", _s("username", name));
+                Logger_Dbg(PLAYER_DEBUG_HANDLER, "Attempted to remove Account", Logger_S("username", name));
                 return;
             }
         }
@@ -18,7 +18,7 @@ void:Acc_Remove(username[], playerid = INVALID_PLAYER_ID)
         mysql_tquery(MySQL_GetHandle(), string, "", "");
         if (playerid != INVALID_PLAYER_ID) {
             SendServerMsgF(playerid, "You successfully Removed "C_GREY"%s's "C_WHITE"account.", name);
-            dbg(PLAYER_DEBUG_HANDLER, "Account has been successfully removed the Account", _s("username", name));
+            Logger_Dbg(PLAYER_DEBUG_HANDLER, "Account has been successfully removed the Account", Logger_S("username", name));
         }
     }
 

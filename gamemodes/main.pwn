@@ -38,6 +38,7 @@
 #include <YSI_Data\y_bit>
 #include <YSI_Data\y_iterate>
 
+#include <env>
 #include <streamer>
 #include <logger>
 #include <mysql_prepared>
@@ -59,10 +60,6 @@
 #include <cmds>
 #include <mapping>
 #include <tester>
-
-#if DISCORD
-	#include <discord>
-#endif
 
 #include <bank>
 #include <gangs>

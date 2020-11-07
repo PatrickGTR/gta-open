@@ -19,49 +19,9 @@
 		"samp-incognito/samp-streamer-plugin:v2.9.4",
 		"kristoisberg/samp-map-zones",
 		"PatrickGTR/actor_robbery",
-		"maddinat0r/samp-discord-connector:v0.3.2"
+		"dakyskye/pawn-env"
 	],
 	"local": true,
-	"builds": [
-		{
-			"name": "dev",
-			"version": "3.10.10",
-			"args": [
-				"-;+",
-				"-(+",
-				"-d3",
-				"-E",
-				"-Z"
-			],
-			"includes": [
-				"gamemodes/utils",
-				"gamemodes/core",
-				"gamemodes/core/user-interface",
-				"gamemodes/core/chat",
-				"gamemodes/core/anti-cheat",
-				"gamemodes/core/server",
-				"gamemodes/core/server/dealership",
-				"gamemodes/core/account",
-				"gamemodes/core/player",
-				"gamemodes/core/player/job",
-				"gamemodes/core/player/vehicle",
-				"gamemodes/core/player/attachment",
-				"gamemodes/core/admin",
-				"gamemodes/core/systems",
-				"gamemodes/core/cmds",
-				"gamemodes/core/houses",
-				"gamemodes/core/houses/furniture",
-				"gamemodes/core/mapping",
-				"gamemodes/core/tester",
-				"gamemodes/core/discord",
-				"gamemodes/core/bank",
-				"gamemodes/core/gangs"
-			],
-			"constants": {
-				"DEV_BUILD": "1"
-			}
-		}
-	],
 	"runtime": {
 		"version": "0.3.7",
 		"mode": "server",
@@ -99,9 +59,46 @@
 		"db_log_queries": false,
 		"conncookies": true,
 		"cookielogging": false,
-		"output": true,
-		"extra": {
-			"discord_bot_token": "NzIzOTE2NzEwOTYwNDMxMTA0.XxForQ.e-gwrZXMzTtzyH_DMMAPTk_B5Ao"
+		"output": true
+	},
+	"builds": [
+		{
+			"name": "dev",
+			"version": "3.10.10",
+			"args": [
+				"-;+",
+				"-(+",
+				"-d3",
+				"-E",
+				"-Z"
+			],
+			"includes": [
+				"gamemodes/utils",
+				"gamemodes/core",
+				"gamemodes/core/user-interface",
+				"gamemodes/core/chat",
+				"gamemodes/core/anti-cheat",
+				"gamemodes/core/server",
+				"gamemodes/core/server/dealership",
+				"gamemodes/core/account",
+				"gamemodes/core/player",
+				"gamemodes/core/player/job",
+				"gamemodes/core/player/vehicle",
+				"gamemodes/core/player/attachment",
+				"gamemodes/core/admin",
+				"gamemodes/core/systems",
+				"gamemodes/core/cmds",
+				"gamemodes/core/houses",
+				"gamemodes/core/houses/furniture",
+				"gamemodes/core/mapping",
+				"gamemodes/core/tester",
+				"gamemodes/core/bank",
+				"gamemodes/core/gangs"
+			],
+			"constants": {
+				"DEV_BUILD": "1"
+			},
+			"compiler": {}
 		}
-	}
+	]
 }

@@ -291,8 +291,8 @@ hook OnPlayerRequestClass(playerid, classid) {
 		TogglePlayerSpectating(playerid, true);
 		defer ForceSpawnPlayer(playerid);
 
-		dbg(PLAYER_DEBUG_HANDLER, "skipping class selection",
-			_p("username", playerid)
+		Logger_Dbg(PLAYER_DEBUG_HANDLER, "skipping class selection",
+			Logger_P(playerid)
     	);
 	} else {
 		SetPlayerPos(playerid, 180.892608, 1830.717895, 23.242187);

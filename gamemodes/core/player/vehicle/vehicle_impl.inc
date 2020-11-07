@@ -300,14 +300,14 @@ stock Vehicle_Park(playerid) {
     GetVehiclePos(vehicleid, x, y, z);
     GetVehicleZAngle(vehicleid, a);
 
-    dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Park / vehicle_impl.inc] owned vehicle parked",
-        _p("username", playerid),
-        _i("account id", Player_GetAccountID(playerid)),
-        _i("vehicle id", VehicleID[index]),
-        _f("x", x),
-        _f("y", y),
-        _f("z", z),
-        _f("a", a)
+    Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Park / vehicle_impl.inc] owned vehicle parked",
+        Logger_P(playerid),
+        Logger_I("account id", Player_GetAccountID(playerid)),
+        Logger_I("vehicle id", VehicleID[index]),
+        Logger_F("x", x),
+        Logger_F("y", y),
+        Logger_F("z", z),
+        Logger_F("a", a)
     );
 
 
@@ -384,10 +384,10 @@ stock Vehicle_Load(playerid) {
 
                 Bit_Let(vehicle_created, i);
 
-                dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Load / vehicle_impl.inc] owned vehicle loaded",
-                    _p("username", playerid),
-                    _i("account id", Player_GetAccountID(playerid)),
-                    _i("vehicle id", VehicleID[i])
+                Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Load / vehicle_impl.inc] owned vehicle loaded",
+                    Logger_P(playerid),
+                    Logger_I("account id", Player_GetAccountID(playerid)),
+                    Logger_I("vehicle id", VehicleID[i])
                 );
 
                 new
@@ -481,10 +481,10 @@ stock Vehicle_Destroy(playerid) {
         Bit_Vet(vehicle_created, i);
 
             
-        dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Destroy / vehicle_impl.inc] owned vehicle destroyed",
-            _p("username", playerid),
-            _i("account id", Player_GetAccountID(playerid)),
-            _i("total", Vehicle_GetPlayerTotal(playerid))
+        Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Destroy / vehicle_impl.inc] owned vehicle destroyed",
+            Logger_P(playerid),
+            Logger_I("account id", Player_GetAccountID(playerid)),
+            Logger_I("total", Vehicle_GetPlayerTotal(playerid))
         );
     }
 }

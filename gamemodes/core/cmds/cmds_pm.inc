@@ -1,5 +1,4 @@
 #include <YSI_Coding\y_hooks>
-#include <discord>
 
 static
     BitArray:PlayerPMDisabled<MAX_PLAYERS>,

@@ -60,7 +60,7 @@ hook OnPlayerSpawn(playerid) {
 	// Execute this when player spawns for the first time.
 	if(PlayerFirstSpawn[playerid]) {
 
-		dbg(SERVER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] calling OnPlayerFirstSpawn");
+		Logger_Dbg(SERVER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] calling OnPlayerFirstSpawn");
 		CallLocalFunction("OnPlayerFirstSpawn", "i", playerid);
 		PlayerFirstSpawn[playerid] = false;
 	}
@@ -81,9 +81,9 @@ hook OnPlayerSpawn(playerid) {
 		if(id == PlayerLastSpawn[playerid]) {
 			// regen new id
 			id = random(sizeof(LS_SpawnPoints));
-			dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] spawnid same as last, regenerating new spawn for player.", 
-				_p("username", playerid), 
-				_i("id", playerid)
+			Logger_Dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] spawnid same as last, regenerating new spawn for player.", 
+				Logger_P(playerid), 
+				Logger_I("id", playerid)
 			);
 		}
 
@@ -127,12 +127,12 @@ hook OnPlayerSpawn(playerid) {
 	SetPlayerVirtualWorld(playerid, 0);
 	SetCameraBehindPlayer(playerid);
     
-	dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] player spawned",
-		_p("username", playerid), 
-		_i("id", playerid), 
-		_f("x", x),
-		_f("y", y), 
-		_f("z", z)
+	Logger_Dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] player spawned",
+		Logger_P(playerid), 
+		Logger_I("id", playerid), 
+		Logger_F("x", x),
+		Logger_F("y", y), 
+		Logger_F("z", z)
 	);
 	return 1;
 }

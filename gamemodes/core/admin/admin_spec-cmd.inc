@@ -69,7 +69,7 @@ ACMD:[1]specoff(playerid, params[])
     }
     TogglePlayerSpectating(playerid, false);
     SpawnPlayer(playerid);
-    SendAdminCmdUsage(playerid, "/specoff", params);
+    
     return 1;
 }
 
@@ -118,7 +118,7 @@ ACMD:[1]spec(playerid, params[])
     }
     Weapon_Save(playerid);
     ResetPlayerWeapons(playerid);
-    SendAdminCmdUsage(playerid, "/spec", params);
+    
     return 1;
 }
 

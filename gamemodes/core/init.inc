@@ -4,43 +4,71 @@
 
 
 main() {
-	log("gamemode initialised.");
-	logger_debug(PLAYER_DEBUG_HANDLER, true);
-	logger_debug(ADMIN_DEBUG_HANDLER, true);
-	logger_debug(SERVER_DEBUG_HANDLER, true);
+	Logger_Log("gamemode initialised.");
+	Logger_ToggleDebug(PLAYER_DEBUG_HANDLER, true);
+	Logger_ToggleDebug(ADMIN_DEBUG_HANDLER, true);
+	Logger_ToggleDebug(SERVER_DEBUG_HANDLER, true);
 }
 
 
 static
     MySQL:MySQL_ConHandle;
 
-// TODO: move to environment var or .ini config.
-static const
-    MYSQL_HOST[]    = "localhost",
-    MYSQL_PW[]      = "",
-    MYSQL_DB[]      = "gta-open",
-    MYSQL_USER[]    = "root";
-
 hook OnGameModeInit() {
-    new MySQLOpt: option_id = mysql_init_options();
-	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server
+    new 
+        MySQLOpt: option_id = mysql_init_options();
+	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server 
 
-    MySQL_ConHandle = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PW, MYSQL_DB, option_id);
+    new 
+        username[24],
+        host[24],
+        password[24],
+        database[24];
+
+    if(Env_Has("MYSQL_USERNAME")) {
+        Env_Get("MYSQL_USERNAME", username);
+    } 
+    else {
+        Logger_Log("Could not find environment variable for MYSQL_USERNAME");
+    }
+    
+    if(Env_Has("MYSQL_PASSWORD")) {
+        Env_Get("MYSQL_PASSWORD", password);
+    }
+    else {
+        Logger_Log("Could not find environment variable for MYSQL_PASSWORD");
+    }
+
+    if(Env_Has("MYSQL_HOST")) {
+        Env_Get("MYSQL_HOST", host);
+    } 
+    else {
+        Logger_Log("Could not find environment variable for MYSQL_HOST");
+    }
+    
+    if(Env_Has("MYSQL_DATABASE")) {
+        Env_Get("MYSQL_DATABASE", database);
+    }
+    else {
+        Logger_Log("Could not find environment variable for MYSQL_DATABASE");
+    }
+    
+    MySQL_ConHandle = mysql_connect(host, username, password, database);
 
     if(MySQL_ConHandle == MYSQL_INVALID_HANDLE || mysql_errno(MySQL_ConHandle) != 0) {
-        fatal("MySQL failed to connect. Server shutting down...");
+        Logger_Log("MySQL failed to connect. Server shutting down...");
         SendRconCommand("exit");
         return 1;
     }
 
-    log("MySQL connection is successful.");
+    Logger_Log("MySQL connection is successful.");
     CallLocalFunction("OnMySQLConnected", "");
     return 1;
 }
 
 hook OnGameModeExit() {
-    log("MySQL connection has been closed.");
     CallLocalFunction("OnMySQLPreClose", "");
+    Logger_Log("MySQL connection has been closed.");
     mysql_close(MySQL_ConHandle);
 }
 

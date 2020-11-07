@@ -78,7 +78,7 @@ hook OnPlayerText(playerid, text[]) {
 						CallLocalFunction(TextMenuCallbackHandler[playerid], "ii", playerid, value);
 						return ~0; // stop the hook from caryying on and don't show the input to players.
 					} else {
-						log("ui_tdmenu.inc - SEVERE! - empty string passed to CallLocalFunction.");
+						Logger_Log("ui_tdmenu.inc - SEVERE! - empty string passed to CallLocalFunction.");
 					}
 			    }
 			}

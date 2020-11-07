@@ -40,9 +40,9 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
                     SendErrorMsg(playerid, "You have been kicked from the server for attempting to login numerous times.");
                     Kick(playerid);
 
-                    dbg(PLAYER_DEBUG_HANDLER, "player has been kicked for too many login attempts",
-                        _p("username", playerid),
-                        _i("uid", Player_GetAccountID(playerid))
+                    Logger_Dbg(PLAYER_DEBUG_HANDLER, "player has been kicked for too many login attempts",
+                        Logger_P(playerid),
+                        Logger_I("uid", Player_GetAccountID(playerid))
                     );
                     return;
                 }
@@ -50,17 +50,17 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
                 Account_PromptLogin(playerid, gPlayerHash[playerid]);
                 SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", PlayerAttempts[playerid], MAX_PASSWORD_ATTEMPT);
 
-                dbg(PLAYER_DEBUG_HANDLER, "player failed to login",
-                    _i("attemps", PlayerAttempts[playerid]),
-                    _p("username", playerid),
-                    _i("uid", Player_GetAccountID(playerid))
+                Logger_Dbg(PLAYER_DEBUG_HANDLER, "player failed to login",
+                    Logger_I("attemps", PlayerAttempts[playerid]),
+                    Logger_P(playerid),
+                    Logger_I("uid", Player_GetAccountID(playerid))
                 );
                 return;
             }
 
-            dbg(PLAYER_DEBUG_HANDLER, "player successfully logged in",
-                _p("username", playerid),
-                _i("uid", Player_GetAccountID(playerid))
+            Logger_Dbg(PLAYER_DEBUG_HANDLER, "player successfully logged in",
+                Logger_P(playerid),
+                Logger_I("uid", Player_GetAccountID(playerid))
             );
 
             PlayerAttempts[playerid] = 0;

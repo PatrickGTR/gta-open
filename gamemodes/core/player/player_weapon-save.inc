@@ -96,9 +96,9 @@ Weapon_Load(playerid) {
 
             if(!(0 <= weaponid <= 46))  {
 
-                dbg(PLAYER_DEBUG_HANDLER, 
+                Logger_Dbg(PLAYER_DEBUG_HANDLER, 
                     "[Weapon_Load / player_weapon-save.inc] Unkown weapon. skipping",
-                     _i("weaponid", weaponid)
+                     Logger_I("weaponid", weaponid)
                 );
 
                 MySQL_BindInt(stmt_deleteSingleWeapon, 0, Player_GetAccountID(playerid));
@@ -112,20 +112,20 @@ Weapon_Load(playerid) {
                 MySQL_BindInt(stmt_deleteSingleWeapon, 1, weaponid);
                 MySQL_ExecuteThreaded(stmt_deleteSingleWeapon);
 
-                dbg(PLAYER_DEBUG_HANDLER, 
+                Logger_Dbg(PLAYER_DEBUG_HANDLER, 
                     "[Weapon_Load / player_weapon-save.inc] Weapon loaded without ammo, deleting entry",
-                     _i("weaponid", weaponid)
+                     Logger_I("weaponid", weaponid)
                 );
             } 
             else {
 
                 GivePlayerWeapon(playerid, weaponid, ammo);
 
-                dbg(PLAYER_DEBUG_HANDLER, 
+                Logger_Dbg(PLAYER_DEBUG_HANDLER, 
                     "[Weapon_Load / player_weapon-save.inc] Weapon loaded",
-                        _i("weaponid", weaponid),
-                        _i("ammo", ammo),
-                        _p("username", playerid)
+                        Logger_I("weaponid", weaponid),
+                        Logger_I("ammo", ammo),
+                        Logger_P(playerid)
                 );
             }
 
@@ -156,11 +156,11 @@ Weapon_Save(playerid) {
         MySQL_BindInt(stmt_insertWeapon, 3, ammo);
         MySQL_ExecuteThreaded(stmt_insertWeapon);
 
-        dbg(PLAYER_DEBUG_HANDLER, 
+        Logger_Dbg(PLAYER_DEBUG_HANDLER, 
             "[Weapon_Save / player_weapon-save.inc] Weapon saved",
-                _i("weaponid", weaponid),
-                _i("ammo", ammo),
-                _p("username", playerid)
+                Logger_I("weaponid", weaponid),
+                Logger_I("ammo", ammo),
+                Logger_P(playerid)
         );
     }
     return 1; 

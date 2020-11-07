@@ -116,10 +116,10 @@ stock void:Player_AwardArrest(playerid, targetid, bool:notify = true) {
     }
 
     if(money > 40000) {
-        dbg(PLAYER_DEBUG_HANDLER, "player arrest reward",
-            _p("playerid", playerid),
-            _p("targetid", targetid),
-            _i("amount", money)
+        Logger_Dbg(PLAYER_DEBUG_HANDLER, "player arrest reward",
+            Logger_P(playerid),
+            Logger_P(targetid),
+            Logger_I("amount", money)
         );
     }
 }
