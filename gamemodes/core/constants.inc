@@ -51,6 +51,10 @@
 #define CHECKPOINT_STREAMDISTANCE   (200)
 #define MAPICON_STREAMDISTANCE      (500)
 
+// Gang
+#define INVALID_GANG_ID (-1)
+#define INVALID_GANG_RANK   (0)
+
 // MySQL Datetime (dd, mm, yyyy)
 #define SQL_DATETIME_FORMAT     "%d %M %Y at %r"
 #define SQL_DATE_FORMAT         "%d %M %Y"

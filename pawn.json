@@ -19,7 +19,7 @@
 		"samp-incognito/samp-streamer-plugin:v2.9.4",
 		"kristoisberg/samp-map-zones",
 		"PatrickGTR/actor_robbery",
-		"dakyskye/pawn-env"
+		"dakyskye/pawn-env:1.1.1"
 	],
 	"local": true,
 	"runtime": {

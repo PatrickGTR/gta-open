@@ -1,5 +1,6 @@
 #include <gang_create>
 #include <gang_control-panel>
+#include <gang_ranks>
 
 #if SETUP_TABLE
     #include <gang_setup-table>
@@ -33,8 +34,8 @@ hook OnMySQLConnected()
 
 hook OnPlayerConnect(playerid)
 {
-    PlayerGang[playerid] = 0;
-    PlayerRank[playerid] = 0;
+    PlayerGang[playerid] = INVALID_GANG_ID;
+    PlayerRank[playerid] = INVALID_GANG_RANK;
     return 1;
 }
 
@@ -58,11 +59,10 @@ static Account_LoadGang(playerid)
             PlayerRank[playerid] = pgangrank;
             foreach(new i : Player)
             {
-                if(IsPlayerConnected(i))
                 {
                     if(Player_GetGangID(i) == Player_GetGangID(playerid))
                     {
-                        SendMsgF(i, COLOR_BLUE, "[GANG CONNECT]: %p (%d) Rank %i has connected to the server", playerid, playerid, pgangrank);
+                        SendMsgF(i, COLOR_BLUE, "[GANG CONNECT]: %p (%d) Rank %s has connected to the server", playerid, playerid, GetGangRankName(gangid, pgangrank));
                     }
                 }
             }
@@ -73,7 +73,7 @@ static Account_LoadGang(playerid)
 }
 
 stock Player_SetGangID(playerid, gangid) {
-    return PlayerGang[playerid] = gangid;
+    PlayerGang[playerid] = gangid;
 }
 
 stock Player_GetGangID(playerid) {
@@ -81,7 +81,7 @@ stock Player_GetGangID(playerid) {
 }
 
 stock Player_SetGangRank(playerid, rank) {
-    return PlayerRank[playerid] = rank;
+    PlayerRank[playerid] = rank;
 }
 
 stock Player_GetGangRank(playerid) {

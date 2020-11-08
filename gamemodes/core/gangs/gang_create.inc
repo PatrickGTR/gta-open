@@ -2,6 +2,11 @@
 
 #define MAX_GANGS   (30)
 
+// Accessed Globaly
+new
+    Iterator:gang_Iter<MAX_GANGS>
+;
+
 static 
     Statement: stmt_insertGang,
     Statement: stmt_insertGangRank,
@@ -12,7 +17,6 @@ static
     Statement: stmt_updateDeaths;
 
 static
-    Iterator: gang_Iter<MAX_GANGS>,
     GangID[MAX_GANGS],
     GangName[MAX_GANGS][30],
     GangLeader[MAX_GANGS][24],
@@ -97,6 +101,7 @@ GangLoad(g_id, const gName[], const gLeader[], gkills, gdeaths) {
     strcpy(GangLeader[g_id], gLeader, 24);
     AddGangKills(g_id, gkills);
     AddGangDeaths(g_id, gdeaths);
+    LoadGangRanks(g_id);
     Iter_Add(gang_Iter, g_id);
     printf("The Gang %s gang id %d has been loaded", GangName[g_id], g_id);
 }
@@ -152,7 +157,7 @@ CMD:gangs(playerid)
 
 ACMD:[5]gangcreate(playerid, params[])
 {
-    new leader, gname[30], lName[MAX_PLAYER_NAME], gangID = Iter_Alloc(gang_Iter);
+    new leader, gname[30], lName[MAX_PLAYER_NAME], gangID = Iter_Free(gang_Iter);
     new string[512];
     if(sscanf(params, "us[30]", leader, gname)) return SendSyntaxMsg(playerid, "/gangcreate (leadername) (gangname)");
     if(!IsPlayerConnected(leader)) return SendErrorMsg(playerid, "Player is not connected");
@@ -168,6 +173,7 @@ ACMD:[5]gangcreate(playerid, params[])
     MySQL_BindInt(stmt_insertGangRank, 0, gangID);
     MySQL_ExecuteThreaded(stmt_insertGangRank);
     SetGangID(gangID, gangID);
+    Iter_Add(gang_Iter, gangID);
     strcpy(GangName[gangID], gname, 30);
     static const query[] = "\
     INSERT INTO \
@@ -176,9 +182,11 @@ ACMD:[5]gangcreate(playerid, params[])
         (%i,%i,%i)";
     mysql_format(MySQL_GetHandle(), string, sizeof(string), query, gangID, Player_GetAccountID(leader), 10);
     mysql_tquery(MySQL_GetHandle(), string);
+    Player_SetGangID(leader, gangID);
     Player_SetGangRank(leader, 10);
     SendMsgAllF(COLOR_MODERATION, "[GANG]: The Gang %s has been created", gname);
     SendMsgAllF(COLOR_MODERATION, "[GANG]: Gang Leader %p", leader);
+    LoadGangRanks(gangID);
     Iter_Add(gang_Iter, gangID);
     return 1;
 }

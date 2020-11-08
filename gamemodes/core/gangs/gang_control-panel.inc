@@ -106,6 +106,8 @@ CMD:setrank(playerid, params[])
     if(Player_GetGangRank(playerid) < 8) return SendErrorMsg(playerid, "Your not Level 8 Up");
     if(sscanf(params, "ui", target, rank)) return SendSyntaxMsg(playerid, "/setrank (name/id) (rank)");
     if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
+    if(Player_GetGangID(target) != Player_GetGangID(playerid)) return SendSyntaxMsg(playerid, "Player is not in your gang :/");
+    if(Player_GetGangRank(playerid) <= Player_GetGangRank(playerid)) return SendErrorMsgF(playerid, "Player is Equal or has Higher level than you");
     if(rank < 0 || rank > 10) return SendErrorMsg(playerid, "Player Rank max is 10");
     MySQL_BindInt(stmt_updatePRank, 0, rank);
     MySQL_BindInt(stmt_updatePRank, 1, Player_GetAccountID(playerid));        
@@ -113,7 +115,6 @@ CMD:setrank(playerid, params[])
     Player_SetGangRank(target, rank);
     SendMsgF(playerid, COLOR_RED, "[GANG]:"C_WHITE" You have set the rank of %p (%d) to rank %i", target, target, rank);
     SendMsgF(target, COLOR_RED, "[GANG]:"C_WHITE" Your rank has been set to %i", rank);
-    Player_SetGangID(target, 0);
     foreach(new i : Player)
     {
         if(IsPlayerConnected(i))
@@ -131,14 +132,14 @@ CMD:gm(playerid, params[])
 {
     new msg[128];
     if(sscanf(params, "s[128]", msg)) return SendSyntaxMsg(playerid, "/gm (message)");
-    if(Player_GetGangID(playerid) == 0) return SendErrorMsg(playerid, "You're not in a gang");
+    if(Player_GetGangID(playerid) == INVALID_GANG_ID) return SendErrorMsg(playerid, "You're not in a gang");
     foreach(new i : Player)
     {
         if(IsPlayerConnected(i))
         {
             if(Player_GetGangID(i) == Player_GetGangID(playerid))
             {
-                SendMsgF(i, COLOR_RED, "[GANG MESSAGE] %p (%d):"C_WHITE" %s", playerid, playerid, msg);
+                SendMsgF(i, COLOR_RED, "[GANG MESSAGE] %s %p (%d) "C_WHITE"%s", GetGangRankName(Player_GetGangID(playerid), Player_GetGangRank(playerid)), playerid, playerid, msg);
             }
         }
     }
