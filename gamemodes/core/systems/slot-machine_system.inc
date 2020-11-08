@@ -382,7 +382,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 timer PlayerBeginGambling[GAMBLE_TIMER](playerid)
 {
 	if(PlayerGamblingState[playerid] != G_STATE_GAMBLING) {
-	    log("Strange error @ gambler");
 	    stop slot_Timer[playerid];
 	    PlayerGamblingState[playerid] = G_STATE_NOT_GAMBLING;
 	    return 0;

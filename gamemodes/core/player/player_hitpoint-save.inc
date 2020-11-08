@@ -99,10 +99,10 @@ Player_HitpointLoad(playerid) {
             SetPlayerHealth(playerid, health);
             SetPlayerArmour(playerid, armour);
 
-            dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointLoad / player_hitpoint-save.inc] hitpoint loaded", 
-                _f("health", health),
-                _f("armour", armour),
-                _p("username", playerid)
+            Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointLoad / player_hitpoint-save.inc] hitpoint loaded", 
+                Logger_F("health", health),
+                Logger_F("armour", armour),
+                Logger_P(playerid)
             );
         } 
     }
@@ -123,10 +123,10 @@ Player_HitpointSave(playerid) {
     MySQL_BindInt(stmt_saveHitpoints, 2, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_saveHitpoints);
     
-    dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointSave / player_hitpoint-save.inc] hitpoint saved", 
-        _f("health", health),
-        _f("armour", armour),
-        _p("username", playerid)
+    Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointSave / player_hitpoint-save.inc] hitpoint saved", 
+        Logger_F("health", health),
+        Logger_F("armour", armour),
+        Logger_P(playerid)
     );
 }
 

@@ -10,12 +10,6 @@
 #include <YSI_Core\y_utils>
 
 #include <logger>
-//extras
-stock LOGGER_FIELD:_p(const field[], playerid) {
-    new result[MAX_FIELD_NAME + 1 + MAX_FIELD_VALUE];
-    formatex(result, sizeof(result), "%s=\"%p\"", field, playerid);
-    return LOGGER_FIELD:result;
-}
 
 #include <formatex>
 FormatSpecifier<'m'>(output[], amount) {
