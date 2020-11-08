@@ -4,7 +4,7 @@ static
     Statement: stmt_loadRanks;
 
 static 
-    GangRank[MAX_GANGS][11][15]
+    GangRank[MAX_GANGS][11][15] // Due to lack of braincells i've decided to NOT use the index 0 thats why its 11 
 ;
 
 hook OnMySQLConnected()
@@ -84,17 +84,13 @@ public OnPlayerEditGangRank(playerid, listitem)
     new string[126], tmpString[128];
     new gangid = Player_GetGangID(playerid);
     format(tmpString, sizeof(tmpString), "GangRank_%i", listitem);
-    printf("listitem %d", listitem);
     new rank = GetPVarInt(playerid, tmpString);
     inline OnPutGangRankName(pid, dialogid, response, llistitem, string:inputtext[]) {
         #pragma unused pid, dialogid, llistitem
         if(!response) return 1;
-        format(string, sizeof(string), "UPDATE gang_ranks SET rank%d = '%s' WHERE g_id = %d", rank, inputtext, gangid);        
-        mysql_tquery(MySQL_GetHandle(), string);
+        format(string, sizeof(string), "UPDATE gang_ranks SET rank%d = '%s' WHERE g_id = %d", rank, inputtext, gangid);
         mysql_tquery(MySQL_GetHandle(), string);
         strcpy(GangRank[gangid][rank], inputtext);
-        printf("Rank %d", rank);
-        printf("Rank name %s", GangRank[gangid][rank]);
     }
     format(tmpString, sizeof(tmpString), "Put the name for Gang Rank %i", rank);
     Dialog_ShowCallback(playerid, using inline OnPutGangRankName, DIALOG_STYLE_INPUT, "Put the Gangrank Name", tmpString, "Ok", "Cancle");
