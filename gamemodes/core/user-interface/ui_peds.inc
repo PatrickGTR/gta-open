@@ -85,7 +85,7 @@ public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently) {
     Player_GetLocation(playerid, location, sizeof(location));
 
     // Notify Players.
-    SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"began robbing a shop in "C_GREY"%s.", playerid, playerid, location);
+    SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"began robbing "C_YELLOW"%s"C_WHITE" in "C_GREY"%s.", playerid, playerid, Entrance_PlayerIn(playerid), location);
     return 1;
 }
 
@@ -109,7 +109,7 @@ public OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type) {
 
 
             Player_GetLocation(playerid, string, sizeof(string));
-            SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from a shop in "C_GREY"%s.", playerid, playerid, robbedmoney, string);
+            SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from "C_YELLOW"%s "C_WHITE"in "C_GREY"%s.", playerid, playerid, robbedmoney, Entrance_PlayerIn(playerid), string);
 
             GivePlayerMoney(playerid, robbedmoney);
         }

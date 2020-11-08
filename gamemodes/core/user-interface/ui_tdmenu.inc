@@ -232,7 +232,7 @@ stock TextInfo_Show(playerid)
 
 	new
 		string[1024];
-	format(string, sizeof(string), "~n~%s~n~~n~~w~___________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
+	format(string, sizeof(string), "~n~%s~n~~n~~w~_________________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
 	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
 	
 	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);

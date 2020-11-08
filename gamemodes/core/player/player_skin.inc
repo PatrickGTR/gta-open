@@ -32,6 +32,11 @@ hook OnPlayerLogin(playerid) {
 
         if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
             Player_SetSkin(playerid, playerSkin);
+
+            Logger_Dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerLogin / player_skin.inc] skin loaded", 
+                Logger_I("skinid", playerSkin), 
+                Logger_P(playerid)
+            );
         }
     }
     MySQL_BindInt(stmt_loadPlayerSkin, 0, Player_GetAccountID(playerid));
