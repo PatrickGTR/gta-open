@@ -51,7 +51,8 @@ hook OnMySQLConnected()
 
     static const checkQuery[] = "\
     SELECT \
-        gName \
+        gName, \
+        g_id \
     FROM \
         gangs \
     WHERE \
@@ -198,14 +199,25 @@ ACMD:[5]gangdelete(playerid, params[])
     inline OnGangDelete()
     {
         new
-            gName[30];
+            gName[30],
+            gId;
 
         MySQL_BindResult(stmt_checkGang, 0, gName);
+        MySQL_BindResultInt(stmt_checkGang, 1, gId);
 
         if(MySQL_Statement_FetchRow(stmt_checkGang))
         {
             MySQL_Bind(stmt_deleteGang, 0, gName);
             MySQL_ExecuteThreaded(stmt_deleteGang);
+            foreach(new i : Player)
+            {
+                if(Player_GetGangID(i) == gId)
+                {
+                    Player_SetGangRank(i, INVALID_GANG_RANK);
+                    Player_SetGangID(i, INVALID_GANG_ID);
+                }
+            }
+            Iter_Remove(gang_Iter, gId);
             SendMsgAllF(COLOR_MODERATION, "[GANG]: The Gang %s has been deleted", gName);
         }
         else {

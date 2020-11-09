@@ -99,9 +99,15 @@ public OnPlayerEditGangRank(playerid, listitem)
 
 CMD:gangranks(playerid, params[])
 {
-    new count = 0, tmpStr[128];
     if(Player_GetGangID(playerid) == INVALID_GANG_ID) return SendErrorMsg(playerid, "You're not in a Gang!");
     if(Player_GetGangRank(playerid) < 9) return SendErrorMsg(playerid, "Only level 9+ can use this command");
+    Player_ShowGangRanks(playerid);
+    return 1;
+}
+
+Player_ShowGangRanks(playerid)
+{
+    new count = 0, tmpStr[128];
     TextMenu_Create(playerid, "OnPlayerEditGangRank", "Gang Ranks");
     for(new i; i < 11; i++) {
         if(i == 0) continue;

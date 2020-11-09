@@ -45,6 +45,30 @@ hook OnPlayerLogin(playerid)
     return 1;
 }
 
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+    if(playerid != INVALID_PLAYER_ID && killerid != INVALID_PLAYER_ID)
+    {
+        if(Player_GetGangID(playerid) != INVALID_GANG_ID && Player_GetGangID(killerid) != INVALID_GANG_ID)
+        {
+            foreach(new i : Player)
+            {
+                if(Player_GetGangID(i) == Player_GetGangID(playerid))
+                {
+                    SendMsgF(i, COLOR_RED, "[GANG DEATH]: %p (%d) got killed by %p (%d) Gang %s", playerid, playerid, killerid, killerid, GetGangName(killerid));
+                }
+                if(Player_GetGangID(i) == Player_GetGangID(killerid))
+                {
+                    SendMsgF(i, COLOR_RED, "[GANG KILL]: %p (%d) has killed %p (%d) Gang %s", killerid, killerid, playerid, playerid, GetGangName(playerid));
+                }
+            }
+            AddGangDeaths(Player_GetGangID(playerid), 1, true);
+            AddGangKills(Player_GetGangID(killerid), 1, true);
+        }
+    }
+    return 1;
+}
+
 static Account_LoadGang(playerid)
 {
     inline OnGangLoad() {
