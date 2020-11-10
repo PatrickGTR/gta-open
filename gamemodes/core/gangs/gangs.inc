@@ -1,5 +1,6 @@
 #include <gang_create>
 #include <gang_control-panel>
+#include <gang_ranks>
 
 #if SETUP_TABLE
     #include <gang_setup-table>
@@ -33,14 +34,38 @@ hook OnMySQLConnected()
 
 hook OnPlayerConnect(playerid)
 {
-    PlayerGang[playerid] = 0;
-    PlayerRank[playerid] = 0;
+    PlayerGang[playerid] = INVALID_GANG_ID;
+    PlayerRank[playerid] = INVALID_GANG_RANK;
     return 1;
 }
 
 hook OnPlayerLogin(playerid)
 {
     Account_LoadGang(playerid);
+    return 1;
+}
+
+hook OnPlayerDeath(playerid, killerid, reason)
+{
+    if(playerid != INVALID_PLAYER_ID && killerid != INVALID_PLAYER_ID)
+    {
+        if(Player_GetGangID(playerid) != INVALID_GANG_ID && Player_GetGangID(killerid) != INVALID_GANG_ID)
+        {
+            foreach(new i : Player)
+            {
+                if(Player_GetGangID(i) == Player_GetGangID(playerid))
+                {
+                    SendMsgF(i, COLOR_RED, "[GANG DEATH]: %p (%d) got killed by %p (%d) Gang %s", playerid, playerid, killerid, killerid, GetGangName(killerid));
+                }
+                if(Player_GetGangID(i) == Player_GetGangID(killerid))
+                {
+                    SendMsgF(i, COLOR_RED, "[GANG KILL]: %p (%d) has killed %p (%d) Gang %s", killerid, killerid, playerid, playerid, GetGangName(playerid));
+                }
+            }
+            AddGangDeaths(Player_GetGangID(playerid), 1, true);
+            AddGangKills(Player_GetGangID(killerid), 1, true);
+        }
+    }
     return 1;
 }
 
@@ -58,11 +83,10 @@ static Account_LoadGang(playerid)
             PlayerRank[playerid] = pgangrank;
             foreach(new i : Player)
             {
-                if(IsPlayerConnected(i))
                 {
                     if(Player_GetGangID(i) == Player_GetGangID(playerid))
                     {
-                        SendMsgF(i, COLOR_BLUE, "[GANG CONNECT]: %p (%d) Rank %i has connected to the server", playerid, playerid, pgangrank);
+                        SendMsgF(i, COLOR_BLUE, "[GANG CONNECT]: %p (%d) Rank %s has connected to the server", playerid, playerid, GetGangRankName(gangid, pgangrank));
                     }
                 }
             }
@@ -73,7 +97,7 @@ static Account_LoadGang(playerid)
 }
 
 stock Player_SetGangID(playerid, gangid) {
-    return PlayerGang[playerid] = gangid;
+    PlayerGang[playerid] = gangid;
 }
 
 stock Player_GetGangID(playerid) {
@@ -81,7 +105,7 @@ stock Player_GetGangID(playerid) {
 }
 
 stock Player_SetGangRank(playerid, rank) {
-    return PlayerRank[playerid] = rank;
+    PlayerRank[playerid] = rank;
 }
 
 stock Player_GetGangRank(playerid) {
