@@ -19,6 +19,12 @@ hook OnGameModeInit() {
 	Logger_ToggleDebug(ADMIN_DEBUG_HANDLER, true);
 	Logger_ToggleDebug(SERVER_DEBUG_HANDLER, true);
 
+    Message_SetTime(5);
+    Message_Add("Welcome to GTA:OPEN");
+    Message_Add("You like GTA:OPEN? Add us to your favourites!");
+    Message_Add("Help keep the server alive by donating!");
+    
+
     new 
         MySQLOpt: option_id = mysql_init_options();
 	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server 

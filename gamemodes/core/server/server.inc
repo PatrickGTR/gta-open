@@ -3,6 +3,7 @@
 #include <server_wanted-level>
 #include <server_time>
 #include <server_shop-items>
+#include <server_msgs>
 
 #include <dealership>
 
