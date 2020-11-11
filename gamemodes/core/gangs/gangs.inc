@@ -10,23 +10,20 @@
 #include <YSI_Coding\y_hooks>
 
 static
-    Statement: stmt_loadPGang;
-
-static 
+    Statement: stmt_loadPGang,
     PlayerGang[MAX_PLAYERS],
-    PlayerRank[MAX_PLAYERS]
-;
+    PlayerRank[MAX_PLAYERS];
 
 hook OnMySQLConnected()
 {
     static const loadQuery[] = "\
-    SELECT \
-        g_id, \
-        gRank \
-    FROM \
-        player_gang \
-    WHERE \
-        u_id = ? \
+        SELECT \
+            g_id, \
+            gRank \
+        FROM \
+            gang_members \
+        WHERE \
+            u_id = ? \
     ";
     stmt_loadPGang = MySQL_PrepareStatement(MySQL_GetHandle(), loadQuery);
     return 1;
@@ -69,25 +66,22 @@ hook OnPlayerDeath(playerid, killerid, reason)
     return 1;
 }
 
-static Account_LoadGang(playerid)
-{
+static Account_LoadGang(playerid) {
     inline OnGangLoad() {
         new 
             gangid,
-            pgangrank;
+            gangrank;
+
         MySQL_BindResultInt(stmt_loadPGang, 0, gangid);
-        MySQL_BindResultInt(stmt_loadPGang, 1, pgangrank);
+        MySQL_BindResultInt(stmt_loadPGang, 1, gangrank);
 
         if(MySQL_Statement_FetchRow(stmt_loadPGang)) {
             PlayerGang[playerid] = gangid;
-            PlayerRank[playerid] = pgangrank;
-            foreach(new i : Player)
-            {
-                {
-                    if(Player_GetGangID(i) == Player_GetGangID(playerid))
-                    {
-                        SendMsgF(i, COLOR_BLUE, "[GANG CONNECT]: %p (%d) Rank %s has connected to the server", playerid, playerid, GetGangRankName(gangid, pgangrank));
-                    }
+            PlayerRank[playerid] = gangrank;
+
+            foreach(new i : Player) {
+                if(Player_GetGangID(i) == Player_GetGangID(playerid)) {
+                    SendMsgF(i, COLOR_BLUE, "[GANG CONNECT]: %p (%d) Rank %s has connected to the server", playerid, playerid, GetGangRankName(gangid, gangrank));
                 }
             }
         }

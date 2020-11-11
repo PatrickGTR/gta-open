@@ -2,18 +2,18 @@
 
 hook OnMySQLConnected() {
     static const query[] = "\
-    CREATE TABLE IF NOT EXISTS player_gang \
+    CREATE TABLE IF NOT EXISTS gang_members \
     ( \
-    	g_id INT(11) NOT NULL, \
-        u_id INT(11) NOT NULL, \
-        gRank INT(11) NOT NULL DEFAULT 1, \
-    	PRIMARY KEY (u_id), \
-    	FOREIGN KEY (u_id) REFERENCES players(u_id),\
-		FOREIGN KEY (g_id) REFERENCES gangs(g_id)\
+    	gang_id INT(11) NOT NULL, \
+        user_id INT(11) NOT NULL, \
+        gang_rank INT(11) NOT NULL DEFAULT 1, \
+    	PRIMARY KEY (user_id), \
+    	FOREIGN KEY (user_id) REFERENCES players(user_id),\
+		FOREIGN KEY (gang_id) REFERENCES gangs(gang_id)\
         ON DELETE CASCADE \
         ON UPDATE CASCADE \
     )";
     mysql_tquery(MySQL_GetHandle(), query);
-    log("setting up 'player_gang' table...");
+    log("setting up 'gang_members' table...");
     return 1;
 }

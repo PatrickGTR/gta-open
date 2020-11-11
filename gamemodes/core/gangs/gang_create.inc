@@ -178,7 +178,7 @@ ACMD:[5]gangcreate(playerid, params[])
     strcpy(GangName[gangID], gname, 30);
     static const query[] = "\
     INSERT INTO \
-        player_gang(g_id, u_id, gRank) \
+        gang_members(g_id, u_id, gRank) \
     VALUES \
         (%i,%i,%i)";
     mysql_format(MySQL_GetHandle(), string, sizeof(string), query, gangID, Player_GetAccountID(leader), 10);

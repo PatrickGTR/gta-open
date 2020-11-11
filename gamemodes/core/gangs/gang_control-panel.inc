@@ -2,8 +2,7 @@
 
 static
     Timer:ganginvitationtimer[MAX_PLAYERS],
-    Timer:gGangCP[MAX_GANGS]
-;
+    Timer:gGangCP[MAX_GANGS];
 
 static 
     Statement: stmt_insertPGang,
@@ -12,59 +11,65 @@ static
 
 static
     gGangCallCircle[MAX_GANGS],
-    bool:PlayerGangInvited[MAX_PLAYERS],
-    GangOwner[MAX_PLAYERS];
+    bool:PlayerGangInvited[MAX_PLAYERS] = false,
+    GangOwner[MAX_PLAYERS] = INVALID_PLAYER_ID;
 
 hook OnMySQLConnected()
 {
     static const insertQuery[] = "\
-    INSERT INTO \
-        player_gang(g_id, u_id) \
-    VALUES \
-        (?,?) \
+        INSERT INTO \
+            gang_members(gang_id, user_id) \
+        VALUES \
+            (?,?) \
     ";
     stmt_insertPGang = MySQL_PrepareStatement(MySQL_GetHandle(), insertQuery);
 
     static const deleteQuery[] = "\
-    DELETE FROM \
-        player_gang \
-    WHERE \
-        u_id = ?\
+        DELETE FROM \
+            gang_members \
+        WHERE \
+            user_id = ?\
     ";
     stmt_deletePGang = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
 
     static const updateQuery[] = "\
-    UPDATE \
-        player_gang \
-    SET \
-        gRank = ? \
-    WHERE \
-        u_id = ? \
+        UPDATE \
+            gang_members \
+        SET \
+            gang_rank = ? \
+        WHERE \
+            user_id = ? \
     ";
     stmt_updatePRank = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);
     return 1;
 }
 
-CMD:gangkick(playerid, params[])
-{
-    new target;
-    if(Player_GetGangRank(playerid) < 7) return SendErrorMsg(playerid, "Your not Level 7 Up");
-    if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/gangkick (name/id)");
-    if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
-    MySQL_BindInt(stmt_deletePGang, 0, Player_GetAccountID(target));
+CMD:gangkick(playerid, params[]){
+    new targetid;
+    if(Player_GetGangRank(playerid) < 7) { 
+        return SendErrorMsg(playerid, "Your not Level 7 Up");
+    }
+
+    if(sscanf(params, "u", targetid)) {
+        return SendSyntaxMsg(playerid, "/gangkick (name/id)");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+
+    MySQL_BindInt(stmt_deletePGang, 0, Player_GetAccountID(targetid));
     MySQL_ExecuteThreaded(stmt_deletePGang);
-    SendMsgF(playerid, COLOR_RED, "[GANG KICK]:"C_WHITE" You have kicked %p (%d) from the gang", target, target);
-    SendMsgF(target, COLOR_RED, "[GANG KICK]:"C_WHITE" You have been kicked out from your gang");
-    Player_SetGangRank(target, 0);
-    Player_SetGangID(target, 0);
-    foreach(new i : Player)
-    {
-        if(IsPlayerConnected(i))
-        {
-            if(Player_GetGangID(i) == Player_GetGangID(playerid))
-            {
-                SendMsgF(i, COLOR_RED, "[GANG KICK]:"C_WHITE" %p (%d) has been kicked out from the gang", target, target);
-            }
+
+    SendMsgF(playerid, COLOR_RED, "[GANG KICK]:"C_WHITE" You have kicked %p (%d) from the gang", targetid, targetid);
+    SendMsgF(targetid, COLOR_RED, "[GANG KICK]:"C_WHITE" You have been kicked out from your gang");
+    
+    Player_SetGangRank(targetid, 0);
+    Player_SetGangID(targetid, 0);
+    
+    foreach(new i : Player) {
+        if(Player_GetGangID(i) == Player_GetGangID(playerid)) {
+            SendMsgF(i, COLOR_RED, "[GANG KICK]:"C_WHITE" %p (%d) has been kicked out from the gang", targetid, targetid);
         }
     }
     return 1;
@@ -72,31 +77,51 @@ CMD:gangkick(playerid, params[])
 
 CMD:ganginvite(playerid, params[])
 {
-    new target;
-    if(Player_GetGangRank(playerid) < 7) return SendErrorMsg(playerid, "Your not Level 7 Up");
-    if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/ganginvite (name/id)");
-    if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
-    if(Player_GetGangID(target) != INVALID_GANG_ID) return SendErrorMsg(playerid, "Player is already in a gang");
-    SendMsgF(target, COLOR_PURPLE, "[GANG INVITATION]:"C_WHITE" You have been invited to %s by %p (%d)",GetGangName(Player_GetGangID(playerid)), playerid, playerid);
-    SendMsgF(playerid, COLOR_PURPLE, "[GANG]:"C_WHITE" You have invited %p (%d) to the gang", target, target);
-    PlayerGangInvited[target] = true;
-    GangOwner[target] = playerid;
-    ganginvitationtimer[target] = defer ACGI(target);
+    new 
+        targetid;
+
+    if(Player_GetGangRank(playerid) < 7) {
+        return SendErrorMsg(playerid, "Your not Level 7 Up");
+    }
+    
+    if(sscanf(params, "u", targetid)) {
+        return SendSyntaxMsg(playerid, "/ganginvite (name/id)");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+
+    if(Player_GetGangID(targetid) != INVALID_GANG_ID) {
+        return SendErrorMsg(playerid, "Player is already in a gang");
+    }
+
+    SendMsgF(targetid, COLOR_PURPLE, "[GANG INVITATION]:"C_WHITE" You have been invited to %s by %p (%d)",GetGangName(Player_GetGangID(playerid)), playerid, playerid);
+    SendMsgF(playerid, COLOR_PURPLE, "[GANG]:"C_WHITE" You have invited %p (%d) to the gang", targetid, targetid);
+
+    PlayerGangInvited[targetid] = true;
+    GangOwner[targetid] = playerid;
+    ganginvitationtimer[targetid] = defer ExpireGangInvite(targetid);
     return 1;
 }
 
 CMD:acceptganginvite(playerid)
 {
-    new target = GangOwner[playerid];
+    new 
+        gangLeader = GangOwner[playerid];
+
     if(!PlayerGangInvited[playerid]) {
         return SendErrorMsg(playerid, "You're not invited to any gangs");
     }
-    MySQL_BindInt(stmt_insertPGang, 0, Player_GetGangID(target));
+
+    MySQL_BindInt(stmt_insertPGang, 0, Player_GetGangID(gangLeader));
     MySQL_BindInt(stmt_insertPGang, 1, Player_GetAccountID(playerid));        
     MySQL_ExecuteThreaded(stmt_insertPGang);
-    Player_SetGangID(playerid, Player_GetGangID(target));
+
+    Player_SetGangID(playerid, Player_GetGangID(gangLeader));
     Player_SetGangRank(playerid, 1);
-    GangOwner[playerid] = -1;
+    
+    GangOwner[playerid] = INVALID_PLAYER_ID;
     PlayerGangInvited[playerid] = false;
     stop ganginvitationtimer[playerid];
     return 1;
@@ -148,7 +173,7 @@ CMD:gm(playerid, params[])
     return 1;
 }
 
-timer ACGI[60000](playerid)
+timer ExpireGangInvite[60000](playerid)
 {
     PlayerGangInvited[playerid] = false;
     GangOwner[playerid] = -1;
