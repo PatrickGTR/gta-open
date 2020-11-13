@@ -67,6 +67,12 @@
 
 // Will be called after the rest ^
 public OnGameModeInit() {
+	Message_SetTime(5);
+    Message_Add("Welcome to GTA:OPEN");
+    Message_Add("You like GTA:OPEN? Add us to your favourites!");
+    Message_Add("Help keep the server alive by donating!");
+
+
 	SendRconCommand("hostname "#SERVER_NAME " v" #SCRIPT_VERSION_MAJOR "." #SCRIPT_VERSION_MINOR "." #SCRIPT_VERSION_PATCH);
 	SendRconCommand("gamemodetext "SERVER_MODE"");
 	SendRconCommand("language "SERVER_LANGUAGE"");

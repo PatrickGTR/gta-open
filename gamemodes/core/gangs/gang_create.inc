@@ -272,4 +272,4 @@ stock GetGangName(gangid) {
 
 stock GetGangID(gangid) {
     return GangID[gangid];
-}
+}   

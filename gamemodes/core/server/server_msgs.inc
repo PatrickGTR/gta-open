@@ -1,8 +1,10 @@
+
+#define DEFAULT_MESSAGE_TIME (1000 * 60) * 3
 #define MAX_MESSAGES (20)
 
 static
     MessageCount = 0,
-    MessageTime,
+    MessageTime = DEFAULT_MESSAGE_TIME, // 3 minutes by default.
     Messages[MAX_MESSAGES][128];
 
 Message_SetTime(minutes) {
