@@ -7,6 +7,7 @@
 #include <cmds_v> // vehicle
 #include <cmds_pm> // private message
 #include <cmds_bank>
+#include <cmds_gang>
 
 #include <cmds_rob>
 
@@ -68,23 +69,44 @@ CMD:commands(playerid, params[]) {
             case 0: ShowCommands(playerid, 0);
             case 1: ShowCommands(playerid, 1);
             case 2: ShowCommands(playerid, 2);
-            case 3:
-            {
-                Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "House Commands", "\
-                        "C_GREY"/buyhouse "C_WHITE"- Purchase a house.\n\
-                        "C_WHITE"Press Key "C_GREY"F"C_WHITE"- To enter/exit a house.\n\
-                        "C_GREY"/hdescription "C_WHITE"- Change house description text.\n\
-                        "C_GREY"/buyfurniture "C_WHITE"- Choices to buy, edit & delete a furniture.", "Close", "");
+            case 3: {
+                Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, 
+                    "House Commands", // Heading
+                    // Content
+                    ""C_GREY"/buyhouse "C_WHITE"- Purchase a house.\n\
+                    "C_WHITE"Press Key "C_GREY"F"C_WHITE"- To enter/exit a house.\n\
+                    "C_GREY"/hdescription "C_WHITE"- Change house description text.\n\
+                    "C_GREY"/buyfurniture "C_WHITE"- Choices to buy, edit & delete a furniture.", 
+                    "Close",    // BTN 1
+                    ""          // BTN 2
+                );
             }
-            case 4:
-            {
-                    Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Attachment Commands", "\
-                        "C_GREY"/attachment buy "C_WHITE"- Purchase a attachment.\n\
-                        "C_GREY"/attachment delete "C_WHITE"- Delete an attachment.\n\
-                        "C_GREY"/attachment edit "C_WHITE"- Edit an attachment.\n\
-                        "C_GREY"/attachment view "C_WHITE"- List all the attachment you own.\n\
-                        "C_GREY"/attachment attach "C_WHITE"- Attach an attachment you own.\n\
-                        "C_GREY"/attachment detach "C_WHITE"- Detach an attachment you own.\n", "Close", "");
+            case 4: {
+                Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, 
+                    "Attachment Commands", // Heading
+                    // Content
+                    ""C_GREY"/attachment buy "C_WHITE"- Purchase a attachment.\n\
+                    "C_GREY"/attachment delete "C_WHITE"- Delete an attachment.\n\
+                    "C_GREY"/attachment edit "C_WHITE"- Edit an attachment.\n\
+                    "C_GREY"/attachment view "C_WHITE"- List all the attachment you own.\n\
+                    "C_GREY"/attachment attach "C_WHITE"- Attach an attachment you own.\n\
+                    "C_GREY"/attachment detach "C_WHITE"- Detach an attachment you own.\n", 
+                    "Close",    // BTN 1
+                    ""          // BTN 2
+                );
+            }
+            case 5: {
+                Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, 
+                    "Gang Commands", // Header
+                    // Content
+                    ""C_GREY"/gang create "C_WHITE"- Create a new gang.\n\
+                    "C_GREY"/gang disband "C_WHITE"- Delete the gang you currently own. "C_YELLOW"(leader)\n\
+                    "C_GREY"/gang leave "C_WHITE"- Leave your current gang.\n\
+                    "C_GREY"/gang invite "C_WHITE"- Invite player into your gang "C_YELLOW"(leader)\n\
+                    "C_GREY"/gang accept "C_WHITE"- Accept most recent gang invitation.\n", 
+                    "Close",    // BTN 1
+                    ""          // BTN 2
+                );
             }
         }
     }
@@ -93,7 +115,12 @@ CMD:commands(playerid, params[]) {
         using inline _response,
         DIALOG_STYLE_LIST,
         "Server Commands & Keys",
-        "General\nTeam\nClass\nHouse\nAttachment",
+        "General\n\
+        Team\n\
+        Class\n\
+        House\n\
+        Attachment\n\
+        Gang",
         "Select",
         "Close"
     );

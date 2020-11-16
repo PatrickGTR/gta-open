@@ -35,11 +35,24 @@ Message_Add(const message[]) {
     return 1;
 }
 
-
+static 
+    lastIndex = -1;
 task AutoSendMessage[MessageTime]() {
 
     new 
-        idx = random(sizeof(Messages));
+        idx = random(MessageCount);
 
-    SendMsgAllF(COLOR_RED, "Automated Message: "C_WHITE"%s", Messages[clamp(idx, 0, sizeof(Messages))]);
+    // regenerate new id.
+    if(idx == lastIndex) {
+        idx = random(MessageCount);
+    }
+
+    SendMsgAllF(COLOR_RED, "Automated Message: "C_WHITE"%s", Messages[clamp(idx, 0, MessageCount)]);
+
+    lastIndex = idx;
+}
+
+CMD:forcemsg(playerid, params[]) {
+    AutoSendMessage();
+    return 1;
 }

@@ -21,7 +21,6 @@
 #define SERVER_DEBUG_HANDLER    "server"
 #define ADMIN_DEBUG_HANDLER     "admin"
 
-
 // YSI
 #define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
 #define YSI_NO_OPTIMISATION_MESSAGE
@@ -35,6 +34,10 @@
 #define MAX_VEHICLE_PER_PLAYER 2
 #define MAX_CRACK 5
 #define MAX_WEED 5
+
+// Gang limits
+#define MAX_GANGS 12
+#define MAX_GANG_NAME 17 // 16 + 1
 
 // Server Settings
 #define SERVER_NAME 			"Grand Theft Open"

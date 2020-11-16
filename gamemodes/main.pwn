@@ -33,6 +33,7 @@
 #include <samp_bcrypt>
 
 // YSI
+#include <YSI_Core\y_utils>
 #include <YSI_Coding\y_inline>
 #include <YSI_Coding\y_timers>
 #include <YSI_Data\y_bit>
@@ -46,6 +47,11 @@
 #include <formatex>
 
 // Gamemode Scripts
+
+#if SETUP_TABLE
+	#include <tables>
+#endif 
+
 #include <init>
 #include <utils>
 #include <anti-cheat> // w.i.p
@@ -62,7 +68,7 @@
 #include <tester>
 
 #include <bank>
-//#include <gangs>
+#include <gangs>
 
 
 // Will be called after the rest ^

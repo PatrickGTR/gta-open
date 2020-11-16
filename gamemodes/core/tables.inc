@@ -11,19 +11,19 @@ hook OnMySQLConnected() {
 
     // players table.
     mysql_tquery(MySQL_GetHandle(), "players.sql");
-    log("setting up 'players' table...");
+    Logger_Log("setting up 'players' table...");
 
     // player stats table.
     mysql_tquery(MySQL_GetHandle(), "stats.sql");
-    log("setting up 'stats' table...");
+    Logger_Log("setting up 'stats' table...");
 
     // vips table.
     mysql_tquery(MySQL_GetHandle(), "vips.sql");
-    log("setting up 'vips' table...");
+    Logger_Log("setting up 'vips' table...");
 
     // jailed players table.
     mysql_tquery_file(MySQL_GetHandle(), "jail.sql");
-    log("setting up 'jailed' table...");
+    Logger_Log("setting up 'jailed' table...");
 
     // --------------------------------------------------------------------------------------------
     // ADMIN
@@ -31,19 +31,26 @@ hook OnMySQLConnected() {
 
     // Admin accounts table.
     mysql_tquery_file(MySQL_GetHandle(), "admins.sql");
-    log("setting up 'admins' table...");
+    Logger_Log("setting up 'admins' table...");
 
     // Banned accounts table.
     mysql_tquery_file(MySQL_GetHandle(), "bans.sql");
-    log("setting up 'bans' table...");
+    Logger_Log("setting up 'bans' table...");
 
     // --------------------------------------------------------------------------------------------
     // HOUSES 
     // --------------------------------------------------------------------------------------------
-    mysql_tquery_file(MySQL_GetHandle(), "houses.sql");
-    log("setting up 'player_houses' table...");
 
-    mysql_tquery_file(MySQL_GetHandle(), "furnitures.sql");
-    log("setting up 'player_houses' table...");
+    mysql_tquery_file(MySQL_GetHandle(), "houses.sql");
+    Logger_Log("setting up 'player_houses' table...");
+    Logger_Log("setting up 'house_furniture' table...");
+
+    // --------------------------------------------------------------------------------------------
+    // Gangs
+    // --------------------------------------------------------------------------------------------
+    mysql_tquery_file(MySQL_GetHandle(), "gangs.sql");
+    Logger_Log("setting up 'gangs' table...");
+    Logger_Log("setting up 'gang_members' table...");
     return 1;
 }
+
