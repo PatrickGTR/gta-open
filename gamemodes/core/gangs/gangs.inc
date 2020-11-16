@@ -22,12 +22,13 @@ static
     GangColour[MAX_GANGS],
     GangLeader[MAX_GANGS];
 
-static 
+static
     Statement: stmt_CreateGang,
     Statement: stmt_InsertMember,
     Statement: stmt_DeleteMember,
     Statement: stmt_DeleteGang,
-    Statement: stmt_LoadGang;
+    Statement: stmt_LoadGang,
+    Statement: stmt_IsGangMember;
 
 hook OnMySQLConnected() {
 
@@ -36,6 +37,21 @@ hook OnMySQLConnected() {
     stmt_DeleteMember = MySQL_PrepareStatement(MySQL_GetHandle(), "DELETE FROM gang_members WHERE user_id = ?");
     stmt_DeleteGang = MySQL_PrepareStatement(MySQL_GetHandle(), "DELETE FROM gangs WHERE leader_uid = ? AND id = ?");
     stmt_LoadGang = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT id, leader_uid, name, colour, kills, deaths FROM gangs");
+
+    static const checkMember_Query[] = 
+    "SELECT \
+        gm.gang_id, \
+        gm.gang_rank, \
+        g.leader_uid \
+    FROM \
+        gang_members AS gm \
+    LEFT JOIN \
+        gangs AS g \
+    ON \
+        gm.gang_id = g.id \
+    WHERE \
+        gm.user_id = ?";
+    stmt_IsGangMember = MySQL_PrepareStatement(MySQL_GetHandle(), checkMember_Query);
 
     // Load Gang
     inline const OnLoadGang() {
@@ -54,7 +70,7 @@ hook OnMySQLConnected() {
         MySQL_BindResultInt(stmt_LoadGang, 4, gangKills);
         MySQL_BindResultInt(stmt_LoadGang, 5, gangDeaths);
 
-        new 
+        new
             freeID = 0;
         while(MySQL_Statement_FetchRow(stmt_LoadGang)) {
             freeID = Iter_Free(GangIndex);
@@ -66,15 +82,11 @@ hook OnMySQLConnected() {
 
             Gang_AddKills(freeID, gangKills);
             Gang_AddDeaths(freeID, gangDeaths);
-
-            printf("gangid: %i, leader: %i, name %s, colour: %i, kills: %i, deaths: %i", 
-                GangID[freeID], 
-                GangLeader[freeID], 
-                GangName[freeID], 
-                GangColour[freeID],
-                Gang_GetKills(freeID),
-                Gang_GetDeaths(freeID));
         }
+
+        Logger_Log("Gang Loaded",
+            Logger_I("total", Iter_Count(GangIndex) + 1)
+        );
     }
     MySQL_ExecuteThreaded_Inline(stmt_LoadGang, using inline OnLoadGang);
     return 1;
@@ -89,7 +101,27 @@ hook OnPlayerConnect(playerid) {
 }
 
 hook OnPlayerLogin(playerid) {
-    // TODO: Write loading code for players.
+    inline const OnMemberCheck() {
+
+        new 
+            gangID = INVALID_GANG_ID,
+            gangRank = 0,
+            gangLeaderUID;
+
+        MySQL_BindResultInt(stmt_IsGangMember, 0, gangID);
+        MySQL_BindResultInt(stmt_IsGangMember, 1, gangRank);
+        MySQL_BindResultInt(stmt_IsGangMember, 2, gangLeaderUID);
+        
+        if(MySQL_Statement_FetchRow(stmt_IsGangMember)) {
+
+            PlayerInGang[playerid] = true;
+            PlayerIsLeader[playerid] = (Player_GetAccountID(playerid) == gangLeaderUID) ? true : false;
+            PlayerInGangID[playerid] = gangID;
+        }
+    }
+
+    MySQL_BindInt(stmt_IsGangMember, 0, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded_Inline(stmt_IsGangMember, using inline OnMemberCheck);
     return 1;
 }
 
@@ -105,7 +137,7 @@ Gang_GetName(gangid, name[], len = sizeof(name)) {
         return;
     }
 
-    new 
+    new
         idx = INVALID_GANG_ID;
 
     foreach(idx : GangIndex) {
@@ -139,13 +171,13 @@ Gang_Create(playerid, const string:gangName[]) {
         return -1;
     }
 
-    new 
+    new
         fix_inline[MAX_GANG_NAME];
     strcpy(fix_inline, gangName);
 
     inline const CreateGang() {
         // Assign Data
-        new 
+        new
             idx = Iter_Free(GangIndex),
             gangID = cache_insert_id();
 
@@ -203,7 +235,7 @@ Gang_Disband(playerid, id) {
     }
 
     // reset gang data.
-    new 
+    new
         idx = INVALID_GANG_ID;
     foreach(idx : GangIndex) {
         if(id == GangID[idx]) {
@@ -230,12 +262,12 @@ Gang_AcceptInvite(playerid, &gangID, &gangColour, &inviterid, gangName[MAX_GANG_
         return 0;
     }
 
-    new 
+    new
         inviterID = InviterID[playerid];
 
    	// 			[To avoid confusion]
     // inviterid    == the player who initiated the invite.
-    // playerid     == the player who got invited. 
+    // playerid     == the player who got invited.
 
     if(IsPlayerConnected(inviterID)) {
         return -1;
@@ -294,10 +326,10 @@ Gang_Join(playerid, id) {
     if(id == INVALID_GANG_ID) {
         return 0;
     }
-    
+
     PlayerInGang[playerid] = true;
     PlayerInGangID[playerid] = id;
-    
+
     // Insert Data to database.
     MySQL_BindInt(stmt_InsertMember, 0, Player_GetAccountID(playerid)); // user id
     MySQL_ExecuteThreaded(stmt_InsertMember);
@@ -317,7 +349,7 @@ Gang_Leave(playerid) {
     PlayerInGangID[playerid] = INVALID_GANG_ID;
 
     // Delete Data to database.
-    MySQL_BindInt(stmt_DeleteMember, 0, Player_GetAccountID(playerid)); 
+    MySQL_BindInt(stmt_DeleteMember, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_DeleteMember);
     return 1;
 }
