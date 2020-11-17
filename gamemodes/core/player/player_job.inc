@@ -2,6 +2,7 @@
 
 static 
     PlayerJob[MAX_PLAYERS],
+    bool:PlayerNew[MAX_PLAYERS],
     Statement:stmt_savePlayerJob;
 
 static const JOB_LIST[] = "\
@@ -18,8 +19,14 @@ hook OnMySQLConnected() {
     return 1;
 }
 
+hook OnPlayerRegister(playerid) {
+    PlayerNew[playerid] = true;
+    return 1;
+}
+
 hook OnPlayerConnect(playerid) {
     PlayerJob[playerid] = TYPE_NO_JOB;
+    PlayerNew[playerid] = false;
 }
 
 // Functions
@@ -44,43 +51,55 @@ Player_ShowJobMenu(playerid) {
     if (Player_GetJob(playerid) != TYPE_NO_JOB)
         return 0;
     
-    new jobID;
     inline _response(ply_id, dialogid, response, listitem, string:inputtext[]) {
         #pragma unused ply_id, dialogid, inputtext
         if (!response) {
             SendErrorMsg(playerid, "You have to select a job!");
             return Player_ShowJobMenu(playerid);
         }
+        
+        new 
+            jobID,
+            title[24],
+            objective[64 + 24];
 
         switch(listitem) {
             case TYPE_DRUGDEALER:  {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Drug Dealer", "Your objective is to create drugs and sell them to earn profit!", 1000 * 10);
+                title = "~r~Drug Dealer";
+                objective = "Your objective is to create drugs and sell them to earn profit!";
                 jobID = TYPE_DRUGDEALER;
             }
             case TYPE_WEAPONDEALER: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Weapon Dealer", "Your objective is to sell any kind of weapons and sell them to earn profit!", 1000 * 10);
+                title = "~r~Weapon Dealer";
+                objective = "Your objective is to sell any kind of weapons and sell them to earn profit!";
                 jobID = TYPE_WEAPONDEALER;
             }
             case TYPE_HITMAN: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Hitman", "Your objective is to kill players with contract and earn a big amount of money!", 1000 * 10);
+                title = "~r~Hitman";
+                objective = "Your objective is to kill players with contract and earn a big amount of money!";
                 jobID = TYPE_HITMAN;
             }
             case TYPE_TERRORIST: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Terrorist", "Your objective is to plant bombs in cars, explode bank and prison entrances!", 1000 * 10);
+                title = "~r~Terrorist";
+                objective = "Your objective is to plant bombs in cars, explode bank and prison entrances!";
                 jobID = TYPE_TERRORIST;
             }
             case TYPE_RAPIST: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Rapist", "Your objective is to infect players with different sexually transmitted disseases!", 1000 * 10);
+                title = "~r~Rapist";
+                objective = "Your objective is to infect players with different sexually transmitted disseases!";
                 jobID = TYPE_RAPIST;
             }
             case TYPE_MECHANIC: {
-                MessageBox_Show(playerid, TYPE_INFORMATION, "~r~Mechanic", "Being mechanic allows you to repair your own vehicle and other player's vehicle!", 1000 * 10);
+                title = "~r~Mechanic";
+                objective = "Being mechanic allows you to repair your own vehicle and other player's vehicle!";
                 jobID = TYPE_MECHANIC;
             }
         }
+        MessageBox_Show(playerid, TYPE_INFORMATION, title, objective, 1000 * 10);
         Player_SetJob(playerid, jobID, true);
-        if(IsPlayerNewbie(playerid)) {
+        if(PlayerNew[playerid]) {
             Player_GiveJobWeapons(playerid);
+            PlayerNew[playerid] = false;
         }
     }
     Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_LIST, "Job Menu", JOB_LIST , "Choose", "Cancel");
@@ -150,9 +169,9 @@ stock Player_GiveJobWeapons(playerid) {
             GivePlayerWeapon(playerid, WEAPON_SNIPER,   200);
         }
         case TYPE_MECHANIC: {
-            GivePlayerWeapon(playerid, WEAPON_AK47, 200);
+            GivePlayerWeapon(playerid, WEAPON_AK47,     200);
             GivePlayerWeapon(playerid, WEAPON_SHOTGSPA, 200);
-            GivePlayerWeapon(playerid, WEAPON_COLT45, 200);
+            GivePlayerWeapon(playerid, WEAPON_COLT45,   200);
         }
     }
     return 1;

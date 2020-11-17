@@ -6,20 +6,22 @@ new
 
 hook OnPlayerDeath(playerid, killerid, reason)
 {
-    if(killerid != INVALID_PLAYER_ID && Player_IsLEO(killerid) && Player_GetWantedLevel(playerid) >= 3)
-    {
-        if(Player_GetWantedLevel(playerid) >= 10) {
-            foreach(new i : Player) {
-                if(Player_IsLEO(i)) {
-                    SendMsgF(playerid, COLOR_BLUE, "[POLICE TAKEDOWN]: %p (%d) has taken %p (%d) with brutal force", killerid, killerid, playerid, playerid);
-                    GivePlayerMoney(playerid, 5000);
+    if(killerid != INVALID_PLAYER_ID) {
+        if(Player_IsLEO(killerid) && Player_GetWantedLevel(playerid) >= 3) {
+            if(Player_GetWantedLevel(playerid) >= 10) {
+                foreach(new i : Player) {
+                    if(Player_IsLEO(i)) {
+                        SendMsgF(playerid, COLOR_BLUE, "[POLICE TAKEDOWN]: %p (%d) has taken %p (%d) with brutal force", killerid, killerid, playerid, playerid);
+                        GivePlayerMoney(playerid, 5000);
+                    }
                 }
             }
+            Player_GiveScore(killerid, 5, true);
+            Player_RemoveScore(playerid, 2);
+            DelaySendToJail(playerid);
         }
-        Player_GiveScore(killerid, 5, true);
-        Player_RemoveScore(playerid, 2);
-        DelaySendToJail(playerid);
     }
+    
     new closestleo = Player_GetClosestLeo(playerid);
     new Float:x, Float:y, Float:z;
     GetPlayerPos(closestleo, x, y, z);
@@ -116,10 +118,10 @@ stock void:Player_AwardArrest(playerid, targetid, bool:notify = true) {
     }
 
     if(money > 40000) {
-        dbg(PLAYER_DEBUG_HANDLER, "player arrest reward",
-            _p("playerid", playerid),
-            _p("targetid", targetid),
-            _i("amount", money)
+        Logger_Dbg(PLAYER_DEBUG_HANDLER, "player arrest reward",
+            Logger_P(playerid),
+            Logger_P(targetid),
+            Logger_I("amount", money)
         );
     }
 }

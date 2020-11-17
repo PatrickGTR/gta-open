@@ -1,36 +1,64 @@
+// SAMP
+#include <a_samp>
+
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 50
+
+// BCrypt
 #define BCRYPT_COST 12
+
+// Set to true if table aren't set up.
+#define SETUP_TABLE 			(false)
+#define DISCORD					(false)
+
+// MySQL Prepared Statement
+#define MYSQL_PREPARE_DEBUG 	(false)
+#define MAX_STATEMENTS 100
+
+// SA-MP Logger
+#define SAMP_LOGGER_COMPAT
+#define PLAYER_DEBUG_HANDLER    "player"
+#define SERVER_DEBUG_HANDLER    "server"
+#define ADMIN_DEBUG_HANDLER     "admin"
+
+// YSI
+#define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
+#define YSI_NO_OPTIMISATION_MESSAGE
+#define YSI_NO_VERSION_CHECK
+#define YSI_NO_HEAP_MALLOC
+#define YSI_NO_CACHE_MESSAGE
+
+// In-game settings / limits
 #define MAX_PLATE_NAME 24
 #define MAX_BAN_REASON 32
 #define MAX_VEHICLE_PER_PLAYER 2
 #define MAX_CRACK 5
 #define MAX_WEED 5
 
-#define YSI_NO_OPTIMISATION_MESSAGE
-#define YSI_NO_VERSION_CHECK
-#define YSI_NO_HEAP_MALLOC
-#define YSI_NO_CACHE_MESSAGE
+// Gang limits
+#define MAX_GANGS 12
+#define MAX_GANG_NAME 17 // 16 + 1
 
+// Server Settings
 #define SERVER_NAME 			"Grand Theft Open"
 #define SERVER_MODE 			"Cops and Robbers"
 #define SERVER_LANGUAGE			"English"
-#define SERVER_WEBSITE			"www.sa-mp.com"
+#define SERVER_WEBSITE			"www.open.mp"
 
 #define SCRIPT_VERSION_MAJOR	1
 #define SCRIPT_VERSION_MINOR	0
 #define SCRIPT_VERSION_PATCH	0
 
-
-#define PLAYER_DEBUG_HANDLER    "player"
-#define SERVER_DEBUG_HANDLER    "server"
-#define ADMIN_DEBUG_HANDLER     "admin"
-
+// Streamer
 #define TEXTLABEL_STREAMDISTANCE    (200)
 #define CHECKPOINT_STREAMDISTANCE   (200)
 #define MAPICON_STREAMDISTANCE      (500)
 
-// (dd, mm, yyyy)
+// Gang
+#define INVALID_GANG_ID (-1)
+#define INVALID_GANG_RANK   (0)
+
+// MySQL Datetime (dd, mm, yyyy)
 #define SQL_DATETIME_FORMAT     "%d %M %Y at %r"
 #define SQL_DATE_FORMAT         "%d %M %Y"
 

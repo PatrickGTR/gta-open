@@ -14,6 +14,8 @@
 // OnMySQLPreClose() -> called before MySQL disconnect (before mysql_close specifically.)
 // OnServerWeekReset() -> called when the in-game week resets.
 // OnServerDayReset() -> called when it's a new in-game day.
+// OnPlayerFirstSpawn(playerid) -> called when player spawns for the first time after initial connection.
+// OnPlayerAutoSave(playerid) -> called every 2 minutes for datas that need to be saved frequently.
 
 // Custom Functions
 // Player_GiveScore(playerid, score, bool:save = false) -> give player a score.
@@ -23,29 +25,32 @@
 // Letter-size-y = letter-size-x * 4
 // For a nice font display
 
-
-#include <a_samp>
-
-#define MYSQL_PREPARE_DEBUG 	(false)
-#define MAX_STATEMENTS 100
-#define SAMP_LOGGER_COMPAT
-
-#define CGEN_MEMORY (20000) // needs looking at, no clue why we had to increase this. YSI said so.
-
-// Set to true if table aren't set up.
-#define SETUP_TABLE 			(false)
-#define DISCORD					(false)
-#define WEAPON_DEBUG			(true)
-
+// Main
 #include <constants>
 
-#include <samp_bcrypt>
+// Libraries
 #include <a_mysql>
+#include <samp_bcrypt>
+
+// YSI
+#include <YSI_Core\y_utils>
 #include <YSI_Coding\y_inline>
 #include <YSI_Coding\y_timers>
+#include <YSI_Data\y_bit>
+#include <YSI_Data\y_iterate>
+
+#include <env>
+#include <streamer>
+#include <logger>
 #include <mysql_prepared>
 #include <map-zones>
 #include <formatex>
+
+// Gamemode Scripts
+
+#if SETUP_TABLE
+	#include <tables>
+#endif 
 
 #include <init>
 #include <utils>
@@ -61,15 +66,19 @@
 #include <cmds>
 #include <mapping>
 #include <tester>
-#if DISCORD
-	#include <discord>
-#endif
+
 #include <bank>
 #include <gangs>
 
 
 // Will be called after the rest ^
 public OnGameModeInit() {
+	Message_SetTime(5);
+    Message_Add("Welcome to GTA:OPEN");
+    Message_Add("You like GTA:OPEN? Add us to your favourites!");
+    Message_Add("Help keep the server alive by donating!");
+
+
 	SendRconCommand("hostname "#SERVER_NAME " v" #SCRIPT_VERSION_MAJOR "." #SCRIPT_VERSION_MINOR "." #SCRIPT_VERSION_PATCH);
 	SendRconCommand("gamemodetext "SERVER_MODE"");
 	SendRconCommand("language "SERVER_LANGUAGE"");
@@ -108,4 +117,9 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
 	}
 
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
+}
+
+CMD:kill(playerid) {
+	SetPlayerHealth(playerid, 0.0);
+	return 1;	
 }

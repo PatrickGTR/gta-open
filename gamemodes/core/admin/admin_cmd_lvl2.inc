@@ -6,7 +6,6 @@ ACMD:[2]jail(playerid, params[])
     SendMsgAllF(COLOR_MODERATION, "[ADMIN JAIL]: %p (%d) has been jailed for %d seconds", target, target, seconds);
     SendMsgAllF(COLOR_MODERATION, "Reason: %s", reason);
     SendMsgF(target, COLOR_MODERATION, "[ADMIN JAIL]: You have been jailed for %d Seconds", seconds);
-    SendAdminCmdUsage(playerid, "/jail", params);
     return 1;
 }
 
@@ -22,7 +21,6 @@ ACMD:[2]unjail(playerid, params[])
     if(!Player_InJail(targetid)) {
         return SendErrorMsg(playerid, "The player is not jailed!");
     }
-    SendAdminCmdUsage(playerid, "/unjail", params);
     SendMsgAllF(COLOR_MODERATION, "[UNJAIL]: %s %p (%d) has unjailed %p (%d)", Admin_GetRankName(playerid), playerid, playerid, targetid, targetid);
     Player_ReleaseFromJail(targetid);
     return 1;

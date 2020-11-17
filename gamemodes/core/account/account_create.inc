@@ -1,21 +1,10 @@
-
-#include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_hooks>
 
 static
-    Statement:stmt_insertPlayerAccount,
-    bool:PlayerFirstTime[MAX_PLAYERS];
-
-static
-    const RegisterDialogMessage[] = "Hello "C_GREY"%p. "C_WHITE"Welcome to "C_YELLOW"%s";
+    Statement:stmt_insertPlayerAccount;
 
 hook OnMySQLConnected() {
     stmt_insertPlayerAccount = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT INTO players (username, password) VALUES (?, ?)");
-    return 1;
-}
-
-hook OnPlayerConnect(playerid) {
-    PlayerFirstTime[playerid] = false;
     return 1;
 }
 
@@ -33,7 +22,11 @@ stock Account_PromptRegister(playerid) {
 
     new
         string[48 + MAX_PLAYER_NAME + 16];
-    format(string, sizeof(string), RegisterDialogMessage, playerid, SERVER_NAME);
+
+    static
+        const RegisterMessage[] = ""C_WHITE"Hello "C_GREY"%p. "C_WHITE"Welcome to "C_YELLOW"%s";
+
+    format(string, sizeof(string), RegisterMessage, playerid, SERVER_NAME);
 
     Dialog_ShowCallback(playerid,
         using inline _response, // handler
@@ -82,7 +75,6 @@ static Account_InsertToDatabase(playerid, const hash[]) {
         MessageBox_ShowF(playerid, TYPE_MSGBOX, msg_title, msg_content, 8000, playerid, SERVER_NAME);
 
         CallLocalFunction("OnPlayerRegister", "i", playerid);
-        PlayerFirstTime[playerid] = true;
         TogglePlayerSpectating(playerid, false);
         Player_SetLoginStatus(playerid, true);
         Class_SelectionState(playerid, true);
@@ -96,12 +88,4 @@ static Account_InsertToDatabase(playerid, const hash[]) {
     MySQL_Bind(stmt_insertPlayerAccount, 0, username);
     MySQL_Bind(stmt_insertPlayerAccount, 1, hash);
     MySQL_ExecuteThreaded_Inline(stmt_insertPlayerAccount, using inline OnRegister);
-}
-
-stock Player_New(playerid) {
-    return PlayerFirstTime[playerid];
-}
-
-stock Player_SetNew(playerid, bool:status) {
-    PlayerFirstTime[playerid] = status;
 }

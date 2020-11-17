@@ -78,7 +78,7 @@ hook OnPlayerText(playerid, text[]) {
 						CallLocalFunction(TextMenuCallbackHandler[playerid], "ii", playerid, value);
 						return ~0; // stop the hook from caryying on and don't show the input to players.
 					} else {
-						log("ui_tdmenu.inc - SEVERE! - empty string passed to CallLocalFunction.");
+						Logger_Log("ui_tdmenu.inc - SEVERE! - empty string passed to CallLocalFunction.");
 					}
 			    }
 			}
@@ -232,7 +232,7 @@ stock TextInfo_Show(playerid)
 
 	new
 		string[1024];
-	format(string, sizeof(string), "~n~%s~n~~n~~w~___________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
+	format(string, sizeof(string), "~n~%s~n~~n~~w~_________________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
 	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
 	
 	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);

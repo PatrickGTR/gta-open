@@ -70,7 +70,6 @@ ACMD:[2]tempban(playerid, params[])
         SendMsgAllF(COLOR_MODERATION, "[ACCOUNT DISABLED]: %p (%d) has been banned for %s", targetid, targetid, reason);
         SendMsgF(targetid, COLOR_MODERATION, "[ACCOUNT DISABLED]: You have been banned by an Admin for %s", reason);
         defer KickTimer(targetid);
-        SendAdminCmdUsage(playerid, "/tempban", params);
     }
     return 1;
 }
@@ -120,7 +119,6 @@ ACMD:[2]offban(playerid, params[])
     }
 
     if(success) {
-        SendAdminCmdUsage(playerid, "/offban", params);
     }
     return 1;
 }
@@ -135,6 +133,5 @@ ACMD:[3]unban(playerid, params[])
     }
 
     Ban_RemoveUser(params, playerid);
-    SendAdminCmdUsage(playerid, "/unban", params);
     return 1;
 }

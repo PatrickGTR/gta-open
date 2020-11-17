@@ -1,5 +1,3 @@
-#include <streamer>
-#include <YSI_Data\y_iterate>
 #include <YSI_Coding\y_hooks>
 
 #define MAX_HOUSES              (100)

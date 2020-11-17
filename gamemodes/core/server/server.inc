@@ -3,14 +3,9 @@
 #include <server_wanted-level>
 #include <server_time>
 #include <server_shop-items>
+#include <server_msgs>
 
 #include <dealership>
-
-#if SETUP_TABLE
-	#include <server_weap-setup-table>
-#endif
-
-#include <server_savingweap>
 
 #include <YSI_Coding\y_hooks>
 enum E_ENTRANCE_DATA
@@ -97,7 +92,7 @@ hook OnGameModeInit() {
 
 		if(!strcmp("[GROTTI]", storeData[i][E_STORE_NAME], true)) {
 			// populate grotti dealership.
-			log("populating [GROTTI] with vehicles.");
+			Logger_Log("populating [GROTTI] with vehicles.");
 
 			vehicleid = CreateVehicle(411,846.7003,-966.7253,1089.8379,154.6938, 1, 1, (60 * 2), 0); // Infernus
 			SetVehicleVirtualWorld(vehicleid, vwID);

@@ -30,7 +30,6 @@ ACMD:[1]acmds(playerid, params[])
 		strcat(tmp_string, "\n\n"C_YELLOW"(level 1)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[0]);
 	}
-	SendAdminCmdUsage(playerid, "/acmds", params);
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Admin Commands List", tmp_string, "Close", "");
 	return 1;
 }
@@ -105,7 +104,6 @@ ACMD:[1]get(playerid, params[])
 	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
 	GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
 	SetPlayerPos(targetid, pos[0], pos[1], pos[2]);
-	SendAdminCmdUsage(playerid, "/get", params);
 	return 1;
 }
 
@@ -122,7 +120,6 @@ ACMD:[1]goto(playerid, params[])
 	SetPlayerInterior(playerid, GetPlayerInterior(target));
 	GetPlayerPos(target, pos[0], pos[1], pos[2]);
 	SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
-	SendAdminCmdUsage(playerid, "/goto", params);
 	return 1;
 }
 
@@ -136,7 +133,6 @@ ACMD:[1]kick(playerid, params[])
 	SendMsgAllF(COLOR_MODERATION, "[ADMIN KICK]: %p (%d) has been kicked for: %s", target, target, reason);
 	SendMsgF(target, COLOR_MODERATION, "[ADMIN KICK]: You have Been Kicked for Reason: %s", reason);
 	defer KickTimer(target);
-	SendAdminCmdUsage(playerid, "/kick", params);
 	return 1;
 }
 
@@ -153,7 +149,6 @@ ACMD:[1]setwanted(playerid, params[])
 	PLAYER_SetPlayerWantedLevel(target, level);
 	SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s wanted level has been set to %d", target, target, level);
 	SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your wanted level has been set to %d by Admin", level);
-	SendAdminCmdUsage(playerid, "/setwanted", params);
 	return 1;
 }
 
@@ -162,7 +157,6 @@ ACMD:[1]asay(playerid, params[])
 	new text[128];
 	if(sscanf(params, "s[128]", text)) return SendSyntaxMsg(playerid, "/asay (text)");
 	SendMsgAllF(COLOR_MODERATION, "[ADMIN]: %s", text);
-	SendAdminCmdUsage(playerid, "/asay", params);
 	return 1;
 }
 
@@ -172,7 +166,6 @@ ACMD:[1]respawn(playerid, params[])
 	if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/respawn (name/id)");
 	TogglePlayerSpectating(target, true);
 	ForceSpawnPlayer(target);
-	SendAdminCmdUsage(playerid, "/respawn", params);
 	return 1;
 }
 
@@ -192,7 +185,6 @@ ACMD:[1]freeze(playerid, params[])
 		TogglePlayerControllable(target, true);
 		SendMsgAllF(COLOR_MODERATION, "[ADMIN UNFREEZE]: %p (%d) has been unfreezed by an Admin", target, target);
 	}
-	SendAdminCmdUsage(playerid, "/freeze", params);
  	return 1;
 }
 
@@ -206,7 +198,6 @@ ACMD:[1]akill(playerid, params[])
 	GetPlayerPos(target, x, y, z);
 	SendMsgAllF(COLOR_BROWN, "%p (%d) Has Died by the Hand Of God", target, target);
 	CreateExplosion(x, y, z, 12, 10.0);
-	SendAdminCmdUsage(playerid, "/akill", params);
 	return 1;
 }
 
@@ -214,6 +205,5 @@ ACMD:[1]afix(playerid, params[])
 {
 	if(!IsPlayerInAnyVehicle(playerid)) return SendErrorMsg(playerid, "You're not in any vehicle");
 	RepairVehicle(GetPlayerVehicleID(playerid));
-	SendAdminCmdUsage(playerid, "/afix", params);
 	return 1;
 }
