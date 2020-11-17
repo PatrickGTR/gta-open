@@ -3,7 +3,6 @@
 
 #include <YSI_Coding\y_hooks>
 
-
 #define INVALID_GANG_ID (-1)
 
 static
@@ -102,20 +101,18 @@ hook OnPlayerConnect(playerid) {
 
 hook OnPlayerLogin(playerid) {
     inline const OnMemberCheck() {
-
         new 
             gangID = INVALID_GANG_ID,
             gangRank = 0,
-            gangLeaderUID;
+            gangLeaderUID = INVALID_PLAYER_ID;
 
         MySQL_BindResultInt(stmt_IsGangMember, 0, gangID);
         MySQL_BindResultInt(stmt_IsGangMember, 1, gangRank);
         MySQL_BindResultInt(stmt_IsGangMember, 2, gangLeaderUID);
         
         if(MySQL_Statement_FetchRow(stmt_IsGangMember)) {
-
             PlayerInGang[playerid] = true;
-            PlayerIsLeader[playerid] = (Player_GetAccountID(playerid) == gangLeaderUID) ? true : false;
+            PlayerIsLeader[playerid] = (Player_GetAccountID(playerid) == gangLeaderUID);
             PlayerInGangID[playerid] = gangID;
         }
     }
@@ -353,6 +350,5 @@ Gang_Leave(playerid) {
     MySQL_ExecuteThreaded(stmt_DeleteMember);
     return 1;
 }
-
 
 #include <gang_stats>

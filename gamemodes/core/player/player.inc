@@ -7,6 +7,7 @@
 #include <player_arrest>
 #include <player_animations>
 #include <player_skin>
+#include <player_crimes>
 
 #include <player_hitpoint-save>
 #include <player_weapon-save>
