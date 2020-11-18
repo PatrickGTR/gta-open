@@ -16,7 +16,6 @@
 #define MAX_STATEMENTS 100
 
 // SA-MP Logger
-#define SAMP_LOGGER_COMPAT
 #define PLAYER_DEBUG_HANDLER    "player"
 #define SERVER_DEBUG_HANDLER    "server"
 #define ADMIN_DEBUG_HANDLER     "admin"
@@ -29,14 +28,15 @@
 #define YSI_NO_CACHE_MESSAGE
 
 // In-game settings / limits
-#define MAX_PLATE_NAME 24
-#define MAX_BAN_REASON 32
-#define MAX_VEHICLE_PER_PLAYER 2
-#define MAX_CRACK 5
-#define MAX_WEED 5
+#define MAX_PLATE_NAME          24
+#define MAX_BAN_REASON          32
+#define MAX_VEHICLE_PER_PLAYER  2
+#define MAX_CRACK               5
+#define MAX_WEED                5
+#define MAX_ATMS                50
 
 // Gang limits
-#define MAX_GANGS 12
+#define MAX_GANGS 10
 #define MAX_GANG_NAME 17 // 16 + 1
 
 // Server Settings

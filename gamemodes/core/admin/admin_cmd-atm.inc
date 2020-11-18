@@ -1,7 +1,6 @@
 #include <YSI_Coding\y_hooks>
 #include <YSI_Coding\y_iterate>
 
-#define MAX_ATMS 		(100)
 #define randomEx(%1,%2) (random(%2)+%1)
 
 // Statements

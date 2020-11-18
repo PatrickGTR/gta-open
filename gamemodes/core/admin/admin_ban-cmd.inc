@@ -11,8 +11,6 @@ ACMD:[2]tempban(playerid, params[])
         bool:success = false,
         interval = -1;
 
-
-
     if (!strcmp(params, "d", true, 1)) {
         if (sscanf(params, "{s[2]}riS(Not specified)["#MAX_BAN_REASON"]", targetid, duration, reason)) {
             return SendSyntaxMsg(playerid, "/tempban d <playerid> <duration> <reason>");
