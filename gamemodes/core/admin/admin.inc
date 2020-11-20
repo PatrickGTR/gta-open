@@ -21,7 +21,7 @@
 // #include <admin_remove-account>
 // #include <admin_cmd_lvl5>
 
-// #include <admin_cmd-atm>
+ #include <admin_cmd-atm>
 // #include <rcon_cmd>
 // #include <fly_cmd>
 #include <admin_player-accuracy>

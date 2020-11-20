@@ -1,1 +1,339 @@
 #include <YSI_Coding\y_hooks>
+
+#define INVALID_ATM_ID (-1)
+
+// Prepared Statements
+static
+    Statement: stmt_InsertATM,
+    Statement: stmt_RemoveATM,
+    Statement: stmt_LoadATM,
+    Statement: stmt_UpdateATM;
+
+// ATM
+static
+    Iterator:ATMIndex<MAX_ATMS>,
+    ATM_ObjectID[MAX_ATMS],
+    ATM_ID[MAX_ATMS],
+    Float: ATM_X[MAX_ATMS],
+    Float: ATM_Y[MAX_ATMS],
+    Float: ATM_Z[MAX_ATMS],
+    Float: ATM_RX[MAX_ATMS],
+    Float: ATM_RY[MAX_ATMS],
+    Float: ATM_RZ[MAX_ATMS],
+    ATM_World[MAX_ATMS],
+    ATM_Interior[MAX_ATMS];
+// ATM Editing State
+static
+    PlayerEditingATM[MAX_PLAYERS] = INVALID_ATM_ID,
+    bool:PlayerIsEditingATM[MAX_PLAYERS] = false;
+
+hook OnPlayerConnect(playerid) {
+    PlayerEditingATM[playerid] = INVALID_ATM_ID;
+    PlayerIsEditingATM[playerid] = false;
+    return 1;
+}
+
+hook OnMySQLConnected() {
+	static const insertQuery[] = "\
+	INSERT INTO \
+		atms (atm_x, atm_y, atm_z, wid, interior) \
+	VALUES \
+		(?, ?, ?, ?, ?) \
+	";
+	stmt_InsertATM = MySQL_PrepareStatement(MySQL_GetHandle(), insertQuery);
+
+    static const
+        deleteQuery[] = "DELETE FROM atms WHERE atm_id = ?";
+    stmt_RemoveATM = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
+
+    static const loadQuery[] = "\
+        SELECT \
+            atm_id, \
+            atm_x, \
+            atm_y, \
+            atm_z, \
+            rx, \
+            ry, \
+            rz, \
+            wid, \
+            interior \
+        FROM \
+            atms \
+    ";
+	stmt_LoadATM = MySQL_PrepareStatement(MySQL_GetHandle(), loadQuery);
+
+    static const updateQuery[] = "\
+    UPDATE \
+        atms \
+    SET \
+        atm_x = ?, \
+        atm_y = ?, \
+        atm_z = ?, \
+        rx = ?, \
+        ry = ?, \
+        rz = ?, \
+        wid = ?, \
+        interior = ? \
+    WHERE \
+        atm_id = ?";
+
+    stmt_UpdateATM = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);
+
+    // LOAD ATM
+    inline const OnATMLoad() {
+        new
+            atmID,
+            Float:x,
+            Float:y,
+            Float:z,
+            Float:rx,
+            Float:ry,
+            Float:rz,
+            world,
+            interior;
+
+        MySQL_BindResultInt(stmt_LoadATM, 0, atmID);
+        MySQL_BindResultFloat(stmt_LoadATM, 1, x);
+        MySQL_BindResultFloat(stmt_LoadATM, 2, y);
+        MySQL_BindResultFloat(stmt_LoadATM, 3, z);
+
+        MySQL_BindResultFloat(stmt_LoadATM, 4, rx);
+        MySQL_BindResultFloat(stmt_LoadATM, 5, ry);
+        MySQL_BindResultFloat(stmt_LoadATM, 6, rz);
+
+        MySQL_BindResultInt(stmt_LoadATM, 7, world);
+        MySQL_BindResultInt(stmt_LoadATM, 8, interior);
+
+        new
+            idx = INVALID_ATM_ID;
+        while(MySQL_Statement_FetchRow(stmt_LoadATM)) {
+            idx = Iter_Alloc(ATMIndex);
+
+            ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
+            ATM_ID[idx] = atmID;
+            ATM_X[idx] = x;
+            ATM_Y[idx] = y;
+            ATM_Z[idx] = z;
+            ATM_RX[idx] = rx;
+            ATM_RY[idx] = ry;
+            ATM_RZ[idx] = rz;
+            ATM_World[idx] = world;
+            ATM_Interior[idx] = interior;
+            Iter_Add(ATMIndex, idx);
+
+            Logger_Dbg("server-atm", "[OnMySQLConnected / server_atm.inc] atm loaded",
+                Logger_I("atm id", atmID),
+                Logger_F("x", x),
+                Logger_F("y", y),
+                Logger_F("z", z),
+                Logger_F("rx", rx),
+                Logger_F("ry", ry),
+                Logger_F("rz", rz),
+                Logger_I("world", world),
+                Logger_I("interior", interior)
+            );
+        }
+    }
+    MySQL_ExecuteThreaded_Inline(stmt_LoadATM, using inline OnATMLoad);
+    return 1;
+}
+
+hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz) {
+    new
+        Float:oldX,
+        Float:oldY,
+        Float:oldZ,
+        Float:oldRotX,
+        Float:oldRotY,
+        Float:oldRotZ;
+
+	GetDynamicObjectPos(objectid, oldX, oldY, oldZ);
+	GetDynamicObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
+
+
+    if(response == EDIT_RESPONSE_FINAL && PlayerIsEditingATM[playerid]) {
+        ATM_Update(PlayerEditingATM[playerid], x, y, z, rx, ry, rz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+        PlayerIsEditingATM[playerid] = false;
+    }
+    if(response == EDIT_RESPONSE_CANCEL) {
+        if(PlayerIsEditingATM[playerid]) {
+            PlayerIsEditingATM[playerid] = false;
+        }
+
+        SetObjectPos(objectid, oldX, oldY, oldZ);
+		SetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
+    }
+    return 1;
+}
+
+
+// returns
+// 0 -> if atmID provided is invalid.
+// 1 -> if atmID is valid, proceed deletion.
+stock ATM_Delete(atmID) {
+
+    new
+        idx = INVALID_ATM_ID,
+        bool:found = false;
+    // finding the index based on ATM MYSQL ID.
+    foreach(new i : ATMIndex) {
+        if(ATM_ID[i] == atmID) {
+            idx = i;
+            found = true;
+            break;
+        }
+    }
+
+    if(!found) {
+        return 0;
+    }
+
+    // remove from database.
+    MySQL_BindInt(stmt_RemoveATM, 0, atmID);
+    MySQL_ExecuteThreaded(stmt_RemoveATM);
+
+    // reset data.
+    DestroyDynamicObject(ATM_ObjectID[idx]);
+
+    ATM_ID[idx] = INVALID_ATM_ID;
+    ATM_X[idx] =
+    ATM_Y[idx] =
+    ATM_Z[idx] =
+    ATM_RX[idx] =
+    ATM_RY[idx] =
+    ATM_RZ[idx] = 0.0;
+    ATM_World[idx] =
+    ATM_Interior[idx] = 0;
+    Iter_Remove(ATMIndex, idx);
+
+    Logger_Dbg(
+        "server-atm",
+        "[ATM_Delete / server_atm.inc] atm deleted",
+        Logger_I("atm id", atmID)
+    );
+    return 1;
+}
+
+// returns
+// 0 -> atmIndex == invalid;
+// 1 -> success
+stock ATM_Edit(playerid, atmIndex) {
+    if(atmIndex == ITER_NONE) {
+        return 0;
+    }
+
+    EditDynamicObject(playerid, ATM_ObjectID[atmIndex]);
+    PlayerEditingATM[playerid] = ATM_ID[atmIndex];
+    PlayerIsEditingATM[playerid] =  true;
+    return 1;
+}
+
+//
+stock ATM_Update(atmID,
+    Float: x,
+    Float: y,
+    Float: z,
+    Float: rx,
+    Float: ry,
+    Float: rz,
+    world,
+    interior
+) {
+
+    new
+        idx = INVALID_ATM_ID;
+    // finding the index based on ATM MYSQL ID.
+    foreach(new i : ATMIndex) {
+        if(ATM_ID[i] == atmID) {
+            idx = i;
+            break;
+        }
+    }
+
+   // update database
+    MySQL_BindFloat(stmt_UpdateATM, 0, x);
+    MySQL_BindFloat(stmt_UpdateATM, 1, y);
+    MySQL_BindFloat(stmt_UpdateATM, 2, z);
+    MySQL_BindFloat(stmt_UpdateATM, 3, rx);
+    MySQL_BindFloat(stmt_UpdateATM, 4, ry);
+    MySQL_BindFloat(stmt_UpdateATM, 5, rz);
+    MySQL_BindInt(stmt_UpdateATM, 6, world);
+    MySQL_BindInt(stmt_UpdateATM, 7, interior);
+    MySQL_BindInt(stmt_UpdateATM, 8, atmID);
+    MySQL_ExecuteThreaded(stmt_UpdateATM);
+
+    // update Data
+    DestroyDynamicObject(ATM_ObjectID[idx]);
+    ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
+
+    ATM_X[idx] = x;
+    ATM_Y[idx] = y;
+    ATM_Z[idx] = z;
+    ATM_RX[idx] = rx;
+    ATM_RY[idx] = ry;
+    ATM_RZ[idx] = rz;
+    ATM_World[idx] = world;
+    ATM_Interior[idx] = interior;
+
+    Logger_Dbg("server-atm", "[ATM_Update / server_atm.inc] atm edited",
+        Logger_I("atm id", atmID),
+        Logger_F("x", x),
+        Logger_F("y", y),
+        Logger_F("z", z),
+        Logger_F("rx", rx),
+        Logger_F("ry", ry),
+        Logger_F("rz", rz),
+        Logger_I("world", world),
+        Logger_I("interior", interior)
+    );
+    return;
+}
+
+// returns
+// -1 -> all slots used
+// if success, function returns the new id found.
+stock ATM_Create(Float: x, Float: y, Float: z, Float:ang, world, interior) {
+
+    // finding new id.
+    new
+        idx = Iter_Alloc(ATMIndex);
+
+    if(idx == ITER_NONE) {
+        Logger_Dbg("server-atm", "[ATM_Create / server_atm.inc] MAX_ATM limit reached.");
+        return -1;
+    }
+
+    inline const OnATMCreated() {
+        // assign data.
+        new
+            atmID = cache_insert_id();
+
+        ATM_ID[idx] = atmID;
+        ATM_X[idx] = x;
+        ATM_Y[idx] = y;
+        ATM_Z[idx] = z;
+        ATM_RX[idx] =
+        ATM_RY[idx] =
+        ATM_RZ[idx] = 0.0;
+        ATM_World[idx] = world;
+        ATM_Interior[idx] = interior;
+        Iter_Add(ATMIndex, idx);
+
+        Logger_Dbg(
+            "server-atm",
+            "[ATM_Create / server_atm.inc] atm created",
+            Logger_I("atm id", atmID)
+        );
+    }
+    // Creating object
+    ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y + 2.0, z, 0.0, 0.0, ang, world, interior, -1, 300.0);
+
+    // Insert data to database.
+    MySQL_BindFloat(stmt_InsertATM, 0, x);
+    MySQL_BindFloat(stmt_InsertATM, 1, y);
+    MySQL_BindFloat(stmt_InsertATM, 2, z);
+    MySQL_BindInt(stmt_InsertATM, 3, world);
+    MySQL_BindInt(stmt_InsertATM, 4, interior);
+    MySQL_ExecuteParallel_Inline(stmt_InsertATM, using inline OnATMCreated);
+    return idx;
+}
