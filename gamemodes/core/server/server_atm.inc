@@ -13,6 +13,7 @@ static
 static
     Iterator:ATMIndex<MAX_ATMS>,
     ATM_ObjectID[MAX_ATMS],
+    Text3D:ATM_Label[MAX_ATMS],
     ATM_ID[MAX_ATMS],
     Float: ATM_X[MAX_ATMS],
     Float: ATM_Y[MAX_ATMS],
@@ -105,11 +106,16 @@ hook OnMySQLConnected() {
         MySQL_BindResultInt(stmt_LoadATM, 8, interior);
 
         new
-            idx = INVALID_ATM_ID;
+            idx = INVALID_ATM_ID,
+            label[24];
         while(MySQL_Statement_FetchRow(stmt_LoadATM)) {
             idx = Iter_Alloc(ATMIndex);
 
             ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
+
+            format(label, sizeof(label), "ATM ID "C_GREEN"%i", atmID);
+            ATM_Label[idx] = Create3DTextLabel(label, COLOR_YELLOW, x, y, z + 1.5, 300.0, world);
+
             ATM_ID[idx] = atmID;
             ATM_X[idx] = x;
             ATM_Y[idx] = y;
@@ -149,7 +155,6 @@ hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z,
 
 	GetDynamicObjectPos(objectid, oldX, oldY, oldZ);
 	GetDynamicObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
-
 
     if(response == EDIT_RESPONSE_FINAL && PlayerIsEditingATM[playerid]) {
         ATM_Update(PlayerEditingATM[playerid], x, y, z, rx, ry, rz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
@@ -214,11 +219,23 @@ stock ATM_Delete(atmID) {
     return 1;
 }
 
+stock ATM_FindIndexIDBySQLID(sqlID) {
+    new
+        idx = INVALID_ATM_ID;
+    foreach(idx : ATMIndex) {
+        if(ATM_ID[idx] == sqlID) {
+            return idx;
+        }
+    }
+    return INVALID_ATM_ID;
+}
+
 // returns
-// 0 -> atmIndex == invalid;
+// 0 -> atmIndex == invalid
+// -1 -> atmID == invalid
 // 1 -> success
 stock ATM_Edit(playerid, atmIndex) {
-    if(atmIndex == ITER_NONE) {
+    if(atmIndex == INVALID_ATM_ID) {
         return 0;
     }
 
@@ -241,14 +258,25 @@ stock ATM_Update(atmID,
 ) {
 
     new
-        idx = INVALID_ATM_ID;
-    // finding the index based on ATM MYSQL ID.
-    foreach(new i : ATMIndex) {
-        if(ATM_ID[i] == atmID) {
-            idx = i;
-            break;
-        }
-    }
+        idx = ATM_FindIndexIDBySQLID(atmID);
+
+    // update data
+    DestroyDynamicObject(ATM_ObjectID[idx]);
+    ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
+
+    new
+        label[24];
+    format(label, sizeof(label), "ATM ID "C_GREEN"%i", atmID);
+    UpdateDynamic3DTextLabelText(ATM_Label[idx], COLOR_YELLOW, label);
+
+    ATM_X[idx] = x;
+    ATM_Y[idx] = y;
+    ATM_Z[idx] = z;
+    ATM_RX[idx] = rx;
+    ATM_RY[idx] = ry;
+    ATM_RZ[idx] = rz;
+    ATM_World[idx] = world;
+    ATM_Interior[idx] = interior;
 
    // update database
     MySQL_BindFloat(stmt_UpdateATM, 0, x);
@@ -261,19 +289,6 @@ stock ATM_Update(atmID,
     MySQL_BindInt(stmt_UpdateATM, 7, interior);
     MySQL_BindInt(stmt_UpdateATM, 8, atmID);
     MySQL_ExecuteThreaded(stmt_UpdateATM);
-
-    // update Data
-    DestroyDynamicObject(ATM_ObjectID[idx]);
-    ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
-
-    ATM_X[idx] = x;
-    ATM_Y[idx] = y;
-    ATM_Z[idx] = z;
-    ATM_RX[idx] = rx;
-    ATM_RY[idx] = ry;
-    ATM_RZ[idx] = rz;
-    ATM_World[idx] = world;
-    ATM_Interior[idx] = interior;
 
     Logger_Dbg("server-atm", "[ATM_Update / server_atm.inc] atm edited",
         Logger_I("atm id", atmID),
@@ -322,11 +337,17 @@ stock ATM_Create(Float: x, Float: y, Float: z, Float:ang, world, interior) {
         Logger_Dbg(
             "server-atm",
             "[ATM_Create / server_atm.inc] atm created",
-            Logger_I("atm id", atmID)
+            Logger_I("atm id", atmID),
+            Logger_F("x", x),
+            Logger_F("y", y),
+            Logger_F("z", z),
+            Logger_I("world", world),
+            Logger_I("interior", interior)
         );
     }
     // Creating object
     ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y + 2.0, z, 0.0, 0.0, ang, world, interior, -1, 300.0);
+    ATM_Label[idx] = Create3DTextLabel("Creation in progress...", COLOR_YELLOW, x, y, z + 1.5, 300.0, world);
 
     // Insert data to database.
     MySQL_BindFloat(stmt_InsertATM, 0, x);

@@ -26,9 +26,27 @@ timer DelayEdit[1500](playerid, ret) {
     ATM_Edit(playerid, ret);
 }
 
+ACMD:[5]editatm(playerid, params[]) {
+    if(isnull(params)) {
+        return SendSyntaxMsg(playerid, "/editatm <atm id>");
+    }
+
+    if(!isnumeric(params)) {
+        return SendErrorMsg(playerid, "Invalid input.");
+    }
+
+    new
+        atmID = strval(params);
+
+    if(!ATM_Edit(playerid, ATM_FindIndexIDBySQLID(atmID))) {
+        return SendErrorMsg(playerid, "Invalid ATM ID.");
+    }
+    return 1;
+}
+
 ACMD:[5]deleteatm(playerid, params[]) {
     if(isnull(params)) {
-        return SendErrorMsg(playerid, "/deleteatm <atm id>");
+        return SendSyntaxMsg(playerid, "/deleteatm <atm id>");
     }
 
     if(!isnumeric(params)) {

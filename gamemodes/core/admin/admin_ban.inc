@@ -73,7 +73,7 @@ Ban_AddUser(playerid, byid = INVALID_PLAYER_ID, reason[], interval_type, bandura
 
 void:OffBan_AddUser(const username[], byid = INVALID_PLAYER_ID, reason[], interval_type, banduration)
 {
-    new 
+    new
         banusername[MAX_PLAYER_NAME],
         string[512],
         bannerName[MAX_PLAYER_NAME],
