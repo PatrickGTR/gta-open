@@ -24,22 +24,22 @@ Message_Add(const message[]) {
     }
 
 
-    Logger_Dbg(SERVER_DEBUG_HANDLER, "[Message_Add / server_msgs.inc] Message added", 
-        Logger_S("message", message), 
+    Logger_Dbg(SERVER_DEBUG_HANDLER, "[Message_Add / server_msgs.inc] Message added",
+        Logger_S("message", message),
         Logger_I("id", MessageCount)
     );
 
     strcpy(Messages[MessageCount], message, 128);
-    
+
     MessageCount ++;
     return 1;
 }
 
-static 
+static
     lastIndex = -1;
 task AutoSendMessage[MessageTime]() {
 
-    new 
+    new
         idx = random(MessageCount);
 
     // regenerate new id.
@@ -47,7 +47,7 @@ task AutoSendMessage[MessageTime]() {
         idx = random(MessageCount);
     }
 
-    SendMsgAllF(COLOR_RED, "Automated Message: "C_WHITE"%s", Messages[clamp(idx, 0, MessageCount)]);
+    SendMsgAllF(COLOR_RED, "%s", Messages[clamp(idx, 0, MessageCount)]);
 
     lastIndex = idx;
 }
