@@ -51,8 +51,3 @@ task AutoSendMessage[MessageTime]() {
 
     lastIndex = idx;
 }
-
-CMD:forcemsg(playerid, params[]) {
-    AutoSendMessage();
-    return 1;
-}

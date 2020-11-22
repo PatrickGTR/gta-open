@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     gShotNearPoliceTick[MAX_PLAYERS],
     gShotPoliceTick[MAX_PLAYERS];
 
@@ -10,14 +10,41 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
+// Store Robbery
+
+hook OnPlayerRobStore(playerid, moneyTaken) {
+    new
+        string[MAX_MAP_ZONE_NAME];
+
+    format(string, sizeof(string), "~g~+ ~w~%m", moneyTaken);
+    GameTextForPlayer(playerid, string, 6000, 1);
+
+
+    Player_GetLocation(playerid, string, sizeof(string));
+    SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from "C_YELLOW"%s "C_WHITE"in "C_GREY"%s.", playerid, playerid, moneyTaken, Entrance_PlayerIn(playerid), string);
+
+    GivePlayerMoney(playerid, moneyTaken);
+    Player_GiveWantedLevel(playerid, 4);
+}
+
+// Player Roberry
+hook OnPlayerRobPlayer(playerid, targetid, moneyTaken) {
+    SendMsgF(playerid, COLOR_ORANGE, "(player robbery) "C_WHITE"You managed to rob "C_GREY"%p (%i) "C_WHITE"and found "C_GREEN"%m "C_WHITE"in his wallet.", targetid, targetid, moneyTaken);
+    SendMsgF(targetid, COLOR_ORANGE, "(player robbery) "C_WHITE"You have been robbed by "C_GREY"%p (%i) "C_WHITE"and found "C_GREEN"%m "C_WHITE"in your wallet.", playerid, playerid, moneyTaken);
+
+    GivePlayerMoney(targetid, -moneyTaken);
+    GivePlayerMoney(playerid, moneyTaken);
+    Player_GiveWantedLevel(playerid, 4);
+}
+
 // Shooting near a cop
 hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ) {
     // disallow spam, only increase wanted every after 2 minutes.
     if(Player_GetClass(playerid) == TEAM_CIVILIAN) {
-        new 
+        new
             closestID = Player_GetClosestLeo(playerid),
-            Float:x, 
-            Float:y, 
+            Float:x,
+            Float:y,
             Float:z;
         GetPlayerPos(closestID, x, y, z);
         if(IsPlayerInRangeOfPoint(playerid, 20.0, x, y, z)) {
@@ -28,9 +55,9 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
             }
             gShotNearPoliceTick[playerid] = gettime();
         }
-        
+
     }
-    return 1;    
+    return 1;
 }
 
 // Shooting a cop detection.

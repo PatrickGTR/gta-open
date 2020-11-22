@@ -101,17 +101,7 @@ public OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type) {
     switch(type) {
         case TYPE_SUCCESS:
         {
-
-            new
-                string[MAX_MAP_ZONE_NAME];
-            format(string, sizeof(string), "~g~+ ~w~%m", robbedmoney);
-            GameTextForPlayer(playerid, string, 6000, 1);
-
-
-            Player_GetLocation(playerid, string, sizeof(string));
-            SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from "C_YELLOW"%s "C_WHITE"in "C_GREY"%s.", playerid, playerid, robbedmoney, Entrance_PlayerIn(playerid), string);
-
-            GivePlayerMoney(playerid, robbedmoney);
+            CallLocalFunction("OnPlayerRobStore", "ii", playerid, robbedmoney);
         }
         case TYPE_FAILED:
         {

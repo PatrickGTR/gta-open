@@ -40,15 +40,10 @@ CMD:rob(playerid, params[])
         SendMsgF(targetid, COLOR_ORANGE, "(player robbery) "C_GREY"%p (%i) "C_WHITE"attempted to rob you but failed, chase him!", playerid, playerid);
         return 1;
     }
-
     new
         robbedcash = random( (GetPlayerMoney(targetid) / 100) * 5 ) + 500; //5% + 500 min of player's money.
 
-    SendMsgF(playerid, COLOR_ORANGE, "(player robbery) "C_WHITE"You managed to rob "C_GREY"%p (%i) "C_WHITE"and found "C_GREEN"%m "C_WHITE"in his wallet.", targetid, targetid, robbedcash);
-    SendMsgF(targetid, COLOR_ORANGE, "(player robbery) "C_WHITE"You have been robbed by "C_GREY"%p (%i) "C_WHITE"and found "C_GREEN"%m "C_WHITE"in your wallet.", playerid, playerid, robbedcash);
-
-    GivePlayerMoney(targetid, -robbedcash);
-    GivePlayerMoney(playerid, robbedcash);
+    CallLocalFunction("OnPlayerRobPlayer", "iii", playerid, targetid, robbedcash);
 
     PlayerRobTick[playerid] = gettime();
     return true;

@@ -16,6 +16,9 @@
 // OnServerDayReset() -> called when it's a new in-game day.
 // OnPlayerFirstSpawn(playerid) -> called when player spawns for the first time after initial connection.
 // OnPlayerAutoSave(playerid) -> called every 2 minutes for datas that need to be saved frequently.
+// OnPlayerRobPlayer(playerid, targetid, moneyTaken) -> called when player has robbed another player.
+// OnPlayerRobStore(playerid, moneyTaken) -> called when player has successfully robbed a store.
+
 
 // Custom Functions
 // Player_GiveScore(playerid, score, bool:save = false) -> give player a score.
@@ -50,7 +53,7 @@
 
 #if SETUP_TABLE
 	#include <tables>
-#endif 
+#endif
 
 #include <init>
 #include <utils>
@@ -121,5 +124,5 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
 
 CMD:kill(playerid) {
 	SetPlayerHealth(playerid, 0.0);
-	return 1;	
+	return 1;
 }
