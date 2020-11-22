@@ -1,6 +1,6 @@
 #include <logger>
 #include <YSI_Coding\y_hooks>
-new 
+new
     bool:PlayerIsGettingAr[MAX_PLAYERS]
 ;
 
@@ -20,17 +20,6 @@ hook OnPlayerDeath(playerid, killerid, reason)
             Player_RemoveScore(playerid, 2);
             DelaySendToJail(playerid);
         }
-    }
-    
-    new closestleo = Player_GetClosestLeo(playerid);
-    new Float:x, Float:y, Float:z;
-    GetPlayerPos(closestleo, x, y, z);
-    if(IsPlayerInRangeOfPoint(playerid, 15.0, x, y, z))
-    {
-        SendMsgF(closestleo, COLOR_BLUE, "[POLICE]: You have took down %p (%d)", playerid, playerid);
-        Player_GiveScore(closestleo, 5, true);
-        Player_RemoveScore(playerid, 2);
-        DelaySendToJail(playerid);
     }
     return 1;
 }
@@ -87,7 +76,7 @@ stock Player_Arrest(playerid, targetid) {
     Player_AwardArrest(playerid, targetid);
 
     PlayerIsGettingAr[targetid] = true;
-    
+
     SendServerMsgF(playerid, "You have arrested %p (%d)", targetid, targetid);
     SendServerMsgF(targetid, "You have been arrested by %p (%d)", playerid, playerid);
 

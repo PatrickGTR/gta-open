@@ -80,7 +80,72 @@ hook OnMySQLConnected() {
 
     stmt_UpdateATM = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);
 
-    // LOAD ATM
+    ATM_Load();
+    return 1;
+}
+
+hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz) {
+    new
+        Float:oldX,
+        Float:oldY,
+        Float:oldZ,
+        Float:oldRotX,
+        Float:oldRotY,
+        Float:oldRotZ;
+
+	GetDynamicObjectPos(objectid, oldX, oldY, oldZ);
+	GetDynamicObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
+
+    if(response == EDIT_RESPONSE_FINAL && PlayerIsEditingATM[playerid]) {
+        ATM_Update(PlayerEditingATM[playerid], x, y, z, rx, ry, rz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+        PlayerIsEditingATM[playerid] = false;
+    }
+
+    if(response == EDIT_RESPONSE_CANCEL) {
+        if(PlayerIsEditingATM[playerid]) {
+            PlayerIsEditingATM[playerid] = false;
+        }
+
+        SetObjectPos(objectid, oldX, oldY, oldZ);
+		SetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
+    }
+    return 1;
+}
+
+
+// getters
+
+
+// returns
+// INVALID_ATM_ID if player is close to none.
+// returns the ATM ID on success.
+stock ATM_GetClosest(playerid) {
+    foreach(new i : ATMIndex) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, ATM_X[i], ATM_Y[i], ATM_Z[i])) {
+            return ATM_ID[i];
+        }
+    }
+    return INVALID_ATM_ID;
+}
+
+// returns
+// true -> player is within range of ATM.
+// false -> player not close to any ATM.
+stock bool:Player_IsNearATM(playerid) {
+    foreach(new i : ATMIndex) {
+
+        if(IsPlayerInRangeOfPoint(playerid, 3.0, ATM_X[i], ATM_Y[i], ATM_Z[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// getters end
+
+// no returns
+stock void:ATM_Load() {
     inline const OnATMLoad() {
         new
             atmID,
@@ -114,7 +179,7 @@ hook OnMySQLConnected() {
             ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
 
             format(label, sizeof(label), "ATM ID "C_GREEN"%i", atmID);
-            ATM_Label[idx] = Create3DTextLabel(label, COLOR_YELLOW, x, y, z + 1.5, 300.0, world);
+            ATM_Label[idx] = CreateDynamic3DTextLabel(label, COLOR_YELLOW, x, y, z + 1.5, 300.0, .worldid = world, .interiorid = interior);
 
             ATM_ID[idx] = atmID;
             ATM_X[idx] = x;
@@ -141,36 +206,7 @@ hook OnMySQLConnected() {
         }
     }
     MySQL_ExecuteThreaded_Inline(stmt_LoadATM, using inline OnATMLoad);
-    return 1;
 }
-
-hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz) {
-    new
-        Float:oldX,
-        Float:oldY,
-        Float:oldZ,
-        Float:oldRotX,
-        Float:oldRotY,
-        Float:oldRotZ;
-
-	GetDynamicObjectPos(objectid, oldX, oldY, oldZ);
-	GetDynamicObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
-
-    if(response == EDIT_RESPONSE_FINAL && PlayerIsEditingATM[playerid]) {
-        ATM_Update(PlayerEditingATM[playerid], x, y, z, rx, ry, rz, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
-        PlayerIsEditingATM[playerid] = false;
-    }
-    if(response == EDIT_RESPONSE_CANCEL) {
-        if(PlayerIsEditingATM[playerid]) {
-            PlayerIsEditingATM[playerid] = false;
-        }
-
-        SetObjectPos(objectid, oldX, oldY, oldZ);
-		SetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
-    }
-    return 1;
-}
-
 
 // returns
 // 0 -> if atmID provided is invalid.
@@ -219,6 +255,9 @@ stock ATM_Delete(atmID) {
     return 1;
 }
 
+// returns
+// INVALID_ATM_ID = no sqlID found.
+// returns index of sqlID if found.
 stock ATM_FindIndexIDBySQLID(sqlID) {
     new
         idx = INVALID_ATM_ID;
@@ -245,8 +284,8 @@ stock ATM_Edit(playerid, atmIndex) {
     return 1;
 }
 
-//
-stock ATM_Update(atmID,
+// no returns
+stock void:ATM_Update(atmID,
     Float: x,
     Float: y,
     Float: z,
@@ -264,10 +303,11 @@ stock ATM_Update(atmID,
     DestroyDynamicObject(ATM_ObjectID[idx]);
     ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
 
+    DestroyDynamic3DTextLabel(ATM_Label[idx]);
     new
         label[24];
     format(label, sizeof(label), "ATM ID "C_GREEN"%i", atmID);
-    UpdateDynamic3DTextLabelText(ATM_Label[idx], COLOR_YELLOW, label);
+    ATM_Label[idx] = CreateDynamic3DTextLabel(label, COLOR_YELLOW, x, y, z + 1.5, 300.0, .worldid = world, .interiorid = interior);
 
     ATM_X[idx] = x;
     ATM_Y[idx] = y;
@@ -301,7 +341,6 @@ stock ATM_Update(atmID,
         Logger_I("world", world),
         Logger_I("interior", interior)
     );
-    return;
 }
 
 // returns
@@ -347,7 +386,8 @@ stock ATM_Create(Float: x, Float: y, Float: z, Float:ang, world, interior) {
     }
     // Creating object
     ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y + 2.0, z, 0.0, 0.0, ang, world, interior, -1, 300.0);
-    ATM_Label[idx] = Create3DTextLabel("Creation in progress...", COLOR_YELLOW, x, y, z + 1.5, 300.0, world);
+    ATM_Label[idx] = CreateDynamic3DTextLabel("Creation in progress...", COLOR_YELLOW, x, y, z + 1.5, 300.0, .worldid = world, .interiorid = interior);
+
 
     // Insert data to database.
     MySQL_BindFloat(stmt_InsertATM, 0, x);

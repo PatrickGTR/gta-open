@@ -13,6 +13,8 @@
 
 #include <YSI_Coding\y_hooks>
 
+#define TDMenu:%1(%2) forward %1(%2); public %1(%2)
+
 static
 	PlayerText:TextMenuHeader[MAX_PLAYERS],
 	PlayerText:TextMenuBody[MAX_PLAYERS],
@@ -234,7 +236,7 @@ stock TextInfo_Show(playerid)
 		string[1024];
 	format(string, sizeof(string), "~n~%s~n~~n~~w~_________________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
 	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
-	
+
 	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);
 	PlayerTextDrawShow(playerid,TextMenuBody[playerid]);
 

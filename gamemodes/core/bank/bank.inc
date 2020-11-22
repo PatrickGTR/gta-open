@@ -1,4 +1,4 @@
-// #include <bankatm>
+#include <bankatm>
 #include <bank_taxes>
 
 #if SETUP_TABLE
@@ -12,7 +12,7 @@ static
     Statement:stmt_saveBank
 ;
 
-static 
+static
     PlayerBankMoney[MAX_PLAYERS],
     PlayerBankDept[MAX_PLAYERS],
     PlayerBankTax[MAX_PLAYERS]
@@ -117,7 +117,7 @@ stock Player_GiveBankMoney(playerid, bankmoney, bool:save = false)
 
 stock Player_RemoveBankMoney(playerid, bankmoney)
 {
-    new 
+    new
         currentBMoney = Player_GetBankMoney(playerid),
         newBMoney = currentBMoney - bankmoney;
     PlayerBankMoney[playerid] = newBMoney;
@@ -151,7 +151,7 @@ stock Player_AddBankDept(playerid, bankdept, bool:save = false)
 
 stock Player_RemoveBankDept(playerid, bankdept)
 {
-    new 
+    new
         currentPDept = Player_GetBankDept(playerid),
         newPDept = currentPDept - bankdept;
     PlayerBankDept[playerid] = newPDept;
