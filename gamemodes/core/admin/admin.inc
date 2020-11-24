@@ -16,7 +16,7 @@
 // #include <admin_cmd_lvl3carscmds>
 // #include <admin_cmd_lvl3>
 
-// #include <admin_cmd_lvl4>
+#include <admin_cmd_lvl4>
 
 // #include <admin_remove-account>
 // #include <admin_cmd_lvl5>

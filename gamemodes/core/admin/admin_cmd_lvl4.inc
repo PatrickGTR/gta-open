@@ -1,8 +1,8 @@
-ACMD:[4]setvip(playerid, params[])
+/*ACMD:[4]setvip(playerid, params[])
 {
-    new 
-        targetid, 
-        level, 
+    new
+        targetid,
+        level,
         month;
 
     if (isnull(params))
@@ -34,7 +34,7 @@ ACMD:[4]setvip(playerid, params[])
 
         if (targetid == INVALID_PLAYER_ID)
             return SendErrorMsg(playerid, "The player you are trying to set VIP is invalid");
-        
+
         if (VIP_GetPlayerLevel(targetid) > 0)
             return SendErrorMsg(playerid, "The player you are trying to set VIP has VIP already.");
 
@@ -48,7 +48,7 @@ ACMD:[4]setvip(playerid, params[])
         SendAdminMsgF("ADMIN "C_GREY"%p "C_WHITE"sets "C_GREY"%p "C_WHITE"VIP level to "C_GREY"%i", playerid, targetid, level);
     }
     return true;
-} 
+}
 
 ACMD:[4]givemoney(playerid, params[])
 {
@@ -56,7 +56,7 @@ ACMD:[4]givemoney(playerid, params[])
     if(sscanf(params, "uis[128]", target, pmoney, reason)) return SendSyntaxMsg(playerid, "/givemoney [playerid] [money] [reason]");
     if(!IsPlayerConnected(target)) {
         return SendErrorMsg(playerid, "Player is not connected");
-    
+
     GivePlayerMoney(target, pmoney);
     SendMsgAllF(COLOR_MODERATION, "[ADMIN REWARD]: Administrator gave %p (%d) $%d for reason: %s", target, target, pmoney, reason);
     return 1;
@@ -71,7 +71,7 @@ ACMD:[4]fine(playerid, params[])
     }
     if(GetPlayerMoney(playerid) < pmoney) {
         return SendErrorMsg(playerid, "Player doesn't have that much money");
-    
+
     GivePlayerMoney(target, -pmoney);
     SendMsgAllF(COLOR_MODERATION, "[ADMIN FINE]: Administrator fined %p (%d) $%d for", target, target, pmoney);
     SendMsgAllF(COLOR_MODERATION, "[ADMIN FINE]: reason: %s", reason);
@@ -84,7 +84,7 @@ ACMD:[4]getmoney(playerid, params[])
     if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/getmoney [playerid]");
     if(!IsPlayerConnected(target)) {
         return SendErrorMsg(playerid, "Player is not connected");
-    
+
     SendServerMsgF(playerid, "%p (%d)'s money is $%d", target, target, GetPlayerMoney(target));
     return 1;
 }
@@ -104,7 +104,7 @@ ACMD:[4]givearmy(playerid, params[])
     }
     if(level < 0 || level > 1) {
         return SendErrorMsg(playerid, "1 = player can select army 0 = player can't select");
-    } 
+    }
     if(level == 0) {
         static const deleteQuery[] = "\
         UPDATE \
@@ -132,6 +132,24 @@ ACMD:[4]givearmy(playerid, params[])
         mysql_tquery(MySQL_GetHandle(), string);
         Player_SetArmy(playerid, true);
         SendMsgAllF(COLOR_MODERATION, "[ARMY]: %p (%d) is accepted from the army.", target, target);
-    
+
+    return 1;
+} */
+
+ACMD:[4]motd(playerid, params[]) {
+
+    if(isnull(params)) {
+        return SendSyntaxMsg(playerid, "/motd <new motd>");
+    }
+
+    new
+        old_motd[128];
+
+    MOTD_Get(old_motd, sizeof(old_motd));
+    MOTD_Set(params, true);
+
+    SendMsgF(playerid, COLOR_YELLOW, "(MOTD UPDATED)");
+    SendMsgF(playerid, COLOR_YELLOW, "(OLD MOTD) "C_BLUE"%s", old_motd);
+    SendMsgF(playerid, COLOR_YELLOW, "(NEW MOTD) "C_BLUE"%s", params);
     return 1;
 }

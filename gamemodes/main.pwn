@@ -42,6 +42,8 @@
 #include <YSI_Data\y_bit>
 #include <YSI_Data\y_iterate>
 
+#include <ini>
+
 #include <env>
 #include <streamer>
 #include <logger>
