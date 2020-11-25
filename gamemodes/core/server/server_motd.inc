@@ -18,16 +18,12 @@ hook OnPlayerPassedBanCheck(playerid) {
     }
 
     SendMsgF(playerid, COLOR_YELLOW, "(MOTD)"C_BLUE" %s", gMOTD);
-
     return 1;
 }
 
 void:MOTD_UpdateConfig(const motd[]) {
-
     ini_open("config.ini");
-
     ini_setString("motd", motd);
-
     ini_commit();
 }
 

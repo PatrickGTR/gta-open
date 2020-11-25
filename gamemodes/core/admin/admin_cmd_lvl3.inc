@@ -1,12 +1,39 @@
+ACMD:[3]setname(playerid, params[])
+{
+    new
+        targetid,
+        newName[MAX_PLAYER_NAME + 1],
+        string[128];
+
+    if(sscanf(params, "us[25]", targetid, newName)) {
+        return SendSyntaxMsg(playerid, "/setname (name/id) (newname)");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Player not connected");
+    }
+
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), "UPDATE players SET username = '%e' WHERE u_id = %i", newName, Player_GetAccountID(targetid));
+    mysql_tquery(MySQL_GetHandle(), string);
+
+    SendMsgF(targetid, COLOR_MODERATION, "[ADMIN]: Your name has been changed to %s", newName);
+    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: You have set %p (%d)'s name to %s", targetid, targetid, newName);
+
+    SetPlayerName(targetid, newName);
+    return 1;
+}
+
 ACMD:[3]getallciv(playerid, params[])
 {
-    new Float:pos[4];
-    foreach(new i : Player)
-    {
-        if(Player_GetClass(i) == TEAM_CIVILIAN)
-        {
-            GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
-            SetPlayerPos(i, pos[0], pos[1], pos[2]);
+    new
+        Float:x,
+        Float:y,
+        Float:z;
+
+    foreach(new i : Player) {
+        if(Player_GetClass(i) == TEAM_CIVILIAN) {
+            GetPlayerPos(playerid, x, y, z);
+            SetPlayerPos(i, x, y + i, z);
         }
     }
     return 1;
@@ -14,34 +41,63 @@ ACMD:[3]getallciv(playerid, params[])
 
 ACMD:[3]disarm(playerid, params[])
 {
-    new target;
-    if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/disarm (name/id)");
-    if(!IsPlayerConnected(target)) {
+    new
+        targetid;
+
+    if(sscanf(params, "u", targetid)) {
+        return SendSyntaxMsg(playerid, "/disarm (name/id)");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
         return SendErrorMsg(playerid, "Player is not connected");
     }
-    ResetPlayerWeapons(target);
-    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN DISARM]: You have disarmed %p (%d)", target, target);
-    SendMsgF(target, COLOR_MODERATION, "[ADMIN DISARM]: You have been disarmed by an admin");
+
+    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN DISARM]: You have disarmed %p (%d)", targetid, targetid);
+    SendMsgF(targetid, COLOR_MODERATION, "[ADMIN DISARM]: You have been disarmed by an admin");
+
+    ResetPlayerWeapons(targetid);
     return 1;
 }
 
 ACMD:[3]sethealth(playerid, params[])
 {
-    new target, Float:health;
-    if(sscanf(params, "uf", target, health)) return SendSyntaxMsg(playerid, "/setheatlh (name/id) (health)");
-    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN HEAL]: %p (%d)'s health has been set to %f", target, target, health);
-    SendMsgF(target, COLOR_MODERATION, "[ADMIN HEAL]: Your health has been set to %f", health);
-    SetPlayerHealth(target, health);
+    new
+        targetid,
+        Float:amount;
+
+    if(sscanf(params, "uf", targetid, amount)) {
+        return SendSyntaxMsg(playerid, "/setheatlh (name/id) (health)");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+
+    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN HEAL]: %p (%d)'s health has been set to %f", targetid, targetid, amount);
+    SendMsgF(targetid, COLOR_MODERATION, "[ADMIN HEAL]: Your health has been set to %f", amount);
+
+    SetPlayerHealth(targetid, amount);
     return 1;
 }
 
 ACMD:[3]setarmour(playerid, params[])
 {
-    new target, Float:armour;
-    if(sscanf(params, "uf", target, armour)) return SendSyntaxMsg(playerid, "/setarmour (name/id) (armour)");
-    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s armour has been set to %f", target, target, armour);
-    SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your armour has been set to %f", armour);
-    SetPlayerArmour(target, armour);
+    new
+        targetid,
+        Float:amount;
+
+    if(sscanf(params, "uf", targetid, amount)) {
+        return SendSyntaxMsg(playerid, "/setarmour (name/id) (armour)");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Player is not connected");
+    }
+
+    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s armour has been set to %f", targetid, targetid, amount);
+    SendMsgF(targetid, COLOR_MODERATION, "[ADMIN]: Your armour has been set to %f", amount);
+
+    SetPlayerArmour(targetid, amount);
     return 1;
 }
 
@@ -73,7 +129,7 @@ public EventInteriors(playerid, listitem)
         case 5:
         {
             SetPlayerInterior(playerid, 14);
-            SetPlayerPos(playerid, -1410.72, 1591.16, 1052.53); 
+            SetPlayerPos(playerid, -1410.72, 1591.16, 1052.53);
         }
     }
     return 1;
@@ -94,34 +150,5 @@ ShowEvenInteriors(playerid)
 ACMD:[3]eventint(playerid, params[])
 {
     ShowEvenInteriors(playerid);
-    return 1;
-}
-
-ACMD:[3]setvirtualworld(playerid, params[])
-{
-    new vm;
-    if(sscanf(params, "i", vm)) return SendSyntaxMsg(playerid, "/setvirtualworld (virtual world)");
-    SetPlayerVirtualWorld(playerid, vm);
-    return 1;
-}
-
-ACMD:[3]setname(playerid, params[])
-{
-    new target, newname[MAX_PLAYER_NAME], string[512];
-    if(sscanf(params, "us[26]", target, newname)) return SendSyntaxMsg(playerid, "/setname (name/id) (newname)");
-    if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player not connected");
-    static const updateQuery[] = "\
-    UPDATE \
-        players \
-    SET \
-        username = %e \
-    WHERE \
-        u_id = %i \
-    ";
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), updateQuery, newname, Player_GetAccountID(target));
-    mysql_tquery(MySQL_GetHandle(), string);
-    SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your name has been changed to %s", newname);
-    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: You have set %p (%d)'s name to %s", target, target, newname);
-    SetPlayerName(target, newname);
     return 1;
 }
