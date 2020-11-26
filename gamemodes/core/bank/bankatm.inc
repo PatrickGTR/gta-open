@@ -110,9 +110,11 @@ TDMenu:AtmMenu(playerid, listitem) {
 
 ShowATMMenu(playerid)
 {
-    new string[128];
+    new
+        string[48];
+
     TextMenu_Create(playerid, "AtmMenu", "ATM");
-    format(string, sizeof(string), "_________________________Bank: ~b~%m~w~~n~~n~", Player_GetBankMoney(playerid));
+    format(string, sizeof(string), "Balance: ~g~%m~w~~n~~n~", Player_GetBankMoney(playerid));
     TextInfo_Add(playerid, string);
     TextMenu_Add(playerid, "~w~Deposit");
     TextMenu_Add(playerid, "~w~Withdraw");
@@ -123,11 +125,13 @@ ShowATMMenu(playerid)
 
 ShowATMDepositInfo(playerid)
 {
-    new string[128];
+    new
+        string[48];
+
     TextInfo_Create(playerid, "ATMDEP", "ATM DEPOSIT");
-    format(string, sizeof(string), "_________________________Bank: ~b~%m~w~~n~~n~", Player_GetBankMoney(playerid));
+    format(string, sizeof(string), "Balance: ~g~%m~w~~n~~n~", Player_GetBankMoney(playerid));
     TextInfo_Add(playerid, string);
-    TextInfo_Add(playerid, "___Type in the chat how much you want to ~g~Deposit~w~");
+    TextInfo_Add(playerid, "Type in the chat how much you want to ~g~Deposit~w~");
     TextInfo_Show(playerid);
     PlayerATMOption[playerid] = ATM_DEPOSIT;
     PlayerBankReply[playerid] = true;
@@ -136,11 +140,13 @@ ShowATMDepositInfo(playerid)
 
 ShowATMWithdrawInfo(playerid)
 {
-    new string[128];
+    new
+        string[48];
+
     TextInfo_Create(playerid, "ATMWITH", "ATM WITHDRAW");
-    format(string, sizeof(string), "_________________________Bank: ~b~%m~w~~n~~n~", Player_GetBankMoney(playerid));
+    format(string, sizeof(string), "Balance: ~g~%m~w~~n~~n~", Player_GetBankMoney(playerid));
     TextInfo_Add(playerid, string);
-    TextInfo_Add(playerid, "___Type in the chat how much you want to ~g~Withdraw~w~");
+    TextInfo_Add(playerid, "Type in the chat how much you want to ~g~Withdraw~w~");
     TextInfo_Show(playerid);
     PlayerATMOption[playerid] = ATM_WITHDRAW;
     PlayerBankReply[playerid] = true;
