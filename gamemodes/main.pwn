@@ -53,11 +53,12 @@
 
 // Gamemode Scripts
 
+#include <init>
+
 #if SETUP_TABLE
 	#include <tables>
 #endif
 
-#include <init>
 #include <utils>
 #include <anti-cheat> // w.i.p
 #include <user-interface>

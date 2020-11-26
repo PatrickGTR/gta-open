@@ -12,6 +12,6 @@ hook OnMySQLConnected() {
         ON UPDATE CASCADE \
     )";
     mysql_tquery(MySQL_GetHandle(), query);
-    log("setting up 'admins' table...");
+    Logger_Log("setting up 'admins' table...");
     return 1;
 }

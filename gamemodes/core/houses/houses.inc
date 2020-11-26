@@ -4,10 +4,6 @@
 #include <houses_entext-handler>
 #include <houses_cmd>
 
-#if SETUP_TABLE
-    #include <houses_setup-table>
-#endif
-
 #include <furniture>
 
 #include <YSI_Coding\y_hooks>

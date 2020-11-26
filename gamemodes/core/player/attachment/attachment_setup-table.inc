@@ -19,6 +19,6 @@ hook OnMySQLConnected()
             scale_y FLOAT NOT NULL, \
             scale_z FLOAT NOT NULL, \
 		FOREIGN KEY(u_id) REFERENCES players(u_id) ON DELETE CASCADE ON UPDATE RESTRICT)");
-    log("setting up 'attachments' table...");
+    Logger_Log("setting up 'attachments' table...");
     return 1;
 }
