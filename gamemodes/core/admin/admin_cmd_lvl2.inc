@@ -5,7 +5,7 @@ ACMD:[2]jail(playerid, params[])
         seconds,
         reason[32];
 
-    if(sscanf(params, "uis[32]", targetid, seconds, reason)) {
+    if(sscanf(params, "uiS[32](No Reason)", targetid, seconds, reason)) {
         return SendSyntaxMsg(playerid, "/jail (name/id) (seconds) (reason)");
     }
 

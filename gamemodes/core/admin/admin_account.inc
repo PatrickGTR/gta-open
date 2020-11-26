@@ -156,24 +156,7 @@ stock Admin_SetPlayerDuty(playerid, bool:toggle)
 stock Admin_IsOnDuty(playerid)
     return Bit_Get(adminOnDuty, playerid);
 
-timer KickTimer[500](playerid) 
+timer KickTimer[500](playerid)
 {
     Kick(playerid);
 }
-
-stock GetPlayerIdFromName(const playername[])
-{
-    for(new i = 0; i <= MAX_PLAYERS; i++)
-    {
-        if(IsPlayerConnected(i))
-        {
-            new playername2[MAX_PLAYER_NAME];
-            GetPlayerName(i, playername2, sizeof(playername2));
-            if(strcmp(playername2, playername, true, strlen(playername)) == 0)
-            {
-                return i;
-            }
-        }
-    }
-    return INVALID_PLAYER_ID;
-} 

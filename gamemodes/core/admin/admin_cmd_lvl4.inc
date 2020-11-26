@@ -57,7 +57,7 @@ ACMD:[4]givemoney(playerid, params[])
         amount,
         reason[32];
 
-    if(sscanf(params, "uis[32]", targetid, amount, reason)) {
+    if(sscanf(params, "uiS[32](No Reason)", targetid, amount, reason)) {
         return SendSyntaxMsg(playerid, "/givemoney [playerid] [money] [reason]");
     }
 
@@ -77,7 +77,7 @@ ACMD:[4]fine(playerid, params[])
         amount,
         reason[32];
 
-    if(sscanf(params, "uis[32]", targetid, amount, reason)) {
+    if(sscanf(params, "uiS[32](No Reason)", targetid, amount, reason)) {
         return SendSyntaxMsg(playerid, "/fine [playerid] [money] [reason]");
     }
 

@@ -25,15 +25,12 @@
 #include <admin_spec-cmd>
 
 hook OnGameModeInit() {
-    Admin_AddCommandToList(1, "/acmds");
     Admin_AddCommandToList(1, "/freeze");
     Admin_AddCommandToList(1, "/akill");
     Admin_AddCommandToList(1, "/afix");
     Admin_AddCommandToList(1, "/get");
     Admin_AddCommandToList(1, "/kick");
     Admin_AddCommandToList(1, "/goto");
-    Admin_AddCommandToList(1, "/asay");
-    Admin_AddCommandToList(1, "/a - admin chat");
 
     Admin_AddCommandToList(2, "/jail");
     Admin_AddCommandToList(2, "/unjail");
@@ -45,7 +42,6 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(3, "/sethealth");
     Admin_AddCommandToList(3, "/eventint - event interiors");
     Admin_AddCommandToList(3, "/setarmour");
-    Admin_AddCommandToList(3, "/setvirtualworld - set your virtual world");
     Admin_AddCommandToList(3, "/giveweaps");
     Admin_AddCommandToList(3, "/veh");
     Admin_AddCommandToList(3, "/offban");
@@ -74,8 +70,4 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(5, "/createatm");
     Admin_AddCommandToList(5, "/deleteatm");
     Admin_AddCommandToList(5, "/editatm");
-    Admin_AddCommandToList(5, "/nearatm");
-    Admin_AddCommandToList(5, "/givescore");
-    Admin_AddCommandToList(5, "/removescore");
-    Admin_AddCommandToList(5, "/offsettester");
 }

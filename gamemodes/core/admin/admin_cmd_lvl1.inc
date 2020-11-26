@@ -12,22 +12,22 @@ ACMD:[1]acmds(playerid, params[])
 	}
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_4)
 	{
-		strcat(tmp_string, "\n\n"C_YELLOW"(level 4)"C_WHITE"\n");
+		strcat(tmp_string, "\n"C_YELLOW"(level 4)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[3]);
 	}
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_3)
 	{
-		strcat(tmp_string, "\n\n"C_YELLOW"(level 3)"C_WHITE"\n");
+		strcat(tmp_string, "\n"C_YELLOW"(level 3)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[2]);
 	}
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_2)
 	{
-		strcat(tmp_string, "\n\n"C_YELLOW"(level 2)"C_WHITE"\n");
+		strcat(tmp_string, "\n"C_YELLOW"(level 2)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[1]);
 	}
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_1)
 	{
-		strcat(tmp_string, "\n\n"C_YELLOW"(level 1)"C_WHITE"\n");
+		strcat(tmp_string, "\n"C_YELLOW"(level 1)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[0]);
 	}
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Admin Commands List", tmp_string, "Close", "");
@@ -156,7 +156,7 @@ ACMD:[1]kick(playerid, params[])
 		targetid,
 		reason[32];
 
-	if(sscanf(params, "us[32]", targetid, reason)) {
+	if(sscanf(params, "uS[32](No Reason)", targetid, reason)) {
 		return SendSyntaxMsg(playerid, "/kick (name/in) (reason)");
 	}
 
@@ -188,14 +188,6 @@ ACMD:[1]setwanted(playerid, params[])
 	SetPlayerWantedLevel(targetid, level);
 	SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s wanted level has been set to %d", targetid, targetid, level);
 	SendMsgF(targetid, COLOR_MODERATION, "[ADMIN]: Your wanted level has been set to %d by Admin", level);
-	return 1;
-}
-
-ACMD:[1]asay(playerid, params[])
-{
-	new text[128];
-	if(sscanf(params, "s[128]", text)) return SendSyntaxMsg(playerid, "/asay (text)");
-	SendMsgAllF(COLOR_MODERATION, "[ADMIN]: %s", text);
 	return 1;
 }
 
@@ -232,7 +224,11 @@ ACMD:[1]freeze(playerid, params[])
 		playerid
 	);
 
-	TogglePlayerControllable(targetid, freezeState);
+	// reverse it
+	// because TogglePlayerControllable function
+	// uses 0 to freeze and 1 to unfreeze while
+	// the command takes 0 to unfreeze, 1 to freeze.
+	TogglePlayerControllable(targetid, !freezeState);
  	return 1;
 }
 
