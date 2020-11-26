@@ -8,6 +8,28 @@ static
     Statement: stmt_updateFurniture,
     Statement: stmt_insertFurniture;
 
+/*
+    SELECT
+        hf.furniture_id,
+        hf.house_id,
+        hf.x,
+        hf.y,
+        hf.z,
+        hf.rx,
+        hf.ry,
+        hf.rz,
+        hf.intid,
+        hf.vworld
+    FROM
+        house_furniture as hf
+    INNER JOIN
+        player_houses as ph
+    ON
+        hf.house_id = ph.house_id
+    WHERE
+        ph.u_id = 1
+*/
+
 hook OnMySQLConnected() {
 
     // Improvement!
@@ -52,8 +74,6 @@ hook OnMySQLConnected() {
         }
     }
     MySQL_TQueryInline(MySQL_GetHandle(), using inline LoadFurnitureObjects, "SELECT * FROM house_furniture");
-
-
 
     static const updateQuery[] = "\
         UPDATE \

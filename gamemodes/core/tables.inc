@@ -3,7 +3,7 @@
 
 // VERY IMPORTANT!
 // Do not change the priority of how the tables are being created
-hook OnMySQLConnected() {
+hook OnMySQLSetupTable() {
     Logger_Log("TABLE SETUP BEGIN");
 
     // --------------------------------------------------------------------------------------------
@@ -11,15 +11,15 @@ hook OnMySQLConnected() {
     // --------------------------------------------------------------------------------------------
 
     // players table.
-    mysql_tquery(MySQL_GetHandle(), "players.sql");
+    mysql_tquery_file(MySQL_GetHandle(), "players.sql");
     Logger_Log("setting up 'players' table...");
 
     // player stats table.
-    mysql_tquery(MySQL_GetHandle(), "stats.sql");
+    mysql_tquery_file(MySQL_GetHandle(), "stats.sql");
     Logger_Log("setting up 'stats' table...");
 
     // vips table.
-    mysql_tquery(MySQL_GetHandle(), "vips.sql");
+    mysql_tquery_file(MySQL_GetHandle(), "vips.sql");
     Logger_Log("setting up 'vips' table...");
 
     // jailed players table.

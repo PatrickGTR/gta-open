@@ -65,6 +65,11 @@ hook OnGameModeInit() {
     }
 
     Logger_Log("MySQL connection is successful.");
+
+    #if defined SETUP_TABLE
+        CallLocalFunction("OnMySQLSetupTable", "");
+    #endif
+
     CallLocalFunction("OnMySQLConnected", "");
     return 1;
 }
