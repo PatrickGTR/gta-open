@@ -14,6 +14,6 @@ hook OnMySQLConnected() {
         ON UPDATE CASCADE \
     )";
     mysql_tquery(MySQL_GetHandle(), query);
-    log("setting up 'player_bank' table...");
+    Logger_Log("setting up 'player_bank' table...");
     return 1;
 }

@@ -1,8 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
 #if SETUP_TABLE
-    #include <admin_setup-bans-table>
-    #include <admin_setup-admins-table>
     #include <admin_setup-atm-table>
 #endif
 
@@ -21,9 +19,9 @@
 // #include <admin_remove-account>
 // #include <admin_cmd_lvl5>
 
- #include <admin_cmd-atm>
-// #include <rcon_cmd>
-// #include <fly_cmd>
+#include <admin_cmd-atm>
+#include <rcon_cmd>
+#include <fly_cmd>
 #include <admin_player-accuracy>
 #include <admin_spec-cmd>
 

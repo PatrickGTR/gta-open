@@ -14,6 +14,6 @@ hook OnMySQLConnected() {
     	PRIMARY KEY (atm_id) \
     )";
     mysql_tquery(MySQL_GetHandle(), query);
-    log("setting up 'atms' table...");
+    Logger_Log("setting up 'atms' table...");
     return 1;
 }

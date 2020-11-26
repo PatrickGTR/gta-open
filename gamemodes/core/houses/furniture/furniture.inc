@@ -2,10 +2,6 @@
 #include <furniture_impl>
 #include <furniture_cmd>
 
-#if SETUP_TABLE
-    #include <furniture_setup-table>
-#endif
-
 #include <YSI_Coding\y_hooks>
 
 static 
