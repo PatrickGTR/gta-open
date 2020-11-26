@@ -4,12 +4,34 @@
 
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     Statement: stmt_updateFurniture,
     Statement: stmt_insertFurniture;
 
+/*
+    SELECT
+        hf.furniture_id,
+        hf.house_id,
+        hf.x,
+        hf.y,
+        hf.z,
+        hf.rx,
+        hf.ry,
+        hf.rz,
+        hf.intid,
+        hf.vworld
+    FROM
+        house_furniture as hf
+    INNER JOIN
+        player_houses as ph
+    ON
+        hf.house_id = ph.house_id
+    WHERE
+        ph.u_id = 1
+*/
+
 hook OnMySQLConnected() {
-    
+
     // Improvement!
     // Load object when user connect instead of loadin it through gamemode init.
     // Delete object when user disconnect, this case we save memory usage.
@@ -53,8 +75,6 @@ hook OnMySQLConnected() {
     }
     MySQL_TQueryInline(MySQL_GetHandle(), using inline LoadFurnitureObjects, "SELECT * FROM house_furniture");
 
-
-
     static const updateQuery[] = "\
         UPDATE \
             house_furniture \
@@ -70,7 +90,7 @@ hook OnMySQLConnected() {
         AND \
         house_id = ?\
     ";
-    stmt_updateFurniture = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);   
+    stmt_updateFurniture = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);
 
     static const insertQuery[] = "\
         INSERT INTO \
@@ -118,7 +138,7 @@ hook OnPlayerEditDynObject(playerid, objectid, response, Float:x, Float:y, Float
                         MySQL_BindInt(stmt_insertFurniture, 8, Player_GetInHouseInt(playerid));
                         MySQL_BindInt(stmt_insertFurniture, 9, Player_GetInHouseVWorld(playerid));
                         MySQL_ExecuteThreaded_Inline(stmt_insertFurniture, using inline ReloadFurniture);
-                            
+
 
                         SendServerMsg(playerid, "Object Saved "C_GREY"[BOUGHT]");
                         GivePlayerMoney(playerid, -Furniture_GetPrice(index));
@@ -162,15 +182,15 @@ hook OnPlayerEditDynObject(playerid, objectid, response, Float:x, Float:y, Float
 
                         // first cell -> house index ID
                         // second cell -> furniture index ID
-                        
+
                         Streamer_GetArrayData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_EXTRA_ID, arr);
-                            
+
                         MySQL_BindFloat(stmt_updateFurniture, 0, x);
                         MySQL_BindFloat(stmt_updateFurniture, 1, y);
                         MySQL_BindFloat(stmt_updateFurniture, 2, z);
-                        MySQL_BindFloat(stmt_updateFurniture, 3, rx); 
-                        MySQL_BindFloat(stmt_updateFurniture, 4, ry); 
-                        MySQL_BindFloat(stmt_updateFurniture, 5, rz); 
+                        MySQL_BindFloat(stmt_updateFurniture, 3, rx);
+                        MySQL_BindFloat(stmt_updateFurniture, 4, ry);
+                        MySQL_BindFloat(stmt_updateFurniture, 5, rz);
                         MySQL_BindInt(stmt_updateFurniture, 6, arr[1]);
                         MySQL_BindInt(stmt_updateFurniture, 7, arr[0]);
 
@@ -216,4 +236,4 @@ hook OnPlayerSelectDynObj(playerid, objectid, modelid, Float:x, Float:y, Float:z
             "Confirm", "Back");
     }
     return 1;
-} 
+}

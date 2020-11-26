@@ -2,6 +2,9 @@
 
 #define INVALID_ATM_ID (-1)
 
+static const
+    ATM_LABEL_INFO[] = "#"C_GREEN"%i\n%s's ATM\n"C_YELLOW"Press "C_GREEN"'Y' "C_YELLOW"to interact";
+
 // Prepared Statements
 static
     Statement: stmt_InsertATM,
@@ -121,7 +124,6 @@ hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z,
 // returns the ATM ID on success.
 stock ATM_GetClosest(playerid) {
     foreach(new i : ATMIndex) {
-
         if(IsPlayerInRangeOfPoint(playerid, 3.0, ATM_X[i], ATM_Y[i], ATM_Z[i])) {
             return ATM_ID[i];
         }
@@ -171,15 +173,12 @@ stock void:ATM_Load() {
         MySQL_BindResultInt(stmt_LoadATM, 8, interior);
 
         new
-            idx = INVALID_ATM_ID,
-            label[24];
+            idx = INVALID_ATM_ID;
         while(MySQL_Statement_FetchRow(stmt_LoadATM)) {
             idx = Iter_Alloc(ATMIndex);
 
             ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
 
-            format(label, sizeof(label), "ATM ID "C_GREEN"%i", atmID);
-            ATM_Label[idx] = CreateDynamic3DTextLabel(label, COLOR_YELLOW, x, y, z + 1.5, 300.0, .worldid = world, .interiorid = interior);
 
             ATM_ID[idx] = atmID;
             ATM_X[idx] = x;
@@ -190,6 +189,9 @@ stock void:ATM_Load() {
             ATM_RZ[idx] = rz;
             ATM_World[idx] = world;
             ATM_Interior[idx] = interior;
+
+            ATM_UpdateLabel(idx);
+
             Iter_Add(ATMIndex, idx);
 
             Logger_Dbg("server-atm", "[OnMySQLConnected / server_atm.inc] atm loaded",
@@ -206,6 +208,31 @@ stock void:ATM_Load() {
         }
     }
     MySQL_ExecuteThreaded_Inline(stmt_LoadATM, using inline OnATMLoad);
+}
+
+static void:ATM_UpdateLabel(atmIndex) {
+    // Delete the current atm if one already exists in this index.
+    if(ATM_Label[atmIndex] != INVALID_3DTEXT_ID) {
+        DestroyDynamic3DTextLabel(ATM_Label[atmIndex]);
+    }
+
+    new
+        string[64 + MAX_MAP_ZONE_NAME + 11];
+
+    new
+        MapZone:zoneID = GetMapZoneAtPoint(ATM_X[atmIndex], ATM_Y[atmIndex], ATM_Z[atmIndex]),
+        zoneName[MAX_MAP_ZONE_NAME];
+    GetMapZoneName(zoneID, zoneName, sizeof(zoneName));
+
+    formatex(string, sizeof(string), ATM_LABEL_INFO, ATM_ID[atmIndex], zoneName);
+    ATM_Label[atmIndex] = CreateDynamic3DTextLabel(string,
+        COLOR_YELLOW,
+        ATM_X[atmIndex],
+        ATM_Y[atmIndex],
+        ATM_Z[atmIndex] + 1.5,
+        300.0,
+        .worldid = ATM_World[atmIndex],
+        .interiorid = ATM_Interior[atmIndex]);
 }
 
 // returns
@@ -235,6 +262,8 @@ stock ATM_Delete(atmID) {
 
     // reset data.
     DestroyDynamicObject(ATM_ObjectID[idx]);
+    DestroyDynamic3DTextLabel(ATM_Label[idx]);
+
 
     ATM_ID[idx] = INVALID_ATM_ID;
     ATM_X[idx] =
@@ -303,11 +332,6 @@ stock void:ATM_Update(atmID,
     DestroyDynamicObject(ATM_ObjectID[idx]);
     ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
 
-    DestroyDynamic3DTextLabel(ATM_Label[idx]);
-    new
-        label[24];
-    format(label, sizeof(label), "ATM ID "C_GREEN"%i", atmID);
-    ATM_Label[idx] = CreateDynamic3DTextLabel(label, COLOR_YELLOW, x, y, z + 1.5, 300.0, .worldid = world, .interiorid = interior);
 
     ATM_X[idx] = x;
     ATM_Y[idx] = y;
@@ -317,6 +341,8 @@ stock void:ATM_Update(atmID,
     ATM_RZ[idx] = rz;
     ATM_World[idx] = world;
     ATM_Interior[idx] = interior;
+
+    ATM_UpdateLabel(idx);
 
    // update database
     MySQL_BindFloat(stmt_UpdateATM, 0, x);

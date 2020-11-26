@@ -3,22 +3,23 @@
 
 // VERY IMPORTANT!
 // Do not change the priority of how the tables are being created
-hook OnMySQLConnected() {
+hook OnMySQLSetupTable() {
+    Logger_Log("TABLE SETUP BEGIN");
 
     // --------------------------------------------------------------------------------------------
     // PLAYERS
     // --------------------------------------------------------------------------------------------
 
     // players table.
-    mysql_tquery(MySQL_GetHandle(), "players.sql");
+    mysql_tquery_file(MySQL_GetHandle(), "players.sql");
     Logger_Log("setting up 'players' table...");
 
     // player stats table.
-    mysql_tquery(MySQL_GetHandle(), "stats.sql");
+    mysql_tquery_file(MySQL_GetHandle(), "stats.sql");
     Logger_Log("setting up 'stats' table...");
 
     // vips table.
-    mysql_tquery(MySQL_GetHandle(), "vips.sql");
+    mysql_tquery_file(MySQL_GetHandle(), "vips.sql");
     Logger_Log("setting up 'vips' table...");
 
     // jailed players table.
@@ -38,7 +39,7 @@ hook OnMySQLConnected() {
     Logger_Log("setting up 'bans' table...");
 
     // --------------------------------------------------------------------------------------------
-    // HOUSES 
+    // HOUSES
     // --------------------------------------------------------------------------------------------
 
     mysql_tquery_file(MySQL_GetHandle(), "houses.sql");
@@ -51,6 +52,14 @@ hook OnMySQLConnected() {
     mysql_tquery_file(MySQL_GetHandle(), "gangs.sql");
     Logger_Log("setting up 'gangs' table...");
     Logger_Log("setting up 'gang_members' table...");
+
+    // --------------------------------------------------------------------------------------------
+    // ATMS
+    // --------------------------------------------------------------------------------------------
+    mysql_tquery_file(MySQL_GetHandle(), "atms.sql");
+    Logger_Log("setting up 'atms' table...");
+
+    Logger_Log("TABLE SETUP END");
     return 1;
 }
 

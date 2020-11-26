@@ -49,7 +49,6 @@ public OnPlayerText(playerid, text[])
 
     strcpy(chat_LastMessage[playerid], processedMessage, 144);
 
-
     // Police Radio
     if(processedMessage[0] == '!') {
         if(!Player_GetClass(playerid)) {
@@ -61,9 +60,24 @@ public OnPlayerText(playerid, text[])
                 continue;
             }
 
-            SendMsgF(i, COLOR_BLUE, "(radio) officer %p: "C_WHITE"%s", playerid, processedMessage[1]);
+            SendMsgF(i, COLOR_BLUE, "(Radio) officer %p: "C_WHITE"%s", playerid, processedMessage[1]);
         }
         return 0;
+    }
+
+    // Admin Chat
+    if(processedMessage[0] == '#') {
+        if(Admin_GetPlayerLevel(playerid) == 0) {
+            return 0;
+        }
+
+        foreach(new i : Player) {
+            if(Admin_GetPlayerLevel(playerid) <= 0) {
+                continue;
+            }
+
+            SendMsgF(i, COLOR_PINK, "(Admin) %s(%i): "C_WHITE"%s", playerid, playerid, processedMessage[1]);
+        }
     }
 
     // Normal Global Message

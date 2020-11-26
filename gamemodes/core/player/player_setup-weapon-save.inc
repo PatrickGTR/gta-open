@@ -17,4 +17,4 @@ hook OnMySQLConnected()
 
     Logger_Log("setting up 'player_weapons' table...");
     return 1;
-}   
+}

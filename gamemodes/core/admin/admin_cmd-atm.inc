@@ -18,6 +18,8 @@ ACMD:[5]createatm(playerid, params[]) {
     }
 
     defer DelayEdit(playerid, ret);
+
+    SendServerMsg(playerid, "ATM Created.");
 	return 1;
 }
 
@@ -41,6 +43,8 @@ ACMD:[5]editatm(playerid, params[]) {
     if(!ATM_Edit(playerid, ATM_FindIndexIDBySQLID(atmID))) {
         return SendErrorMsg(playerid, "Invalid ATM ID.");
     }
+
+    SendServerMsgF(playerid, "ATM "C_GREY"ID %i "C_WHITE"Edited.");
     return 1;
 }
 
@@ -60,5 +64,7 @@ ACMD:[5]deleteatm(playerid, params[]) {
     if(!ret) {
         return SendErrorMsg(playerid, "Invalid ATM ID, try again.");
     }
+
+    SendServerMsgF(playerid, "ATM "C_GREY"ID %i "C_WHITE"Deleted.", atmID);
     return 1;
 }

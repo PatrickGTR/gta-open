@@ -1,63 +1,56 @@
 ACMD:[5]setadmin(playerid, params[])
 {
-    new target, level;
-    if(sscanf(params, "ui", target, level)) return SendSyntaxMsg(playerid, "/setadmin [player] [level]");
-    if(target == INVALID_PLAYER_ID) return SendErrorMsg(playerid, "INVALID PLAYER!");
-    if(Admin_GetPlayerLevel(target) == 5) {
-        return SendErrorMsg(playerid, "You can't demote an developer!");
+    new
+        targetid,
+        level;
+
+    if(sscanf(params, "ui", targetid, level)) {
+        return SendSyntaxMsg(playerid, "/setadmin [player] [level]");
     }
-    if(Admin_GetPlayerLevel(target) == level) {
+
+    if(IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "INVALID PLAYER!");
+    }
+
+    if(Admin_GetPlayerLevel(targetid) == 5) {
+        return SendErrorMsg(playerid, "You can't demote a developer!");
+    }
+
+    if(Admin_GetPlayerLevel(targetid) == level) {
         return SendErrorMsg(playerid, "The player has currently at that admin position");
     }
-    if(level < 0 || level > MAX_ADMIN_LEVELS) {
-        return SendErrorMsgF(playerid, "Max admin level is %d", MAX_ADMIN_LEVELS);
+
+    if(!IS_IN_RANGE(level, 0, MAX_ADMIN_LEVELS)) {
+        return SendErrorMsgF(playerid, "The admin levels are 0 to %i", MAX_ADMIN_LEVELS);
     }
-    Admin_SetPlayerLevel(target, level);
-    SendMsgAllF(COLOR_MODERATION, "%p (%d)'s admin level is set to %s", target, target, Admin_GetRankName(target));
+
+    Admin_SetPlayerLevel(targetid, level);
+    SendMsgAllF(COLOR_MODERATION, "%p(%d)'s admin level is set to %s", targetid, targetid, Admin_GetRankName(targetid));
     return 1;
 }
 
 ACMD:[5]settester(playerid, params[])
 {
-    new target, level;
-    if(sscanf(params, "ui", target, level)) return SendSyntaxMsg(playerid, "/settester [playerid] [1/0]");
-    if(!IsPlayerConnected(target)) {
+    new
+        targetid,
+        bool:testerState;
+    if(sscanf(params, "ul", targetid, testerState)) {
+        return SendSyntaxMsg(playerid, "/settester (name/id) (0/1)");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
         return SendErrorMsg(playerid, "Player is not connected!");
     }
-    if(level < 0 || level > 1) {
-        return SendErrorMsg(playerid, "Use 0 to demote the player use 1 to promote the player");
-    }
-    if(level == 1 && GetPlayerTester(target)) {
+
+    if(testerState && GetPlayerTester(targetid)) {
         return SendErrorMsg(playerid, "Player is already a tester");
     }
-    if(level == 0 && !GetPlayerTester(target)) {
+    if(!testerState && !GetPlayerTester(targetid)) {
         return SendErrorMsg(playerid, "Player is not a tester you can't demote him");
     }
-    if(level == 1) {
-        SetPlayerTester(target, true);
-        SendMsgAllF(COLOR_MODERATION, "[BETA INFO]: %p (%d) is now a Beta Tester!", target, target);
-    }
-    if(level == 0) {
-        SetPlayerTester(target, false);
-        SendMsgAllF(COLOR_MODERATION, "[BETA INFO]: %p (%d) is demoted from Beta Tester to Normal Player", target, target);
-    }
-    return 1;
-}
 
-ACMD:[5]offsettester(playerid, params[])
-{
-    new playername[MAX_PLAYER_NAME], level;
-    if(sscanf(params, "s[24]i", playername, level)) return SendSyntaxMsg(playerid, "/offsettester (playername) (1/0)");
-    if(IsPlayerConnected(GetPlayerIdFromName(playername))) return SendErrorMsg(playerid, "Player is online use /settester instead");
-    if(level < 0 || level > 1) {
-        return SendErrorMsg(playerid, "Use 0 to demote the player use 1 to promote the player");
-    }
-    if(level == 1) {
-        OffSetTester(playerid, playername, true);
-    }
-    if(level == 0) {
-        OffSetTester(playerid, playername, false);
-    }
+    SetPlayerTester(targetid, testerState);
+    SendMsgAllF(COLOR_MODERATION, "(BETA TESTER) "C_GREY"%p(%d) "C_WHITE"is %s a "C_GREY"Beta Tester", targetid, targetid, (testerState) ? ("now") : ("no longer"));
     return 1;
 }
 
@@ -100,22 +93,6 @@ ACMD:[5]skick(playerid, params[])
     return 1;
 }
 
-ACMD:[5]givescore(playerid, params[])
-{
-    new target, score;
-    if(sscanf(params, "ui", target, score)) return SendSyntaxMsg(playerid, "/givescore (name/id) (score)");
-    Player_GiveScore(target, score, true);
-    return 1;
-}
-
-ACMD:[5]removescore(playerid, params[])
-{
-    new target, score;
-    if(sscanf(params, "ui", target, score)) return SendSyntaxMsg(playerid, "/removescore (name/id) (score)");
-    Player_RemoveScore(target, score);
-    return 1;
-}
-
 ACMD:[5]setarmy(playerid, params[])
 {
     new target, level, string[256];
@@ -128,7 +105,7 @@ ACMD:[5]setarmy(playerid, params[])
     }
     if(level < 0 || level > 1) {
         return SendErrorMsg(playerid, "1 = player can select army 0 = player can't select");
-    } 
+    }
     if(level == 0) {
         static const deleteQuery[] = "\
         UPDATE \

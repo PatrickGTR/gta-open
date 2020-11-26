@@ -6,10 +6,6 @@
 #include <inventory>
 #include <account_stats>
 
-#if SETUP_TABLE
-    #include <account_setup-inventory>
-#endif
-
 #include <YSI_Coding\y_hooks>
 
 static

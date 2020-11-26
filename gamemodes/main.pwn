@@ -42,6 +42,8 @@
 #include <YSI_Data\y_bit>
 #include <YSI_Data\y_iterate>
 
+#include <ini>
+
 #include <env>
 #include <streamer>
 #include <logger>
@@ -51,7 +53,7 @@
 
 // Gamemode Scripts
 
-#include <init> // This needs to be included first before the tables
+#include <init>
 
 #if SETUP_TABLE
 	#include <tables>

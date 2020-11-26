@@ -17,13 +17,13 @@ hook OnGameModeInit() {
 
     Logger_ToggleDebug(PLAYER_DEBUG_HANDLER, true);
 	Logger_ToggleDebug(ADMIN_DEBUG_HANDLER, true);
-	Logger_ToggleDebug(SERVER_DEBUG_HANDLER, true);    
-    
-    new 
-        MySQLOpt: option_id = mysql_init_options();
-	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server 
+	Logger_ToggleDebug(SERVER_DEBUG_HANDLER, true);
 
-    new 
+    new
+        MySQLOpt: option_id = mysql_init_options();
+	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server
+
+    new
         username[24],
         host[24],
         password[24],
@@ -31,11 +31,11 @@ hook OnGameModeInit() {
 
     if(Env_Has("MYSQL_USERNAME")) {
         Env_Get("MYSQL_USERNAME", username);
-    } 
+    }
     else {
         Logger_Log("Could not find environment variable for MYSQL_USERNAME");
     }
-    
+
     if(Env_Has("MYSQL_PASSWORD")) {
         Env_Get("MYSQL_PASSWORD", password);
     }
@@ -45,18 +45,18 @@ hook OnGameModeInit() {
 
     if(Env_Has("MYSQL_HOST")) {
         Env_Get("MYSQL_HOST", host);
-    } 
+    }
     else {
         Logger_Log("Could not find environment variable for MYSQL_HOST");
     }
-    
+
     if(Env_Has("MYSQL_DATABASE")) {
         Env_Get("MYSQL_DATABASE", database);
     }
     else {
         Logger_Log("Could not find environment variable for MYSQL_DATABASE");
     }
-    
+
     MySQL_ConHandle = mysql_connect(host, username, password, database);
 
     if(MySQL_ConHandle == MYSQL_INVALID_HANDLE || mysql_errno(MySQL_ConHandle) != 0) {
@@ -65,6 +65,11 @@ hook OnGameModeInit() {
     }
 
     Logger_Log("MySQL connection is successful.");
+
+    #if defined SETUP_TABLE
+        CallLocalFunction("OnMySQLSetupTable", "");
+    #endif
+
     CallLocalFunction("OnMySQLConnected", "");
     return 1;
 }

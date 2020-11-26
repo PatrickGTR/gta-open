@@ -3,7 +3,7 @@ ACMD:[1]acmds(playerid, params[])
 	new
 		tmp_string[1024];
 
-	//strcat(tmp_string, "/a [message] - Staff chat channel");
+	strcat(tmp_string, "# - Staff chat channel");
 
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_5)
 	{
@@ -12,22 +12,22 @@ ACMD:[1]acmds(playerid, params[])
 	}
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_4)
 	{
-		strcat(tmp_string, "\n\n"C_YELLOW"(level 4)"C_WHITE"\n");
+		strcat(tmp_string, "\n"C_YELLOW"(level 4)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[3]);
 	}
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_3)
 	{
-		strcat(tmp_string, "\n\n"C_YELLOW"(level 3)"C_WHITE"\n");
+		strcat(tmp_string, "\n"C_YELLOW"(level 3)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[2]);
 	}
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_2)
 	{
-		strcat(tmp_string, "\n\n"C_YELLOW"(level 2)"C_WHITE"\n");
+		strcat(tmp_string, "\n"C_YELLOW"(level 2)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[1]);
 	}
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_1)
 	{
-		strcat(tmp_string, "\n\n"C_YELLOW"(level 1)"C_WHITE"\n");
+		strcat(tmp_string, "\n"C_YELLOW"(level 1)"C_WHITE"\n");
 		strcat(tmp_string, adminCommands[0]);
 	}
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Admin Commands List", tmp_string, "Close", "");
@@ -65,24 +65,29 @@ public AdminListMenu(playerid, listitem)
 
 ACMD:[1]admins(playerid, params[])
 {
-	new onlineadmins = 0;
-	new tmpString[100];
+	new
+		count = 0,
+		tmpString[128];
+
 	TextMenu_Create(playerid, "AdminListMenu", "Admins");
 	foreach(new i : Player)
 	{
-		if(Admin_GetPlayerLevel(i) > 0) 
+		if(Admin_GetPlayerLevel(i) > 0)
 		{
-			format(tmpString, sizeof(tmpString),
-            "%p (%d) Admin Level: %s",
-        	i, i, Admin_GetRankName(i));
+			format(
+				tmpString,
+				sizeof(tmpString),
+            	"%p(%d) rank: %s", i, i, Admin_GetRankName(i)
+			);
+
 			TextMenu_Add(playerid, tmpString);
-			
-			format(tmpString, sizeof(tmpString), "AdminCount_%i", onlineadmins);
+
+			format(tmpString, sizeof(tmpString), "AdminCount_%i", count);
 			SetPVarInt(playerid, tmpString, i);
-			onlineadmins++;
+			count++;
 		}
 	}
-	if(onlineadmins == 0) {
+	if(count == 0) {
 		return SendServerMsg(playerid, "No online admins");
 	}
 	else {
@@ -93,70 +98,96 @@ ACMD:[1]admins(playerid, params[])
 
 ACMD:[1]get(playerid, params[])
 {
-	new targetid;
-	new Float:pos[4];
-	if(sscanf(params, "u", targetid)) return SendSyntaxMsg(playerid, "/get [player]");
+	new
+		targetid,
+		Float:x,
+		Float:y,
+		Float:z;
+
+	if(sscanf(params, "u", targetid)) {
+		return SendSyntaxMsg(playerid, "/get [player]");
+	}
+
 	if(!IsPlayerConnected(targetid)) {
 		return SendErrorMsg(playerid, "Player is not connected");
 	}
-	if(targetid == playerid) return SendErrorMsg(playerid, "You can't get yourself");
+
+	if(targetid == playerid) {
+		return SendErrorMsg(playerid, "You can't get yourself");
+	}
+
 	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
 	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
-	GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
-	SetPlayerPos(targetid, pos[0], pos[1], pos[2]);
+	GetPlayerPos(playerid, x, y, z);
+	SetPlayerPos(targetid, x, y, z);
 	return 1;
 }
 
 ACMD:[1]goto(playerid, params[])
 {
-	new target;
-	new Float:pos[4];
-	if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/gotop (playerid)");
-	if(!IsPlayerConnected(target)) {
+	new
+		targetid,
+		Float:x,
+		Float:y,
+		Float:z;
+
+	if(sscanf(params, "u", targetid)) {
+		return SendSyntaxMsg(playerid, "/gotop (playerid)");
+	}
+
+	if(!IsPlayerConnected(targetid)) {
 		return SendErrorMsg(playerid, "Player is not connected");
 	}
-	if(target == playerid) return SendErrorMsg(playerid, "You can't goto yourself");
-	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(target));
-	SetPlayerInterior(playerid, GetPlayerInterior(target));
-	GetPlayerPos(target, pos[0], pos[1], pos[2]);
-	SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+
+	if(targetid == playerid) {
+		return SendErrorMsg(playerid, "You can't goto yourself");
+	}
+
+	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
+	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
+	GetPlayerPos(playerid, x, y, z);
+	SetPlayerPos(targetid, x, y, z);
 	return 1;
 }
 
 ACMD:[1]kick(playerid, params[])
 {
-	new target, reason[128];
-	if(sscanf(params, "us[128]", target, reason)) return SendSyntaxMsg(playerid, "/kick (name/in) (reason)");
-	if(!IsPlayerConnected(target)) {
-		return SendErrorMsg(playerid, "Player not connected");
+	new
+		targetid,
+		reason[32];
+
+	if(sscanf(params, "uS[32](No Reason)", targetid, reason)) {
+		return SendSyntaxMsg(playerid, "/kick (name/in) (reason)");
 	}
-	SendMsgAllF(COLOR_MODERATION, "[ADMIN KICK]: %p (%d) has been kicked for: %s", target, target, reason);
-	SendMsgF(target, COLOR_MODERATION, "[ADMIN KICK]: You have Been Kicked for Reason: %s", reason);
-	defer KickTimer(target);
+
+	if(!IsPlayerConnected(targetid)) {
+		return SendErrorMsg(playerid, "Player is not connected");
+	}
+
+	SendMsgAllF(COLOR_MODERATION, "[ADMIN KICK]: %p (%d) has been kicked for: %s", targetid, targetid, reason);
+	SendMsgF(targetid, COLOR_MODERATION, "[ADMIN KICK]: You have Been Kicked for: %s", reason);
+	Kick(targetid);
 	return 1;
 }
 
 ACMD:[1]setwanted(playerid, params[])
 {
-	new target, level;
-	if(sscanf(params, "ui", target, level)) return SendSyntaxMsg(playerid, "/setwanted (name/id) (wanted level)");
-	if(!IsPlayerConnected(target)) {
+	new
+		targetid,
+		level;
+
+	if(sscanf(params, "ui", targetid, level)) {
+		return SendSyntaxMsg(playerid, "/setwanted (name/id) (wanted level)");
+	}
+	if(!IsPlayerConnected(targetid)) {
 		return SendErrorMsg(playerid, "Player is not connected");
 	}
 	if(level != 0 && Player_IsLEO(playerid)) {
 		return SendErrorMsg(playerid, "You cant give Enforcers wanted level");
 	}
-	PLAYER_SetPlayerWantedLevel(target, level);
-	SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s wanted level has been set to %d", target, target, level);
-	SendMsgF(target, COLOR_MODERATION, "[ADMIN]: Your wanted level has been set to %d by Admin", level);
-	return 1;
-}
-
-ACMD:[1]asay(playerid, params[])
-{
-	new text[128];
-	if(sscanf(params, "s[128]", text)) return SendSyntaxMsg(playerid, "/asay (text)");
-	SendMsgAllF(COLOR_MODERATION, "[ADMIN]: %s", text);
+	SetPlayerWantedLevel(targetid, level);
+	SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: %p (%d)'s wanted level has been set to %d", targetid, targetid, level);
+	SendMsgF(targetid, COLOR_MODERATION, "[ADMIN]: Your wanted level has been set to %d by Admin", level);
 	return 1;
 }
 
@@ -171,33 +202,57 @@ ACMD:[1]respawn(playerid, params[])
 
 ACMD:[1]freeze(playerid, params[])
 {
-	new target, level, reason[128];
-	if(sscanf(params, "uiS(No Reason)[128]", target, level, reason)) return SendSyntaxMsg(playerid, "/freeze (name/id) (1/0) (reason)");
-	if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
-	if(level < 0 || level > 1) {
-		return SendErrorMsg(playerid, "Use 0 to unfreeze the player use 1 to freeze");
+	new
+		targetid,
+		bool:freezeState;
+
+	if(sscanf(params, "ul", targetid, freezeState)) {
+		return SendSyntaxMsg(playerid, "/freeze (name/id) (0/1)");
 	}
-	if(level == 1) {
-		TogglePlayerControllable(target, false);
-		SendMsgAllF(COLOR_MODERATION, "[ADMIN FREEZE]: %p (%d) has been freeze by an Admin for: %s", target, target, reason);
+
+	if(!IsPlayerConnected(targetid)) {
+		return SendErrorMsg(playerid, "Player is not connected");
 	}
-	if(level == 0) {
-		TogglePlayerControllable(target, true);
-		SendMsgAllF(COLOR_MODERATION, "[ADMIN UNFREEZE]: %p (%d) has been unfreezed by an Admin", target, target);
-	}
+
+	SendMsgAllF(
+		COLOR_MODERATION,
+		"[ADMIN FREEZE]: %p(%d) has been %s by Admin %p(%d)",
+		targetid,
+		targetid,
+		(freezeState) ? ("frozen") : ("unfrozen"),
+		playerid,
+		playerid
+	);
+
+	// reverse it
+	// because TogglePlayerControllable function
+	// uses 0 to freeze and 1 to unfreeze while
+	// the command takes 0 to unfreeze, 1 to freeze.
+	TogglePlayerControllable(targetid, !freezeState);
  	return 1;
 }
 
 ACMD:[1]akill(playerid, params[])
 {
-	new target;
-	new Float:x, Float:y, Float:z;
-	if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/akill (name/id)");
-	if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
-	SetPlayerHealth(target, 0);
-	GetPlayerPos(target, x, y, z);
-	SendMsgAllF(COLOR_BROWN, "%p (%d) Has Died by the Hand Of God", target, target);
+	new
+		targetid,
+		Float:x,
+		Float:y,
+		Float:z;
+
+	if(sscanf(params, "u", targetid)) {
+		return SendSyntaxMsg(playerid, "/akill (name/id)");
+	}
+
+	if(!IsPlayerConnected(targetid)) {
+		return SendErrorMsg(playerid, "Player is not connected");
+	}
+
+	GetPlayerPos(targetid, x, y, z);
 	CreateExplosion(x, y, z, 12, 10.0);
+	SetPlayerHealth(targetid, 0);
+
+	SendMsgAllF(COLOR_BROWN, "%p(%d) Has died by hand of GOD", targetid, targetid);
 	return 1;
 }
 
