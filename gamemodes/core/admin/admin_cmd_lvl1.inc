@@ -3,7 +3,7 @@ ACMD:[1]acmds(playerid, params[])
 	new
 		tmp_string[1024];
 
-	//strcat(tmp_string, "/a [message] - Staff chat channel");
+	strcat(tmp_string, "# - Staff chat channel");
 
 	if (Admin_GetPlayerLevel(playerid) >= ADM_LVL_5)
 	{

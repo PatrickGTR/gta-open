@@ -4,6 +4,7 @@
 // VERY IMPORTANT!
 // Do not change the priority of how the tables are being created
 hook OnMySQLConnected() {
+    Logger_Log("TABLE SETUP BEGIN");
 
     // --------------------------------------------------------------------------------------------
     // PLAYERS
@@ -38,7 +39,7 @@ hook OnMySQLConnected() {
     Logger_Log("setting up 'bans' table...");
 
     // --------------------------------------------------------------------------------------------
-    // HOUSES 
+    // HOUSES
     // --------------------------------------------------------------------------------------------
 
     mysql_tquery_file(MySQL_GetHandle(), "houses.sql");
@@ -51,6 +52,14 @@ hook OnMySQLConnected() {
     mysql_tquery_file(MySQL_GetHandle(), "gangs.sql");
     Logger_Log("setting up 'gangs' table...");
     Logger_Log("setting up 'gang_members' table...");
+
+    // --------------------------------------------------------------------------------------------
+    // ATMS
+    // --------------------------------------------------------------------------------------------
+    mysql_tquery_file(MySQL_GetHandle(), "atms.sql");
+    Logger_Log("setting up 'atms' table...");
+
+    Logger_Log("TABLE SETUP END");
     return 1;
 }
 
