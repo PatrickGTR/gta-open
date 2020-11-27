@@ -2,7 +2,7 @@
 // Github -> https://github.com/PatrickGTR
 
 // Credits to these people, made the production easier.
-// Southclaw, Y_Les, maddinatOr, SyS, Zeex, Slice, Lorenc
+// Southclaw, Y_Less, maddinatOr, SyS, Zeex, Slice, Lorenc
 
 
 // Custom Callbacks

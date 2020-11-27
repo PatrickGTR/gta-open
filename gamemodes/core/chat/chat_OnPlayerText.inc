@@ -78,6 +78,7 @@ public OnPlayerText(playerid, text[])
 
             SendMsgF(i, COLOR_PINK, "(Admin) %s(%i): "C_WHITE"%s", playerid, playerid, processedMessage[1]);
         }
+        return 0;
     }
 
     // Normal Global Message

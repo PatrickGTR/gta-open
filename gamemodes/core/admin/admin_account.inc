@@ -144,6 +144,29 @@ stock Admin_GetRankName(playerid)
 Admin_GetPlayerLevel(playerid)
     return PlayerAdminLevel[playerid];
 
+stock SendAdminCmdUsage(playerid, const cmd[], const params[]) {
+
+    if(Admin_GetPlayerLevel(playerid) == 5) {
+        return 0;
+    }
+
+   // loop through all players
+    foreach(new i : Player) {
+        // only send message if admin level is more than 1
+        if (Admin_GetPlayerLevel(i) >= 1) {
+            SendMsgF(i, COLOR_MODERATION, "[ADMINCMD]: %p (%d) used %s %s", playerid, playerid, cmd, params);
+        }
+    }
+    return 1;
+}
+
+stock Admin_GetPlayerLevelLogCmdUsage(playerid, const cmd[], const params[], const level) {
+    if(Admin_GetPlayerLevel(playerid) < level) {
+        return true;
+    }
+    SendAdminCmdUsage(playerid, cmd, params);
+    return false;
+}
 
 stock Admin_SetPlayerDuty(playerid, bool:toggle)
 {

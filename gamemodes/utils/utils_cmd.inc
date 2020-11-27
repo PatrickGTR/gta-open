@@ -7,9 +7,10 @@
 #define CMD:%1(%2) forward cmd_%1(%2); public cmd_%1(%2)
 
 // ADMIN
-#define ACMD:[%0]%1(%2,%3) CMD:%1(%2,%3) if (Admin_GetPlayerLevel(%2) < %0) return 0; else
+#define @ACMD_PARAMS_REPLACE:%0[] %0
+#define ACMD:[%0]%1(%2,%3) CMD:%1(%2,%3)if(Admin_GetPlayerLevelLogCmdUsage(%2,#%1,@ACMD_PARAMS_REPLACE:%3,%0))return 0;else
 
-// TESTER 
+// TESTER
 #define TCMD:%1(%2,%3) CMD:%1(%2,%3) if (!GetPlayerTester(%2) && Admin_GetPlayerLevel(%2) == 0) return 0; else
 
 #if defined OnPlayerCommandReceived
@@ -51,3 +52,4 @@ stock CommandExists(const cmd[])
     strcpy(cmd_name, cmd);
     return (funcidx(prefix) != -1);
 }
+
