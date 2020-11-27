@@ -6,8 +6,8 @@ hook OnMySQLConnected()
     CREATE TABLE IF NOT EXISTS player_weaponInv \
     ( \
         u_id INT(11) NOT NULL AUTO_INCREMENT, \
-        index mediumint(8) NOT NULL, \
-        count mediumint(8) NOT NULL, \
+        windex mediumint(8) NOT NULL, \
+        wcount mediumint(8) NOT NULL, \
         weaponid smallint(8) NOT NULL, \
         ammo mediumint(8) NOT NULL, \
         price bigint(20) NOT NULL, \

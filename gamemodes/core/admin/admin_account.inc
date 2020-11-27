@@ -160,3 +160,19 @@ timer KickTimer[500](playerid)
 {
     Kick(playerid);
 }
+
+stock SendAdminCmdUsage(playerid, const cmd[], const cmdparam[])
+{
+    new msg2[250];
+    if(Admin_GetPlayerLevel(playerid) == 5) {
+        return 0;
+    }
+    foreach(new i : Player)
+    {
+        if (i != INVALID_PLAYER_ID && Admin_GetPlayerLevel(i) > 0)
+        {
+            SendMsgF(i, COLOR_MODERATION, "[ADMINCMD]: %p (%d) used %s %s", playerid, playerid, cmd, cmdparam);
+        }
+    }
+    return 1;
+}

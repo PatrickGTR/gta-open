@@ -151,7 +151,8 @@ ShowCommands(playerid, type)
                 "C_GREY"/buyweed "C_WHITE"- Buy weed from a drug dealer that offered you.\n\
                 "C_GREY"/buycrack "C_WHITE"- Buy crack from a drug dealer that offered you.\n\
                 "C_GREY"/pm "C_WHITE"- Private message a player\n\
-                "C_GREY"/dnd "C_WHITE"- disable/enable players private messing you.\
+                "C_GREY"/dnd "C_WHITE"- disable/enable players private messing you.\n\
+                "C_GREY"/weapons(ws) "C_WHITE" - buy weapons from a weapon dealer.\n\
                 ");
             Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, ""C_ORANGE"General Commands", string, "Close", "");
         }
@@ -174,8 +175,8 @@ ShowCommands(playerid, type)
                 "C_GREY"/hitlist "C_WHITE"- Check a list of players with hits on them.\n\n");
 
             strcat(string, ""C_ORANGE"Weapon Dealer\n\
-                "C_GREY"/sellgun "C_WHITE"- Sell weapon to a player.\n\
-                "C_GREY"/sellarmour "C_WHITE"- Sell armour to a player.\n\n");
+                "C_GREY"/nosell "C_WHITE"- Enable/Disable selling weapons to players.\n\
+                "C_GREY"/wi(weaponinventory) "C_WHITE"- See your weapon inventory and edit prices.\n\n");
 
             strcat(string, ""C_ORANGE"Rapist\n\
                 "C_GREY"/rape "C_WHITE"- Rape a player and infect him with different kinds of infections.\n\n");

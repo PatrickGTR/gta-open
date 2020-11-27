@@ -14,6 +14,7 @@ static
     gWeaponAmmo[MAX_PLAYERS][MAX_WEAPON_INDEX],
     gWeaponCount[MAX_PLAYERS][MAX_WEAPON_INDEX], // The Ammout of the weapon ex: 2x M4 (500 Ammo)
     Bit:gHasBeenOffered[MAX_PLAYERS],
+    bool:gNoSell[MAX_PLAYERS],
     Iterator:gWeaponIndex[MAX_PLAYERS]<MAX_WEAPON_INDEX>,
     gDealerID[MAX_PLAYERS],
     gPlayerArmourInInv[MAX_PLAYERS]
@@ -31,8 +32,8 @@ hook OnMySQLConnected()
 {
     static const query_loadWeaponInv[] = "\
     SELECT \
-        index, \
-        count, \
+        windex, \
+        wcount, \
         weaponid, \
         ammo, \
         price, \
@@ -45,7 +46,7 @@ hook OnMySQLConnected()
     stmt_loadWeaponInv = MySQL_PrepareStatement(MySQL_GetHandle(), query_loadWeaponInv);
 
     static const query_saveWeaponInv[] = "\
-    INSERT INTO player_weaponInv (u_id, index, count, weaponid, ammo, price) \
+    INSERT INTO player_weaponInv (u_id, windex, wcount, weaponid, ammo, price) \
     VALUES (?, ?, ?, ?, ?, ?, ?)\
     ";
     stmt_saveWeaponInv = MySQL_PrepareStatement(MySQL_GetHandle(), query_saveWeaponInv);
@@ -115,7 +116,9 @@ CMD:weapons(playerid, params[])
 {
     new dealerid = Player_GetClosestPlayer(playerid, 5.0);
     if(!IsPlayerConnected(dealerid)) return SendErrorMsg(playerid, "There is no players close to you");
+    if(Player_GetClass(playerid) != TEAM_CIVILIAN) return SendErrorMsg(playerid, "You have to be a civilian to use this.");
     if(Player_GetJob(dealerid) != TYPE_WEAPONDEALER) return SendErrorMsg(playerid, "This player is not a weapon dealer");
+    if(gNoSell[dealerid]) return SendErrorMsg(playerid, "Dealer is not selling atm.");
     ShowDealerInvToPlayer(playerid, dealerid);
     return 1;
 }
@@ -123,12 +126,25 @@ ALTCMD:ws(weapons);
 
 CMD:weaponinventory(playerid, params[])
 {
-    if(Player_GetJob(playerid) != TYPE_WEAPONDEALER) return SendErrorMsg(playerid, "You're not a weapon dealer");
+    if(Player_GetJob(playerid) != TYPE_WEAPONDEALER || Player_GetClass(playerid) != TEAM_CIVILIAN) return SendErrorMsg(playerid, "You're not a weapon dealer");
     Player_ShowWeaponInv(playerid);
     return 1;
 }
 ALTCMD:wi(weaponinventory);
 ALTCMD:weapinv(weaponinventory);
+
+CMD:nosell(playerid, params)
+{
+    if(Player_GetJob(playerid) != TYPE_WEAPONDEALER || Player_GetClass(playerid) != TEAM_CIVILIAN) return SendErrorMsg(playerid, "You're not a weapon dealer");
+    if(!gNoSell[playerid]) {
+        SendServerMsg(playerid, "You're now selling weapons.");
+        gNoSell[playerid] = true;
+    } else if(gNoSell[playerid]) {
+        SendServerMsg(playerid, "You're not selling weapons now.");
+        gNoSell[playerid] = false;
+    }
+    return 1;
+}
 
 /* FUNCTIONS */
 
@@ -148,7 +164,7 @@ TDMenu:DealerInventory(playerid, listitem)
         if(gWeaponCount[dealerid][index] > 1) {
             gWeaponCount[dealerid][index] --;
             new tmpstr[152];
-            mysql_format(MySQL_GetHandle(), tmpstr, sizeof(tmpstr), "UPDATE player_weaponInv SET count = '%d' WHERE u_id = '%d' & index = '%d'", gWeaponCount[playerid][index], Player_GetAccountID(playerid), index);
+            mysql_format(MySQL_GetHandle(), tmpstr, sizeof(tmpstr), "UPDATE player_weaponInv SET wcount = '%d' WHERE u_id = '%d' & windex = '%d'", gWeaponCount[playerid][index], Player_GetAccountID(playerid), index);
             mysql_tquery(MySQL_GetHandle(), tmpstr);
         } else {
             DeleteWeaponIndex(dealerid, index, true);
@@ -170,7 +186,7 @@ static ShowDealerInvToPlayer(playerid, dealerid)
     foreach(new i : gWeaponIndex[dealerid])
     {
         GetWeaponName(gWeaponID[dealerid][i], weaponname, sizeof weaponname);
-        format(tmpString, sizeof(tmpString), "Weapon: %s Ammo: %d Price: $%d", weaponname, gWeaponAmmo[dealerid][i], gWeaponPrice[dealerid][i]);
+        format(tmpString, sizeof(tmpString), "Weapon: ~g~%s ~w~Ammo: ~g~%d ~w~Price: ~g~$%d", weaponname, gWeaponAmmo[dealerid][i], gWeaponPrice[dealerid][i]);
         TextMenu_Add(playerid, tmpString);
 
         count ++;
@@ -207,7 +223,7 @@ TDMenu:WeaponInventory(playerid, listitem)
             gWeaponPrice[playerid][index] = value;
             SendServerMsgF(playerid, "You have set %s (%d Ammo)'s price to %d", weaponname, gWeaponAmmo[playerid][index], value);
             new tmpstr[152];
-            mysql_format(MySQL_GetHandle(), tmpstr, sizeof(tmpstr), "UPDATE player_weaponInv SET price = '%d' WHERE u_id = '%d' & index = '%d'", value, Player_GetAccountID(playerid), index);
+            mysql_format(MySQL_GetHandle(), tmpstr, sizeof(tmpstr), "UPDATE player_weaponInv SET price = '%d' WHERE u_id = '%d' & windex = '%d'", value, Player_GetAccountID(playerid), index);
             mysql_tquery(MySQL_GetHandle(), tmpstr);
             Player_ShowWeaponInv(playerid);
         }
@@ -229,7 +245,7 @@ static Player_ShowWeaponInv(playerid)
     foreach(new i : gWeaponIndex[playerid])
     {
         GetWeaponName(gWeaponID[playerid][i], weaponname, sizeof weaponname);
-        format(tmpString, sizeof(tmpString), "Weapon: %s Ammo: %d Price: $%d Query: %d", weaponname, gWeaponAmmo[playerid][i], gWeaponPrice[playerid][i], gWeaponCount[playerid][i]);
+        format(tmpString, sizeof(tmpString), "Weapon: ~g~%s ~w~Ammo: ~g~%d ~w~Price: ~g~$%d Query: ~g~%d", weaponname, gWeaponAmmo[playerid][i], gWeaponPrice[playerid][i], gWeaponCount[playerid][i]);
         TextMenu_Add(playerid, tmpString);
 
         count++;
@@ -276,7 +292,7 @@ static GivePlayerInvWeapon(playerid, weaponid, ammo)
         {
             gWeaponCount[playerid][i]++;
             new tmpString[152];
-            mysql_format(MySQL_GetHandle(), tmpString, sizeof(tmpString), "UPDATE player_weaponInv SET count = '%d' WHERE u_id = '%d' & index = '%d'", gWeaponCount[playerid][i], Player_GetAccountID(playerid), i);
+            mysql_format(MySQL_GetHandle(), tmpString, sizeof(tmpString), "UPDATE player_weaponInv SET wcount = '%d' WHERE u_id = '%d' & windex = '%d'", gWeaponCount[playerid][i], Player_GetAccountID(playerid), i);
             mysql_tquery(MySQL_GetHandle(), tmpString);
             return 1;
         }
@@ -308,46 +324,55 @@ TDMenu:WeaponShowPage1(playerid, listitem)
             if(GetPlayerMoney(playerid) < 15000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -15000);
             GivePlayerInvWeapon(playerid, 24, 250);
+            Player_ShowWeaponShop(playerid, 1);
         }
         case 2: {
             if(GetPlayerMoney(playerid) < 30000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -30000);
             GivePlayerInvWeapon(playerid, 24, 500);
+            Player_ShowWeaponShop(playerid, 1);
         }
         case 3: {
             if(GetPlayerMoney(playerid) < 10000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -10000);
             GivePlayerInvWeapon(playerid, 26, 250);
+            Player_ShowWeaponShop(playerid, 1);
         }   
         case 4: {
             if(GetPlayerMoney(playerid) < 25000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -25000);
             GivePlayerInvWeapon(playerid, 24, 500);
+            Player_ShowWeaponShop(playerid, 1);
         }
         case 5: {
             if(GetPlayerMoney(playerid) < 5000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -5000);
             GivePlayerInvWeapon(playerid, 22, 100);
+            Player_ShowWeaponShop(playerid, 1);
         }
         case 6: {
-            if(GetPlayerMoney(playerid) < 10000) return SendErrorMsg(playerid, "You don't have enough money");
-            GivePlayerMoney(playerid, -10000);
+            if(GetPlayerMoney(playerid) < 50000) return SendErrorMsg(playerid, "You don't have enough money");
+            GivePlayerMoney(playerid, -50000);
             GivePlayerInvWeapon(playerid, 22, 250);
+            Player_ShowWeaponShop(playerid, 1);
         }
         case 7: {
             if(GetPlayerMoney(playerid) < 5000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -5000);
             GivePlayerInvWeapon(playerid, 23, 100);
+            Player_ShowWeaponShop(playerid, 1);
         }
         case 8: {
             if(GetPlayerMoney(playerid) < 10000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -10000);
             GivePlayerInvWeapon(playerid, 23, 250);
+            Player_ShowWeaponShop(playerid, 1);
         }
         case 9: {
             if(GetPlayerMoney(playerid) < 6000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -6000);
             GivePlayerInvWeapon(playerid, 25, 50);
+            Player_ShowWeaponShop(playerid, 1);
         }
         case 10: {
             Player_ShowWeaponShop(playerid, 2);
@@ -362,49 +387,98 @@ TDMenu:WeaponShowPage2(playerid, listitem)
     {
         case 1: {
             if(GetPlayerMoney(playerid) < 12000) return SendErrorMsg(playerid, "You don't have enough money");
-            GivePlayerMoney(playerid, -15000);
-            GivePlayerInvWeapon(playerid, 24, 250);
+            GivePlayerMoney(playerid, -12000);
+            GivePlayerInvWeapon(playerid, 25, 100);
+            Player_ShowWeaponShop(playerid, 2);
         }
         case 2: {
             if(GetPlayerMoney(playerid) < 13000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -13000);
-            GivePlayerInvWeapon(playerid, 24, 500);
+            GivePlayerInvWeapon(playerid, 27, 100);
+            Player_ShowWeaponShop(playerid, 2);
         }
         case 3: {
             if(GetPlayerMoney(playerid) < 26000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -26000);
-            GivePlayerInvWeapon(playerid, 26, 250);
+            GivePlayerInvWeapon(playerid, 27, 250);
+            Player_ShowWeaponShop(playerid, 2);
         }   
         case 4: {
             if(GetPlayerMoney(playerid) < 25000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -25000);
-            GivePlayerInvWeapon(playerid, 24, 500);
+            GivePlayerInvWeapon(playerid, 28, 250);
+            Player_ShowWeaponShop(playerid, 2);
         }
         case 5: {
             if(GetPlayerMoney(playerid) < 50000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -50000);
-            GivePlayerInvWeapon(playerid, 22, 100);
+            GivePlayerInvWeapon(playerid, 28, 500);
+            Player_ShowWeaponShop(playerid, 2);
         }
         case 6: {
             if(GetPlayerMoney(playerid) < 25000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -25000);
-            GivePlayerInvWeapon(playerid, 22, 250);
+            GivePlayerInvWeapon(playerid, 32, 250);
+            Player_ShowWeaponShop(playerid, 2);
         }
         case 7: {
             if(GetPlayerMoney(playerid) < 50000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -50000);
-            GivePlayerInvWeapon(playerid, 23, 100);
+            GivePlayerInvWeapon(playerid, 32, 500);
+            Player_ShowWeaponShop(playerid, 2);
         }
         case 8: {
-            if(GetPlayerMoney(playerid) < 10000) return SendErrorMsg(playerid, "You don't have enough money");
-            GivePlayerMoney(playerid, -10000);
-            GivePlayerInvWeapon(playerid, 23, 250);
+            if(GetPlayerMoney(playerid) < 15000) return SendErrorMsg(playerid, "You don't have enough money");
+            GivePlayerMoney(playerid, -15000);
+            GivePlayerInvWeapon(playerid, 31, 250);
+            Player_ShowWeaponShop(playerid, 2);
         }
         case 9: {
             Player_ShowWeaponShop(playerid, 1);
         }
         case 10: {
             Player_ShowWeaponShop(playerid, 3);
+        }
+    }
+    return 1;
+}
+
+TDMenu:WeaponShowPage3(playerid, listitem)
+{
+    switch(listitem)
+    {
+        case 1: {
+            if(GetPlayerMoney(playerid) < 10000) return SendErrorMsg(playerid, "You don't have enough money");
+            GivePlayerMoney(playerid, -10000);
+            GivePlayerInvWeapon(playerid, 30, 250);
+            Player_ShowWeaponShop(playerid, 3);
+        }
+        case 2: {
+            if(GetPlayerMoney(playerid) < 5000) return SendErrorMsg(playerid, "You don't have enough money");
+            GivePlayerMoney(playerid, -5000);
+            GivePlayerInvWeapon(playerid, 33, 50);
+            Player_ShowWeaponShop(playerid, 3);
+        }
+        case 3: {
+            if(GetPlayerMoney(playerid) < 10000) return SendErrorMsg(playerid, "You don't have enough money");
+            GivePlayerMoney(playerid, -10000);
+            GivePlayerInvWeapon(playerid, 33, 100);
+            Player_ShowWeaponShop(playerid, 3);
+        }   
+        case 4: {
+            if(GetPlayerMoney(playerid) < 6000) return SendErrorMsg(playerid, "You don't have enough money");
+            GivePlayerMoney(playerid, -6000);
+            GivePlayerInvWeapon(playerid, 34, 50);
+            Player_ShowWeaponShop(playerid, 3);
+        }
+        case 5: {
+            if(GetPlayerMoney(playerid) < 12000) return SendErrorMsg(playerid, "You don't have enough money");
+            GivePlayerMoney(playerid, -12000);
+            GivePlayerInvWeapon(playerid, 34, 100);
+            Player_ShowWeaponShop(playerid, 3);
+        }
+        case 6: {
+            Player_ShowWeaponShop(playerid, 2);
         }
     }
     return 1;
@@ -425,7 +499,7 @@ Player_ShowWeaponShop(playerid, page)
             TextMenu_Add(playerid, "Silenced 9mm (100 Ammo)\t~g~$5000");
             TextMenu_Add(playerid, "Silenced 9mm (250 Ammo)\t~g~$10000");
             TextMenu_Add(playerid, "Shotgun (50 Ammo)\t~g~$6000");
-            //TextMenu_Add(playerid, "Next Page");
+            TextMenu_Add(playerid, "Next Page");
         }
         case 2: {
             TextMenu_Create(playerid, "WeaponShowPage2", "Weapons");
@@ -448,7 +522,6 @@ Player_ShowWeaponShop(playerid, page)
             TextMenu_Add(playerid, "Sniper Rifle (50 Ammo)\t~g~$6000");  
             TextMenu_Add(playerid, "Sniper Rifle (100 Ammo)\t~g~$12000");
             TextMenu_Add(playerid, "Previous Page");
-            TextMenu_Add(playerid, "Next Page");
         }
     }
     TextMenu_Show(playerid);
