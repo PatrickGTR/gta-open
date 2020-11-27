@@ -3,7 +3,7 @@
 hook OnMySQLConnected()
 {
     static const query[] = "\
-    CREATE TABLE IF NOT EXISTS player_weaponInv \
+    CREATE TABLE IF NOT EXISTS weapon_Inventory_player \
     ( \
         u_id INT(11) NOT NULL AUTO_INCREMENT, \
         windex mediumint(8) NOT NULL, \
