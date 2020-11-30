@@ -101,7 +101,6 @@ public TextMenuAmmunationMain(playerid, listitem)
             Ammunation_ShowMenu(playerid);
         }
         case 11: {
-            SendClientMessage(playerid, -1, "Next Page");
             Ammunation_ShowMenu(playerid, true);
         }
     }
@@ -160,8 +159,11 @@ public TextMenuAmmunationNext(playerid, listitem) {
             Ammunation_ShowMenu(playerid, true);
         }
         case 7: {
+            if(Player_GetJob(playerid) != TYPE_WEAPONDEALER) return SendErrorMsg(playerid, "You're not a weapon dealer");
+            Player_ShowWeaponShop(playerid, 1);
+        }
+        case 8: {
             Ammunation_ShowMenu(playerid);
-            SendClientMessage(playerid, -1, "Previous Page.");
         }
     }
     return 1;
@@ -248,6 +250,7 @@ stock Ammunation_ShowMenu(playerid, bool:next = false) {
         TextMenu_Add(playerid, "~w~M4 250 ammo [~g~$25,000~w~]");
         TextMenu_Add(playerid, "~w~Chainsaw [~g~$15,000~w~]");
         TextMenu_Add(playerid, "~w~Armour [~g~$1,000~w~]");
+        TextMenu_Add(playerid, "~w~Buy Weapon For Inventory");
         TextMenu_Add(playerid, "~y~Prev Page");
     }
 

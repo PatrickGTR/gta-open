@@ -15,6 +15,6 @@ hook OnMySQLConnected()
         )";
     mysql_tquery(MySQL_GetHandle(), query);
 
-    log("setting up 'player_inventory' table...");
+    Logger_Log("setting up 'player_inventory' table...");
     return 1;
 }

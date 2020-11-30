@@ -42,13 +42,13 @@ TCMD:fly(playerid, params[])
         SendServerMsg(playerid, "Control: Space = Move Low");
         SendServerMsg(playerid, "Control: Shift = Move Up");
         TogglePlayerControllable(playerid, false);
-        SendAdminCmdUsage(playerid, "/fly turn on", params);
+        //SendAdminCmdUsage(playerid, "/fly turn on", params);
     }
     else if(fly[playerid] == true)
     {
         fly[playerid] = false;
         SendServerMsg(playerid, "Fly Mode off");
-        SendAdminCmdUsage(playerid, "/fly turn off", params);
+        //SendAdminCmdUsage(playerid, "/fly turn off", params);
         TogglePlayerControllable(playerid, true);
     }
     return 1;

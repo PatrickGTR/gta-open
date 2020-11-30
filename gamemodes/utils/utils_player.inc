@@ -49,13 +49,13 @@ Player_IsInAmmu(playerid)
     return 0;
 }
 
-Float:Player_GetArmour(playerid) {
+/*Float:Player_GetArmour(playerid) {
     new
         Float:playerArmour;
 
     GetPlayerArmour(playerid, playerArmour);
     return playerArmour;
-}
+}*/
 
 stock Player_FacePlayer(playerid, giveplayerid) {
     // function made by Nero_3D.

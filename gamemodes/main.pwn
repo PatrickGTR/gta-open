@@ -82,6 +82,7 @@ public OnGameModeInit() {
 	Message_SetTime(5);
     Message_Add("Welcome to GTA:OPEN");
     Message_Add("You like GTA:OPEN? Add us to your favourites!");
+	Message_Add("Check our discord server discord.gg/fhN3q4J6Qr");
     Message_Add("Help keep the server alive by donating!");
 
 
@@ -123,9 +124,4 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
 	}
 
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
-}
-
-CMD:kill(playerid) {
-	SetPlayerHealth(playerid, 0.0);
-	return 1;
 }
