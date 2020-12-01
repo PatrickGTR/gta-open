@@ -14,158 +14,46 @@ hook OnGameModeInit()
     return 1;
 }
 
-forward TextMenuAmmunationMain(playerid, listitem);
-public TextMenuAmmunationMain(playerid, listitem)
-{
-    switch(listitem) {
-        case 1: {
-            if(GetPlayerMoney(playerid) < 50000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_TEC9, 500);
-            GivePlayerMoney(playerid, -50000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 2: {
-            if(GetPlayerMoney(playerid) < 25000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_TEC9, 250);
-            GivePlayerMoney(playerid, -25000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 3: {
-            if(GetPlayerMoney(playerid) < 50000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_UZI, 500);
-            GivePlayerMoney(playerid, -50000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 4:
-        {
-            if(GetPlayerMoney(playerid) < 25000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_UZI, 250);
-            GivePlayerMoney(playerid, -25000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 5:
-        {
-            if(GetPlayerMoney(playerid) < 50000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_MP5, 500);
-            GivePlayerMoney(playerid, -50000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 6: {
-            if(GetPlayerMoney(playerid) < 25000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_MP5, 250);
-            GivePlayerMoney(playerid, -25000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 7: {
-            if(GetPlayerMoney(playerid) < 50000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_SAWEDOFF, 500);
-            GivePlayerMoney(playerid, -50000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 8: {
-            if(GetPlayerMoney(playerid) < 25000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_SAWEDOFF, 250);
-            GivePlayerMoney(playerid, -25000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 9: {
-            if(GetPlayerMoney(playerid) < 50000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_DEAGLE, 500);
-            GivePlayerMoney(playerid, -50000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 10: {
-            if(GetPlayerMoney(playerid) < 25000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_DEAGLE, 250);
-            GivePlayerMoney(playerid, -25000);
-            Ammunation_ShowMenu(playerid);
-        }
-        case 11: {
-            Ammunation_ShowMenu(playerid, true);
-        }
-    }
-    return 1;
-}
+static const
+    gAmmunationData[][] = {
+    // Layout
+    // Weapon ID | Weapon_Prize | Ammunition
+        {WEAPON_TEC9, 500, 250},        // 0
+        {WEAPON_UZI, 500, 250},         // 1
+        {WEAPON_MP5, 500, 250},         // 2
+        {WEAPON_SAWEDOFF, 500, 100},    // 3
+        {WEAPON_DEAGLE, 800, 100},      // 4
+        {WEAPON_SNIPER, 1200, 50},      // 5
+        {WEAPON_M4, 2000, 350},         // 6
+        {WEAPON_CHAINSAW, 2500, 1}     // 7
+    };
 
-forward TextMenuAmmunationNext(playerid, listitem);
-public TextMenuAmmunationNext(playerid, listitem) {
-    switch(listitem) {
-        case 1: {
-            if(GetPlayerMoney(playerid) < 50000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_SNIPER, 100);
-            GivePlayerMoney(playerid, -50000);
-            Ammunation_ShowMenu(playerid, true);
-        }
-        case 2: {
-            if(GetPlayerMoney(playerid) < 25000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_SNIPER, 50);
-            GivePlayerMoney(playerid, -25000);
-            Ammunation_ShowMenu(playerid, true);
-        }
-        case 3: {
-            if(GetPlayerMoney(playerid) < 50000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_M4, 500);
-            GivePlayerMoney(playerid, -50000);
-            Ammunation_ShowMenu(playerid, true);
-        }
-        case 4: {
-            if(GetPlayerMoney(playerid) < 25000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_M4, 250);
-            GivePlayerMoney(playerid, -25000);
-            Ammunation_ShowMenu(playerid, true);
-        }
-        case 5: {
-            if(GetPlayerMoney(playerid) < 15000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            GivePlayerWeapon(playerid, WEAPON_CHAINSAW, 1);
-            GivePlayerMoney(playerid, -15000);
-            Ammunation_ShowMenu(playerid, true);
-        }
-        case 6: {
-            if(GetPlayerMoney(playerid) < 1000) {
-                return SendServerMsg(playerid, "Not Enough Money!");
-            }
-            SetPlayerArmour(playerid, 100);
-            GivePlayerMoney(playerid, -1000);
-            Ammunation_ShowMenu(playerid, true);
-        }
-        case 7: {
-            if(Player_GetJob(playerid) != TYPE_WEAPONDEALER) return SendErrorMsg(playerid, "You're not a weapon dealer");
-            Player_ShowWeaponShop(playerid, 1);
-        }
-        case 8: {
+TDMenu:TextMenuAmmunationMain(playerid, listitem)
+{
+    new
+        tmpString[24],
+        index;
+
+    format(tmpString, sizeof(tmpString), "AmmunationMenuItem_%i", listitem);
+    index = GetPVarInt(playerid, tmpString);
+
+    if(listitem == 8) {
+        if(Player_GetJob(playerid) != TYPE_WEAPONDEALER) {
             Ammunation_ShowMenu(playerid);
+            return SendErrorMsg(playerid, "You're not a weapon dealer");
         }
+        Player_ShowWeaponShop(playerid, 1);
+        return 1;
     }
+
+    if(index == 0) {
+        // do nothing
+        return 1;
+    }
+
+    GivePlayerWeapon(playerid, gAmmunationData[index][0], gAmmunationData[index][2]);
+    GivePlayerMoney(playerid, gAmmunationData[index][1]);
+    Ammunation_ShowMenu(playerid);
     return 1;
 }
 
@@ -205,7 +93,6 @@ hook OnPlayerUpdate(playerid)
             return 1;
         }
         TextMenu_HideSpecific(playerid, "TextMenuAmmunationMain");
-        TextMenu_HideSpecific(playerid, "TextMenuAmmunationNext");
 
     }
     if(!IsPlayerInRangeOfPoint(playerid, 5.0, 312.8376, -167.7640, 999.5938)) {
@@ -213,7 +100,6 @@ hook OnPlayerUpdate(playerid)
             return 1;
         }
         TextMenu_HideSpecific(playerid, "TextMenuAmmunationMain");
-        TextMenu_HideSpecific(playerid, "TextMenuAmmunationNext");
     }
     if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1015.4679, -930.1953, 42.1797)) {
         if(PlayerFixingVehicle[playerid]) {
@@ -226,34 +112,26 @@ hook OnPlayerUpdate(playerid)
     return 1;
 }
 
-stock Ammunation_ShowMenu(playerid, bool:next = false) {
+stock Ammunation_ShowMenu(playerid) {
 
-    if(!next) {
-        TextMenu_Create(playerid, "TextMenuAmmunationMain", "Ammunation");
-        TextMenu_Add(playerid, "~w~Tec 9 500 ammo [~g~$50,000~w~]");
-        TextMenu_Add(playerid, "~w~Tec 9 250 ammo [~g~$25,000~w~]");
-        TextMenu_Add(playerid, "~w~Mac 10 500 ammo [~g~$50,000~w~]");
-        TextMenu_Add(playerid, "~w~Mac 10 250 ammo [~g~$25,000~w~]");
-        TextMenu_Add(playerid, "~w~MP5 500 ammo [~g~$50,000~w~]");
-        TextMenu_Add(playerid, "~w~MP5 250 ammo [~g~$25,000~w~]");
-        TextMenu_Add(playerid, "~w~Sawn Off 500 ammo [~g~$50,000~w~]");
-        TextMenu_Add(playerid, "~w~Sawn Off 250 ammo [~g~$25,000~w~]");
-        TextMenu_Add(playerid, "~w~Deagle 500 ammo [~g~$50,000~w~]");
-        TextMenu_Add(playerid, "~w~Deagle 250 ammo [~g~$25,000~w~]");
-        TextMenu_Add(playerid, "~y~Next Page");
-    }
-    else {
-        TextMenu_Create(playerid, "TextMenuAmmunationNext", "Ammunation");
-        TextMenu_Add(playerid, "~w~Sniper 100 ammo [~g~$25,000~w~]");
-        TextMenu_Add(playerid, "~w~Sniper 50 ammo [~g~$10,000~w~]");
-        TextMenu_Add(playerid, "~w~M4 500 ammo [~g~$50,000~w~]");
-        TextMenu_Add(playerid, "~w~M4 250 ammo [~g~$25,000~w~]");
-        TextMenu_Add(playerid, "~w~Chainsaw [~g~$15,000~w~]");
-        TextMenu_Add(playerid, "~w~Armour [~g~$1,000~w~]");
-        TextMenu_Add(playerid, "~w~Buy Weapon For Inventory");
-        TextMenu_Add(playerid, "~y~Prev Page");
-    }
+    TextMenu_Create(playerid, "TextMenuAmmunationMain", "Ammunation");
+    new
+        string[64];
+    for(new i = 1; i < sizeof(gAmmunationData); i++) {
+        format(
+                string,
+                sizeof(string),
+                "~w~%W ~g~%m - ~y~ammunation: ~w~%i",
+                gAmmunationData[i][0],
+                gAmmunationData[i][1],
+                gAmmunationData[i][2]
+        );
+        TextMenu_Add(playerid, string);
 
+        format(string, sizeof(string), "AmmunationMenuItem_%i", i);
+        SetPVarInt(playerid, string, i);
+    }
+    TextMenu_Add(playerid, "~y~Buy Weapon For Inventory");
     TextMenu_Show(playerid);
     return 1;
 }
