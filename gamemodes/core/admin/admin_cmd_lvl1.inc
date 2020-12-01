@@ -1,4 +1,4 @@
-ACMD:[1]acmds(playerid, params[])
+/*ACMD:[1]acmds(playerid, params[])
 {
 	new
 		tmp_string[1024];
@@ -32,7 +32,7 @@ ACMD:[1]acmds(playerid, params[])
 	}
 	Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Admin Commands List", tmp_string, "Close", "");
 	return 1;
-}
+}*/
 
 forward AdminListMenu(playerid, listitem);
 public AdminListMenu(playerid, listitem)

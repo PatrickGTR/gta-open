@@ -13,7 +13,7 @@ enum
 }
 
 // accessed globally
-new adminCommands[5][2048];
+//new adminCommands[5][2048];
 
 static
     PlayerAdminLevel[MAX_PLAYERS],
@@ -94,7 +94,7 @@ stock SendAdminMsgF(const fmat[], {Float,_}:...)
     return 1;
 }
 
-stock Admin_AddCommandToList(level, const string[])
+/*stock Admin_AddCommandToList(level, const string[])
 {
     if (!(ADM_LVL_1 <= level <= ADM_LVL_5))
     {
@@ -105,7 +105,7 @@ stock Admin_AddCommandToList(level, const string[])
     strcat(adminCommands[level - 1], string);
     strcat(adminCommands[level - 1], "\n");
     return 1;
-}
+}*/
 
 stock Admin_SetPlayerLevel(playerid, level)
 {
