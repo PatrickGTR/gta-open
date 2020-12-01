@@ -12,9 +12,6 @@ enum
     ADM_LVL_5
 }
 
-// accessed globally
-//new adminCommands[5][2048];
-
 static
     PlayerAdminLevel[MAX_PLAYERS],
     BitArray: adminOnDuty<MAX_PLAYERS>,
@@ -93,19 +90,6 @@ stock SendAdminMsgF(const fmat[], {Float,_}:...)
     }
     return 1;
 }
-
-/*stock Admin_AddCommandToList(level, const string[])
-{
-    if (!(ADM_LVL_1 <= level <= ADM_LVL_5))
-    {
-        printf("ERROR: Cannot register admin command for level %d", level);
-        return 0;
-    }
-
-    strcat(adminCommands[level - 1], string);
-    strcat(adminCommands[level - 1], "\n");
-    return 1;
-}*/
 
 stock Admin_SetPlayerLevel(playerid, level)
 {
