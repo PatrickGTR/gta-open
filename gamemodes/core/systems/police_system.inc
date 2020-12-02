@@ -176,10 +176,12 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
-hook OnPlayerDisconnect(playerid, reason)
-{
-    if(Player_IsCuffed(playerid) == true) {
-        Player_SendToJail(playerid, 300, true);
+hook OnPlayerDisconnect(playerid, reason) {
+    if(Player_IsCuffed(playerid)) {
+        new
+            level = GetPlayerWantedLevel(playerid),
+            punishmentTime = (level * 2) * 2;
+        Player_SendToJail(playerid, punishmentTime, true);
     }
     return 1;
 }
@@ -192,13 +194,8 @@ stock Player_IsInJail(playerid) {
     return (PlayerJailTime[playerid] > 0 && Player_HasFinishedJailSentence(playerid));
 }
 
-stock Player_InJail(playerid) 
-{
-    if(PlayerJailTime[playerid] > 0)
-    {
-        return 1;
-    }
-    return 0;
+stock Player_InJail(playerid) {
+    return (PlayerJailTime[playerid] > 0);
 }
 
 stock Player_SetBailAmount(playerid, amount) {

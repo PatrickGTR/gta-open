@@ -69,7 +69,7 @@ stock SendAdminMsg(const fmat[])
     {
         if (i != INVALID_PLAYER_ID && Admin_GetPlayerLevel(i) > 0)
         {
-            SendMsgF(i, COLOR_LIGHTGREEN, "** ADMIN ** "C_WHITE"- %s", fmat);
+            SendMsgF(i, COLOR_MODERATION, "(Admin) "C_WHITE" %s", fmat);
         }
     }
     return 1;
@@ -138,7 +138,7 @@ stock SendAdminCmdUsage(playerid, const cmd[], const params[]) {
     foreach(new i : Player) {
         // only send message if admin level is more than 1
         if (Admin_GetPlayerLevel(i) >= 1) {
-            SendMsgF(i, COLOR_MODERATION, "[ADMINCMD]: %p (%d) used /%s %s", playerid, playerid, cmd, params);
+            SendMsgF(i, COLOR_MODERATION, "(AdmCmd) "C_GREY"%p(%d) "C_WHITE"used "C_GREY"/%s %s", playerid, playerid, cmd, params);
         }
     }
     return 1;
