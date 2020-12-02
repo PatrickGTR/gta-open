@@ -1,4 +1,16 @@
-#define MENU_MECH       (3)
+static const
+    gAmmunationData[][] = {
+    // Layout
+    // Weapon ID | Weapon_Prize | Ammunition
+        {WEAPON_TEC9, 500, 250},        // 0
+        {WEAPON_UZI, 500, 250},         // 1
+        {WEAPON_MP5, 500, 250},         // 2
+        {WEAPON_SAWEDOFF, 500, 100},    // 3
+        {WEAPON_DEAGLE, 800, 100},      // 4
+        {WEAPON_SNIPER, 1200, 50},      // 5
+        {WEAPON_M4, 2000, 350},         // 6
+        {WEAPON_CHAINSAW, 2500, 1}      // 7
+    };
 
 static
     bool:PlayerFixingVehicle[MAX_PLAYERS],
@@ -13,20 +25,6 @@ hook OnGameModeInit()
     CreateDynamicMapIcon(1015.4679, -930.1953, 42.1797, 27, -1, .streamdistance = 200.0, .style = MAPICON_GLOBAL);
     return 1;
 }
-
-static const
-    gAmmunationData[][] = {
-    // Layout
-    // Weapon ID | Weapon_Prize | Ammunition
-        {WEAPON_TEC9, 500, 250},        // 0
-        {WEAPON_UZI, 500, 250},         // 1
-        {WEAPON_MP5, 500, 250},         // 2
-        {WEAPON_SAWEDOFF, 500, 100},    // 3
-        {WEAPON_DEAGLE, 800, 100},      // 4
-        {WEAPON_SNIPER, 1200, 50},      // 5
-        {WEAPON_M4, 2000, 350},         // 6
-        {WEAPON_CHAINSAW, 2500, 1}     // 7
-    };
 
 TDMenu:TextMenuAmmunationMain(playerid, listitem)
 {
@@ -48,6 +46,7 @@ TDMenu:TextMenuAmmunationMain(playerid, listitem)
 
     if(index == 0) {
         // do nothing
+        // GetPVarInt returns 0 if invalid and we never used 0.
         return 1;
     }
 
@@ -86,20 +85,14 @@ public TextMenuMechanic(playerid, listitem)
     return 1;
 }
 
-hook OnPlayerUpdate(playerid)
+hook OnPlayerSecondUpdate(playerid)
 {
-    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 295.4240, -82.5273, 1001.5156)) {
+    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 295.4240, -82.5273, 1001.5156) || !IsPlayerInRangeOfPoint(playerid, 5.0, 312.8376, -167.7640, 999.5938)) {
         if(Player_IsInAmmu(playerid)) {
             return 1;
         }
         TextMenu_HideSpecific(playerid, "TextMenuAmmunationMain");
 
-    }
-    if(!IsPlayerInRangeOfPoint(playerid, 5.0, 312.8376, -167.7640, 999.5938)) {
-        if(Player_IsInAmmu(playerid)) {
-            return 1;
-        }
-        TextMenu_HideSpecific(playerid, "TextMenuAmmunationMain");
     }
     if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1015.4679, -930.1953, 42.1797)) {
         if(PlayerFixingVehicle[playerid]) {

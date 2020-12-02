@@ -9,8 +9,7 @@ static
     Statement:stmt_insertWeapon,
     Statement:stmt_loadWeapon,
     Statement:stmt_deleteSingleWeapon,
-    Statement:stmt_deteleWeapons
-;
+    Statement:stmt_deteleWeapons;
 
 hook OnMySQLPreClose() {
     foreach(new i : Player) {
@@ -40,11 +39,11 @@ hook OnMySQLConnected() {
     ";
     stmt_loadWeapon = MySQL_PrepareStatement(MySQL_GetHandle(), loadQuery);
 
-    static const 
+    static const
         deleteSingleQuery[] = "DELETE FROM player_weapons WHERE u_id = ? AND weapid = ?";
     stmt_deleteSingleWeapon = MySQL_PrepareStatement(MySQL_GetHandle(), deleteSingleQuery);
 
-    static const 
+    static const
         deleteAllWeapon[] = "DELETE FROM player_weapons WHERE u_id = ?";
     stmt_deteleWeapons = MySQL_PrepareStatement(MySQL_GetHandle(), deleteAllWeapon);
     return 1;
@@ -79,11 +78,22 @@ hook function GivePlayerWeapon(playerid, weaponid, ammo) {
     MySQL_BindInt(stmt_insertWeapon, 2, ammo);
     MySQL_BindInt(stmt_insertWeapon, 3, ammo);
     MySQL_ExecuteThreaded(stmt_insertWeapon);
-    
+
     continue(playerid, weaponid, ammo);
 }
 
-Weapon_Load(playerid) {
+void:Weapon_DeleteEntry(playerid, weaponid) {
+    MySQL_BindInt(stmt_deleteSingleWeapon, 0, Player_GetAccountID(playerid));
+    MySQL_BindInt(stmt_deleteSingleWeapon, 1, weaponid);
+    MySQL_ExecuteThreaded(stmt_deleteSingleWeapon);
+
+    Logger_Dbg(PLAYER_DEBUG_HANDLER,
+        "[Weapon_Load / player_weapon-save.inc] Weapon loaded without ammo, deleting entry",
+            Logger_I("weaponid", weaponid)
+    );
+}
+
+void:Weapon_Load(playerid) {
     inline const WeaponLoad() {
         new
             weaponid,
@@ -96,7 +106,7 @@ Weapon_Load(playerid) {
 
             if(!(0 <= weaponid <= 46))  {
 
-                Logger_Dbg(PLAYER_DEBUG_HANDLER, 
+                Logger_Dbg(PLAYER_DEBUG_HANDLER,
                     "[Weapon_Load / player_weapon-save.inc] Unkown weapon. skipping",
                      Logger_I("weaponid", weaponid)
                 );
@@ -108,20 +118,13 @@ Weapon_Load(playerid) {
 
             // delete data if there is no ammo left.
             if(ammo == 0) {
-                MySQL_BindInt(stmt_deleteSingleWeapon, 0, Player_GetAccountID(playerid));
-                MySQL_BindInt(stmt_deleteSingleWeapon, 1, weaponid);
-                MySQL_ExecuteThreaded(stmt_deleteSingleWeapon);
-
-                Logger_Dbg(PLAYER_DEBUG_HANDLER, 
-                    "[Weapon_Load / player_weapon-save.inc] Weapon loaded without ammo, deleting entry",
-                     Logger_I("weaponid", weaponid)
-                );
-            } 
+                Weapon_DeleteEntry(playerid, weaponid);
+            }
             else {
 
                 GivePlayerWeapon(playerid, weaponid, ammo);
 
-                Logger_Dbg(PLAYER_DEBUG_HANDLER, 
+                Logger_Dbg(PLAYER_DEBUG_HANDLER,
                     "[Weapon_Load / player_weapon-save.inc] Weapon loaded",
                         Logger_I("weaponid", weaponid),
                         Logger_I("ammo", ammo),
@@ -134,18 +137,16 @@ Weapon_Load(playerid) {
 
     MySQL_BindInt(stmt_loadWeapon, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteParallel_Inline(stmt_loadWeapon, using inline WeaponLoad);
-
-    return 1;
 }
 
-Weapon_Save(playerid) {
+void:Weapon_Save(playerid) {
     new
         weaponid,
         ammo;
 
     for(new i; i < 13; i++) {
         GetPlayerWeaponData(playerid, i, weaponid, ammo);
-        
+
         if(!weaponid) {
             continue;
         }
@@ -156,12 +157,11 @@ Weapon_Save(playerid) {
         MySQL_BindInt(stmt_insertWeapon, 3, ammo);
         MySQL_ExecuteThreaded(stmt_insertWeapon);
 
-        Logger_Dbg(PLAYER_DEBUG_HANDLER, 
+        Logger_Dbg(PLAYER_DEBUG_HANDLER,
             "[Weapon_Save / player_weapon-save.inc] Weapon saved",
                 Logger_I("weaponid", weaponid),
                 Logger_I("ammo", ammo),
                 Logger_P(playerid)
         );
     }
-    return 1; 
 }

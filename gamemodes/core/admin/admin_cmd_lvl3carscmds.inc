@@ -5,7 +5,7 @@
 #define MAX_SPAWNED_VEHICLES 100
 #define MAX_ADMINS_VEHICLES 100
 
-static 
+static
     SpawnedVehicles[MAX_SPAWNED_VEHICLES],
     SpawnedVehicleCount
 ;

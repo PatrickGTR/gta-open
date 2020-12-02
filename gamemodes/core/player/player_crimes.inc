@@ -10,18 +10,25 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
-// Store Robbery
+// Murder
+hook OnPlayerDeath(playerid, killerid, reason) {
+    if(killerid != INVALID_PLAYER_ID) {
+        Player_GiveWantedLevel(killerid, 4);
+    }
+    return 1;
+}
 
+// Store Robbery
 hook OnPlayerRobStore(playerid, moneyTaken) {
     new
-        string[MAX_MAP_ZONE_NAME];
+        string[16];
 
     format(string, sizeof(string), "~g~+ ~w~%m", moneyTaken);
     GameTextForPlayer(playerid, string, 6000, 1);
 
 
     Player_GetLocation(playerid, string, sizeof(string));
-    SendMsgAllF(COLOR_ORANGE, "/Robbery/ "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from "C_YELLOW"%s "C_WHITE"in "C_GREY"%s.", playerid, playerid, moneyTaken, Entrance_PlayerIn(playerid), string);
+    SendMsgAllF(COLOR_ORANGE, "(store robbery) "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from "C_YELLOW"%s "C_WHITE"in "C_GREY"%s.", playerid, playerid, moneyTaken, Entrance_PlayerIn(playerid), string);
 
     GivePlayerMoney(playerid, moneyTaken);
     Player_GiveWantedLevel(playerid, 4);
