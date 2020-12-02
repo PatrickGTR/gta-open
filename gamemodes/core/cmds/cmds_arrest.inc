@@ -2,17 +2,13 @@ CMD:arrestcw(playerid)
 {
     new
         targetid = Player_GetClosestWanted(playerid),
-        ret = Player_Arrest(playerid, targetid);
+        errorMessage[45],
+        ret;
 
-    if(ret == -1) {
-        return SendErrorMsg(playerid, "Only cops can use this command!");
-    }
-    if(ret == INVALID_PLAYER_ID) {
-        return SendErrorMsg(playerid, "Player is not connected!");
-    }
+    ret = Player_Arrest(playerid, targetid, errorMessage, sizeof(errorMessage));
 
-    if(targetid == -1)  {
-        return SendErrorMsg(playerid, "There's no warrant near you");
+    if(!ret) {
+        return SendErrorMsg(playerid, errorMessage);
     }
     return 1;
 }
@@ -24,25 +20,19 @@ CMD:arcw(playerid)
 
 CMD:arrest(playerid, params[])
 {
-    new targetid;
+    new
+        targetid;
     if(sscanf(params, "u", targetid)) {
         return SendSyntaxMsg(playerid, "/arrest (name/id)");
     }
 
     new
-        ret = Player_Arrest(playerid, targetid);
+        errorMessage[45],
+        ret;
+    ret = Player_Arrest(playerid, targetid, errorMessage, sizeof(errorMessage));
 
-    if(ret == -1) {
-        return SendErrorMsg(playerid, "Only cops can use this command!");
-    }
-    if(ret == INVALID_PLAYER_ID) {
-        return SendErrorMsg(playerid, "Player is not connected!");
-    }
-    if(ret == -3) {
-        return SendErrorMsg(playerid, "Player is not wanted!");
-    }
-    if(targetid == playerid) {
-        return SendErrorMsg(playerid, "You can't arrest yourself!");
+    if(!ret) {
+        return SendErrorMsg(playerid, errorMessage);
     }
     return 1;
 }

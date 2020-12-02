@@ -37,7 +37,6 @@ hook OnPlayerSecondUpdate(playerid) {
 }
 
 hook OnPlayerConnect(playerid) {
-
     PlayerInteriorZoneID[playerid] = INVALID_MAP_ZONE_ID;
     PlayerInteriorZoneID[playerid] = INVALID_MAP_ZONE_ID;
     return 1;

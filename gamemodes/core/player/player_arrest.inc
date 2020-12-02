@@ -1,7 +1,7 @@
 #include <logger>
 #include <YSI_Coding\y_hooks>
 new
-    bool:PlayerIsGettingAr[MAX_PLAYERS]
+    bool:gPlayerGettingArrested[MAX_PLAYERS]
 ;
 
 hook OnPlayerDeath(playerid, killerid, reason)
@@ -25,62 +25,65 @@ hook OnPlayerDeath(playerid, killerid, reason)
 }
 
 // returns
-// -1 (player is not a cop)
-// -2 (target is not connected)
-// -3 (target is below arrestable)
-// -4 (target is in car, pull over demand.)
-stock Player_Arrest(playerid, targetid) {
-
+// 0 fail
+// - (player is not a cop)
+// - (target is not connected)
+// - (target is below arrestable)
+// 1 success
+// - (target is in car, pull over demand.)
+Player_Arrest(playerid, targetid, errorMessage[], len = sizeof(errorMessage)) {
     if(!Player_IsLEO(playerid)) {
-        return -1;
+        strcat(errorMessage, "Only cops can use this command!", len);
+        return 0;
     }
 
     if(!IsPlayerConnected(targetid)) {
-        return INVALID_PLAYER_ID;
+        strcat(errorMessage, "Player is not connected!", len);
+        return 0;
     }
 
+    // don't show error message, no need
+    // can't arrest player with wanted level lower than 3.
     if(Player_GetWantedLevel(targetid) <= 3) {
-        return -3;
+        return 0;
     }
 
     if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
         Player_NotifyPullover(playerid, targetid);
-        return -4;
+        return 1;
     }
 
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) {
-        SendServerMsg(playerid, "You must be on foot to arrest the criminal");
-        return -5;
+        strcat(errorMessage, "You must be on foot to arrest the criminal", len);
+        return 0;
     }
 
     if(!Player_IsCuffed(targetid)) {
-        SendErrorMsg(playerid, "You need to cuff the player first!");
-        return -6;
+        strcat(errorMessage, "You need to cuff the player first!", len);
+        return 0;
     }
 
-    if(PlayerIsGettingAr[targetid]) {
-        SendErrorMsg(playerid, "The player is now getting arrested");
-        return -7;
+    if(gPlayerGettingArrested[targetid]) {
+        strcat(errorMessage, "The player is now getting arrested", len);
+        return 0;
     }
 
+    // UI
+    GameTextForPlayer(targetid, "~r~Busted!", 4000, 0);
     ApplyAnimation(targetid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);
     ApplyAnimation(playerid, "PED", "ARRESTgun", 4.1, 0, 1, 1, 1, 3000, 1);
-
+    SendServerMsgF(playerid, "You have arrested %p (%d)", targetid, targetid);
+    SendServerMsgF(targetid, "You have been arrested by %p (%d)", playerid, playerid);
     // make of them face each other.
     Player_FacePlayer(playerid, targetid);
     Player_FacePlayer(targetid, playerid);
-
-    // let animation play out for both  end.
+    // let animation play out for both end before sending player to jail x, y, z
     defer DelaySendToJail(targetid);
-
+    // award player
     Player_AwardArrest(playerid, targetid);
 
-    PlayerIsGettingAr[targetid] = true;
-
-    SendServerMsgF(playerid, "You have arrested %p (%d)", targetid, targetid);
-    SendServerMsgF(targetid, "You have been arrested by %p (%d)", playerid, playerid);
-
-    GameTextForPlayer(targetid, "~r~Busted!", 4000, 0);
+    // if player is getting arrested, disallow actions from other police officers while UI is playing.
+    gPlayerGettingArrested[targetid] = true;
     return 1;
 }
 
@@ -90,7 +93,7 @@ timer void:DelaySendToJail[3000 + GetPlayerPing(targetid)](targetid) {
         seconds = (level * 2);
     Player_SetBailAmount(targetid, 5000);
     Player_SendToJail(targetid, seconds, true);
-    PlayerIsGettingAr[targetid] = false;
+    gPlayerGettingArrested[targetid] = false;
 }
 
 stock void:Player_AwardArrest(playerid, targetid, bool:notify = true) {

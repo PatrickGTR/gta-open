@@ -151,11 +151,21 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             return 1;
         }
 
+
+
+        new
+            errorMessage[45];
         if(!Player_IsCuffed(id)) {
-            return cmd_cuffcw(playerid);
+
+            if(!Player_CuffPlayer(playerid, id, errorMessage, sizeof(errorMessage))) {
+                return SendErrorMsg(playerid, errorMessage);
+            }
+
         }
         else {
-            return cmd_arrestcw(playerid);
+            if(!Player_Arrest(playerid, id, errorMessage, sizeof(errorMessage))) {
+                return SendErrorMsg(playerid, errorMessage);
+            }
         }
     }
     return 1;

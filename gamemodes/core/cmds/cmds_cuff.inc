@@ -1,75 +1,75 @@
-CMD:cuffcw(playerid)
-{
+// cuff closest player
+CMD:cuffcw(playerid) {
     new
         targetid = Player_GetClosestWanted(playerid),
-        Float:x,
-        Float:y,
-        Float:z;
-    GetPlayerPos(playerid, x, y, z);
-    if(Player_GetClass(playerid) != TEAM_POLICE) {
-        return SendErrorMsg(playerid, "Only cops can use this command!");
-    }
-    if(targetid == INVALID_PLAYER_ID)  {
-        return SendErrorMsg(playerid, "There's no warrant near you");
-    }
-    if(!IsPlayerInRangeOfPoint(targetid, 5.0, x, y, z)) {
-        return SendErrorMsg(playerid, "There's no warrant near you");
-    }
-    if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
-        SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", targetid, targetid);
-        SendServerMsgF(targetid, "%p (%d) has asked you to pull over", playerid, playerid);
-        return 0;
-    }
-    if(Player_IsCuffed(targetid)) {
-        return SendErrorMsg(playerid, "The player is already cuffed");
-    }
-    SendServerMsgF(targetid, "You have been cuffed by officer %p (%d)", playerid, playerid);
-    SendServerMsgF(playerid, "You're now cuffing %p (%d)", targetid, targetid);
+        errorMessage[32],
+        ret;
 
-    Player_Cuff(targetid, true);
+    ret = Player_CuffPlayer(playerid, targetid, errorMessage, sizeof(errorMessage));
+
+    if(!ret) {
+        SendErrorMsg(playerid, errorMessage);
+    }
     return 1;
 }
 
-CMD:cuff(playerid, params[])
-{
+// cuff player by id
+CMD:cuff(playerid, params[]) {
     new
-        Float:x,
-        Float:y,
-        Float:z,
-        targetid
-    ;
+        targetid;
+
     if(sscanf(params, "u", targetid)) {
         return SendSyntaxMsg(playerid, "/cuff (name/id)");
     }
-    GetPlayerPos(playerid, x, y, z);
-    if(!Player_IsLEO(playerid)) {
-        return SendErrorMsg(playerid, "Only cops can use this command!");
-    }
-    if(!IsPlayerConnected(targetid)) {
-        return SendErrorMsg(playerid, "Player is not connected!");
-    }
-    if(targetid == playerid) {
-        return SendErrorMsg(playerid, "You can't cuff yourself");
-    }
-    if(Player_GetWantedLevel(targetid) <= 3) {
-        return SendErrorMsg(playerid, "Player is not wanted!");
-    }
-    if(!IsPlayerInRangeOfPoint(targetid, 5.0, x, y, z)) {
-        return SendErrorMsgF(playerid, "%p (%d) is not close to you", targetid, targetid);
-    }
-    if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
-        SendServerMsgF(playerid, "You have asked %p (%d) to pull over!", targetid, targetid);
-        SendServerMsgF(targetid, "%p (%d) has asked you to pull over", playerid, playerid);
-        return 0;
-    }
-    if(Player_IsCuffed(targetid)) {
-        return SendErrorMsg(playerid, "The player is already cuffed");
-    }
-    SendServerMsgF(targetid, "You have been cuffed by officer %p (%d)", playerid, playerid);
-    SendServerMsgF(playerid, "You're now cuffing %p (%d)", targetid, targetid);
 
+    new
+        errorMessage[32],
+        ret;
 
-    Player_Cuff(targetid, true);
+    ret = Player_CuffPlayer(playerid, targetid, errorMessage, sizeof(errorMessage));
+
+    if(!ret) {
+        SendErrorMsg(playerid, errorMessage);
+    }
     return 1;
 }
 
+// returns
+// 0 -> fail
+// -> playerid is not police.
+// -> targetid == INVALID_PLAYER_ID.
+// -> targetid is not in range.
+// -> targetid is aleady cuffed.
+// 1 -> success, if it passes all the checks above.
+Player_CuffPlayer(playerid, targetid, errorMsg[], len = sizeof(errorMsg)) {
+    if(Player_GetClass(playerid) != TEAM_POLICE) {
+        strcat(errorMsg, "Only cops can use this command!", len);
+        return 0;
+    }
+
+    if(targetid == INVALID_PLAYER_ID)  {
+        strcat(errorMsg, "There's no warrant near you", len);
+        return 0;
+    }
+
+    new
+        Float:x,
+        Float:y,
+        Float:z;
+
+    GetPlayerPos(playerid, x, y, z);
+    if(!IsPlayerInRangeOfPoint(targetid, 5.0, x, y, z)) {
+        strcat(errorMsg, "There's no warrant near you", len);
+        return 0;
+    }
+
+    if(Player_IsCuffed(targetid)) {
+        strcat(errorMsg, "The player is already cuffed", len);
+        return 0;
+    }
+
+    SendServerMsgF(targetid, "You have been cuffed by officer "C_GREY"%p(%d)", playerid, playerid);
+    SendServerMsgF(playerid, "You're now cuffing "C_GREY"%p(%d)", targetid, targetid);
+    Player_Cuff(targetid, true);
+    return 1;
+}
