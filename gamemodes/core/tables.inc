@@ -26,6 +26,10 @@ hook OnMySQLSetupTable() {
     mysql_tquery_file(MySQL_GetHandle(), "jail.sql");
     Logger_Log("setting up 'jailed' table...");
 
+    // player_weapons
+    mysql_tquery_file(MySQL_GetHandle(), "weapons.sql");
+    Logger_Log("setting up 'player_weapons' table...");
+
     // --------------------------------------------------------------------------------------------
     // ADMIN
     // --------------------------------------------------------------------------------------------
