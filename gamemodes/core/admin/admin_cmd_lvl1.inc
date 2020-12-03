@@ -62,10 +62,7 @@ ACMD:[1]admins(playerid, params[])
 ACMD:[1]get(playerid, params[])
 {
 	new
-		targetid,
-		Float:x,
-		Float:y,
-		Float:z;
+		targetid;
 
 	if(sscanf(params, "u", targetid)) {
 		return SendSyntaxMsg(playerid, "/get [player]");
@@ -79,20 +76,22 @@ ACMD:[1]get(playerid, params[])
 		return SendErrorMsg(playerid, "You can't get yourself");
 	}
 
+	new
+		Float:x,
+		Float:y,
+		Float:z;
+	GetPlayerPos(playerid, x, y, z);
+
+	SetPlayerPos(targetid, x, y, z);
 	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
 	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
-	GetPlayerPos(playerid, x, y, z);
-	SetPlayerPos(targetid, x, y, z);
 	return 1;
 }
 
 ACMD:[1]goto(playerid, params[])
 {
 	new
-		targetid,
-		Float:x,
-		Float:y,
-		Float:z;
+		targetid;
 
 	if(sscanf(params, "u", targetid)) {
 		return SendSyntaxMsg(playerid, "/gotop (playerid)");
@@ -106,10 +105,15 @@ ACMD:[1]goto(playerid, params[])
 		return SendErrorMsg(playerid, "You can't goto yourself");
 	}
 
+	new
+		Float:x,
+		Float:y,
+		Float:z;
+	GetPlayerPos(targetid, x, y, z);
+
+	SetPlayerPos(playerid, x, y, z);
 	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
 	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
-	GetPlayerPos(playerid, x, y, z);
-	SetPlayerPos(targetid, x, y, z);
 	return 1;
 }
 
