@@ -5,6 +5,7 @@
 #include <player_location>
 #include <player_items>
 #include <player_arrest>
+#include <player_jail>
 #include <player_animations>
 #include <player_skin>
 #include <player_crimes>
