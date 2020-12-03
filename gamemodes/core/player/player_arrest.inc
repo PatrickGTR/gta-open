@@ -42,10 +42,10 @@ Player_Arrest(playerid, targetid, errorMessage[], len = sizeof(errorMessage)) {
         return 0;
     }
 
-    // don't show error message, no need
+    // do nothing, automatically return 1
     // can't arrest player with wanted level lower than 3.
     if(Player_GetWantedLevel(targetid) <= 3) {
-        return 0;
+        return 1;
     }
 
     if(GetPlayerState(targetid) != PLAYER_STATE_ONFOOT) {
@@ -68,6 +68,11 @@ Player_Arrest(playerid, targetid, errorMessage[], len = sizeof(errorMessage)) {
         return 0;
     }
 
+    if(targetid == playerid) {
+        strcat(errorMessage, "You can't arrest yourself, dummy!", len);
+        return 0;
+    }
+
     // UI
     GameTextForPlayer(targetid, "~r~Busted!", 4000, 0);
     ApplyAnimation(targetid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);
@@ -79,7 +84,7 @@ Player_Arrest(playerid, targetid, errorMessage[], len = sizeof(errorMessage)) {
     Player_FacePlayer(targetid, playerid);
     // let animation play out for both end before sending player to jail x, y, z
     defer DelaySendToJail(targetid);
-    // award player
+
     Player_AwardArrest(playerid, targetid);
 
     // if player is getting arrested, disallow actions from other police officers while UI is playing.

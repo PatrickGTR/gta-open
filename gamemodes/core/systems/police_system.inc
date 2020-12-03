@@ -150,9 +150,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         if(id == INVALID_PLAYER_ID) {
             return 1;
         }
-
-
-
         new
             errorMessage[45];
         if(!Player_IsCuffed(id)) {

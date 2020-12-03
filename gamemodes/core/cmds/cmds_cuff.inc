@@ -68,6 +68,12 @@ Player_CuffPlayer(playerid, targetid, errorMsg[], len = sizeof(errorMsg)) {
         return 0;
     }
 
+    if(targetid == playerid) {
+        strcat(errorMsg, "You can't cuff yourself, dummy!", len);
+        return 0;
+    }
+
+
     SendServerMsgF(targetid, "You have been cuffed by officer "C_GREY"%p(%d)", playerid, playerid);
     SendServerMsgF(playerid, "You're now cuffing "C_GREY"%p(%d)", targetid, targetid);
     Player_Cuff(targetid, true);

@@ -76,7 +76,7 @@ public OnPlayerText(playerid, text[])
                 continue;
             }
 
-            SendMsgF(i, COLOR_PINK, "(Admin) %s(%i): "C_WHITE"%s", playerid, playerid, processedMessage[1]);
+            SendMsgF(i, COLOR_PINK, "(Admin) %p(%i): "C_WHITE"%s", playerid, playerid, processedMessage[1]);
         }
         return 0;
     }
