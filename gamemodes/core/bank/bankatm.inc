@@ -23,11 +23,10 @@ hook OnPlayerText(playerid, text[]) {
         if(isnumeric(text)) {
             new
                 value = strval(text);
-            if(PlayerATMOption[playerid] == ATM_DEPOSIT)
-            {
+            if(PlayerATMOption[playerid] == ATM_DEPOSIT) {
                 if(GetPlayerMoney(playerid) < value) {
                     SendErrorMsg(playerid, "You don't have enough money");
-                    return 0;
+                    return ~0;
                 }
 
                 // Deduct money from player, add money to player's bank.
@@ -45,7 +44,7 @@ hook OnPlayerText(playerid, text[]) {
             if(PlayerATMOption[playerid] == ATM_WITHDRAW) {
                 if(Player_GetBankMoney(playerid) < value) {
                     SendErrorMsg(playerid, "You don't have enough money on your bank acc");
-                    return 0;
+                    return ~0;
                 }
 
                 // Deduct money from bank, add money to player.

@@ -122,13 +122,46 @@ hook OnPlayerEditDynObj(playerid, objectid, response, Float:x, Float:y, Float:z,
 // returns
 // INVALID_ATM_ID if player is close to none.
 // returns the ATM ID on success.
+stock ATM_GetObjectID(atmID) {
+    new
+        idx = ATM_FindIndexIDBySQLID(atmID);
+
+    if(idx == INVALID_ATM_ID) {
+        return;
+    }
+
+    return ATM_ObjectID[idx];
+}
+
+// returns
+// INVALID_ATM_ID if player is close to none.
+// returns the ATM ID on success.
 stock ATM_GetClosest(playerid) {
+     new
+        Float:x,
+        Float:y,
+        Float:z,
+        Float:plyX,
+        Float:plyY,
+        Float:plyZ
+        Float:distance = 5.0,
+        closestATM = -1;
+
     foreach(new i : ATMIndex) {
-        if(IsPlayerInRangeOfPoint(playerid, 3.0, ATM_X[i], ATM_Y[i], ATM_Z[i])) {
-            return ATM_ID[i];
+        x = ATM_X[i],
+        y = ATM_Y[i],
+        z = ATM_Z[i];
+
+        GetPlayerPos(playerid, plyX, plyY, plyZ);
+
+        distance = Distance(plyX, plyY, plyZ, x, y, z);
+
+        if (distance < lowestdistance) {
+            lowestdistance = distance;
+            closestATM = ATM_ID[i];
         }
     }
-    return INVALID_ATM_ID;
+    return closestATM;
 }
 
 // returns
@@ -331,7 +364,6 @@ stock void:ATM_Update(atmID,
     // update data
     DestroyDynamicObject(ATM_ObjectID[idx]);
     ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
-
 
     ATM_X[idx] = x;
     ATM_Y[idx] = y;

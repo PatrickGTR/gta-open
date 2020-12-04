@@ -25,8 +25,8 @@ stock Player_GetC4(playerid) {
     return PlayerC4[playerid];
 }
 
-stock Player_SetC4(playerid, amount) {
-    PlayerC4[playerid] = amount;
+stock Player_GiveC4(playerid, amount) {
+    PlayerC4[playerid] += amount;
     return 1;
 }
 
