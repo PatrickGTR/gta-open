@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 static const
     gAmmunationData[][] = {
     // Layout

@@ -1,10 +1,10 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     GangKills[MAX_GANGS],
     GangDeaths[MAX_GANGS];
 
-static  
+static
     Statement: stmt_UpdateKills,
     Statement: stmt_UpdateDeaths;
 
@@ -18,10 +18,10 @@ hook OnPlayerDeath(playerid, killerid, reason) {
     if(killerid != INVALID_PLAYER_ID) {
         if(Player_GetGangID(playerid) != INVALID_GANG_ID && Player_GetGangID(killerid) != INVALID_GANG_ID) {
 
-            new 
+            new
                 killerGangName[MAX_GANG_NAME],
                 playerGangName[MAX_GANG_NAME];
-            
+
             Gang_GetName(Player_GetGangID(playerid), playerGangName, sizeof(playerGangName));
             Gang_GetName(Player_GetGangID(killerid), killerGangName, sizeof(killerGangName));
 
@@ -58,7 +58,7 @@ Gang_AddKills(gangid, kills, bool:save = false) {
     }
 }
 
-Gang_AddDeaths(gangid, deaths, bool:save = false) {        
+Gang_AddDeaths(gangid, deaths, bool:save = false) {
     GangDeaths[gangid] += deaths;
 
     if(save) {

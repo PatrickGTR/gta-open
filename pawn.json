@@ -88,6 +88,7 @@
 				"gamemodes/core/player/attachment",
 				"gamemodes/core/admin",
 				"gamemodes/core/systems",
+				"gamemodes/core/systems/jobs",
 				"gamemodes/core/cmds",
 				"gamemodes/core/houses",
 				"gamemodes/core/houses/furniture",
