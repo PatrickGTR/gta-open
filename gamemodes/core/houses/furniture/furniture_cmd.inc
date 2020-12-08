@@ -1,7 +1,11 @@
-CMD:buyfurniture(playerid, params[]) {
+CMD:furniture(playerid, params[]) {
     if (!Player_IsInsideHouse(playerid)) {
         return SendErrorMsg(playerid, "You must be inside your house to buy a furniture.");
     }
+
+    // Initialise data
+    Furniture_SetEditingState(playerid, INVALID_EDITING_TYPE);
+    Player_SetFurnitureMode(playerid, false);
 
     inline ShowFurnitureOption(pid, dialogid, response, listitem, string:inputtext[]) {
         #pragma unused pid, dialogid, inputtext
@@ -15,10 +19,6 @@ CMD:buyfurniture(playerid, params[]) {
             }
             // Edit Menu
             case 1: {
-                if (Player_IsOnFurnitureMode(playerid) && Furniture_GetEditingState(playerid) == TYPE_EDITING_FURNITURE) {
-                    return SendErrorMsg(playerid, "You are already editing a furniture, close the current one in order to proceed again.");
-                }
-
                 Furniture_SetEditingState(playerid, TYPE_EDITING_FURNITURE);
                 Player_SetFurnitureMode(playerid, true);
 
