@@ -46,9 +46,9 @@ hook OnMySQLConnected() {
         players as p \
     ON \
         h.u_id = p.u_id \
-    ORDER BY \
-        h.house_id DESC \
     ";
+    //     // ORDER BY
+    //     h.house_id DESC
     stmt_LoadHouse = MySQL_PrepareStatement(MySQL_GetHandle(), loadQuery);
 
     static const updateDescriptionQuery[] = "\
@@ -224,6 +224,7 @@ House_Delete(playerid, houseid) {
             DestroyDynamicCP(HouseExitCP[houseid]);
             DestroyDynamic3DTextLabel(HouseEntranceLabel[houseid]);
             DestroyDynamic3DTextLabel(HouseExitLabel[houseid]);
+            HouseOwnerID[houseid] = -1;
 
             Iter_Remove(HouseIndex, houseid);
         }
@@ -358,9 +359,11 @@ House_Load() {
         MySQL_BindResultInt(stmt_LoadHouse, 11, intid);
         MySQL_BindResult(stmt_LoadHouse, 12, ownerName);
 
-
         while(MySQL_Statement_FetchRow(stmt_LoadHouse)) {
+
             House_Create(x, y, z, a, vworld, price, interior, description, ownerName, ownerID);
+
+            printf("id: %i - x: %.2f, y: %.2f, z: %0.2f", houseid, x, y, z);
         }
     }
 

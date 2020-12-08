@@ -13,6 +13,12 @@ hook OnMySQLConnected() {
 			house_id = ? \
 	";
 	stmt_deleteFurniture = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
+	return 1;
+}
+
+hook OnPlayerConnect(playerid) {
+	Furniture_DeleteTemporary(playerid);
+	return 1;
 }
 
 enum E_EDITING_STATE
@@ -154,7 +160,9 @@ Furniture_Delete(houseID, furnitureID) {
 }
 
 Furniture_DeleteTemporary(playerid) {
-	DestroyDynamicObject(g_tmpPlayerObjID[playerid]);
+	if(g_tmpPlayerObjID[playerid] != INVALID_OBJECT_ID) {
+		DestroyDynamicObject(g_tmpPlayerObjID[playerid]);
+	}
 
 	g_tmpPlayerObjID[playerid] = INVALID_OBJECT_ID;
 	g_tmpPlayerIndexID[playerid] = -1;

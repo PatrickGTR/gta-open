@@ -11,7 +11,6 @@
 		"Y-Less/code-parse.inc",
 		"Y-Less/indirection",
 		"Southclaws/formatex",
-		"Zeex/samp-plugin-crashdetect:v4.20",
 		"pBlueG/SA-MP-MySQL:R41-4",
 		"Sreyas-Sreelal/samp-bcrypt:0.2.2",
 		"Southclaws/samp-logger",
@@ -19,8 +18,8 @@
 		"samp-incognito/samp-streamer-plugin:v2.9.4",
 		"kristoisberg/samp-map-zones",
 		"PatrickGTR/actor_robbery",
-		"dakyskye/pawn-env:1.1.1",
-		"Southclaws/samp-ini"
+		"Southclaws/samp-ini",
+		"Zeex/samp-plugin-crashdetect:v4.20"
 	],
 	"local": true,
 	"runtime": {

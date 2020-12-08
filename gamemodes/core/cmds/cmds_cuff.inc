@@ -53,7 +53,7 @@ Player_CuffPlayer(playerid, targetid, errorMsg[], len = sizeof(errorMsg)) {
     }
 
     // do nothing, can't cuff players with wanted level below 3
-    if(GetPlayerWantedLevel(playerid) <= 3) {
+    if(GetPlayerWantedLevel(targetid) <= 3) {
         return 1;
     }
 
