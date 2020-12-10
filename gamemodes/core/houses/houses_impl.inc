@@ -359,12 +359,18 @@ House_Load() {
         MySQL_BindResultInt(stmt_LoadHouse, 11, intid);
         MySQL_BindResult(stmt_LoadHouse, 12, ownerName);
 
+        new
+            benchHouse = GetTickCount(),
+            count = 0;
         while(MySQL_Statement_FetchRow(stmt_LoadHouse)) {
-
             House_Create(x, y, z, a, vworld, price, interior, description, ownerName, ownerID);
-
-            printf("id: %i - x: %.2f, y: %.2f, z: %0.2f | %s" , houseid, x, y, z, ownerName);
+            count ++;
         }
+        Logger_Log(
+            "House Loaded",
+            Logger_I("total", count),
+            Logger_I("took (ms)", GetTickCount() - benchHouse)
+        );
     }
 
     MySQL_ExecuteThreaded_Inline(stmt_LoadHouse, using inline OnHouseLoad);
