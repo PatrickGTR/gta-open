@@ -363,7 +363,7 @@ House_Load() {
 
             House_Create(x, y, z, a, vworld, price, interior, description, ownerName, ownerID);
 
-            printf("id: %i - x: %.2f, y: %.2f, z: %0.2f", houseid, x, y, z);
+            printf("id: %i - x: %.2f, y: %.2f, z: %0.2f | %s" , houseid, x, y, z, ownerName);
         }
     }
 

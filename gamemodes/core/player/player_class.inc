@@ -281,6 +281,15 @@ hook OnPlayerLogin(playerid) {
 	return 1;
 }
 
+hook OnPlayerSpawn(playerid) {
+	if(Player_BoughtSkin(playerid)) {
+		Player_SetBoughtSkin(playerid, false);
+		Class_SelectionState(playerid, false);
+		Player_SetSkin(playerid, Player_GetSkin(playerid), true);
+	}
+	return 1;
+}
+
 hook OnPlayerRequestClass(playerid, classid) {
 
 	// F4 Detection.
@@ -369,9 +378,9 @@ stock void:Class_SelectionState(playerid, bool:status) {
 	PlayerClassState[playerid] = status;
 }
 
-stock Player_GetClassName(playerid) 
+stock Player_GetClassName(playerid)
 {
-	new class_ranknames[4][24] = 
+	new class_ranknames[4][24] =
 	{
 		"Civilian",
 		"Police",
