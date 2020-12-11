@@ -9,6 +9,9 @@
 - Per player vehicle system, customize your car, cutomize your plate and everything will be saved.
 - Gangs, competitive gang system that competes with other gangs kills, deaths and zone captures.
 
+## Discord server
+Join our discord server discord.gg/fhN3q4J6Qr
+
 
 # Running & Compiling
 Run this gamemode in three line!
