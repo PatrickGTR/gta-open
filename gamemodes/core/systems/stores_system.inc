@@ -116,7 +116,7 @@ stock Ammunation_ShowMenu(playerid) {
         format(
                 string,
                 sizeof(string),
-                "~w~%W ~g~%m - ~y~ammunation: ~w~%i",
+                "~w~%W ~g~%m - ~y~Ammo: ~w~%i",
                 gAmmunationData[i][0],
                 gAmmunationData[i][1],
                 gAmmunationData[i][2]

@@ -34,23 +34,23 @@ hook OnPlayerConnect(playerid) {
 	TextMenuItems[playerid][0] = EOS;
 	TextInfoNameHandler[playerid][0] = EOS;
 
-	TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 10.000000, 146.000000, "Title");
-	PlayerTextDrawFont(playerid, TextMenuHeader[playerid], 3);
-	PlayerTextDrawLetterSize(playerid, TextMenuHeader[playerid], 0.300000, 1.200000);
-	PlayerTextDrawTextSize(playerid, TextMenuHeader[playerid], 165.000000, 156.500000);
-	PlayerTextDrawSetOutline(playerid, TextMenuHeader[playerid], 0);
-	PlayerTextDrawSetShadow(playerid, TextMenuHeader[playerid], 1);
-	PlayerTextDrawAlignment(playerid, TextMenuHeader[playerid], 1);
+	TextMenuHeader[playerid] = CreatePlayerTextDraw(playerid, 85.000000, 170.000000, "Title");
+	PlayerTextDrawFont(playerid, TextMenuHeader[playerid], 0);
+	PlayerTextDrawLetterSize(playerid, TextMenuHeader[playerid], 0.600000, 2.000000);
+	PlayerTextDrawTextSize(playerid, TextMenuHeader[playerid], 274.000000, 153.000000);
+	PlayerTextDrawSetOutline(playerid, TextMenuHeader[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, TextMenuHeader[playerid], 0);
+	PlayerTextDrawAlignment(playerid, TextMenuHeader[playerid], 2);
 	PlayerTextDrawColor(playerid, TextMenuHeader[playerid], -1);
 	PlayerTextDrawBackgroundColor(playerid, TextMenuHeader[playerid], 255);
 	PlayerTextDrawBoxColor(playerid, TextMenuHeader[playerid], 50);
 	PlayerTextDrawUseBox(playerid, TextMenuHeader[playerid], 0);
 	PlayerTextDrawSetProportional(playerid, TextMenuHeader[playerid], 1);
 
-	TextMenuBody[playerid] = CreatePlayerTextDraw(playerid, 10.000000, 160.000000, "Content");
+	TextMenuBody[playerid] = CreatePlayerTextDraw(playerid, 15.000000, 185.000000, "Content");
 	PlayerTextDrawFont(playerid, TextMenuBody[playerid], 1);
-	PlayerTextDrawLetterSize(playerid, TextMenuBody[playerid], 0.150000, 0.600000);
-	PlayerTextDrawTextSize(playerid, TextMenuBody[playerid], 165.000000, 0.000000);
+	PlayerTextDrawLetterSize(playerid, TextMenuBody[playerid], 0.200000, 0.800000);
+	PlayerTextDrawTextSize(playerid, TextMenuBody[playerid], 168.000000, 18.000000);
 	PlayerTextDrawSetOutline(playerid, TextMenuBody[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, TextMenuBody[playerid], 0);
 	PlayerTextDrawAlignment(playerid, TextMenuBody[playerid], 1);
@@ -138,7 +138,7 @@ stock TextMenu_Create(playerid, const callback[], const title[]) {
 	strcpy(TextMenuCallbackHandler[playerid], callback, 32);
 
 	new tempString[35];
-	format(tempString, sizeof(tempString), "~b~%s", title);
+	format(tempString, sizeof(tempString), "~y~%s", title);
     PlayerTextDrawSetString(playerid, TextMenuHeader[playerid], tempString);
 	return 1;
 }
@@ -152,9 +152,22 @@ stock TextMenu_Show(playerid)
 		return 0;
 	}
 
+	//~n~_1. Option~n~
+	//~n~~n~
+	//_____~w~Press ~y~T~w~ or ~y~F6~w~ and choose option~n~
+	//_________Press ~y~N~w~ to close this box~n~
+
 	new
 		string[1024];
-    format(string, sizeof(string), "~n~%s~n~~n~~w~___________Press_~y~T_~w~Or_~y~F6~w~_and_type_option_number~n~_________________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
+    format(string, sizeof(string), "\
+		~n~\
+		%s \
+		~n~ \
+		_____~w~Press ~y~T~w~ or ~y~F6~w~ and choose option~n~ \
+		_________Press ~y~N~w~ to close this box \
+		~n~~n~ \
+		", TextMenuItems[playerid]
+	);
 	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
 
 	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);
@@ -165,7 +178,7 @@ stock TextMenu_Show(playerid)
 }
 
 // returns
-// - 0 if player is invalid or trying to hide a menu when there isn't shown.
+// - 0 if player is invalid or trying to hide a menu when hithere isn't shown.
 // - 1 success
 stock TextMenu_Hide(playerid)
 {
@@ -221,7 +234,7 @@ stock TextInfo_Create(playerid, const intname[], const title[]) {
 	strcpy(TextInfoNameHandler[playerid], intname, 32);
 
 	new tempString[35];
-	format(tempString, sizeof(tempString), "~b~%s", title);
+	format(tempString, sizeof(tempString), "~y~%s", title);
 	PlayerTextDrawSetString(playerid, TextMenuHeader[playerid], tempString);
 	return 1;
 }
@@ -234,7 +247,14 @@ stock TextInfo_Show(playerid)
 
 	new
 		string[1024];
-	format(string, sizeof(string), "~n~%s~n~~n~~w~_________________Press_~y~N_~w~to_close_this_box~n~~n~", TextMenuItems[playerid]);
+	format(string, sizeof(string), "~n~\
+		%s \
+		~n~ \
+		_________Press ~y~N~w~ to close this box \
+		~n~~n~ \
+		",
+		TextMenuItems[playerid]
+	);
 	PlayerTextDrawSetString(playerid, TextMenuBody[playerid], string);
 
 	PlayerTextDrawShow(playerid,TextMenuHeader[playerid]);
