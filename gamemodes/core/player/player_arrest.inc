@@ -92,7 +92,7 @@ Player_Arrest(playerid, targetid, errorMessage[], len = sizeof(errorMessage)) {
     return 1;
 }
 
-timer void:DelaySendToJail[3000 + GetPlayerPing(targetid)](targetid) {
+timer void:DelaySendToJail[1500 + GetPlayerPing(targetid)](targetid) {
     new
         level = GetPlayerWantedLevel(targetid),
         seconds = (level * 2);
@@ -105,7 +105,7 @@ stock void:Player_AwardArrest(playerid, targetid, bool:notify = true) {
 
     new
         level =  GetPlayerWantedLevel(targetid),
-        money = level * 100;
+        money = level * 200;
     GivePlayerMoney(playerid, money);
     Player_GiveScore(playerid, 1, true);
     Player_RemoveScore(playerid, 1);

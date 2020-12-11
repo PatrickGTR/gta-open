@@ -21,33 +21,35 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
+hook OnExplosiveDetonate(playerid, Float: x, Float: y, Float:z) {
+	new
+		Float:distCompare = Distance(x, y, z, 266.36240, 82.94550, 1001.29077);
 
-stock ExplodeCellDoors(playerid) {
-	if (IsPlayerInRangeOfPoint(playerid, 15.0, 266.36240, 82.94550, 1001.29077)) {
-		if(!_LSCellOpen(playerid)) {
+	if(distCompare <= 15) {
+		if(!LS_OpenCells(playerid)) {
 		    defer LSCellClose();
         }
 	}
+	return 1;
 }
 
 timer LSCellClose[1000 * 8]() {
 	MoveDynamicObject(JailCell1, 266.36240, 87.45930, 1001.29077, 0.5);
 	MoveDynamicObject(JailCell2, 266.36240, 82.94550, 1001.29077, 0.5);
-
 	JailCellBreached = false;
 }
 
- static _LSCellOpen(playerid) {
+ static LS_OpenCells(playerid) {
 	if(JailCellBreached)
 		return 1;
 
 	foreach(new i : Player) {
 		if(Player_IsInJail(i)) {
 			Player_ReleaseFromJail(i, false);
-			SendMsgF(i, COLOR_ORANGE, "** JAIL BREACH ** The cell doors have been breached, the doors are open for you to escape! RUN!");
+			SendMsgF(i, COLOR_RED, "(terrorism) The cell doors have been breached, the doors are open for you to escape! RUN!");
 		}
 	}
-	SendMsgAllF(COLOR_ORANGE, "** JAIL BREACH ** %p (%i) "C_WHITE"managed to free all the prisoners by planting c4 and detonated it.", playerid, playerid);
+	SendMsgAllF(COLOR_RED, "(terrorism) %p (%i) "C_WHITE"managed to free all the prisoners by planting c4 and detonated it.", playerid, playerid);
 
 	MoveDynamicObject(JailCell1, 266.36240, 86.68930, 1001.29077, 0.5);
     MoveDynamicObject(JailCell2, 266.36240, 82.21280, 1001.29077, 0.5);

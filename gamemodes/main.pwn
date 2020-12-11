@@ -18,7 +18,25 @@
 // OnPlayerAutoSave(playerid) -> called every 2 minutes for datas that need to be saved frequently.
 // OnPlayerRobPlayer(playerid, targetid, moneyTaken) -> called when player has robbed another player.
 // OnPlayerRobStore(playerid, moneyTaken) -> called when player has successfully robbed a store.
+// OnExplosiveDetonate(playerid, Float: x, Float: y, Float:z)  -> call when c4 has been detonated.
 
+#if 0
+	forward OnPlayerLogin(playerid);
+	forward OnPlayerRegister(playerid);
+	forward OnPlayerPassedBanCheck(playerid);
+	forward OnPlayerSecondUpdate(playerid);
+	forward OnPlayerFirstSpawn(playerid);
+	forward OnPlayerAutoSave(playerid);
+	forward OnPlayerRobPlayer(playerid, targetid, moneyTaken);
+	forward OnPlayerRobStore(playerid, moneyTaken);
+	forward OnExplosiveDetonate(playerid, Float: x, Float: y, Float: z);
+
+	forward OnServerSecondUpdate();
+	forward OnMySQLConnected();
+	forward OnMySQLPreClose();
+	forward OnServerWeekReset();
+	forward OnServerDayReset();
+#endif
 
 // Custom Functions
 // Player_GiveScore(playerid, score, bool:save = false) -> give player a score.
@@ -128,6 +146,7 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
 }
 
+// TEMP - MUST REMOVE!
 CMD:kill(playerid, params[]) {
 	SetPlayerHealth(playerid, 0.0);
 	return 1;

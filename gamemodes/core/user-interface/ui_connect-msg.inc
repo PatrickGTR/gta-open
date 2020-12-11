@@ -33,7 +33,7 @@ hook OnPlayerConnect(playerid) {
     new
         string[sizeof(joinString[]) * 5];
 
-    format(joinString[0], sizeof(joinString[]), "~g~JOIN: ~w~%p (%i)~n~", playerid, playerid);
+    format(joinString[0], sizeof(joinString[]), "~n~~g~JOIN: ~w~%p (%i)", playerid, playerid);
 
     strcat(string, joinString[4], sizeof(string));
     strcat(string, joinString[3], sizeof(string));
@@ -42,6 +42,7 @@ hook OnPlayerConnect(playerid) {
     strcat(string, joinString[0], sizeof(string));
 
     TextDrawSetString(LeaveJoinTD, string);
+    Logger_Log("join td debug, unmatched tilted", Logger_S("content", string));
     return 1;
 }
 
@@ -61,9 +62,9 @@ hook OnPlayerDisconnect(playerid, reason) {
     }
 
     new
-        string[128];
+        string[7 + ((sizeof(joinString[]) * 5))];
 
-    format(joinString[0], sizeof(joinString[]), "%s: ~w~%p (%i)~n~", leave_reason, playerid, playerid);
+    format(joinString[0], sizeof(joinString[]), "~n~%s: ~w~%p (%i)", leave_reason, playerid, playerid);
 
     strcat(string, joinString[4], sizeof(string));
     strcat(string, joinString[3], sizeof(string));
@@ -72,9 +73,9 @@ hook OnPlayerDisconnect(playerid, reason) {
     strcat(string, joinString[0], sizeof(string));
 
     TextDrawSetString(LeaveJoinTD, string);
+    Logger_Log("leave td debug, unmatched tilted", Logger_S("content", string));
     return 1;
 }
-
 
 hook OnPlayerSpawn(playerid) {
     TextDrawShowForPlayer(playerid, LeaveJoinTD);

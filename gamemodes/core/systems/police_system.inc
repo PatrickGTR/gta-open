@@ -5,11 +5,24 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         if(Player_GetClass(playerid) != TEAM_POLICE) {
             return 0;
         }
-        new id = Player_GetClosestWanted(playerid);
+        new
+            id = Player_GetClosestWanted(playerid);
 
         if(id == INVALID_PLAYER_ID) {
             return 1;
         }
+
+        new
+            Float: x,
+            Float: y,
+            Float: z;
+        GetPlayerPos(id, x, y, z);
+
+        if(GetPlayerDistanceFromPoint(playerid, x, y, z) >= 3.5) {
+            SendErrorMsg(playerid, "No players nearby");
+            return 1;
+        }
+
         new
             errorMessage[45];
         if(!Player_IsCuffed(id)) {

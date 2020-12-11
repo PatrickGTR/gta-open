@@ -4,10 +4,10 @@ static
 
 CMD:plantc4(playerid, params[])
 {
-    if (Player_GetJob(playerid) == TYPE_TERRORIST) {
+    if (Player_GetJob(playerid) != TYPE_TERRORIST) {
         return SendErrorMsg(playerid, "Only terrorist can use this command.");
     }
-    
+
 	if (Player_GetC4(playerid) <= 0)
 		return SendErrorMsg(playerid, "You do not have C4, how is that possible to plant one?");
 
@@ -25,7 +25,7 @@ CMD:plantc4(playerid, params[])
 	ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 1, 1, 0, 5, 1);
 	PlayerC4Planted[playerid] = true;
 	return true;
-}   
+}
 
 CMD:detonate(playerid, params[])
 {
@@ -35,16 +35,17 @@ CMD:detonate(playerid, params[])
 	new
 		Float:x,
 		Float:y,
-		Float:z
-	;
+		Float:z;
 	GetDynamicObjectPos(PlayerC4Object[playerid], x, y, z);
 
-	ExplodeCellDoors(playerid);
-
+	// Create UI
 	CreateExplosion(x, y, z, 0, 5.0);
+	Player_GiveWantedLevel(playerid, 4);
+	// Call Function
+	CallLocalFunction("OnExplosiveDetonate", "ifff", playerid, x, y, z);
+	// Rese Data
 	DestroyDynamicObject(PlayerC4Object[playerid]);
 	PlayerC4Object[playerid] = INVALID_OBJECT_ID;
 	PlayerC4Planted[playerid] = false;
-	Player_GiveWantedLevel(playerid, 4);
 	return true;
 }
