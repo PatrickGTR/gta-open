@@ -1,4 +1,8 @@
-# GTA Open
+
+<center>
+    <img src="https://images-ext-1.discordapp.net/external/9bnqMJR8BELEgIBP8pyZzXRt2WJ0NmIWpsNjwcvtdMs/https/i.ibb.co/SRLzzcn/gtaopen-reddaddy.png" alt="Logo">
+</center>
+
 ##### A Cops and robbers mode based in Los Santos with features including...
 - Robbing stores and players
 - Attachments (a.k.a clothing system)
@@ -10,8 +14,11 @@
 - Gangs, competitive gang system that competes with other gangs kills, deaths and zone captures.
 
 ## Discord server
-Join our discord server discord.gg/fhN3q4J6Qr
-
+<center>
+<a href="https://discord.gg/d3ty5mnv">
+    <img src="https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg" alt="Logo" height="128">
+</a>
+</center>
 
 # Running & Compiling
 Run this gamemode in three line!
@@ -25,7 +32,7 @@ sampctl package run
 
 #### Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. 
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create.
 
 Any contributions you make are **greatly appreciated**.
 
@@ -53,15 +60,15 @@ static
 // Brace style
 // ------------------------------------------------------------------------
 // Both style are acceptable but please NOTE!
-// make the indentation style consistent depending on the 
+// make the indentation style consistent depending on the
 // module you are working on.
 
 // K & R
 if(condition == true)
     condition == false;
 
-// Allman 
-if(condition == true) 
+// Allman
+if(condition == true)
 {
     condition == false;
 }
@@ -89,9 +96,9 @@ Level_GivePlayer(playerid, level) {
     if(!IsPlayerConnected(playerid)) {
         return 0;
     }
-    
+
     // Single declaration for multiple variables, with each on a new indented line.
-    new 
+    new
         // Variables/parameters in "lowerCamelCase" - as above, except the first word.
         playerLevel = Level_Get(playerid);
 
@@ -106,7 +113,7 @@ Level_Set(playerid, level, bool:save = false) {
     }
 
     gPlayerLevel[playerid] = level;
-    
+
     if(save) {
         // mock update the database.
         // UPDATE player_statistics SET level = level + ?
@@ -121,15 +128,15 @@ Level_Set(playerid, level, bool:save = false) {
 // ------------------------------------------------------------------------
 // Delicate information such as discord_token & mysql credentials
 // must be stored in environment variables to avoid rouge scripter who will tamper with the database
-// NOTE: 
+// NOTE:
 // USE https://github.com/dakyskye/pawn-env
 
 public OnGameModeInit() {
-     new 
+     new
         MySQLOpt: option_id = mysql_init_options();
-	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server 
+	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server
 
-    new 
+    new
         username[24],
         host[24],
         password[24],
@@ -139,11 +146,11 @@ public OnGameModeInit() {
     // like shown below.
     if(Env_Has("MYSQL_USERNAME")) {
         Env_Get("MYSQL_USERNAME", username);
-    } 
+    }
     else {
         print("Could not find environment variable for MYSQL_USERNAME");
     }
-    
+
     if(Env_Has("MYSQL_PASSWORD")) {
         Env_Get("MYSQL_PASSWORD", password);
     }
@@ -153,18 +160,18 @@ public OnGameModeInit() {
 
     if(Env_Has("MYSQL_HOST")) {
         Env_Get("MYSQL_HOST", host);
-    } 
+    }
     else {
         print("Could not find environment variable for MYSQL_HOST");
     }
-    
+
     if(Env_Has("MYSQL_DATABASE")) {
         Env_Get("MYSQL_DATABASE", database);
     }
     else {
         print("Could not find environment variable for MYSQL_DATABASE");
     }
-    
+
     MySQL_ConHandle = mysql_connect(host, username, password, database);
 
     if(MySQL_ConHandle == MYSQL_INVALID_HANDLE || mysql_errno(MySQL_ConHandle) != 0) {
@@ -183,12 +190,12 @@ public OnGameModeInit() {
 // ------------------------------------------------------------------------
 // Each statement declaration must have stmt_ prefix.
 // after the prefix, naming must be CamelCase.
-static 
+static
     stmt_CamelCase;
 
-// long queries must be seperated into different lines 
+// long queries must be seperated into different lines
 // for better readability.
-// it also should be stored in an array with no fixed size 
+// it also should be stored in an array with no fixed size
 // declared as 'static const'
 static const query_LoadAttachments[] = "\
     SELECT \
@@ -220,7 +227,7 @@ Name | Message
 [Zeex]       | amx_assembly, crashdetect, indirection
 [Slice]      | formatex
 [Lorenc]     | SFCNR, snippets & data from sfcnr
- 
+
 Very special thanks to
 **SA:MP Team past, present and future - SA:MP.**
 
