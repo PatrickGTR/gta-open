@@ -19,7 +19,8 @@ static
     GangName[MAX_GANGS][MAX_GANG_NAME],
     GangID[MAX_GANGS],
     GangColour[MAX_GANGS],
-    GangLeader[MAX_GANGS];
+    GangLeader[MAX_GANGS],
+    GangLeaderName[MAX_GANGS][MAX_PLAYER_NAME];
 
 static
     Statement: stmt_CreateGang,
@@ -32,10 +33,28 @@ static
 hook OnMySQLConnected() {
 
     stmt_CreateGang = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT INTO gangs (leader_uid, name) VALUES (?, ?)");
-    stmt_InsertMember = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT into gang_members (user_id) VALUES (?)");
+    stmt_InsertMember = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT into gang_members (gang_id, user_id) VALUES (?,?)");
     stmt_DeleteMember = MySQL_PrepareStatement(MySQL_GetHandle(), "DELETE FROM gang_members WHERE user_id = ?");
     stmt_DeleteGang = MySQL_PrepareStatement(MySQL_GetHandle(), "DELETE FROM gangs WHERE leader_uid = ? AND id = ?");
-    stmt_LoadGang = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT id, leader_uid, name, colour, kills, deaths FROM gangs");
+
+    static const loadGangs_Query[] =
+    "SELECT \
+        g.id, \
+        g.leader_uid, \
+        g.name, \
+        g.colour, \
+        g.kills, \
+        g.deaths, \
+        p.username \
+    FROM  \
+        gangs as g \
+    LEFT JOIN  \
+        players as p \
+    ON  \
+        p.u_id = g.leader_uid \
+    ";
+
+    stmt_LoadGang = MySQL_PrepareStatement(MySQL_GetHandle(), loadGangs_Query);
 
     static const checkMember_Query[] =
     "SELECT \
@@ -60,7 +79,8 @@ hook OnMySQLConnected() {
             gangName[MAX_GANG_NAME],
             gangColour,
             gangKills,
-            gangDeaths;
+            gangDeaths,
+            gangLeaderName[MAX_PLAYER_NAME];
 
         MySQL_BindResultInt(stmt_LoadGang, 0, gangID);
         MySQL_BindResultInt(stmt_LoadGang, 1, gangLeader);
@@ -68,27 +88,33 @@ hook OnMySQLConnected() {
         MySQL_BindResultInt(stmt_LoadGang, 3, gangColour);
         MySQL_BindResultInt(stmt_LoadGang, 4, gangKills);
         MySQL_BindResultInt(stmt_LoadGang, 5, gangDeaths);
+        MySQL_BindResult(stmt_LoadGang, 6, gangLeaderName, sizeof(gangLeaderName));
 
         new
             freeID = 0,
             startTick;
 
         startTick = GetTickCount();
+        new
+            count = 0;
         while(MySQL_Statement_FetchRow(stmt_LoadGang)) {
-            freeID = Iter_Free(GangIndex);
+            freeID = Iter_Alloc(GangIndex);
 
             GangID[freeID] = gangID;
             GangLeader[freeID] = gangLeader;
             GangName[freeID] = gangName;
             GangColour[freeID] = gangColour;
+            GangLeaderName[freeID] = gangLeaderName;
 
             Gang_AddKills(freeID, gangKills);
             Gang_AddDeaths(freeID, gangDeaths);
+
+            count ++;
         }
 
         Logger_Log("Gang Loaded",
-            Logger_I("total", Iter_Count(GangIndex) + 1),
-            Logger_I("load time (ms)", startTick -  GetTickCount())
+            Logger_I("total", count),
+            Logger_I("load time (ms)", GetTickCount() - startTick)
         );
     }
     MySQL_ExecuteThreaded_Inline(stmt_LoadGang, using inline OnLoadGang);
@@ -98,6 +124,7 @@ hook OnMySQLConnected() {
 hook OnPlayerConnect(playerid) {
     PlayerInGang[playerid] = false;
     PlayerIsLeader[playerid] = false;
+    PlayerInGangID[playerid] = INVALID_GANG_ID;
     InviterID[playerid] = INVALID_PLAYER_ID;
     PlayerIsInvited[playerid] = false;
     return 1;
@@ -108,7 +135,7 @@ hook OnPlayerLogin(playerid) {
         new
             gangID = INVALID_GANG_ID,
             gangRank = 0,
-            gangLeaderUID = INVALID_PLAYER_ID;
+            gangLeaderUID = -1;
 
         MySQL_BindResultInt(stmt_IsGangMember, 0, gangID);
         MySQL_BindResultInt(stmt_IsGangMember, 1, gangRank);
@@ -116,7 +143,7 @@ hook OnPlayerLogin(playerid) {
 
         if(MySQL_Statement_FetchRow(stmt_IsGangMember)) {
             PlayerInGang[playerid] = true;
-            PlayerIsLeader[playerid] = (Player_GetAccountID(playerid) == gangLeaderUID);
+            PlayerIsLeader[playerid] = (Player_GetAccountID(playerid) == gangLeaderUID) ? (true) : (false);
             PlayerInGangID[playerid] = gangID;
         }
     }
@@ -187,6 +214,7 @@ Gang_Create(playerid, const string:gangName[]) {
         GangID[idx] = gangID;
         GangColour[idx] = -1;
         GangLeader[idx] = Player_GetAccountID(playerid);
+        GangLeaderName[idx] = ReturnPlayerName(playerid);
 
         Iter_Add(GangIndex, idx);
 
@@ -247,7 +275,8 @@ Gang_Disband(playerid, id) {
     GangName[idx][0] = EOS;
     GangID[idx] = INVALID_GANG_ID;
     GangColour[idx] = -1;
-    GangLeader[idx] = INVALID_PLAYER_ID;
+    GangLeader[idx] = -1;
+    GangLeaderName[idx][0] = EOS;
 
     Iter_Remove(GangIndex, idx);
     return 1;
@@ -270,7 +299,7 @@ Gang_AcceptInvite(playerid, &gangID, &gangColour, &inviterid, gangName[MAX_GANG_
     // inviterid    == the player who initiated the invite.
     // playerid     == the player who got invited.
 
-    if(IsPlayerConnected(inviterID)) {
+    if(!IsPlayerConnected(inviterID)) {
         return -1;
     }
 
@@ -332,7 +361,8 @@ Gang_Join(playerid, id) {
     PlayerInGangID[playerid] = id;
 
     // Insert Data to database.
-    MySQL_BindInt(stmt_InsertMember, 0, Player_GetAccountID(playerid)); // user id
+    MySQL_BindInt(stmt_InsertMember, 0, id);
+    MySQL_BindInt(stmt_InsertMember, 1, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_InsertMember);
     return 1;
 }
@@ -352,6 +382,22 @@ Gang_Leave(playerid) {
     // Delete Data to database.
     MySQL_BindInt(stmt_DeleteMember, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_DeleteMember);
+    return 1;
+}
+
+Gang_ShowGangs(playerid) {
+    TextInfo_Create(playerid, "GANGS", "Gangs");
+    new
+        string[64];
+    foreach(new i : GangIndex) {
+        format(string, sizeof(string),
+            "~w~- Name: ~y~%s ~w~- Owner: ~y~%s",
+            GangName[i], GangLeaderName[i]
+        );
+        TextInfo_Add(playerid, string);
+    }
+
+    TextInfo_Show(playerid);
     return 1;
 }
 

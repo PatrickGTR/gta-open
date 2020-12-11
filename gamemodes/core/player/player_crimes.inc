@@ -55,11 +55,14 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
             Float:z;
         GetPlayerPos(closestID, x, y, z);
         if(IsPlayerInRangeOfPoint(playerid, 20.0, x, y, z)) {
-            if((gettime() - gShotNearPoliceTick[playerid]) < (60 * 2)) {
-                SendMsgF(playerid, COLOR_RED, "You shot near a on-duty police officer, you've gained an extra 4 stars.");
 
-                Player_GiveWantedLevel(playerid, 4);
+            if((gettime() - gShotNearPoliceTick[playerid]) < (60 * 2)) {
+                return 1;
             }
+
+            SendMsgF(playerid, COLOR_RED, "You shot near a on-duty police officer, you've gained an extra 4 stars.");
+
+            Player_GiveWantedLevel(playerid, 4);
             gShotNearPoliceTick[playerid] = gettime();
         }
 
@@ -73,11 +76,12 @@ hook OnPlayerTakePlayerDmg(playerid, issuerid, &Float: amount, weaponid, bodypar
     if(Player_GetClass(issuerid) == TEAM_CIVILIAN && Player_GetClass(playerid) == TEAM_POLICE) {
         // disallow spam, only increase wanted every after 2 minutes.
         if((gettime() - gShotPoliceTick[playerid]) < (60 * 2)) {
-            SendMsgF(issuerid, COLOR_RED, "You shot an on-duty police officer, you've gained an extra 4 stars.");
-
-            Player_GiveWantedLevel(playerid, 4);
-            gShotPoliceTick[issuerid] = gettime();
+            return 1;
         }
+        SendMsgF(issuerid, COLOR_RED, "You shot an on-duty police officer, you've gained an extra 4 stars.");
+
+        Player_GiveWantedLevel(playerid, 4);
+        gShotPoliceTick[issuerid] = gettime();
     }
     return 1;
 }

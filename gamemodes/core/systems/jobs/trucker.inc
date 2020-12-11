@@ -12,8 +12,8 @@ static
     Timer:TruckingDeliveryTimer[MAX_PLAYERS]
 ;
 
-static 
-    bool:IsPlayerTrucking[MAX_PLAYERS], 
+static
+    bool:IsPlayerTrucking[MAX_PLAYERS],
     TruckingCooldown[MAX_PLAYERS],
     bool:PlayerCanTruck[MAX_PLAYERS],
     PlayerTruckingState[MAX_PLAYERS];
@@ -38,7 +38,7 @@ static
 CMD:trucker(playerid) {
     if(!PlayerCanTruck[playerid]) {
         return SendErrorMsg(playerid, "You're not in a truck!");
-    } 
+    }
     if(Player_GetWantedLevel(playerid) != 0) {
         return SendErrorMsg(playerid, "Only innocents can start a trucking mission");
     }
@@ -55,10 +55,10 @@ Trucker_Pickup(playerid) {
     }
     IsPlayerTrucking[playerid] = true;
     PlayerTruckingState[playerid] = STATE_PICKUP;
-    
+
     DisablePlayerRaceCheckpoint(playerid);
     SetPlayerRaceCheckpoint(playerid, 1, 2174.6182, -2266.6165, 13.3797, 2174.6182, -2266.6165, 13.3797, 3.0);
-    
+
     UI_TimeLeft(playerid, 300);
     TruckingPickupTimer[playerid] = defer TruckingPickup(playerid);
 
@@ -83,7 +83,7 @@ Trucker_Begin(playerid) {
     DisablePlayerRaceCheckpoint(playerid);
     SetPlayerRaceCheckpoint(playerid, 1, x, y, z, x, y, z, 3.0);
 
-    stop TruckingPickupTimer[playerid];
+	stop TruckingPickupTimer[playerid];
     UI_TimeLeft(playerid, 300);
     TruckingDeliveryTimer[playerid] = defer TruckingDelivery(playerid);
 
@@ -103,7 +103,7 @@ Trucker_End(playerid) {
     return 1;
 }
 
-hook OnPlayerEnterRaceCP(playerid) 
+hook OnPlayerEnterRaceCP(playerid)
 {
     if(IsPlayerTrucking[playerid])
     {

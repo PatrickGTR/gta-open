@@ -92,8 +92,8 @@ stock Player_GetClosestWanted(playerid) {
     return closestID;
 }
 
-stock Player_GetClosestLeo(playerid) {
-    new 
+Player_GetClosestLeo(playerid) {
+    new
         closestID = INVALID_PLAYER_ID;
 
     foreach(new i : Player) {
@@ -102,7 +102,7 @@ stock Player_GetClosestLeo(playerid) {
             continue;
         }
 
-        if(Player_GetClosestPlayer(playerid, 1000.0) && Player_IsLEO(i)) 
+        if(Player_GetClosestPlayer(playerid, 1000.0) && Player_IsLEO(i))
         {
             closestID = i;
             break;
@@ -111,7 +111,7 @@ stock Player_GetClosestLeo(playerid) {
     return closestID;
 }
 
-stock Player_IsNearPlayer(playerid, targetid, Float:radius)
+Player_IsNearPlayer(playerid, targetid, Float:radius)
 {
 	new
         Float:x,
@@ -128,7 +128,7 @@ stock Player_IsNearPlayer(playerid, targetid, Float:radius)
 	return matchingVW && matchingInt && inRange;
 }
 
-stock Player_GetClosestPlayer(playerid, Float:range = 10000.0)
+Player_GetClosestPlayer(playerid, Float:range = 10000.0)
 {
     new
         Float:x,
@@ -140,7 +140,7 @@ stock Player_GetClosestPlayer(playerid, Float:range = 10000.0)
     return GetClosestPlayerFromPoint(x, y, z, range, playerid);
 }
 
-static GetClosestPlayerFromPoint(Float:x, Float:y, Float:z, &Float:lowestdistance = 10000.0, exceptionid = INVALID_PLAYER_ID)
+GetClosestPlayerFromPoint(Float:x, Float:y, Float:z, &Float:lowestdistance = 10000.0, exceptionid = INVALID_PLAYER_ID)
 {
     new
         Float:px,

@@ -91,28 +91,31 @@ Player_HitpointLoad(playerid) {
         new
             Float:armour,
             Float:health;
-            
+
         MySQL_BindResultFloat(stmt_loadHitpoints, 0, health);
         MySQL_BindResultFloat(stmt_loadHitpoints, 1, armour);
 
         if(MySQL_Statement_FetchRow(stmt_loadHitpoints)) {
-            SetPlayerHealth(playerid, health);
+            // health == 0.0
+            // make sure player doesn't spawn dying
+            // if the health that was 0 or below, give him full health on first spawn.
+            SetPlayerHealth(playerid, (health == 0.0) ? (Float:100.0) : (health));
             SetPlayerArmour(playerid, armour);
 
-            Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointLoad / player_hitpoint-save.inc] hitpoint loaded", 
+            Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointLoad / player_hitpoint-save.inc] hitpoint loaded",
                 Logger_F("health", health),
                 Logger_F("armour", armour),
                 Logger_P(playerid)
             );
-        } 
+        }
     }
     MySQL_BindInt(stmt_loadHitpoints, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteParallel_Inline(stmt_loadHitpoints, using inline HealthLoad);
 }
 
 Player_HitpointSave(playerid) {
-    new 
-        Float:health, 
+    new
+        Float:health,
         Float:armour;
 
     GetPlayerHealth(playerid, health);
@@ -122,8 +125,8 @@ Player_HitpointSave(playerid) {
     MySQL_BindFloat(stmt_saveHitpoints, 1, armour);
     MySQL_BindInt(stmt_saveHitpoints, 2, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_saveHitpoints);
-    
-    Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointSave / player_hitpoint-save.inc] hitpoint saved", 
+
+    Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointSave / player_hitpoint-save.inc] hitpoint saved",
         Logger_F("health", health),
         Logger_F("armour", armour),
         Logger_P(playerid)

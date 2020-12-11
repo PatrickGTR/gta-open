@@ -35,6 +35,8 @@
 #include <a_mysql>
 #include <samp_bcrypt>
 
+#include <EVF>
+
 // YSI
 #include <YSI_Core\y_utils>
 #include <YSI_Coding\y_inline>
@@ -44,7 +46,7 @@
 
 #include <ini>
 
-#include <env>
+// #include <env>
 #include <streamer>
 #include <logger>
 #include <mysql_prepared>
@@ -124,4 +126,9 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
 	}
 
     return 1; // returning 0 will prevent user from taking damage (THIS IS A BIG FEATURE!)
+}
+
+CMD:kill(playerid, params[]) {
+	SetPlayerHealth(playerid, 0.0);
+	return 1;
 }

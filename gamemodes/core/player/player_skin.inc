@@ -20,7 +20,7 @@ hook OnPlayerRegister(playerid) {
 hook OnPlayerConnect(playerid) {
     PlayerSkin[playerid] = -1;
     PlayerNew[playerid] = false;
-    return 1;   
+    return 1;
 }
 
 hook OnPlayerLogin(playerid) {
@@ -33,8 +33,8 @@ hook OnPlayerLogin(playerid) {
         if(MySQL_Statement_FetchRow(stmt_loadPlayerSkin)) {
             Player_SetSkin(playerid, playerSkin);
 
-            Logger_Dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerLogin / player_skin.inc] skin loaded", 
-                Logger_I("skinid", playerSkin), 
+            Logger_Dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerLogin / player_skin.inc] skin loaded",
+                Logger_I("skinid", playerSkin),
                 Logger_P(playerid)
             );
         }
@@ -45,18 +45,25 @@ hook OnPlayerLogin(playerid) {
 }
 
 hook OnPlayerFirstSpawn(playerid) {
-    SetPlayerSkin(playerid, Player_GetSkin(playerid));
+
+    new
+        skinid = Player_GetSkin(playerid);
+    SetPlayerSkin(playerid, skinid);
 
     if(PlayerNew[playerid]) {
-        MySQL_BindInt(stmt_updatePlayerSkin, 0, Player_GetSkin(playerid));
-        MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
-        MySQL_ExecuteParallel(stmt_updatePlayerSkin);
+        Player_SetSkin(playerid, skinid, true);
     }
     return 1;
 }
 
-stock Player_SetSkin(playerid, skinid) {
+stock Player_SetSkin(playerid, skinid, bool:save = false) {
 	PlayerSkin[playerid] = skinid;
+
+    if(save) {
+        MySQL_BindInt(stmt_updatePlayerSkin, 0, Player_GetSkin(playerid));
+        MySQL_BindInt(stmt_updatePlayerSkin, 1, Player_GetAccountID(playerid));
+        MySQL_ExecuteParallel(stmt_updatePlayerSkin);
+    }
 }
 
 stock Player_GetSkin(playerid) {
