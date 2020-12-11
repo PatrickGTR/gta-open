@@ -59,6 +59,79 @@ static
 	{true, 1, 24, 		"[DRUG HOUSE]", 			{2166.4160,-1671.7675,15.0742}, {742.9769, 207.1607, 11558.7939}}
 };
 
+static
+	bool:gPlayerDone[MAX_PLAYERS][35],
+	gPlayerCurrInt[MAX_PLAYERS];
+
+static GetNextStore(playerid)
+{
+	for(new i = 0; i < sizeof storeData; i++)
+	{
+		if(!gPlayerDone[playerid][i])
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+static AddToFile(const filename[], Float:x, Float:y, Float:z, Float:ang, int, const name[])
+{
+	new
+		tmpStr[152],
+		File:file_ptr
+	;
+	file_ptr = fopen(filename, filemode:io_append);
+
+	if(!file_ptr) return print("No such file");
+
+	format(tmpStr, sizeof (tmpStr), "%f, %f, %f, %f, %d // %s\n",x, y, z, ang, int, name);
+	fwrite(file_ptr, tmpStr);
+	fclose(file_ptr);
+	return 1;
+}
+
+CMD:savepos(playerid, params[])
+{
+	new name[100];
+	//if(sscanf(params, "s[32]", name)) return SendSyntaxMsg(playerid, "/savepos (name)");
+	new Float:x, Float:y, Float:z, Float:ang, int;
+	new ind = gPlayerCurrInt[playerid];
+	GetPlayerPos(playerid, x, y, z);
+	GetPlayerFacingAngle(playerid, ang);
+	int = GetPlayerInterior(playerid);
+	strcpy(name, storeData[ind][E_STORE_NAME], sizeof(name));
+	if(int != 0) {
+		strcat(name, " interior");
+	}
+	AddToFile("savedpos.txt", x, y, z, ang, int, name);
+	SendServerMsg(playerid, "Saved pos!");
+	return 1;
+}
+
+CMD:gotonext(playerid, params[])
+{
+	new nextstore = GetNextStore(playerid);
+	if(nextstore == -1) return SendErrorMsg(playerid, "You're all done!");
+	new
+		Float:enX,
+		Float:enY,
+		Float:enZ
+	;
+	enX = storeData[nextstore][E_ENTRANCE_POS][0];
+	enY = storeData[nextstore][E_ENTRANCE_POS][1];
+	enZ = storeData[nextstore][E_ENTRANCE_POS][2];
+
+
+	gPlayerCurrInt[playerid] = nextstore;
+	gPlayerDone[playerid][nextstore] = true;
+
+	SetPlayerPos(playerid, enX, enY, enZ);
+	SetPlayerVirtualWorld(playerid, 0);
+	SetPlayerInterior(playerid, 0);
+	return 1;
+}
+
 hook OnGameModeInit() {
 
 	// Init Entrances
