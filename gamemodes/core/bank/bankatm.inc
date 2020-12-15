@@ -72,7 +72,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     }
 
     // disable access if ATM is disabled
-    if(ATM_GetState(ATM_GetClosest(playerid))) {
+    new
+        atmID = ATM_GetClosest(playerid),
+        idx = ATM_FindIndexIDBySQLID(atmID);
+
+    if(ATM_GetState(idx)) {
         return 1;
     }
 

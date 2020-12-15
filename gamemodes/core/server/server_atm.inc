@@ -28,7 +28,7 @@ static
     Float: ATM_RZ[MAX_ATMS],
     ATM_World[MAX_ATMS],
     ATM_Interior[MAX_ATMS],
-    ATM_Disabled[MAX_ATMS] = {false, ...};
+    bool:ATM_Disabled[MAX_ATMS] = {false, ...};
 // ATM Editing State
 static
     PlayerEditingATM[MAX_PLAYERS] = INVALID_ATM_ID,
@@ -468,15 +468,4 @@ ATM_State(idx, bool: disable) {
 
 ATM_GetState(idx) {
     return ATM_Disabled[idx];
-}
-
-CMD:gotoatm(playerid, params[]) {
-
-    SetPlayerPos(playerid,
-        ATM_X[0],
-        ATM_Y[0],
-        ATM_Z[0]
-    );
-
-    return 1;
 }

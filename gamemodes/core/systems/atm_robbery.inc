@@ -109,7 +109,7 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
         reward[playerid] += random(100) + 500;
 
         if(++ count[playerid] >= MAX_MONEY_PICKUP) {
-
+            // TODO:
             // beautify reward
             SendMsgF(playerid, COLOR_GREEN, "%m", reward[playerid]);
         }
@@ -134,9 +134,4 @@ timer RestoreATMState[ATM_COOLDOWN](objectID, idx) {
     );
 }
 
-CMD:givemec4(playerid, params[]) {
-
-    Player_GiveC4(playerid, 10);
-    return 1;
-}
 
