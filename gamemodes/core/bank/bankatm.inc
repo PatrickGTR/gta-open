@@ -65,14 +65,25 @@ hook OnPlayerText(playerid, text[]) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    if(newkeys == KEY_YES && Player_IsNearATM(playerid)) {
+    // don't run code below if player is not near
+    // any ATM machine.
+    if(!Player_IsNearATM(playerid)) {
+        return 1;
+    }
+
+    // disable access if ATM is disabled
+    if(ATM_GetState(ATM_GetClosest(playerid))) {
+        return 1;
+    }
+
+    if(newkeys == KEY_YES) {
         if(PlayerBankReply[playerid]) {
             PlayerATMOption[playerid] = ATM_NONE;
             PlayerBankReply[playerid] = false;
         }
         ShowATMMenu(playerid);
     }
-    if(newkeys == KEY_NO && Player_IsNearATM(playerid)) {
+    if(newkeys == KEY_NO) {
         TextMenu_HideSpecific(playerid, "AtmMenu");
         TextInfo_HideSpecific(playerid, "ATMDEP");
         TextInfo_HideSpecific(playerid, "ATMWITH");

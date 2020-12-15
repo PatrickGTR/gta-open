@@ -11,6 +11,8 @@
 #include <army_system>
 #include <bomb_shop>
 
+#include <atm_robbery>
+
 // Player jobs
 #include <jobs>
 
