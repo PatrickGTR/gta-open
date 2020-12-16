@@ -5,13 +5,8 @@
  * Purpose: server-sided vending machines placed around san andreas
  */
 
-/* ** Error Checking ** */
-#if !defined __ac__money
-	#error "Server-sided vending machines is not using server-sided money"
-#endif
-
 /* ** Includes ** */
-#include 							< YSI_Coding\y_hooks >
+#include < YSI_Coding\y_hooks >
 #include <streamer>
 
 /* ** Definitions ** */
@@ -111,19 +106,19 @@ hook OnScriptInit( )
 hook OnPlayerConnect( playerid )
 {
 	// Remove Vending Machines
-	RemoveBuildingForPlayer( playerid, 1302, 0.0, 0.0, 0.0, 6000.0 );
-    RemoveBuildingForPlayer( playerid, 1209, 0.0, 0.0, 0.0, 6000.0 );
-    RemoveBuildingForPlayer( playerid, 955, 0.0, 0.0, 0.0, 6000.00 );
-    RemoveBuildingForPlayer( playerid, 956, 0.0, 0.0, 0.0, 6000.00 );
-    RemoveBuildingForPlayer( playerid, 1775, 0.0, 0.0, 0.0, 6000.0 );
-    RemoveBuildingForPlayer( playerid, 1776, 0.0, 0.0, 0.0, 6000.0 );
-    RemoveBuildingForPlayer( playerid, 1977, 0.0, 0.0, 0.0, 6000.0 );
+	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 6000.0 );
+    RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 6000.0 );
+    RemoveBuildingForPlayer(playerid, 955, 0.0, 0.0, 0.0, 6000.00 );
+    RemoveBuildingForPlayer(playerid, 956, 0.0, 0.0, 0.0, 6000.00 );
+    RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 6000.0 );
+    RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 6000.0 );
+    RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 6000.0 );
     return 1;
 }
 
 hook OnPlayerKeyStateChange( playerid, newkeys, oldkeys )
 {
-	if ( 0 <= playerid < MAX_PLAYERS && ( ( ( newkeys & KEY_SECONDARY_ATTACK ) == KEY_SECONDARY_ATTACK ) && ( ( oldkeys & KEY_SECONDARY_ATTACK ) != KEY_SECONDARY_ATTACK ) ) ) // pressed ENTER
+	if ( 0 <= playerid < MAX_PLAYERS && PRESSED(KEY_SECONDARY_ATTACK) ) // pressed ENTER
 	{
 		if ( GetPlayerState( playerid ) == PLAYER_STATE_ONFOOT && p_VendingUseTimer[ playerid ] == -1 && GetPlayerAnimationIndex( playerid ) != 1660 )
 		{

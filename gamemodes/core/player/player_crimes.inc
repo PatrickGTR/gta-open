@@ -21,14 +21,9 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 // Store Robbery
 hook OnPlayerRobStore(playerid, moneyTaken) {
     new
-        string[16];
-
-    format(string, sizeof(string), "~g~+ ~w~%m", moneyTaken);
-    GameTextForPlayer(playerid, string, 6000, 1);
-
-
-    Player_GetLocation(playerid, string, sizeof(string));
-    SendMsgAllF(COLOR_ORANGE, "(store robbery) "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from "C_YELLOW"%s "C_WHITE"in "C_GREY"%s.", playerid, playerid, moneyTaken, Entrance_PlayerIn(playerid), string);
+        location[MAX_MAP_ZONE_NAME];
+    Player_GetLocation(playerid, location, sizeof(location));
+    SendMsgAllF(COLOR_ORANGE, "(store robbery) "C_GREY"%p(%i) "C_WHITE"took "C_GREEN"%m "C_WHITE"from "C_YELLOW"%s "C_WHITE"in "C_GREY"%s.", playerid, playerid, moneyTaken, Entrance_PlayerIn(playerid), location);
 
     GivePlayerMoney(playerid, moneyTaken);
     Player_GiveWantedLevel(playerid, 4);
