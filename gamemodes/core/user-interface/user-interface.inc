@@ -16,3 +16,4 @@
 
 #include <ui_dealership>
 #include <ui_gametime>
+#include <ui_money-notification>

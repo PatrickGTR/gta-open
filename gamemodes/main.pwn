@@ -80,8 +80,8 @@
 #endif
 
 #include <utils>
-#include <anti-cheat> // w.i.p
 #include <user-interface>
+#include <anti-cheat> // w.i.p
 #include <server>
 #include <account>
 #include <player>
