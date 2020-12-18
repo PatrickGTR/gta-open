@@ -54,8 +54,7 @@ static Account_Create(playerid, const password[]) {
         return;
     }
 
-    inline const OnPasswordHash(string:hash[])
-    {
+    inline const OnPasswordHash(string:hash[]) {
         Account_InsertToDatabase(playerid, hash);
     }
     BCrypt_HashInline(password, BCRYPT_COST, using inline OnPasswordHash);

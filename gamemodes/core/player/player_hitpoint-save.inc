@@ -99,7 +99,12 @@ Player_HitpointLoad(playerid) {
             // health == 0.0
             // make sure player doesn't spawn dying
             // if the health that was 0 or below, give him full health on first spawn.
-            SetPlayerHealth(playerid, (health == 0.0) ? (Float:100.0) : (health));
+            // as player left the game dead.
+            if(health <= 0) {
+                health = 100.0;
+            }
+
+            SetPlayerHealth(playerid, health);
             SetPlayerArmour(playerid, armour);
 
             Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Player_HitpointLoad / player_hitpoint-save.inc] hitpoint loaded",

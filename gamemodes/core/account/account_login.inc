@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 static
-    gPlayerHash[MAX_PLAYERS][250],
+    gPlayerHash[MAX_PLAYERS][62],
     bool:gPlayerLoginStatus[MAX_PLAYERS],
     PlayerAttempts[MAX_PLAYERS];
 
@@ -70,10 +70,10 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
         BCrypt_CheckInline(inputtext, gPlayerHash[playerid], using inline OnPasswordVerify);
     }
 
-    new 
+    new
         string[48 + MAX_PLAYER_NAME + 16];
 
-    static const 
+    static const
         LoginMessage[] = ""C_WHITE"Hello "C_GREY"%p. "C_WHITE"Welcome back to "C_YELLOW"%s";
 
     format(string, sizeof(string), LoginMessage, playerid, SERVER_NAME);
@@ -102,7 +102,7 @@ hook OnMySQLConnected() {
     stmt_updatePlayerLastLogin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET last_login = CURRENT_TIMESTAMP() WHERE u_id = ?");
     return 1;
 }
- 
+
 hook OnPlayerLogin(playerid) {
 
     MySQL_BindInt(stmt_updatePlayerLastLogin, 0, Player_GetAccountID(playerid));
