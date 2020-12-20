@@ -12,6 +12,8 @@ static
 
 hook OnExplosiveDetonate(playerid, Float: x, Float: y, Float: z) {
     new
+        // TODO: ATM_GetClosest from X, Y, Z of explosion instead of player's closest atm.
+        // so player can explode ATMs from far up to MAX_PLANTED_C4.
         atmID = ATM_GetClosest(playerid),
         objectID = ATM_GetObjectID(atmID),
         Float: atmX,
@@ -85,7 +87,7 @@ hook OnExplosiveDetonate(playerid, Float: x, Float: y, Float: z) {
         ATM_RobbedRecently[idx] = gettime();
 
         // Replenish ATM in ATM_COOLDOWN_MINUTES.
-        defer RestoreATMState(objectID, idx);
+        defer ReplinishAtm(objectID, idx);
     }
     return 1;
 }
@@ -101,26 +103,30 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
         sizeof(arr)
     );
 
-    if(ATM_MoneyPickup[arr[0]][arr[1]]== pickupid) {
+    new
+        idx = arr[0],
+        id = arr[1];
+
+    if(ATM_MoneyPickup[idx][id]== pickupid) {
         static
             count[MAX_PLAYERS] = 0,
             reward[MAX_PLAYERS] = 0;
 
-        reward[playerid] += random(100) + 500;
+        reward[playerid] += random(250) + 500;
 
         if(++ count[playerid] >= MAX_MONEY_PICKUP) {
-            // TODO:
-            // beautify reward
-            SendMsgF(playerid, COLOR_GREEN, "%m", reward[playerid]);
+            SendMsgF(
+                playerid,
+                COLOR_ORANGE, "(atm robbery) "C_WHITE"You have taken "C_GREEN"%m "C_WHITE"from the atm.",
+                reward[playerid]
+            );
         }
-
-
     }
     return 1;
 }
 
 // 5 minutes
-timer RestoreATMState[ATM_COOLDOWN](objectID, idx) {
+timer ReplinishAtm[ATM_COOLDOWN](objectID, idx) {
     ATM_RobbedRecently[idx] = 0;
     ATM_State(idx, false);
     ATM_UpdateLabel(idx);

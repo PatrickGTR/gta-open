@@ -78,13 +78,15 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
 
     format(string, sizeof(string), LoginMessage, playerid, SERVER_NAME);
 
-    Dialog_ShowCallback(playerid,
+    Dialog_ShowCallback(
+        playerid,
         using inline PromptLoginResponse,   // Handler
         DIALOG_STYLE_PASSWORD,              // Style
         "Please Login...",                  // Title
         string,                             // Content
         "Login",                            // Button Left
-        "Leave");                           // Button Right
+        "Leave"                             // Button Right
+    );
 }
 
 // Local
