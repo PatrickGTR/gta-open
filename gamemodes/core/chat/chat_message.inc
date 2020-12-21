@@ -16,7 +16,8 @@ static
 
 
 stock SendErrorMsg(playerid, const string[]) {
-    return SendMsgF(playerid, COLOR_RED, "Error: "C_WHITE"%s", string);
+    UI_ShowError(playerid, string);
+    return 1;
 }
 
 stock SendSyntaxMsg(playerid, const string[]) {

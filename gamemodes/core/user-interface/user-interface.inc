@@ -8,6 +8,7 @@
 #include <ui_tdmenu>
 #include <ui_time-left>
 #include <ui_location>
+#include <ui_error>
 
 // Do not change the order
 // we prioritise 'ui_prev-dialog'

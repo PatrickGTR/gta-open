@@ -111,6 +111,19 @@ hook OnPlayerLogin(playerid) {
         MySQL_BindResultInt(stmt_LoadShots, 7, MissCount[playerid]);
 
         MySQL_Statement_FetchRow(stmt_LoadShots);
+
+        Logger_Dbg(
+            PLAYER_DEBUG_HANDLER,
+            "[OnPlayerLogin / player_shots.inc] player shot data loaded",
+            Logger_I("Chest", ChestCount[playerid]),
+            Logger_I("Torso", TorsoCount[playerid]),
+            Logger_I("Left Arm", LeftArmCount[playerid]),
+            Logger_I("Right Arm", RightArmCount[playerid]),
+            Logger_I("Right Leg", RightLegCount[playerid]),
+            Logger_I("Left Leg", LeftLegCount[playerid]),
+            Logger_I("Head", HeadCount[playerid]),
+            Logger_I("Miss", MissCount[playerid])
+        );
     }
 
     MySQL_BindInt(stmt_LoadShots, 0, Player_GetAccountID(playerid));
@@ -131,6 +144,19 @@ static _SaveShotData(playerid) {
 
     MySQL_BindInt(stmt_SaveShots, 8, Player_GetAccountID(playerid));
     MySQL_ExecuteParallel(stmt_SaveShots);
+
+    Logger_Dbg(
+        PLAYER_DEBUG_HANDLER,
+        "[_SaveShotData / player_shots.inc] player shot data saved",
+        Logger_I("Chest", ChestCount[playerid]),
+        Logger_I("Torso", TorsoCount[playerid]),
+        Logger_I("Left Arm", LeftArmCount[playerid]),
+        Logger_I("Right Arm", RightArmCount[playerid]),
+        Logger_I("Right Leg", RightLegCount[playerid]),
+        Logger_I("Left Leg", LeftLegCount[playerid]),
+        Logger_I("Head", HeadCount[playerid]),
+        Logger_I("Miss", MissCount[playerid])
+    );
 }
 
 static _GetOverallShots(playerid) {
@@ -206,15 +232,15 @@ CMD:shots(playerid, params[])
         Missed: %d\n\
         Overall shots: %d\
     ",
-		ChestCount[targetid],
-		TorsoCount[targetid],
-		LeftArmCount[targetid],
-		RightArmCount[targetid],
-		LeftLegCount[targetid],
-		RightLegCount[targetid],
-		HeadCount[targetid],
-		MissCount[targetid],
-		_GetOverallShots(targetid)
+        ChestCount[targetid],
+        TorsoCount[targetid],
+        LeftArmCount[targetid],
+        RightArmCount[targetid],
+        LeftLegCount[targetid],
+        RightLegCount[targetid],
+        HeadCount[targetid],
+        MissCount[targetid],
+        _GetOverallShots(targetid)
     );
 
     new

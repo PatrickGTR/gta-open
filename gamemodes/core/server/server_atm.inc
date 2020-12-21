@@ -268,7 +268,8 @@ void:ATM_UpdateLabel(atmIndex, colour = COLOR_YELLOW, const label[] = ATM_LABEL_
         ATM_Z[atmIndex] + 1.5,
         300.0,
         .worldid = ATM_World[atmIndex],
-        .interiorid = ATM_Interior[atmIndex]);
+        .interiorid = ATM_Interior[atmIndex],
+        .testlos = 1);
 }
 
 // returns
