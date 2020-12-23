@@ -37,7 +37,7 @@ ACMD:[2]unjail(playerid, params[])
         return SendErrorMsg(playerid, "The player is not connected!");
     }
 
-    if(!Player_InJail(targetid)) {
+    if(!Player_IsInJail(targetid)) {
         return SendErrorMsg(playerid, "The player is not jailed!");
     }
 

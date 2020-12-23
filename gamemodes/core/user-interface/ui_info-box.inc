@@ -167,6 +167,12 @@ stock void:MessageBox_ShowAllF(type, const caption[], const info[], interval = 6
     formatex(string, sizeof(string), info, ___(4));
 
     foreach(new i : Player) {
+
+        // skip not spawned players
+        if(!Player_IsSpawned(i)) {
+            continue;
+        }
+
         MessageBox_Show(i, type, caption, string, interval);
     }
 }

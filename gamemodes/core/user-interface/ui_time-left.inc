@@ -42,7 +42,7 @@ stock UI_TimeLeft(playerid, seconds) {
 
     mins = seconds / 60;
     secs = seconds % 60;
-    format(string, sizeof(string), "Time Left~n~~g~%02d:%02d", mins ,secs);
+    format(string, sizeof(string), "Time Left~n~~g~%02d:%02d", mins, secs);
     PlayerTextDrawSetString(playerid, timeLeft[playerid], string);
 
     if(!timeLeftShown[playerid]) {

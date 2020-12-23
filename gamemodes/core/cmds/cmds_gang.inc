@@ -101,5 +101,13 @@ CMD:gang(playerid, params[]) {
 		SetPlayerColor(playerid,  gangColour);
 
     }
+    else if(!strcmp(params, "members", false, 7)) {
+        Gang_ShowMembers(playerid);
+    }
+    return 1;
+}
+
+CMD:cuffme(playerid, params[]) {
+    Player_Cuff(playerid);
     return 1;
 }
