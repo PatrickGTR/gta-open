@@ -24,6 +24,14 @@ hook OnGameModeInit() {
 }
 
 hook OnPlayerConnect(playerid) {
+    // just to be safe
+    // as this textdraw is not deleted on player disconnect.
+    TextDrawHideForPlayer(playerid, ErrorSign);
+
+    ErrorContent[playerid] = INVALID_PLAYER_TEXT_DRAW;
+    ErrorTimer[playerid] = Timer:0;
+    ErrorAlreadyShown[playerid] = false;
+
     ErrorContent[playerid] = CreatePlayerTextDraw(playerid, 320.000000, 300.000000, "~r~ERROR~n~~w~Oops something went wrong, try again!");
     PlayerTextDrawFont(playerid, ErrorContent[playerid], 1);
     PlayerTextDrawLetterSize(playerid, ErrorContent[playerid], 0.400000, 1.600000);
@@ -37,14 +45,6 @@ hook OnPlayerConnect(playerid) {
     PlayerTextDrawUseBox(playerid, ErrorContent[playerid], 0);
     PlayerTextDrawSetProportional(playerid, ErrorContent[playerid], 1);
     PlayerTextDrawSetSelectable(playerid, ErrorContent[playerid], 0);
-
-    // just to be safe
-    // as this textdraw is not deleted on player disconnect.
-    TextDrawHideForPlayer(playerid, ErrorSign);
-
-    ErrorContent[playerid] = INVALID_PLAYER_TEXT_DRAW;
-    ErrorTimer[playerid] = Timer:0;
-    ErrorAlreadyShown[playerid] = false;
     return 1;
 }
 

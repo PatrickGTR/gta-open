@@ -142,7 +142,7 @@ ShowATMDepositInfo(playerid)
     new
         string[48];
 
-    TextInfo_Create(playerid, "ATMDEP", "ATM DEPOSIT");
+    TextInfo_Create(playerid, "ATMDEP", "Deposit");
     format(string, sizeof(string), "Balance: ~g~%m~w~~n~~n~", Player_GetBankMoney(playerid));
     TextInfo_Add(playerid, string);
     TextInfo_Add(playerid, "Type in the chat how much you want to ~g~Deposit~w~");
@@ -157,7 +157,7 @@ ShowATMWithdrawInfo(playerid)
     new
         string[48];
 
-    TextInfo_Create(playerid, "ATMWITH", "ATM WITHDRAW");
+    TextInfo_Create(playerid, "ATMWITH", "Withdraw");
     format(string, sizeof(string), "Balance: ~g~%m~w~~n~~n~", Player_GetBankMoney(playerid));
     TextInfo_Add(playerid, string);
     TextInfo_Add(playerid, "Type in the chat how much you want to ~g~Withdraw~w~");

@@ -34,7 +34,7 @@ hook function GivePlayerMoney(playerid, money) {
         string,
          sizeof(string),
          "%s %m",
-         (money > 0) ? ("~g~+") : ("~r~-"), // colour
+         (money > 0) ? ("~g~+") : ("~r~"), // colour
          money
     );
     PlayerTextDrawSetString(

@@ -2,9 +2,6 @@
 
 #define INVALID_ATM_ID (-1)
 
-//static const
-//    ATM_LABEL_INFO[] = "#"C_GREEN"%i\n%s's ATM\n"C_YELLOW"Press "C_GREEN"'Y' "C_YELLOW"to interact";
-
 #define ATM_LABEL_INFO "#"C_GREEN"%i\n%s's ATM\n"C_YELLOW"Press "C_GREEN"'Y' "C_YELLOW"to interact"
 
 // Prepared Statements

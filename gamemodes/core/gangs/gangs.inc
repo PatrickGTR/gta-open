@@ -11,7 +11,7 @@ static
     bool:PlayerInGang[MAX_PLAYERS] = false,
     PlayerInGangID[MAX_PLAYERS] = INVALID_GANG_ID,
 // Invite Data
-    InviterID[MAX_PLAYERS],
+    PlayerInviterID[MAX_PLAYERS],
     bool:PlayerIsInvited[MAX_PLAYERS] = false;
 
 static
@@ -125,7 +125,7 @@ hook OnPlayerConnect(playerid) {
     PlayerInGang[playerid] = false;
     PlayerIsLeader[playerid] = false;
     PlayerInGangID[playerid] = INVALID_GANG_ID;
-    InviterID[playerid] = INVALID_PLAYER_ID;
+    PlayerInviterID[playerid] = INVALID_PLAYER_ID;
     PlayerIsInvited[playerid] = false;
     return 1;
 }
@@ -287,17 +287,16 @@ Gang_Disband(playerid, id) {
 // 0 -> player was not invited.
 // -1 -> inviter is not connected anymore.
 Gang_AcceptInvite(playerid, &gangID, &gangColour, &inviterid, gangName[MAX_GANG_NAME]) {
-
     if(!PlayerIsInvited[playerid]) {
         return 0;
     }
 
-    new
-        inviterID = InviterID[playerid];
-
-   	// 			[To avoid confusion]
-    // inviterid    == the player who initiated the invite.
+    // 			   NOTE! [To avoid confusion]
+    // inviterID    == the player who initiated the invite.
     // playerid     == the player who got invited.
+    // inviterid    == pass on argument of player who initiated the invite.
+    new
+        inviterID = PlayerInviterID[playerid];
 
     if(!IsPlayerConnected(inviterID)) {
         return -1;
@@ -306,17 +305,19 @@ Gang_AcceptInvite(playerid, &gangID, &gangColour, &inviterid, gangName[MAX_GANG_
     new
         idx = INVALID_GANG_ID;
     foreach(idx : GangIndex) {
-        if(PlayerInGangID[playerid] == GangID[idx]) {
+        if(PlayerInGangID[inviterID] == GangID[idx]) {
             break;
         }
     }
 
-    inviterid = inviterID;
+    inviterid = PlayerInviterID[playerid];
     gangID = PlayerInGangID[inviterID];
     gangColour = GangColour[idx];
     strcpy(gangName, GangName[idx]);
 
     Gang_Join(playerid, PlayerInGangID[inviterID]);
+
+    // Clear data
     GangInviteTimerExpire(playerid);
     return 1;
 }
@@ -339,7 +340,7 @@ Gang_InvitePlayer(playerid, targetid) {
         return -2;
     }
 
-    InviterID[targetid] = playerid;
+    PlayerInviterID[targetid] = playerid;
     PlayerIsInvited[targetid] = true;
 
     // start expire count.
@@ -348,7 +349,7 @@ Gang_InvitePlayer(playerid, targetid) {
 }
 
 timer GangInviteTimerExpire[1000 * 60](playerid)  {
-    InviterID[playerid] = INVALID_PLAYER_ID;
+    PlayerInviterID[playerid] = INVALID_PLAYER_ID;
     PlayerIsInvited[playerid] = false;
 }
 
@@ -391,8 +392,8 @@ Gang_ShowGangs(playerid) {
         string[64];
     foreach(new i : GangIndex) {
         format(string, sizeof(string),
-            "~w~- Name: ~y~%s ~w~- Owner: ~y~%s",
-            GangName[i], GangLeaderName[i]
+            "~y~%s ~w~- ~y~%s",
+            GangID[i], GangName[i], GangLeaderName[i]
         );
         TextInfo_Add(playerid, string);
     }
