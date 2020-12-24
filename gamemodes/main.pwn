@@ -151,13 +151,3 @@ CMD:kill(playerid, params[]) {
 	SetPlayerHealth(playerid, 0.0);
 	return 1;
 }
-
-CMD:time(playerid, params[])
-{
-	new day, month, year, hour, mins, sec;
-	gettime(hour, mins, sec);
-	getdate(year, month, day);
-	SendServerMsgF(playerid, "Day: %d Month: %d Year: %d", day, month, year);
-	SendServerMsgF(playerid, "Hour: %d Mins: %d Secs: %d", hour, mins, sec);
-	return 1;
-}

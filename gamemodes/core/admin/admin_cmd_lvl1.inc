@@ -229,3 +229,13 @@ ACMD:[1]afix(playerid, params[])
 	RepairVehicle(GetPlayerVehicleID(playerid));
 	return 1;
 }
+
+ACMD:[1]asay(playerid, params[])
+{
+	new msg[144];
+	if(sscanf(params, "s[144]", msg)) return SendSyntaxMsg(playerid, "/asay (message)");
+	SendClientMessageToAll(COLOR_WHITE, " ");
+	SendMsgAllF(COLOR_MODERATION, "ADMIN"C_WHITE": %s", msg);
+	SendClientMessageToAll(COLOR_WHITE, " ");
+	return 1;
+}

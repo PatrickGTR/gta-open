@@ -174,3 +174,56 @@ ACMD:[4]motd(playerid, params[]) {
     SendMsgF(playerid, COLOR_YELLOW, "(NEW MOTD) "C_BLUE"%s", params);
     return 1;
 }
+
+ACMD:[4]blacklist(playerid, params[])
+{
+    new target, reason[128], string[256];
+    if(sscanf(params, "us[128]", target, reason)) return SendSyntaxMsg(playerid, "/blacklist (name/id) (reason)");
+    if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
+    if(IsPlayerBlacklisted(target)) return SendErrorMsg(playerid, "Player is blacklisted already");
+    if(Player_GetClass(target) == TEAM_ARMY) {
+        Class_SelectionState(target, true);
+        Player_SetBoughtSkin(playerid, true);
+        ForceClassSelection(target);
+        TogglePlayerSpectating(target, true);
+        TogglePlayerSpectating(target, false);
+    }
+    static const Query[] = "\
+    UPDATE \
+        armys \
+    SET \
+        Blacklisted = %i \
+    WHERE \
+        u_id = %i \
+    ";
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), Query, 1, Player_GetAccountID(target));
+    mysql_tquery(MySQL_GetHandle(), string);
+    Player_SetArmy(target, false);
+    Player_SetBlacklist(target, true);
+    SendMsgAllF(COLOR_MODERATION, "[ARMY]: %p (%d) has been blacklisted from army by the Owners", target, target);
+    SendMsgAllF(COLOR_MODERATION, "Reason: %s", reason);
+    SendMsgF(target, COLOR_MODERATION, "[ARMY]: You have been blacklisted from the army.");
+    return 1;
+}
+
+ACMD:[4]unblacklist(playerid, params[])
+{
+    new target, string[256];
+    if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/unblacklist (name/id)");
+    if(!IsPlayerConnected(target)) return SendErrorMsg(playerid, "Player is not connected");
+    if(!IsPlayerBlacklisted(target)) return SendErrorMsg(playerid, "Player is not blacklisted");
+    static const Query[] = "\
+    UPDATE \
+        armys \
+    SET \
+        Blacklisted = %i \
+    WHERE \
+        u_id = %i \
+    ";
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), Query, 0, Player_GetAccountID(target));
+    mysql_tquery(MySQL_GetHandle(), string);
+    Player_SetBlacklist(target, false);
+    SendMsgF(playerid, COLOR_MODERATION, "[ARMY]: You have unblacklisted %p (%d) from the army", target, target);
+    SendMsgF(target, COLOR_MODERATION, "[ARMY]: You have been unblacklisted from the army.");
+    return 1;
+}

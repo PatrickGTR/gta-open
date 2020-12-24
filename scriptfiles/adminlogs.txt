@@ -1,7 +1,1 @@
-[24/12/2020] 11:50:46: XomoX used acmds 
-[24/12/2020] 11:51:4: XomoX used acmds 
-[24/12/2020] 11:51:32: XomoX used acmds 
-[24/12/2020] 11:51:41: XomoX used disarm 
-[24/12/2020] 11:51:43: XomoX used disarm XomoX
-[24/12/2020] 11:53:30: XomoX used giveweaps 
-[24/12/2020] 11:53:38: XomoX used giveweaps XomoX M4 5000
+[24/12/2020] 16:22:37: XomoX used /acmds 

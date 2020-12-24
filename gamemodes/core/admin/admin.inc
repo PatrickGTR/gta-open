@@ -23,10 +23,14 @@
 hook OnGameModeInit() {
     Admin_AddCommandToList(1, "/freeze");
     Admin_AddCommandToList(1, "/akill");
+    Admin_AddCommandToList(1, "/admins");
+    Admin_AddCommandToList(1, "/asay");
     Admin_AddCommandToList(1, "/afix");
     Admin_AddCommandToList(1, "/get");
     Admin_AddCommandToList(1, "/kick");
     Admin_AddCommandToList(1, "/goto");
+    Admin_AddCommandToList(1, "/setwanted");
+    Admin_AddCommandToList(1, "/respawn");
     Admin_AddCommandToList(1, "/cheats - See player total cheat detections");
 
     Admin_AddCommandToList(2, "/jail");
@@ -54,6 +58,8 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(4, "/hcreate");
     Admin_AddCommandToList(4, "/hdelete");
     Admin_AddCommandToList(4, "/getmoney - to get someone's money info");
+    Admin_AddCommandToList(4, "/blacklist - blacklist a player from the army");
+    Admin_AddCommandToList(4, "/unblacklist");
 
     Admin_AddCommandToList(5, "/setadmin");
     Admin_AddCommandToList(5, "/settester");
@@ -61,8 +67,6 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(5, "/bankrupt - set a player bank and tax bal to 0");
     Admin_AddCommandToList(5, "/skick - silent kick");
     Admin_AddCommandToList(5, "/setarmy - set army even score is not 30k");
-    Admin_AddCommandToList(5, "/blacklist - blacklist a player from the army");
-    Admin_AddCommandToList(5, "/unblacklist");
     Admin_AddCommandToList(5, "/deleteacc - delete an acc from the database");
     Admin_AddCommandToList(5, "/createatm");
     Admin_AddCommandToList(5, "/deleteatm");

@@ -1,5 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
+static gPlayerLastVehicle[MAX_PLAYERS];
+
 forward OnPlayerEnteredVehicle(playerid, vehicleid, ispassenger);
 
 stock LoadStaticVehiclesFromFile(const filename[])
@@ -50,3 +52,17 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
     }
     return 1;
 }
+
+hook OnPlayerConnect(playerid)
+{
+    gPlayerLastVehicle[playerid] = INVALID_PLAYER_ID;
+    return 1;
+}
+
+public OnPlayerEnteredVehicle(playerid, vehicleid, ispassenger)
+{
+    gPlayerLastVehicle[playerid] = vehicleid;
+    return 1;
+}
+
+stock Player_GetLastVehicle(playerid) return gPlayerLastVehicle[playerid];
