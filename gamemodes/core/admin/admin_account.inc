@@ -141,6 +141,12 @@ stock SendAdminCmdUsage(playerid, const cmd[], const params[]) {
             SendMsgF(i, COLOR_MODERATION, "(AdmCmd) "C_GREY"%p(%d) "C_WHITE"used "C_GREY"/%s %s", playerid, playerid, cmd, params);
         }
     }
+
+    if(Admin_Log(playerid, cmd, params)) {
+        Logger_Log("Admin Command Logged!", Logger_P(playerid));
+    } else {
+        Logger_Err("No adminlogs.txt located");
+    }
     return 1;
 }
 
@@ -158,6 +164,24 @@ stock Admin_IsOnDuty(playerid)
 timer KickTimer[500](playerid)
 {
     Kick(playerid);
+}
+
+stock Admin_Log(playerid, const cmd[], const params[]) {
+    new
+        File:file_ptr,
+        tmpString[256],
+        Day, Month, Year,
+        Hour, Minute, Second
+    ;
+    file_ptr = fopen("adminlogs.txt", io_append);
+
+    if(!file_ptr) return 0;
+    gettime(Hour, Minute, Second);
+    getdate(Year, Month, Day);
+    formatex(tmpString, sizeof tmpString, "[%d/%d/%d] %d:%d:%d: %p used /%s %s\n", Day, Month, Year, Hour, Minute, Second, playerid, cmd, params);
+    fwrite(file_ptr, tmpString);
+    fclose(file_ptr);
+    return 1;
 }
 
 stock SendAnticheatMsg(const string[]) {
