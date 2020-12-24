@@ -76,9 +76,27 @@ public OnPlayerText(playerid, text[])
                 continue;
             }
 
-            SendMsgF(i, COLOR_PINK, "(Admin) %p(%i): "C_WHITE"%s", playerid, playerid, processedMessage[1]);
+            SendMsgF(i, COLOR_PINK, "(Admin) [%d] %p(%i): "C_WHITE"%s", Admin_GetRankName(playerid), playerid, playerid, processedMessage[1]);
         }
         return 0;
+    }
+
+    // Testers Chat
+    if(processedMessage[0] == '>') {
+        if(!GetPlayerTester(playerid) && Admin_GetPlayerLevel(playerid) == 0) {
+            return 0;
+        }
+
+        foreach(new i : Player)
+        {
+            if (i != INVALID_PLAYER_ID)
+            {
+                if(GetPlayerTester(i) || Admin_GetPlayerLevel(i) > 0)
+                {    
+                    SendMsgF(i, COLOR_PINK, "(Tester) "C_WHITE"%p (%d): %s", playerid, playerid, processedMessage[1]);
+                }
+            }
+        }
     }
 
     // Normal Global Message

@@ -159,3 +159,25 @@ timer KickTimer[500](playerid)
 {
     Kick(playerid);
 }
+
+stock SendAnticheatMsg(const string[]) {
+    new chat_msgOut[144];
+    foreach(new i : Player)
+    {
+        if(Admin_GetPlayerLevel(i) != 0) {
+            return SendMsgF(i, COLOR_MODERATION, "[ANTI-CHEAT]: %s", string);
+        }
+    }
+}
+
+stock SendAnticheatMsgF(const fmat[], {Float,_}:...) {
+    new chat_msgOut[144];
+    foreach(new i : Player)
+    {
+        if(Admin_GetPlayerLevel(i) != 0) {
+            formatex(chat_msgOut, sizeof(chat_msgOut), fmat, ___(2));
+            return SendMsgF(i, COLOR_MODERATION, "[ANTI-CHEAT]: %s", chat_msgOut);
+        }
+    }
+    return 1;
+}

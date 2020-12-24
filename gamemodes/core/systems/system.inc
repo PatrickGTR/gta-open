@@ -10,6 +10,7 @@
 #include <weed_system>
 #include <army_system>
 #include <bomb_shop>
+#include <car_crane>
 
 // Player jobs
 #include <jobs>

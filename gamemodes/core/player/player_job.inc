@@ -10,7 +10,8 @@ static const JOB_LIST[] = "\
     Weapon Dealer\n\
     Hitman\n\
     Terrorist\n\
-    Rapist"
+    Rapist\n\
+    Mechanic"
 ;
 
 // Hook

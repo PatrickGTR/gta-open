@@ -1,3 +1,7 @@
+#include <YSI_Coding\y_hooks>
+
+forward OnPlayerEnteredVehicle(playerid, vehicleid, ispassenger);
+
 stock LoadStaticVehiclesFromFile(const filename[])
 {
     new
@@ -26,10 +30,23 @@ stock LoadStaticVehiclesFromFile(const filename[])
             continue;
         }
         
-        AddStaticVehicleEx(vehicletype, SpawnX, SpawnY, SpawnZ, SpawnRot, col1, col2, (60*60)); // respawn 60 minutes
+        CreateCar(vehicletype, SpawnX, SpawnY, SpawnZ, SpawnRot, col1, col2); // respawn 60 minutes
         vehicles_loaded ++;
     }
     fclose(file_ptr);
     printf("Loaded %d vehicles from: %s", vehicles_loaded, filename);
     return vehicles_loaded;
+}
+
+hook OnPlayerStateChange(playerid, newstate, oldstate)
+{
+    if(oldstate == PLAYER_STATE_ONFOOT && newstate == PLAYER_STATE_DRIVER)
+    {
+        new vehid = GetPlayerVehicleID(playerid);
+        CallLocalFunction("OnPlayerEnteredVehicle", "ddd", playerid, vehid, 0);
+    } else if(oldstate == PLAYER_STATE_ONFOOT && newstate == PLAYER_STATE_PASSENGER) {
+        new vehid = GetPlayerVehicleID(playerid);
+        CallLocalFunction("OnPlayerEnteredVehicle", "ddd", playerid, vehid, 1);
+    }
+    return 1;
 }

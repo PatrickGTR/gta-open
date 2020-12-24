@@ -175,3 +175,4 @@ stock AC_SetPlayerSpawned( playerid, bool: spawned ) {
 //#include "pickup_spam.pwn"
 
 
+#include <anti-cheat_detection>

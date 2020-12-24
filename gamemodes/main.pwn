@@ -100,10 +100,10 @@
 // Will be called after the rest ^
 public OnGameModeInit() {
 	Message_SetTime(5);
-    Message_Add("Welcome to GTA:OPEN");
-    Message_Add("You like GTA:OPEN? Add us to your favourites!");
-	Message_Add("Check our discord server discord.gg/fhN3q4J6Qr");
-    Message_Add("Help keep the server alive by donating!");
+    Message_Add("[GTO-BOT]: Welcome to GTA:OPEN");
+    Message_Add("[GTO-BOT]: You like GTA:OPEN? Add us to your favourites!");
+	Message_Add("[GTO-BOT]: Check our discord server discord.gg/fhN3q4J6Qr");
+    Message_Add("[GTO-BOT]: Help keep the server alive by donating!");
 
 
 	SendRconCommand("hostname "#SERVER_NAME " v" #SCRIPT_VERSION_MAJOR "." #SCRIPT_VERSION_MINOR "." #SCRIPT_VERSION_PATCH);
@@ -149,5 +149,15 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
 // TEMP - MUST REMOVE!
 CMD:kill(playerid, params[]) {
 	SetPlayerHealth(playerid, 0.0);
+	return 1;
+}
+
+CMD:time(playerid, params[])
+{
+	new day, month, year, hour, mins, sec;
+	gettime(hour, mins, sec);
+	getdate(year, month, day);
+	SendServerMsgF(playerid, "Day: %d Month: %d Year: %d", day, month, year);
+	SendServerMsgF(playerid, "Hour: %d Mins: %d Secs: %d", hour, mins, sec);
 	return 1;
 }

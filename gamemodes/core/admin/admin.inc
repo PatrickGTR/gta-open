@@ -27,6 +27,7 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(1, "/get");
     Admin_AddCommandToList(1, "/kick");
     Admin_AddCommandToList(1, "/goto");
+    Admin_AddCommandToList(1, "/cheats - See player total cheat detections");
 
     Admin_AddCommandToList(2, "/jail");
     Admin_AddCommandToList(2, "/unjail");
