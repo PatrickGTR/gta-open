@@ -53,7 +53,7 @@ TDMenu:TextMenuAmmunationMain(playerid, listitem)
     }
 
     GivePlayerWeapon(playerid, gAmmunationData[index][0], gAmmunationData[index][2]);
-    GivePlayerMoney(playerid, gAmmunationData[index][1]);
+    GivePlayerMoney(playerid, -gAmmunationData[index][1]);
     Ammunation_ShowMenu(playerid);
     return 1;
 }

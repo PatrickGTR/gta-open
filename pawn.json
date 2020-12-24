@@ -7,6 +7,7 @@
 		"sampctl/samp-stdlib",
 		"maddinat0r/sscanf:v2.8.3",
 		"pawn-lang/YSI-Includes@5.x",
+		"Zeex/samp-plugin-crashdetect:v4.20",
 		"Zeex/amx_assembly",
 		"Y-Less/code-parse.inc",
 		"Y-Less/indirection",
@@ -18,8 +19,7 @@
 		"samp-incognito/samp-streamer-plugin:v2.9.4",
 		"kristoisberg/samp-map-zones",
 		"PatrickGTR/actor_robbery",
-		"Southclaws/samp-ini",
-		"Zeex/samp-plugin-crashdetect:v4.20"
+		"Southclaws/samp-ini"
 	],
 	"local": true,
 	"runtime": {
@@ -59,7 +59,11 @@
 		"db_log_queries": false,
 		"conncookies": true,
 		"cookielogging": false,
-		"output": true
+		"output": true,
+		"extra": {
+			"long_call_time": "0"
+		}
+
 	},
 	"builds": [
 		{

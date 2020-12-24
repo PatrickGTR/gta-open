@@ -2,14 +2,10 @@
 #include <YSI_Coding\y_hooks>
 #include <logger>
 
-
-main() {
-	print("[main] gamemode initialised.");
-}
-
-
 static
     MySQL:MySQL_ConHandle;
+
+main() { }
 
 hook OnGameModeInit() {
 

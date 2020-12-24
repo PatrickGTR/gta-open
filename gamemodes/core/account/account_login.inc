@@ -1,7 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 static
-    gPlayerHash[MAX_PLAYERS][250],
+    gPlayerHash[MAX_PLAYERS][62],
     bool:gPlayerLoginStatus[MAX_PLAYERS],
     PlayerAttempts[MAX_PLAYERS];
 
@@ -45,7 +45,7 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
                 }
 
                 Account_PromptLogin(playerid, gPlayerHash[playerid]);
-                SendErrorMsgF(playerid, "Wrong password, try again! - Attempts: [%i/%i]", PlayerAttempts[playerid], MAX_PASSWORD_ATTEMPT);
+                SendErrorMsg(playerid, "Oops something went wrong, try again.");
 
                 Logger_Dbg(PLAYER_DEBUG_HANDLER, "player failed to login",
                     Logger_I("attemps", PlayerAttempts[playerid]),
@@ -63,28 +63,36 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
             PlayerAttempts[playerid] = 0;
             Account_NotifySuccess(playerid);
             CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
-
-            // Force Spawn Player
-            defer ForceSpawnPlayer(playerid);
         }
         BCrypt_CheckInline(inputtext, gPlayerHash[playerid], using inline OnPasswordVerify);
     }
 
-    new 
-        string[48 + MAX_PLAYER_NAME + 16];
+    new
+        string[128];
 
-    static const 
-        LoginMessage[] = ""C_WHITE"Hello "C_GREY"%p. "C_WHITE"Welcome back to "C_YELLOW"%s";
+    static const LoginMessage[] = "\
+        "C_WHITE"Hello "C_GREY"%p. "C_WHITE"Welcome back \
+        \n\n\
+        "C_WHITE"Enter credentials to proceed. \
+    ";
 
-    format(string, sizeof(string), LoginMessage, playerid, SERVER_NAME);
+    format(
+        string,
+        sizeof(string),
+        LoginMessage,
+        playerid,
+        SERVER_NAME
+    );
 
-    Dialog_ShowCallback(playerid,
+    Dialog_ShowCallback(
+        playerid,
         using inline PromptLoginResponse,   // Handler
         DIALOG_STYLE_PASSWORD,              // Style
-        "Please Login...",                  // Title
+        SERVER_NAME,                        // Title
         string,                             // Content
         "Login",                            // Button Left
-        "Leave");                           // Button Right
+        "Leave"                             // Button Right
+    );
 }
 
 // Local
@@ -102,7 +110,7 @@ hook OnMySQLConnected() {
     stmt_updatePlayerLastLogin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET last_login = CURRENT_TIMESTAMP() WHERE u_id = ?");
     return 1;
 }
- 
+
 hook OnPlayerLogin(playerid) {
 
     MySQL_BindInt(stmt_updatePlayerLastLogin, 0, Player_GetAccountID(playerid));

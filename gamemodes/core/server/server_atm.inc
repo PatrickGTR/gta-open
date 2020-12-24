@@ -2,8 +2,7 @@
 
 #define INVALID_ATM_ID (-1)
 
-static const
-    ATM_LABEL_INFO[] = "#"C_GREEN"%i\n%s's ATM\n"C_YELLOW"Press "C_GREEN"'Y' "C_YELLOW"to interact";
+#define ATM_LABEL_INFO "#"C_GREEN"%i\n%s's ATM\n"C_YELLOW"Press "C_GREEN"'Y' "C_YELLOW"to interact"
 
 // Prepared Statements
 static
@@ -25,7 +24,8 @@ static
     Float: ATM_RY[MAX_ATMS],
     Float: ATM_RZ[MAX_ATMS],
     ATM_World[MAX_ATMS],
-    ATM_Interior[MAX_ATMS];
+    ATM_Interior[MAX_ATMS],
+    bool:ATM_Disabled[MAX_ATMS] = {false, ...};
 // ATM Editing State
 static
     PlayerEditingATM[MAX_PLAYERS] = INVALID_ATM_ID,
@@ -127,7 +127,7 @@ stock ATM_GetObjectID(atmID) {
         idx = ATM_FindIndexIDBySQLID(atmID);
 
     if(idx == INVALID_ATM_ID) {
-        return;
+        return INVALID_ATM_ID;
     }
 
     return ATM_ObjectID[idx];
@@ -136,14 +136,14 @@ stock ATM_GetObjectID(atmID) {
 // returns
 // INVALID_ATM_ID if player is close to none.
 // returns the ATM ID on success.
-stock ATM_GetClosest(playerid) {
-     new
+stock ATM_GetClosest(playerid, Float:lowestdistance = 5000.0) {
+    new
         Float:x,
         Float:y,
         Float:z,
         Float:plyX,
         Float:plyY,
-        Float:plyZ
+        Float:plyZ,
         Float:distance = 5.0,
         closestATM = -1;
 
@@ -243,7 +243,7 @@ stock void:ATM_Load() {
     MySQL_ExecuteThreaded_Inline(stmt_LoadATM, using inline OnATMLoad);
 }
 
-static void:ATM_UpdateLabel(atmIndex) {
+void:ATM_UpdateLabel(atmIndex, colour = COLOR_YELLOW, const label[] = ATM_LABEL_INFO) {
     // Delete the current atm if one already exists in this index.
     if(ATM_Label[atmIndex] != INVALID_3DTEXT_ID) {
         DestroyDynamic3DTextLabel(ATM_Label[atmIndex]);
@@ -257,15 +257,16 @@ static void:ATM_UpdateLabel(atmIndex) {
         zoneName[MAX_MAP_ZONE_NAME];
     GetMapZoneName(zoneID, zoneName, sizeof(zoneName));
 
-    formatex(string, sizeof(string), ATM_LABEL_INFO, ATM_ID[atmIndex], zoneName);
+    formatex(string, sizeof(string), label, ATM_ID[atmIndex], zoneName);
     ATM_Label[atmIndex] = CreateDynamic3DTextLabel(string,
-        COLOR_YELLOW,
+        colour,
         ATM_X[atmIndex],
         ATM_Y[atmIndex],
         ATM_Z[atmIndex] + 1.5,
         300.0,
         .worldid = ATM_World[atmIndex],
-        .interiorid = ATM_Interior[atmIndex]);
+        .interiorid = ATM_Interior[atmIndex],
+        .testlos = 1);
 }
 
 // returns
@@ -307,6 +308,7 @@ stock ATM_Delete(atmID) {
     ATM_RZ[idx] = 0.0;
     ATM_World[idx] =
     ATM_Interior[idx] = 0;
+    ATM_Disabled[idx] = false;
     Iter_Remove(ATMIndex, idx);
 
     Logger_Dbg(
@@ -429,6 +431,7 @@ stock ATM_Create(Float: x, Float: y, Float: z, Float:ang, world, interior) {
         ATM_RZ[idx] = 0.0;
         ATM_World[idx] = world;
         ATM_Interior[idx] = interior;
+        ATM_Disabled[idx] = false;
         Iter_Add(ATMIndex, idx);
 
         Logger_Dbg(
@@ -455,4 +458,12 @@ stock ATM_Create(Float: x, Float: y, Float: z, Float:ang, world, interior) {
     MySQL_BindInt(stmt_InsertATM, 4, interior);
     MySQL_ExecuteParallel_Inline(stmt_InsertATM, using inline OnATMCreated);
     return idx;
+}
+
+ATM_State(idx, bool: disable) {
+    ATM_Disabled[idx] = disable;
+}
+
+ATM_GetState(idx) {
+    return ATM_Disabled[idx];
 }

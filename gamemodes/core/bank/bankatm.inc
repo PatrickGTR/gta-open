@@ -65,14 +65,29 @@ hook OnPlayerText(playerid, text[]) {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    if(newkeys == KEY_YES && Player_IsNearATM(playerid)) {
+    // don't run code below if player is not near
+    // any ATM machine.
+    if(!Player_IsNearATM(playerid)) {
+        return 1;
+    }
+
+    // disable access if ATM is disabled
+    new
+        atmID = ATM_GetClosest(playerid),
+        idx = ATM_FindIndexIDBySQLID(atmID);
+
+    if(ATM_GetState(idx)) {
+        return 1;
+    }
+
+    if(newkeys == KEY_YES) {
         if(PlayerBankReply[playerid]) {
             PlayerATMOption[playerid] = ATM_NONE;
             PlayerBankReply[playerid] = false;
         }
         ShowATMMenu(playerid);
     }
-    if(newkeys == KEY_NO && Player_IsNearATM(playerid)) {
+    if(newkeys == KEY_NO) {
         TextMenu_HideSpecific(playerid, "AtmMenu");
         TextInfo_HideSpecific(playerid, "ATMDEP");
         TextInfo_HideSpecific(playerid, "ATMWITH");
@@ -127,7 +142,7 @@ ShowATMDepositInfo(playerid)
     new
         string[48];
 
-    TextInfo_Create(playerid, "ATMDEP", "ATM DEPOSIT");
+    TextInfo_Create(playerid, "ATMDEP", "Deposit");
     format(string, sizeof(string), "Balance: ~g~%m~w~~n~~n~", Player_GetBankMoney(playerid));
     TextInfo_Add(playerid, string);
     TextInfo_Add(playerid, "Type in the chat how much you want to ~g~Deposit~w~");
@@ -142,7 +157,7 @@ ShowATMWithdrawInfo(playerid)
     new
         string[48];
 
-    TextInfo_Create(playerid, "ATMWITH", "ATM WITHDRAW");
+    TextInfo_Create(playerid, "ATMWITH", "Withdraw");
     format(string, sizeof(string), "Balance: ~g~%m~w~~n~~n~", Player_GetBankMoney(playerid));
     TextInfo_Add(playerid, string);
     TextInfo_Add(playerid, "Type in the chat how much you want to ~g~Withdraw~w~");

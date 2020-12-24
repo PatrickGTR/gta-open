@@ -12,6 +12,8 @@
 #include <bomb_shop>
 #include <car_crane>
 
+#include <atm_robbery>
+
 // Player jobs
 #include <jobs>
 

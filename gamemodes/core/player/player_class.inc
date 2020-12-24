@@ -277,6 +277,7 @@ static
 	PlayerClass[MAX_PLAYERS];
 
 hook OnPlayerLogin(playerid) {
+    defer ForceSpawnPlayer(playerid);
 	PlayerClassState[playerid] = false;
 	return 1;
 }
@@ -352,7 +353,7 @@ hook OnPlayerRequestSpawn(playerid)
   return 1;
 }
 
-timer void:ForceSpawnPlayer[GetPlayerPing(playerid)](playerid) {
+timer void:ForceSpawnPlayer[50](playerid) {
 
 	// using SetSpawnInfo fixes the kick bug when
 	// TogglePlayerSpectating is used to force spawn player but without using

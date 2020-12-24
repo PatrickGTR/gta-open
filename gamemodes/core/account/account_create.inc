@@ -24,14 +24,18 @@ stock Account_PromptRegister(playerid) {
         string[48 + MAX_PLAYER_NAME + 16];
 
     static
-        const RegisterMessage[] = ""C_WHITE"Hello "C_GREY"%p. "C_WHITE"Welcome to "C_YELLOW"%s";
+        const RegisterMessage[] = "\
+        "C_WHITE"Hello "C_GREY"%p. "C_WHITE"Welcome \
+        \n\n \
+        "C_WHITE"Enter password to register. \
+    ";
 
     format(string, sizeof(string), RegisterMessage, playerid, SERVER_NAME);
 
     Dialog_ShowCallback(playerid,
         using inline _response, // handler
         DIALOG_STYLE_PASSWORD,  // style
-        "Please register...",   // title
+        SERVER_NAME,            // title
         string,                 // content
         "Register",             // button left
         "Leave");               // button right
@@ -54,8 +58,7 @@ static Account_Create(playerid, const password[]) {
         return;
     }
 
-    inline const OnPasswordHash(string:hash[])
-    {
+    inline const OnPasswordHash(string:hash[]) {
         Account_InsertToDatabase(playerid, hash);
     }
     BCrypt_HashInline(password, BCRYPT_COST, using inline OnPasswordHash);

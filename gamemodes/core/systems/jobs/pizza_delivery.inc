@@ -116,11 +116,6 @@ Pizza_End(playerid) {
 
     // Notify Player
     SendMsgF(playerid, COLOR_RED, "(pizza delivery) "C_WHITE"Pizza successfully delivered!");
-
-    new
-        string[16];
-    format(string, sizeof(string), "~g~+ ~w~%m", reward);
-    GameTextForPlayer(playerid, string, 6000, 1);
     return 1;
 }
 

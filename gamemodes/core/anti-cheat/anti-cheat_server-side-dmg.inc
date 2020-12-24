@@ -618,6 +618,4 @@ stock ForcePlayerKill( playerid, killerid, weaponid )
 }
 
 /* ** Modules ** */
-#if defined __ac__money
-	#include <anti-cheat_vending-machines>
-#endif
+#include <anti-cheat_vending-machines>
