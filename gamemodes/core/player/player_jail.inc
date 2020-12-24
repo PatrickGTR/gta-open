@@ -1,6 +1,11 @@
 #include <YSI_Coding\y_hooks>
 
 static
+    Timer:gPlayerDeducedTimer[MAX_PLAYERS],
+    bool:gIsPlayerHasActiveTimer[MAX_PLAYERS]
+;
+
+static
     PlayerJailTime[MAX_PLAYERS],
     PlayerJailTick[MAX_PLAYERS],
     PlayerBailBalance[MAX_PLAYERS],
@@ -115,6 +120,9 @@ stock Player_ReleaseFromJail(playerid, move = true) {
     PlayerJailTime[playerid] = 0;
     UI_HideTimeLeft(playerid);
 
+    gIsPlayerHasActiveTimer[playerid] = false;
+    stop gPlayerDeducedTimer[playerid];
+
     MySQL_BindInt(stmt_releaseJail, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_releaseJail);
     return 1;
@@ -165,6 +173,16 @@ hook OnPlayerDisconnect(playerid, reason) {
     return 1;
 }
 
+hook OnPlayerSecondUpdate(playerid)
+{
+    if(Player_IsInJail(playerid) && !gIsPlayerHasActiveTimer[playerid])
+    {
+        gIsPlayerHasActiveTimer[playerid] = true;
+        gPlayerDeducedTimer[playerid] = repeat DeduceBail(playerid);
+    }
+    return 1;
+}
+
 stock Player_HasFinishedJailSentence(playerid) {
     return ((gettime() -  PlayerJailTick[playerid]) > PlayerJailTime[playerid]);
 }
@@ -184,4 +202,19 @@ stock Player_SetBailAmount(playerid, amount) {
 
 stock Player_GetBailAmount(playerid) {
     return PlayerBailBalance[playerid];
+}
+
+timer DeduceBail[1000](playerid)
+{
+    new
+        currbail = Player_GetBailAmount(playerid),
+        newbail = currbail - 100;
+    if(currbail <= 0) {
+        Player_SetBailAmount(playerid, 0);
+        Player_ReleaseFromJail(playerid);
+        return 1;
+    }
+    Player_SetBailAmount(playerid, newbail);
+    SendServerMsgF(playerid, "Current bail is: %d", Player_GetBailAmount(playerid));
+    return 1;
 }
