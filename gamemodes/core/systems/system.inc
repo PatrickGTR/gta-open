@@ -11,6 +11,7 @@
 #include <army_system>
 #include <bomb_shop>
 #include <1v1_system>
+#include <car_crusher>
 
 #include <atm_robbery>
 

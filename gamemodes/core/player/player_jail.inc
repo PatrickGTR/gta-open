@@ -24,8 +24,7 @@ static const JailData[][E_JAILPOS_DATA] = {
     {263.9785, 82.0106, 1001.0391, 269.8944}
 };
 
-hook OnGameModeInit()
-{
+hook OnGameModeInit() {
     static const query_retrieveBal[] = "\
         SELECT \
             jailed_time, \
@@ -50,17 +49,31 @@ hook OnGameModeInit()
     return 1;
 }
 
-stock Player_SendToJail(playerid, seconds, bool:save = false) {
-    if(!UI_TimeLeft(playerid, seconds)) {
-        return 0;
-    }
+static void:_Player_SaveJailTime(playerid, seconds) {
+    new
+        string[256];
+    static const query[] = "\
+        INSERT INTO \
+            jailed(u_id, jailed_time) \
+        VALUES \
+            (%i, %i) \
+        ON DUPLICATE KEY UPDATE \
+            jailed_time = %i \
+    ";
 
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), seconds, seconds);
+    mysql_tquery(MySQL_GetHandle(), string);
+}
+
+
+static void:_Player_SendToJailPos(playerid) {
     new
         Float:x,
         Float:y,
         Float:z,
         Float:ang,
         idx = random(sizeof(JailData));
+
     x = JailData[idx][E_JAILPOS_X];
     y = JailData[idx][E_JAILPOS_Y];
     z = JailData[idx][E_JAILPOS_Z];
@@ -70,6 +83,13 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
     SetPlayerFacingAngle(playerid, ang);
     SetPlayerVirtualWorld(playerid, 16);
     SetPlayerInterior(playerid, 6);
+}
+
+stock Player_SendToJail(playerid, seconds, bool:save = false) {
+    if(!UI_TimeLeft(playerid, seconds)) {
+        return 0;
+    }
+    _Player_SendToJailPos(playerid);
 
     ClearAnimations(playerid, 1);
 
@@ -88,25 +108,12 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
     // }
 
     if(save) {
-        new
-            string[256];
-        static const query[] = "\
-            INSERT INTO \
-                jailed(u_id, jailed_time) \
-            VALUES \
-                (%i, %i) \
-            ON DUPLICATE KEY UPDATE \
-                jailed_time = %i \
-        ";
-
-        mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), seconds, seconds);
-        mysql_tquery(MySQL_GetHandle(), string);
+        _Player_SaveJailTime(playerid, seconds);
     }
     return 1;
 }
 
 stock Player_ReleaseFromJail(playerid, move = true) {
-
     // this is option is to move the player out of the cell when his time finishes.
     // we set the option to 'false' for our terrorist cell explosion system since
     // the cell door opens and we don't need to move the player.
@@ -128,10 +135,8 @@ stock Player_ReleaseFromJail(playerid, move = true) {
     return 1;
 }
 
-hook OnPlayerLogin(playerid)
-{
-    inline OnPlayerJailedTimeLoad()
-    {
+hook OnPlayerLogin(playerid) {
+    inline OnPlayerJailedTimeLoad() {
         new
             time,
             balance;
@@ -148,10 +153,22 @@ hook OnPlayerLogin(playerid)
     MySQL_ExecuteThreaded_Inline(stmt_retrieveJail, using inline OnPlayerJailedTimeLoad);
 }
 
-hook OnPlayerSpawn(playerid)
-{
+hook OnPlayerSpawn(playerid) {
     if(PlayerJailTime[playerid] > 0) {
         Player_SendToJail(playerid, PlayerJailTime[playerid], true);
+        SendServerMsg(playerid, "You've left when jailed, you are server the remaining time.");
+    }
+    if(Player_GetBailAmount(playerid) > 0) {
+        _Player_SendToJailPos(playerid);
+
+        TextInfo_Create(playerid, "JAILBAIL", "Jail");
+        TextInfo_Add(playerid, "You have unpaid fees use ~y~/bail");
+        TextInfo_Add(playerid, "~w~to pay your fees and free yourself");
+        TextInfo_Show(playerid);
+
+        // by pass Player_IsInJail check.
+        // do not remove.
+        PlayerJailTime[playerid] = 1;
     }
     return 1;
 }
@@ -167,32 +184,39 @@ hook OnPlayerDisconnect(playerid, reason) {
     if(Player_IsCuffed(playerid)) {
         new
             level = GetPlayerWantedLevel(playerid),
-            punishmentTime = (level * 2) * 2;
+            punishmentTime = (level > 0) ? ((level * 2) * 2) : (100 * 10);
         Player_SendToJail(playerid, punishmentTime, true);
     }
-    return 1;
-}
 
-hook OnPlayerSecondUpdate(playerid)
-{
-    if(Player_IsInJail(playerid) && !gIsPlayerHasActiveTimer[playerid])
-    {
-        gIsPlayerHasActiveTimer[playerid] = true;
-        gPlayerDeducedTimer[playerid] = repeat DeduceBail(playerid);
+    if(Player_IsInJail(playerid)) {
+        _Player_SaveJailTime(playerid, Player_TimeLeftInJail(playerid));
     }
     return 1;
 }
 
 stock Player_HasFinishedJailSentence(playerid) {
     return ((gettime() -  PlayerJailTick[playerid]) > PlayerJailTime[playerid]);
+
+hook OnPlayerSecondUpdate(playerid) {
+    if(Player_TimeLeftInJail(playerid) == 1) {
+        TextInfo_Create(playerid, "JAILBAIL", "Jail");
+        TextInfo_Add(playerid, "Your time has ended use ~y~/bail");
+        TextInfo_Add(playerid, "~w~to pay your fees and free yourself");
+        TextInfo_Show(playerid);
+    }
+    return 1;
+}
+
+stock Player_TimeLeftInJail(playerid) {
+    return (PlayerJailTime[playerid] - (gettime() - PlayerJailTick[playerid]));
+}
+
+stock Player_HasServedSentence(playerid) {
+    return ((gettime() -  PlayerJailTick[playerid]) >= PlayerJailTime[playerid]);
 }
 
 stock Player_IsInJail(playerid) {
-    return (PlayerJailTime[playerid] > 0 && Player_HasFinishedJailSentence(playerid));
-}
-
-stock Player_InJail(playerid) {
-    return (PlayerJailTime[playerid] > 0);
+    return (PlayerJailTime[playerid] > 0 && Player_HasServedSentence(playerid));
 }
 
 stock Player_SetBailAmount(playerid, amount) {

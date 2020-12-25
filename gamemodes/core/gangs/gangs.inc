@@ -386,6 +386,35 @@ Gang_Leave(playerid) {
     return 1;
 }
 
+Gang_ShowMembers(playerid, bool:online = true) {
+    new
+        count = 0;
+    if(online) {
+        TextInfo_Create(playerid, "GANGMEM", "Members");
+        foreach(new i : Player) {
+            // skip self
+            if(playerid == i) {
+                continue;
+            }
+            if(Player_GetGangID(playerid) == Player_GetGangID(i)) {
+                TextInfo_Add(playerid, ReturnPlayerName(i));
+                count ++;
+            }
+        }
+
+        if(count == 0) {
+            TextInfo_Add(playerid, "No Online Members");
+        }
+
+        TextInfo_Show(playerid);
+    }
+    else {
+        // TODO: show offline members
+    }
+
+    return 1;
+}
+
 Gang_ShowGangs(playerid) {
     TextInfo_Create(playerid, "GANGS", "Gangs");
     new
