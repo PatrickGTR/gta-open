@@ -35,39 +35,12 @@ hook OnGameModeInit() {
         MySQLOpt: option_id = mysql_init_options();
 	mysql_set_option(option_id, AUTO_RECONNECT, true); // it automatically reconnects when loosing connection to mysql server
 
+    // use config
     new
         username[24] = "root",
         host[24] = "localhost",
         password[24] = "",
         database[24] = "gta-open";
-
-    // if(Env_Has("MYSQL_USERNAME")) {
-    //     Env_Get("MYSQL_USERNAME", username);
-    // }
-    // else {
-    //     Logger_Log("Could not find environment variable for MYSQL_USERNAME");
-    // }
-//
-    // if(Env_Has("MYSQL_PASSWORD")) {
-    //     Env_Get("MYSQL_PASSWORD", password);
-    // }
-    // else {
-    //     Logger_Log("Could not find environment variable for MYSQL_PASSWORD");
-    // }
-//
-    // if(Env_Has("MYSQL_HOST")) {
-    //     Env_Get("MYSQL_HOST", host);
-    // }
-    // else {
-    //     Logger_Log("Could not find environment variable for MYSQL_HOST");
-    // }
-//
-    // if(Env_Has("MYSQL_DATABASE")) {
-    //     Env_Get("MYSQL_DATABASE", database);
-    // }
-    // else {
-    //     Logger_Log("Could not find environment variable for MYSQL_DATABASE");
-    // }
 
     MySQL_ConHandle = mysql_connect(host, username, password, database);
 
@@ -76,13 +49,12 @@ hook OnGameModeInit() {
         return 1;
     }
 
-    Logger_Log("MySQL connection is successful.");
-
     #if defined SETUP_TABLE
         CallLocalFunction("OnMySQLSetupTable", "");
     #endif
 
     CallLocalFunction("OnMySQLConnected", "");
+    Logger_Log("MySQL connection is successful.");
     return 1;
 }
 

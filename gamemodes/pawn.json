@@ -13,13 +13,13 @@
 		"Y-Less/indirection",
 		"Southclaws/formatex",
 		"pBlueG/SA-MP-MySQL:R41-4",
+		"Sreyas-Sreelal/samp-bcrypt:0.2.3",
 		"Southclaws/samp-logger",
 		"PatrickGTR/MySQL-Prepared-Statements",
 		"samp-incognito/samp-streamer-plugin:v2.9.4",
 		"kristoisberg/samp-map-zones",
 		"PatrickGTR/actor_robbery",
-		"Southclaws/samp-ini",
-		"Sreyas-Sreelal/samp-bcrypt:0.2.3"
+		"Southclaws/samp-ini"
 	],
 	"local": true,
 	"runtime": {
@@ -63,6 +63,7 @@
 		"extra": {
 			"long_call_time": "0"
 		}
+
 	},
 	"builds": [
 		{

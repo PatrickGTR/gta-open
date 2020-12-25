@@ -41,7 +41,7 @@ hook OnExplosiveDetonate(playerid, Float: x, Float: y, Float: z) {
         }
 
         // atm has not been replinished yet, disallow action.
-        if(gettime() - ATM_RobbedRecently[idx] < 60 * ATM_COOLDOWN_MINUTES) {
+        if((gettime() - ATM_RobbedRecently[idx]) < 60 * ATM_COOLDOWN_MINUTES) {
             return 1;
         }
 

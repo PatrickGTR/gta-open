@@ -24,7 +24,7 @@ hook OnPlayerConnect(playerid)
     caption_TD[playerid][TYPE_MSGBOX] = CreatePlayerTextDraw(playerid, 21.000000, 204.000000, "~y~~h~caption");
     PlayerTextDrawBackgroundColor(playerid, caption_TD[playerid][TYPE_MSGBOX], TD_OUTLINE_COLOUR);
     PlayerTextDrawFont(playerid, caption_TD[playerid][TYPE_MSGBOX], 3);
-    PlayerTextDrawLetterSize(playerid, caption_TD[playerid][TYPE_MSGBOX], 0.449999, 1.500000);
+    PlayerTextDrawLetterSize(playerid, caption_TD[playerid][TYPE_MSGBOX], 0.45, 1.8);
     PlayerTextDrawColor(playerid, caption_TD[playerid][TYPE_MSGBOX], -1);
     PlayerTextDrawSetOutline(playerid, caption_TD[playerid][TYPE_MSGBOX], 0);
     PlayerTextDrawSetProportional(playerid, caption_TD[playerid][TYPE_MSGBOX], 1);
@@ -33,7 +33,7 @@ hook OnPlayerConnect(playerid)
     info_TD[playerid][TYPE_MSGBOX] = CreatePlayerTextDraw(playerid, 22.000000, 220.000000, "This is a text. This is another one. The whole paragraph is supposed to be quite long. So, yeah!");
     PlayerTextDrawBackgroundColor(playerid, info_TD[playerid][TYPE_MSGBOX], TD_OUTLINE_COLOUR);
     PlayerTextDrawFont(playerid, info_TD[playerid][TYPE_MSGBOX], 1);
-    PlayerTextDrawLetterSize(playerid, info_TD[playerid][TYPE_MSGBOX], 0.159999, 1.100000);
+    PlayerTextDrawLetterSize(playerid, info_TD[playerid][TYPE_MSGBOX], 0.2, 0.8);
     PlayerTextDrawColor(playerid, info_TD[playerid][TYPE_MSGBOX], -1);
     PlayerTextDrawSetOutline(playerid, info_TD[playerid][TYPE_MSGBOX], 0);
     PlayerTextDrawSetProportional(playerid, info_TD[playerid][TYPE_MSGBOX], 1);
@@ -46,7 +46,7 @@ hook OnPlayerConnect(playerid)
     caption_TD[playerid][TYPE_INFORMATION] = CreatePlayerTextDraw(playerid, 162.000000, 363.000000, "~y~~h~caption");
     PlayerTextDrawBackgroundColor(playerid, caption_TD[playerid][TYPE_INFORMATION], TD_OUTLINE_COLOUR);
     PlayerTextDrawFont(playerid, caption_TD[playerid][TYPE_INFORMATION], 3);
-    PlayerTextDrawLetterSize(playerid, caption_TD[playerid][TYPE_INFORMATION], 0.519999, 1.899999);
+    PlayerTextDrawLetterSize(playerid, caption_TD[playerid][TYPE_INFORMATION], 0.5, 2.0);
     PlayerTextDrawColor(playerid, caption_TD[playerid][TYPE_INFORMATION], -1);
     PlayerTextDrawSetOutline(playerid, caption_TD[playerid][TYPE_INFORMATION], 1);
     PlayerTextDrawSetProportional(playerid, caption_TD[playerid][TYPE_INFORMATION], 1);
@@ -55,7 +55,7 @@ hook OnPlayerConnect(playerid)
     info_TD[playerid][TYPE_INFORMATION] = CreatePlayerTextDraw(playerid, 161.000000, 393.000000, "This is the message. We tell the user what's going on here!");
     PlayerTextDrawBackgroundColor(playerid, info_TD[playerid][TYPE_INFORMATION], TD_OUTLINE_COLOUR);
     PlayerTextDrawFont(playerid, info_TD[playerid][TYPE_INFORMATION], 1);
-    PlayerTextDrawLetterSize(playerid, info_TD[playerid][TYPE_INFORMATION], 0.199999, 1.199999);
+    PlayerTextDrawLetterSize(playerid, info_TD[playerid][TYPE_INFORMATION], 0.2, 0.8);
     PlayerTextDrawColor(playerid, info_TD[playerid][TYPE_INFORMATION], -1);
     PlayerTextDrawSetOutline(playerid, info_TD[playerid][TYPE_INFORMATION], 1);
     PlayerTextDrawSetProportional(playerid, info_TD[playerid][TYPE_INFORMATION], 1);

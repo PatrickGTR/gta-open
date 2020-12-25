@@ -187,7 +187,7 @@ hook OnPlayerDisconnect(playerid, reason) {
 }
 
 hook OnPlayerSecondUpdate(playerid) {
-    if(Player_TimeLeftInJail(playerid) == 0) {
+    if(Player_TimeLeftInJail(playerid) == 1) {
         TextInfo_Create(playerid, "JAILBAIL", "Jail");
         TextInfo_Add(playerid, "Your time has ended use ~y~/bail");
         TextInfo_Add(playerid, "~w~to pay your fees and free yourself");
