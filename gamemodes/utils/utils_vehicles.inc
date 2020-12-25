@@ -32,7 +32,7 @@ stock LoadStaticVehiclesFromFile(const filename[])
             continue;
         }
         
-        CreateCar(vehicletype, SpawnX, SpawnY, SpawnZ, SpawnRot, col1, col2); // respawn 60 minutes
+        AddStaticVehicleEx(vehicletype, SpawnX, SpawnY, SpawnZ, SpawnRot, col1, col2, (60*60)); // respawn 60 minutes
         vehicles_loaded ++;
     }
     fclose(file_ptr);
