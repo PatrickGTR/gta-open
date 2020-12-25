@@ -19,8 +19,7 @@ static const JailData[][E_JAILPOS_DATA] = {
     {263.9785, 82.0106, 1001.0391, 269.8944}
 };
 
-hook OnGameModeInit()
-{
+hook OnGameModeInit() {
     static const query_retrieveBal[] = "\
         SELECT \
             jailed_time, \
@@ -110,7 +109,6 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
 }
 
 stock Player_ReleaseFromJail(playerid, move = true) {
-
     // this is option is to move the player out of the cell when his time finishes.
     // we set the option to 'false' for our terrorist cell explosion system since
     // the cell door opens and we don't need to move the player.
