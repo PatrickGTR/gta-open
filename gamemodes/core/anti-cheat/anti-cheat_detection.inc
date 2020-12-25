@@ -18,6 +18,12 @@ static
 public OnPlayerCheatDetected( playerid, detection, params )
 {
     SendAnticheatMsgF("%p (%d) is might be using %d", playerid, playerid, AC_DetectedCheatToString(detection));
+    Logger_Log("Hacks Detected", Logger_P(playerid), Logger_S("Hacks", AC_DetectedCheatToString(detection)));
+    if(AntiCheat_Log(playerid, AC_DetectedCheatToString(detection))) {
+        Logger_Log("Hacks Logged", Logger_P(playerid));
+    } else {
+        Logger_Err("Something is wrong logging the Hack", Logger_P(playerid));
+    }
     switch(detection)
     {
         case CHEAT_TYPE_ARMOUR: gPlayerACDetections[playerid][E_ARMOUR]++;

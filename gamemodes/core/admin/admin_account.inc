@@ -184,6 +184,27 @@ stock Admin_Log(playerid, const cmd[], const params[]) {
     return 1;
 }
 
+stock AntiCheat_Log(playerid, const hack[])
+{
+    new
+        File:file_ptr,
+        tmpString[256],
+        Day, Month, Year,
+        Hour, Minute, Second
+    ;
+    file_ptr = fopen("anti-cheat_logs.txt", io_append);
+
+    if(!file_ptr) return 0;
+    if(!IsPlayerConnected(playerid)) return 0;
+
+    gettime(Hour, Minute, Second);
+    getdate(Year, Month, Day);
+    formatex(tmpString, sizeof tmpString, "[%d/%d/%d] %d:%d:%d: %p Might be hacking %s Ping %d\n", Day, Month, Year, Hour, Minute, Second, playerid, hack, GetPlayerPing(playerid));
+    fwrite(file_ptr, tmpString);
+    fclose(file_ptr);
+    return 1;
+}
+
 stock SendAnticheatMsg(const string[]) {
     new chat_msgOut[144];
     foreach(new i : Player)
@@ -196,12 +217,6 @@ stock SendAnticheatMsg(const string[]) {
 
 stock SendAnticheatMsgF(const fmat[], {Float,_}:...) {
     new chat_msgOut[144];
-    foreach(new i : Player)
-    {
-        if(Admin_GetPlayerLevel(i) != 0) {
-            formatex(chat_msgOut, sizeof(chat_msgOut), fmat, ___(2));
-            return SendMsgF(i, COLOR_MODERATION, "[ANTI-CHEAT]: %s", chat_msgOut);
-        }
-    }
-    return 1;
+    formatex(chat_msgOut, sizeof(chat_msgOut), fmat, ___(2));
+    return SendAnticheatMsg(chat_msgOut);
 }
