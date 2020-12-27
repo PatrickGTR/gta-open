@@ -41,6 +41,7 @@
 #define MAX_VEHICLE_PER_PLAYER  2
 #define MAX_CRACK               5
 #define MAX_WEED                5
+#define MAX_ITEM                10
 #define MAX_ATMS                50
 
 // Gang limits

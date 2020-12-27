@@ -63,13 +63,13 @@ hook OnGameModeInit() {
 hook OnPlayerTakeDamage(playerid, issuerid, Float: amount, weaponid, bodypart) {
     if(issuerid != INVALID_PLAYER_ID) {
         switch(bodypart) {
-            case WEAPON_BODY_PART_CHEST:        ChestCount[playerid]    += 1;
-            case WEAPON_BODY_PART_TORSO:        TorsoCount[playerid]    += 1;
-            case WEAPON_BODY_PART_LEFT_ARM:     LeftArmCount[playerid]  += 1;
-            case WEAPON_BODY_PART_RIGHT_ARM:    RightArmCount[playerid] += 1;
-            case WEAPON_BODY_PART_LEFT_LEG:     RightLegCount[playerid] += 1;
-            case WEAPON_BODY_PART_RIGHT_LEG:    LeftLegCount[playerid]  += 1;
-            case WEAPON_BODY_PART_HEAD:         HeadCount[playerid]     += 1;
+            case WEAPON_BODY_PART_CHEST:        ChestCount[issuerid]    += 1;
+            case WEAPON_BODY_PART_TORSO:        TorsoCount[issuerid]    += 1;
+            case WEAPON_BODY_PART_LEFT_ARM:     LeftArmCount[issuerid]  += 1;
+            case WEAPON_BODY_PART_RIGHT_ARM:    RightArmCount[issuerid] += 1;
+            case WEAPON_BODY_PART_LEFT_LEG:     RightLegCount[issuerid] += 1;
+            case WEAPON_BODY_PART_RIGHT_LEG:    LeftLegCount[issuerid]  += 1;
+            case WEAPON_BODY_PART_HEAD:         HeadCount[issuerid]     += 1;
         }
     }
     return 1;

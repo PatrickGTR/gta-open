@@ -20,7 +20,7 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
-hook function GivePlayerMoney(playerid, money) {
+hook native GivePlayerMoney(playerid, money) {
     if(!Player_IsSpawned(playerid)) {
         return 1;
     }

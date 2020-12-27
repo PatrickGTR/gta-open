@@ -53,12 +53,12 @@ stock void:UI_ShowError(playerid, const message[]) {
         return;
     }
 
-    if(strlen(message) > 64) {
+    if(strlen(message) > 128) {
         return;
     }
 
     new
-        string[64];
+        string[128];
     strcat(string, "~r~");
     strcat(string, "ERROR");
     strcat(string, "~n~");

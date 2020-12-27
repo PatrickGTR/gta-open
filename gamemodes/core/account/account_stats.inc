@@ -7,7 +7,7 @@ static
     Statement:stmt_savePlayerKills,
     Statement:stmt_savePlayerDeaths;
 
-static 
+static
     PlayerScore[MAX_PLAYERS],
     PlayerKills[MAX_PLAYERS],
     PlayerDeaths[MAX_PLAYERS]
@@ -100,7 +100,9 @@ static Account_LoadStats(playerid) {
             Player_SetDeaths(playerid, deaths);
             Player_SetJob(playerid, jobID);
             SetPlayerWantedLevel(playerid, wantedLevel);
-            GivePlayerMoney(playerid, playerMoney);
+
+            defer DelayGiveMoney(playerid, playerMoney);
+
             Player_SetClass(playerid, playerClass);
             Player_GiveScore(playerid, playerScore);
         }
@@ -108,6 +110,10 @@ static Account_LoadStats(playerid) {
 
     MySQL_BindInt(stmt_loadPlayerStats, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteParallel_Inline(stmt_loadPlayerStats, using inline OnDataLoad);
+}
+
+timer DelayGiveMoney[100](playerid, money){
+    GivePlayerMoney(playerid, money);
 }
 
 stock Player_GiveScore(playerid, score, bool:save = false)
@@ -125,7 +131,7 @@ stock Player_GiveScore(playerid, score, bool:save = false)
 }
 
 stock Player_RemoveScore(playerid, score) {
-    new 
+    new
         currentScore = Player_GetScore(playerid),
         newScore = currentScore - score;
     SetPlayerScore(playerid, newScore);
@@ -138,11 +144,11 @@ stock Player_RemoveScore(playerid, score) {
 stock Player_GetScore(playerid)
     return PlayerScore[playerid];
 
-stock Player_GetKills(playerid) 
+stock Player_GetKills(playerid)
     return PlayerKills[playerid];
 
 stock Player_GiveKill(playerid, kills, bool:save = false) {
-    new 
+    new
         currentKills = Player_GetKills(playerid),
         newKills = currentKills + kills;
     PlayerKills[playerid] = newKills;
@@ -157,7 +163,7 @@ stock Player_GetDeaths(playerid)
     return PlayerDeaths[playerid];
 
 stock Player_SetDeaths(playerid, deaths, bool:save = false) {
-    new 
+    new
         currentDeaths = Player_GetDeaths(playerid),
         newDeaths = currentDeaths + deaths;
     PlayerDeaths[playerid] = newDeaths;
