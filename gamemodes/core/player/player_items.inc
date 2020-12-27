@@ -10,13 +10,6 @@ static
     PlayerRope[MAX_PLAYERS],
     PlayerScissors[MAX_PLAYERS];
 
-new
-    Statement: stmt_saveItem;
-
-hook OnGameModeInit() {
-    stmt_saveItem = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_items SET ? = ? WHERE u_id = ?");
-}
-
 hook OnPlayerConnect(playerid) {
     PlayerC4[playerid]          =
     PlayerCrack[playerid]       =
@@ -45,24 +38,6 @@ hook OnPlayerLogin(playerid) {
     new
         Statement: stmt_load;
 
-    static const query[] = "\
-    SELECT \
-        c4, \
-        crack, \
-        weed, \
-        picklock, \
-        wallet, \
-        rope, \
-        condom, \
-        scissors \
-    FROM \
-        player_items \
-    WHERE \
-        u_id = ? \
-    ";
-
-    stmt_load = MySQL_PrepareStatement(MySQL_GetHandle(), query);
-
     inline const OnItemLoad() {
         MySQL_BindResultInt(stmt_load, 0, PlayerC4[playerid]);
         MySQL_BindResultInt(stmt_load, 1, PlayerCrack[playerid]);
@@ -83,114 +58,161 @@ hook OnPlayerLogin(playerid) {
         }
     }
 
+    static const query[] = "\
+    SELECT \
+        c4, \
+        crack, \
+        weed, \
+        picklock, \
+        wallet, \
+        rope, \
+        condom, \
+        scissors \
+    FROM \
+        player_items \
+    WHERE \
+        u_id = ? \
+    ";
+
+    stmt_load = MySQL_PrepareStatement(MySQL_GetHandle(), query);
     MySQL_BindInt(stmt_load, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_load, using inline OnItemLoad);
     MySQL_StatementClose(stmt_load);
+
     return 1;
 }
 
+// C4
 stock void:Player_GiveC4(playerid, amount) {
     PlayerC4[playerid] += amount;
 
-    MySQL_Bind(stmt_saveItem, 0, "c4", true);
-    MySQL_BindInt(stmt_saveItem, 1, Player_GetC4(playerid));
-    MySQL_BindInt(stmt_saveItem, 2, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_saveItem);
+    _SaveItem(playerid, "c4", amount);
 }
 
 stock Player_GetC4(playerid) {
     return PlayerC4[playerid];
 }
 
+// Crack
 stock void:Player_GiveCrack(playerid, amount) {
     PlayerCrack[playerid] += amount;
 
-    MySQL_Bind(stmt_saveItem, 0, "crack", true);
-    MySQL_BindInt(stmt_saveItem, 1, Player_GetCrack(playerid));
-    MySQL_BindInt(stmt_saveItem, 2, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_saveItem);
+    _SaveItem(playerid, "crack", amount);
 }
 
 stock Player_GetCrack(playerid) {
     return PlayerCrack[playerid];
 }
 
+// Picklock
 stock void:Player_GivePicklock(playerid, amount) {
     PlayerPickLock[playerid] += amount;
 
-    MySQL_Bind(stmt_saveItem, 0, "picklock", true);
-    MySQL_BindInt(stmt_saveItem, 1, Player_GetPicklock(playerid));
-    MySQL_BindInt(stmt_saveItem, 2, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_saveItem);
+    _SaveItem(playerid, "picklock", amount);
 }
 
 stock Player_GetPicklock(playerid) {
     return PlayerPickLock[playerid];
 }
 
+// Wallet
 stock void:Player_GiveWallet(playerid, amount) {
     PlayerWallet[playerid] += amount;
 
-    MySQL_Bind(stmt_saveItem, 0, "wallet", true);
-    MySQL_BindInt(stmt_saveItem, 1, Player_GetWallet(playerid));
-    MySQL_BindInt(stmt_saveItem, 2, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_saveItem);
+    _SaveItem(playerid, "wallet", amount);
 }
 
 stock Player_GetWallet(playerid) {
     return PlayerWallet[playerid];
 }
 
+// Weed
 stock void:Player_GiveWeed(playerid, amount) {
     PlayerWeed[playerid] += amount;
 
-    MySQL_Bind(stmt_saveItem, 0, "weed", true);
-    MySQL_BindInt(stmt_saveItem, 1, Player_GetWeed(playerid));
-    MySQL_BindInt(stmt_saveItem, 2, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_saveItem);
+    _SaveItem(playerid, "weed", amount);
 }
 
 stock Player_GetWeed(playerid) {
     return PlayerWeed[playerid];
 }
 
+// Condom
 stock void:Player_GiveCondom(playerid, amount) {
     PlayerCondom[playerid] += amount;
 
-    MySQL_Bind(stmt_saveItem, 0, "condom", true);
-    MySQL_BindInt(stmt_saveItem, 1, Player_GetCondom(playerid));
-    MySQL_BindInt(stmt_saveItem, 2, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_saveItem);
+    _SaveItem(playerid, "condom", amount);
 }
 
 stock Player_GetCondom(playerid) {
     return PlayerCondom[playerid];
 }
 
+// Rope
 stock void:Player_GiveRope(playerid, amount) {
     PlayerRope[playerid] += amount;
 
-    MySQL_Bind(stmt_saveItem, 0, "rope", true);
-    MySQL_BindInt(stmt_saveItem, 1, Player_GetRope(playerid));
-    MySQL_BindInt(stmt_saveItem, 2, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_saveItem);
+    _SaveItem(playerid, "rope", amount);
 }
 
 stock Player_GetRope(playerid) {
     return PlayerRope[playerid];
 }
 
+// Scissors
 stock void:Player_GiveScissors(playerid, amount) {
     PlayerScissors[playerid] += amount;
 
-    MySQL_Bind(stmt_saveItem, 0, "scissors", true);
-    MySQL_BindInt(stmt_saveItem, 1, Player_GetScissors(playerid));
-    MySQL_BindInt(stmt_saveItem, 2, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_saveItem);
+    _SaveItem(playerid, "scissors", amount);
 }
 
 stock Player_GetScissors(playerid) {
     return PlayerScissors[playerid];
+}
+
+// Internal Function
+static void:_SaveItem(playerid, const itemName[], value) {
+    new
+        Statement: stmt_saveItem;
+
+    stmt_saveItem = MySQL_PrepareStatement(
+        MySQL_GetHandle(),
+        "UPDATE player_items SET ? = ? + ? WHERE u_id = ?"
+    );
+
+    MySQL_Bind(stmt_saveItem, 0, itemName, true);
+    MySQL_Bind(stmt_saveItem, 1, itemName, true);
+    MySQL_BindInt(stmt_saveItem, 2, value);
+    MySQL_BindInt(stmt_saveItem, 3, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded(stmt_saveItem);
+
+}
+
+static _ItemPlayerHoldingValue(playerid, itemId) {
+    switch(itemId) {
+        case 0: return Player_GetC4(playerid);
+        case 1: return Player_GetCrack(playerid);
+        case 2: return Player_GetWeed(playerid);
+        case 3: return Player_GetPicklock(playerid);
+        case 4: return Player_GetWallet(playerid);
+        case 5: return Player_GetCondom(playerid);
+        case 6: return Player_GetRope(playerid);
+        case 7: return Player_GetScissors(playerid);
+    }
+    return -1;
+}
+
+static void:_GiveItem(playerid, itemId, amount) {
+    switch(itemId) {
+        case 0: Player_GiveC4(playerid, amount);
+        case 1: Player_GiveCrack(playerid, amount);
+        case 2: Player_GiveWeed(playerid, amount);
+        case 3: Player_GivePicklock(playerid, amount);
+        case 4: Player_GiveWallet(playerid, amount);
+        case 5: Player_GiveCondom(playerid, amount);
+        case 6: Player_GiveRope(playerid, amount);
+        case 7: Player_GiveScissors(playerid, amount);
+    }
 }
 
 // Command
@@ -254,7 +276,8 @@ ACMD:[4]giveitem(playerid, params[]) {
     if(amount > (itemLimit[itemId] - _ItemPlayerHoldingValue(playerid, itemId))) {
         return SendErrorMsgF(
                 playerid,
-                "value too high~n~tip: player can hold ~y~%i ~p~%s",
+                "value too high\
+                ~n~tip: player can hold ~y~%i ~p~%s",
                 (itemLimit[itemId] - _ItemPlayerHoldingValue(playerid, itemId)),
                 validItems[itemId]
             );
@@ -265,31 +288,4 @@ ACMD:[4]giveitem(playerid, params[]) {
     SendServerMsgF(playerid, "You have given %p[%i] x"C_YELLOW"%i "C_GREY"%s", targetid, targetid, amount, validItems[itemId]);
     SendServerMsgF(playerid, "%p[%i] have given you x"C_YELLOW"%i "C_GREY"%s", playerid, playerid, amount, validItems[itemId]);
     return 1;
-}
-
-static _ItemPlayerHoldingValue(playerid, itemId) {
-    switch(itemId) {
-        case 0: return Player_GetC4(playerid);
-        case 1: return Player_GetCrack(playerid);
-        case 2: return Player_GetWeed(playerid);
-        case 3: return Player_GetPicklock(playerid);
-        case 4: return Player_GetWallet(playerid);
-        case 5: return Player_GetCondom(playerid);
-        case 6: return Player_GetRope(playerid);
-        case 7: return Player_GetScissors(playerid);
-    }
-    return -1;
-}
-
-static void:_GiveItem(playerid, itemId, amount) {
-    switch(itemId) {
-        case 0: Player_GiveC4(playerid, amount);
-        case 1: Player_GiveCrack(playerid, amount);
-        case 2: Player_GiveWeed(playerid, amount);
-        case 3: Player_GivePicklock(playerid, amount);
-        case 4: Player_GiveWallet(playerid, amount);
-        case 5: Player_GiveCondom(playerid, amount);
-        case 6: Player_GiveRope(playerid, amount);
-        case 7: Player_GiveScissors(playerid, amount);
-    }
 }
