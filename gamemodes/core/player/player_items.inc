@@ -78,7 +78,6 @@ hook OnPlayerLogin(playerid) {
     MySQL_BindInt(stmt_load, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded_Inline(stmt_load, using inline OnItemLoad);
     MySQL_StatementClose(stmt_load);
-
     return 1;
 }
 

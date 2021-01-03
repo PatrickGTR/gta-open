@@ -14,6 +14,7 @@
 
 #include <admin_acmds>
 
+#include <admin_cmd-entrance>
 #include <admin_cmd-atm>
 #include <rcon_cmd>
 #include <fly_cmd>

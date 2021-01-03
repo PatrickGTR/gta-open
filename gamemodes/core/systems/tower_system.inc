@@ -37,7 +37,7 @@ hook OnGameModeInit()
     CreateObject(1652, 1788.966796, -1297.323242, 12.930883, 0, 0, 177.300064, 0.0); //fence
     CreateObject(2332, 1817.233276, -1306.228027, 97.952163, 0, 0, 0, 0.0); //safe
     TowerCP = CreateDynamicCP(1817.1315, -1307.1591, 98.5000, 1.0, 0, 0, .streamdistance = CHECKPOINT_STREAMDISTANCE);
-    TowerEnt = Entrance_Create(1807.0723, -1290.1117, 131.7344, 90.0, 1815.9473, -1317.6854, 125.7266, 90.0, 0, 0);
+    TowerEnt = Entrance_Create(1807.0723, -1290.1117, 131.7344, 90.0, 0, 0, 1815.9473, -1317.6854, 125.7266, 90.0, 0, 0);
     Entrance_SetIcon(TowerEnt, 42);
     return 1;
 }
