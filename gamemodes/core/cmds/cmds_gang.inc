@@ -106,8 +106,3 @@ CMD:gang(playerid, params[]) {
     }
     return 1;
 }
-
-CMD:cuffme(playerid, params[]) {
-    Player_Cuff(playerid);
-    return 1;
-}
