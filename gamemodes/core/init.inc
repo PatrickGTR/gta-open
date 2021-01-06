@@ -2,6 +2,9 @@
 #include <YSI_Coding\y_hooks>
 #include <logger>
 
+// Damage
+DEFINE_HOOK_REPLACEMENT__(Damage, Dmg);
+
 static
     MySQL:MySQL_ConHandle;
 

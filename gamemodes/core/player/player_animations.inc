@@ -31,7 +31,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 
-hook OnPlayerDeath(playerid, killerid, reason) {
+hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
 	if(PlayerUsingAnimation[playerid]) {
         PlayerUsingAnimation[playerid] = false;
         TextDrawHideForPlayer(playerid, txtAnimHelper);
@@ -1515,7 +1515,7 @@ CMD:die(playerid, params[])
 CMD:lranim(playerid, params[])
 {
 
-	new 
+	new
 		vehicleid = GetPlayerVehicleID(playerid),
 		modelid = GetVehicleModel(vehicleid),
 		bool:isLowerRider = false;

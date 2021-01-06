@@ -206,7 +206,7 @@ hook OnPlayerEnterRaceCP(playerid)
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart)
 {
     if(BurglaryInfo[playerid] != 0){
         Player_StopRobbery(playerid);

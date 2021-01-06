@@ -4,10 +4,10 @@ new
     bool:gPlayerGettingArrested[MAX_PLAYERS]
 ;
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart)
 {
     if(killerid != INVALID_PLAYER_ID) {
-        if(Player_IsLEO(killerid) && Player_GetWantedLevel(playerid) >= 3) {
+        if(Player_IsLEO(killerid)) {
             if(Player_GetWantedLevel(playerid) >= 10) {
                 foreach(new i : Player) {
                     if(Player_IsLEO(i)) {
