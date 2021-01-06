@@ -48,14 +48,36 @@ public OnPlayerCommandText(playerid, cmdtext[])
     #if defined OnPlayerCommandPerformed
         return OnPlayerCommandPerformed(playerid, cmd, CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) :("\1")));
     #else
-        return CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) :( "\1"));
+        return CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) :("\1"));
     #endif
 }
 
-stock CommandExists(const cmd[])
-{
-    static prefix[4] = {'c', 'm', 'd', '_'}, cmd_name[28];
+stock CommandExecute(playerid, const cmd[], const params[] = "\1", {GLOBAL_TAG_TYPTES, _}:...) {
+    if(!CommandExists(cmd)) {
+        return 0;
+    }
 
-    strcpy(cmd_name, cmd);
-    return (funcidx(prefix) != -1);
+    new
+        prefix[] = "cmd_",
+        cmd_name[28];
+
+    strcat(cmd_name, prefix);
+    strcat(cmd_name, cmd);
+
+    new
+        tmp[32];
+    formatex(tmp, sizeof(tmp), params, ___(3));
+    CallLocalFunction(cmd_name, "ds", playerid, tmp);
+    return 1;
+}
+
+stock CommandExists(const cmd[]) {
+    new
+        prefix[] = "cmd_",
+        cmd_name[28];
+
+    strcat(cmd_name, prefix);
+    strcat(cmd_name, cmd);
+
+    return (funcidx(cmd_name) != -1);
 }

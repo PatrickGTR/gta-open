@@ -48,7 +48,7 @@ hook OnMySQLConnected() {
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     if(PRESSED(KEY_NO)) {
-        return CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/furniture");
+        return CommandExecute(playerid, "furniture");
     }
 
     if(PRESSED(KEY_SECONDARY_ATTACK)) {

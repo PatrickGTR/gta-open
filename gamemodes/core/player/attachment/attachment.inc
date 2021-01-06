@@ -280,13 +280,9 @@ hook OnPlayerFirstSpawn(playerid) {
 	return 1;
 }
 
-timer DelayAddAttachment[1000](playerid) {
-	new
-		tmp[24];
+timer DelayAddAttachment[500](playerid) {
 	foreach(new i : gAttachmentIndex[playerid]) {
-
-		format(tmp, sizeof(tmp), "/attachment attach %i", i);
-		CallLocalFunction("OnPlayerCommandText", "ds", playerid, tmp);
+		CommandExecute(playerid, "attachment", "attach %i", i);
 	}
 }
 
