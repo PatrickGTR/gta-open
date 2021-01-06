@@ -25,6 +25,10 @@ hook native GivePlayerMoney(playerid, money) {
         return 1;
     }
 
+    if(money == 0) {
+        return continue(playerid, money);
+    }
+
     new
         string[24];
 

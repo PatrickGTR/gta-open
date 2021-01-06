@@ -122,7 +122,15 @@ stock MessageBox_Show(playerid, type, const caption[], const info[], interval = 
         case TYPE_MSGBOX:
         {
             PlayerTextDrawSetString(playerid, caption_TD[playerid][type], caption);
-            PlayerTextDrawSetString(playerid, info_TD[playerid][type], info);
+
+            new
+                string[256];
+
+            strcat(string, "~n~", sizeof(string));
+            strcat(string, info, sizeof(string));
+            strcat(string, "~n~~n~", sizeof(string));
+
+            PlayerTextDrawSetString(playerid, info_TD[playerid][type], string);
             PlayerTextDrawShow(playerid, caption_TD[playerid][type]);
             PlayerTextDrawShow(playerid, info_TD[playerid][type]);
         }
