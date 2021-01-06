@@ -8,6 +8,7 @@
 #include <cmds_pm> // private message
 #include <cmds_bank>
 #include <cmds_gang>
+#include <cmds_perks>
 
 #include <cmds_rob>
 
