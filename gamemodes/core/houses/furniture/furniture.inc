@@ -31,7 +31,7 @@ static
 */
 
 hook OnMySQLConnected() {
-
+    // TODO:
     // Improvement!
     // Load object when user connect instead of loadin it through gamemode init.
     // Delete object when user disconnect, this case we save memory usage.
@@ -124,7 +124,15 @@ hook OnPlayerEditDynObject(playerid, objectid, response, Float:x, Float:y, Float
                         inline ReloadFurniture() {
                             // We retrieve the last inserted ID.
                             new furniture_id = cache_insert_id();
-                            Furniture_Create(furniture_id, Player_GetInHouseID(playerid), Furniture_GetObjectID(index), x, y, z, rx, ry, rz, Player_GetInHouseVWorld(playerid), Player_GetInHouseInt(playerid));
+                            Furniture_Create(
+                                furniture_id,
+                                Player_GetInHouseID(playerid),
+                                Furniture_GetObjectID(index),
+                                x,  y, z,
+                                rx, ry, rz,
+                                GetPlayerVirtualWorld(playerid),
+                                GetPlayerInterior(playerid)
+                            );
                         }
 
                         MySQL_BindInt(stmt_insertFurniture, 0, Player_GetInHouseID(playerid));
@@ -135,8 +143,8 @@ hook OnPlayerEditDynObject(playerid, objectid, response, Float:x, Float:y, Float
                         MySQL_BindFloat(stmt_insertFurniture, 5, rx);
                         MySQL_BindFloat(stmt_insertFurniture, 6, ry);
                         MySQL_BindFloat(stmt_insertFurniture, 7, rz);
-                        MySQL_BindInt(stmt_insertFurniture, 8, Player_GetInHouseInt(playerid));
-                        MySQL_BindInt(stmt_insertFurniture, 9, Player_GetInHouseVWorld(playerid));
+                        MySQL_BindInt(stmt_insertFurniture, 8, GetPlayerInterior(playerid));
+                        MySQL_BindInt(stmt_insertFurniture, 9, GetPlayerVirtualWorld(playerid));
                         MySQL_ExecuteThreaded_Inline(stmt_insertFurniture, using inline ReloadFurniture);
 
 

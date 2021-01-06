@@ -141,9 +141,9 @@ Furniture_ShowDialog(playerid) {
     return 1;
 }
 
-Furniture_Create(furnitureID, houseID, objectID, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, vw, int) {
+Furniture_Create(furnitureID, houseID, modelId, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, vw, int) {
   	new
-  		tmp_objectid = CreateDynamicObject(objectID, x, y, z, rx, ry, rz, vw, int),
+  		tmp_objectid = CreateDynamicObject(modelId, x, y, z, rx, ry, rz, vw, int),
   		arr[2];
 
     arr[0] = houseID;

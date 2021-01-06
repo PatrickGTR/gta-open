@@ -37,7 +37,6 @@ hook OnMySQLConnected() {
         h.entrance_y, \
         h.entrance_z, \
         h.entrance_a, \
-        h.virtual_world, \
         h.interior_id, \
         IFNULL(p.username, 'None') as username \
     FROM \
@@ -47,8 +46,6 @@ hook OnMySQLConnected() {
     ON \
         h.u_id = p.u_id \
     ";
-    //     // ORDER BY
-    //     h.house_id DESC
     stmt_LoadHouse = MySQL_PrepareStatement(MySQL_GetHandle(), loadQuery);
 
     static const updateDescriptionQuery[] = "\
@@ -93,24 +90,6 @@ hook OnMySQLConnected() {
 }
 
 static
-    PlayerHouseCheckpointID[MAX_PLAYERS];
-
-hook OnPlayerEnterDynamicCP(playerid, checkpointid) {
-    new
-        arr[2];
-
-    Streamer_GetArrayData(STREAMER_TYPE_CP, checkpointid, E_STREAMER_EXTRA_ID, arr);
-
-    if (arr[0] == HOUSES_STREAMER_IDENTIFIER) {
-        new index = arr[1];
-        if (checkpointid == House_GetEntranceCPHandler(index)) {
-            PlayerHouseCheckpointID[playerid] = checkpointid;
-        }
-    }
-    return 1;
-}
-
-static
     Iterator:HouseIndex<MAX_HOUSES>,
     Text3D:HouseEntranceLabel[MAX_HOUSES],
     Text3D:HouseExitLabel[MAX_HOUSES],
@@ -135,7 +114,7 @@ static
 // this function returns
 // -1 if there are no slots left.
 // new house id on success
-stock House_Create(Float:x, Float:y, Float:z, Float:a, vworld, price, interior, description[MAX_HOUSE_DESCRIPTION] = "", ownerName[MAX_PLAYER_NAME] = "", ownerID = -1, bool:save = false)
+stock House_Create(Float:x, Float:y, Float:z, Float:a, price, interior, description[MAX_HOUSE_DESCRIPTION] = "", ownerName[MAX_PLAYER_NAME] = "", ownerID = -1, bool:save = false)
 {
     new
         houseid = Iter_Alloc(HouseIndex);
@@ -161,7 +140,7 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, vworld, price, interior, 
         price);
 
 
-    HouseEntranceLabel[houseid] = CreateDynamic3DTextLabel(string, COLOR_ORANGE, x, y, z, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, -1, -1, -1, 25.0);
+    HouseEntranceLabel[houseid] = CreateDynamic3DTextLabel(string, COLOR_ORANGE, x, y, z, 25.0, .worldid = -1, .streamdistance = 25.0);
     HouseEntranceCP[houseid] = CreateDynamicCP(x, y, z, 1.0, -1, -1, -1, 25.0);
 
     new
@@ -171,9 +150,14 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, vworld, price, interior, 
         intid,
         bool:unused;
 
+
+    // use houseid as a unique virtual world for
+    new
+        world = houseid;
+
     House_GetInteriorData(interior, ex, ey, ez, intid, unused, unused);
-    HouseExitLabel[houseid] = CreateDynamic3DTextLabel("Exit", COLOR_ORANGE, ex, ey, ez, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, vworld, intid, -1, 25.0);
-    HouseExitCP[houseid] = CreateDynamicCP(ex, ey, ez, 1.0, vworld, intid, -1, 25.0);
+    HouseExitLabel[houseid] = CreateDynamic3DTextLabel("Exit", COLOR_ORANGE, ex, ey, ez, 25.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, world, intid, -1, 25.0);
+    HouseExitCP[houseid] = CreateDynamicCP(ex, ey, ez, 1.0, world, intid, -1, 25.0);
 
     new
         arr[2];
@@ -194,7 +178,7 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, vworld, price, interior, 
     HouseEntranceY[houseid]     = y;
     HouseEntranceZ[houseid]     = z;
     HouseEntranceA[houseid]     = a;
-    HouseVWorld[houseid]        = vworld;
+    HouseVWorld[houseid]        = world;
     HouseInteriorID[houseid]    = intid;
     Iter_Add(HouseIndex, houseid);
 
@@ -341,7 +325,6 @@ House_Load() {
             Float:y,
             Float:z,
             Float:a,
-            vworld,
             intid,
             ownerName[MAX_PLAYER_NAME];
 
@@ -355,15 +338,14 @@ House_Load() {
         MySQL_BindResultFloat(stmt_LoadHouse, 7, y);
         MySQL_BindResultFloat(stmt_LoadHouse, 8, z);
         MySQL_BindResultFloat(stmt_LoadHouse, 9, a);
-        MySQL_BindResultInt(stmt_LoadHouse, 10, vworld);
-        MySQL_BindResultInt(stmt_LoadHouse, 11, intid);
-        MySQL_BindResult(stmt_LoadHouse, 12, ownerName);
+        MySQL_BindResultInt(stmt_LoadHouse, 10, intid);
+        MySQL_BindResult(stmt_LoadHouse, 11, ownerName);
 
         new
             benchHouse = GetTickCount(),
             count = 0;
         while(MySQL_Statement_FetchRow(stmt_LoadHouse)) {
-            House_Create(x, y, z, a, vworld, price, interior, description, ownerName, ownerID);
+            House_Create(x, y, z, a, price, interior, description, ownerName, ownerID);
             count ++;
         }
         Logger_Log(
@@ -435,20 +417,4 @@ stock Player_GetTotalHouses(playerid) {
         }
     }
     return count;
-}
-
-stock Player_GetInHouseVWorld(playerid) {
-    new
-        arr[2];
-
-    Streamer_GetArrayData(STREAMER_TYPE_CP, PlayerHouseCheckpointID[playerid], E_STREAMER_EXTRA_ID, arr);
-    return HouseVWorld[arr[1]];
-}
-
-stock Player_GetInHouseInt(playerid) {
-    new
-        arr[2];
-
-    Streamer_GetArrayData(STREAMER_TYPE_CP, PlayerHouseCheckpointID[playerid], E_STREAMER_EXTRA_ID, arr);
-    return HouseInteriorID[arr[1]];
 }

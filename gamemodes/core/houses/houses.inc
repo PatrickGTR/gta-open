@@ -71,18 +71,17 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
             }
 
             MessageBox_Show(
-                    playerid,
-                    TYPE_MSGBOX,
-                    "~r~Goodbye",
-                    "See you soon."
-                );
+                playerid,
+                TYPE_MSGBOX,
+                "~r~Goodbye",
+                "See you soon."
+            );
 
             new
                 Float: x,
                 Float: y,
                 Float: z,
                 Float: a;
-
 
             House_GetEntranceData(houseid, x, y, z, a);
 

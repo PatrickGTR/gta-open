@@ -79,7 +79,6 @@ ACMD:[4]hcreate(playerid, params[])
         y,
         z,
         a,
-        GetPlayerVirtualWorld(playerid),
         price,
         interior,
         .save = true
