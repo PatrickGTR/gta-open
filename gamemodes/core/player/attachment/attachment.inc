@@ -270,9 +270,24 @@ hook OnPlayerLogin(playerid) {
             Iter_Add(gAttachmentIndex[playerid], slot);
         }
 	}
-    MySQL_BindInt(stmt_LoadAttachments, 0, Player_GetAccountID(playerid));
+    MySQL_BindInt(stmt_LoadAttachments, 0, Player_GetAccountID(playerid)	);
     MySQL_ExecuteParallel_Inline(stmt_LoadAttachments, using inline LoadAttachment);
     return 1;
+}
+
+hook OnPlayerFirstSpawn(playerid) {
+	defer DelayAddAttachment(playerid);
+	return 1;
+}
+
+timer DelayAddAttachment[1000](playerid) {
+	new
+		tmp[24];
+	foreach(new i : gAttachmentIndex[playerid]) {
+
+		format(tmp, sizeof(tmp), "/attachment attach %i", i);
+		CallLocalFunction("OnPlayerCommandText", "ds", playerid, tmp);
+	}
 }
 
 static const
@@ -303,7 +318,7 @@ CMD:attachment(playerid, params[]) {
         }
 
 		Attachment_GetModelName(gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID], attachmentName, sizeof(attachmentName));
-		SendServerMsgF(playerid, "Successfully deleted attachment "C_GREY"(%s [slot: %i])", index, attachmentName);
+		SendServerMsgF(playerid, "Successfully deleted attachment "C_GREY"(%s [slot: %i])", attachmentName, index);
 
 		DeleteAttachment(playerid, index);
 	}
@@ -321,7 +336,7 @@ CMD:attachment(playerid, params[]) {
         }
 
 		Attachment_GetModelName(gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID], attachmentName, sizeof(attachmentName));
-		SendServerMsgF(playerid, "You are editing attachment "C_GREY"(%s [slot: %i])", index, attachmentName);
+		SendServerMsgF(playerid, "You are editing attachment "C_GREY"(%s [slot: %i])", attachmentName, index);
 
 		SetPlayerAttachedObject(playerid, index,
 			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID],
@@ -380,7 +395,7 @@ CMD:attachment(playerid, params[]) {
 			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEZ]);
 
 		Attachment_GetModelName(gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID], attachmentName, sizeof(attachmentName));
-		SendServerMsgF(playerid, "Successfully attached "C_GREY"(%s [slot: %i])", index, attachmentName);
+		SendServerMsgF(playerid, "Successfully attached "C_GREY"(%s [slot: %i])", attachmentName, index);
 	}
 	if (!strcmp(params, "detach", true, 6)) {
 		if (sscanf(params, "{s[7]}i", index)) {
