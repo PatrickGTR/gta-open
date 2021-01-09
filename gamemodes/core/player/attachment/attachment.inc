@@ -270,7 +270,7 @@ hook OnPlayerLogin(playerid) {
             Iter_Add(gAttachmentIndex[playerid], slot);
         }
 	}
-    MySQL_BindInt(stmt_LoadAttachments, 0, Player_GetAccountID(playerid)	);
+    MySQL_BindInt(stmt_LoadAttachments, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteParallel_Inline(stmt_LoadAttachments, using inline LoadAttachment);
     return 1;
 }

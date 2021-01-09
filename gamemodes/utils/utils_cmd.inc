@@ -53,6 +53,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 }
 
 stock CommandExecute(playerid, const cmd[], const params[] = "\1", {GLOBAL_TAG_TYPTES, _}:...) {
+    if(cmd[0] == '/') {
+        Logger_Err(
+            "[CommandExecute] contains '/' (slash) - remove slash!",
+                Logger_P(playerid),
+                Logger_S("command", cmd)
+        );
+        return 0;
+    }
     if(!CommandExists(cmd)) {
         return 0;
     }

@@ -1,4 +1,5 @@
 #include <vehicle_impl>
+#include <vehicle_last>
 
 #if SETUP_TABLE
     #include <vehicle_setup-table>
@@ -19,7 +20,7 @@ hook OnPlayerLogin(playerid) {
 hook OnPlayerStateChange(playerid, newstate, oldstate) {
 
     if(newstate == PLAYER_STATE_DRIVER) {
-        if(Vehicle_IsPlayer(playerid)) {
+        if(Vehicle_IsOwner(playerid)) {
             SendMsgF(playerid, COLOR_SAMPBLUE, "Welcome back to your personal vehicle.");
             return 1;
         }
@@ -27,6 +28,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
         foreach_PersonalVehicles(i) {
             if(Vehicle_GetHandler(i) == GetPlayerVehicleID(playerid)) {
                 SendMsgF(playerid, COLOR_SAMPBLUE, "This vehicle is owned by "C_GREY"%s", Vehicle_GetOwnerName(i));
+                break;
             }
         }
     }

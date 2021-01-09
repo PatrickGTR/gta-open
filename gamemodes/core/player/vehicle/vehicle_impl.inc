@@ -423,25 +423,22 @@ timer DelayAddVehicleComponent[seconds](vehicleid, componentid, seconds) {
     AddVehicleComponent(vehicleid, componentid);
 }
 
-stock Vehicle_IsPlayer(playerid)
+stock Vehicle_IsOwner(playerid, vehicleid = INVALID_VEHICLE_ID)
 {
-    new
-        ply_vehicleID = GetPlayerVehicleID(playerid);
+    if(vehicleid == INVALID_VEHICLE_ID) {
+        vehicleid = GetPlayerVehicleID(playerid);
+    }
 
     foreach(new i : Vehicle) {
         if(!Bit_Get(vehicle_created, i)) {
             continue;
         }
 
-        if(VehicleHandler[i] != ply_vehicleID) {
+        if(VehicleHandler[i] != vehicleid) {
             continue;
         }
 
         if(!IsVehicleStreamedIn(VehicleHandler[i], playerid)) {
-            return 0;
-        }
-
-        if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) {
             return 0;
         }
 
@@ -456,7 +453,7 @@ Vehicle_GetOwnerName(index) {
     return VehicleOwnerName[index];
 }
 
-stock Vehicle_Destroy(playerid) {
+Vehicle_Destroy(playerid) {
     foreach(new i : Vehicle) {
         if(!Bit_Get(vehicle_created, i)) {
             continue;
@@ -480,7 +477,7 @@ stock Vehicle_Destroy(playerid) {
         DestroyVehicle(VehicleHandler[i]);
         Bit_Vet(vehicle_created, i);
 
-            
+
         Logger_Dbg(PLAYER_DEBUG_HANDLER, "[Vehicle_Destroy / vehicle_impl.inc] owned vehicle destroyed",
             Logger_P(playerid),
             Logger_I("account id", Player_GetAccountID(playerid)),
