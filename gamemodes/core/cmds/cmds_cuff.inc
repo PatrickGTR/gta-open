@@ -1,7 +1,7 @@
 // cuff closest player
 CMD:cuffcw(playerid) {
     new
-        targetid = Player_GetClosestWanted(playerid),
+        targetid = Player_GetClosestWanted(playerid, 5.0),
         errorMessage[32],
         ret;
 
@@ -77,7 +77,6 @@ Player_CuffPlayer(playerid, targetid, errorMsg[], len = sizeof(errorMsg)) {
         strcat(errorMsg, "You can't cuff yourself, dummy!", len);
         return 0;
     }
-
 
     SendServerMsgF(targetid, "You have been cuffed by officer "C_GREY"%p(%d)", playerid, playerid);
     SendServerMsgF(playerid, "You're now cuffing "C_GREY"%p(%d)", targetid, targetid);

@@ -1,9 +1,16 @@
-CMD:arrestcw(playerid)
+ALTCMD:arcw(arrestcw);
+ALTCMD:ar(arrest);
+
+CMD:arrestcw(playerid, params[])
 {
     new
-        targetid = Player_GetClosestWanted(playerid),
+        targetid = Player_GetClosestWanted(playerid, 5.0),
         errorMessage[45],
         ret;
+
+    if(targetid == INVALID_PLAYER_ID) {
+        return SendErrorMsg(playerid, "No players nearby to arrest.");
+    }
 
     ret = Player_Arrest(playerid, targetid, errorMessage, sizeof(errorMessage));
 
@@ -11,11 +18,6 @@ CMD:arrestcw(playerid)
         return SendErrorMsg(playerid, errorMessage);
     }
     return 1;
-}
-
-CMD:arcw(playerid)
-{
-    return cmd_arrestcw(playerid);
 }
 
 CMD:arrest(playerid, params[])
@@ -35,9 +37,4 @@ CMD:arrest(playerid, params[])
         return SendErrorMsg(playerid, errorMessage);
     }
     return 1;
-}
-
-CMD:ar(playerid, params[])
-{
-    return cmd_arrest(playerid, params);
 }

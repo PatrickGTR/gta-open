@@ -47,7 +47,7 @@ hook OnMySQLConnected() {
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    if(PRESSED(KEY_NO)) {
+    if(PRESSED(KEY_NO) && Player_IsInsideHouse(playerid)) {
         return CommandExecute(playerid, "furniture");
     }
 

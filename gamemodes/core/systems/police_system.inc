@@ -1,39 +1,31 @@
 #include <YSI_Coding\y_hooks>
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-    if(PRESSED(KEY_SUBMISSION)) {
-        if(Player_GetClass(playerid) != TEAM_POLICE) {
-            return 0;
-        }
-        new
-            id = Player_GetClosestWanted(playerid);
+    if(PRESSED(KEY_LOOK_BEHIND)) {
 
-        if(id == INVALID_PLAYER_ID) {
+        if(Player_GetClass(playerid) != TEAM_POLICE) {
             return 1;
         }
 
         new
-            Float: x,
-            Float: y,
-            Float: z;
-        GetPlayerPos(id, x, y, z);
+            targetid = Player_GetClosestWanted(playerid, 5.0);
 
-        if(GetPlayerDistanceFromPoint(playerid, x, y, z) >= 3.5) {
+        if(targetid == INVALID_PLAYER_ID) {
             SendErrorMsg(playerid, "No players nearby");
             return 1;
         }
 
         new
             errorMessage[45];
-        if(!Player_IsCuffed(id)) {
+        if(!Player_IsCuffed(targetid)) {
 
-            if(!Player_CuffPlayer(playerid, id, errorMessage, sizeof(errorMessage))) {
+            if(!Player_CuffPlayer(playerid, targetid, errorMessage, sizeof(errorMessage))) {
                 return SendErrorMsg(playerid, errorMessage);
             }
 
         }
         else {
-            if(!Player_Arrest(playerid, id, errorMessage, sizeof(errorMessage))) {
+            if(!Player_Arrest(playerid, targetid, errorMessage, sizeof(errorMessage))) {
                 return SendErrorMsg(playerid, errorMessage);
             }
         }

@@ -149,7 +149,7 @@ ACMD:[1]setwanted(playerid, params[])
 	if(!IsPlayerConnected(targetid)) {
 		return SendErrorMsg(playerid, "Player is not connected");
 	}
-	if(level != 0 && Player_IsLEO(playerid)) {
+	if(level != 0 && Player_IsLEO(targetid)) {
 		return SendErrorMsg(playerid, "You cant give Enforcers wanted level");
 	}
 	SetPlayerWantedLevel(targetid, level);

@@ -13,7 +13,9 @@ hook OnPlayerConnect(playerid) {
 // Murder
 hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
     if(killerid != INVALID_PLAYER_ID) {
-        Player_GiveWantedLevel(killerid, 4);
+        Player_GiveWantedLevel(killerid, 6);
+
+        SendMsgF(killerid, COLOR_RED, "You commited murder, you've gained an extra 6 stars.");
     }
     return 1;
 }
@@ -27,6 +29,8 @@ hook OnPlayerRobStore(playerid, moneyTaken) {
 
     GivePlayerMoney(playerid, moneyTaken);
     Player_GiveWantedLevel(playerid, 4);
+
+    return 1;
 }
 
 // Player Roberry
@@ -37,53 +41,56 @@ hook OnPlayerRobPlayer(playerid, targetid, moneyTaken) {
     GivePlayerMoney(targetid, -moneyTaken);
     GivePlayerMoney(playerid, moneyTaken);
     Player_GiveWantedLevel(playerid, 4);
+
+    return 1;
 }
 
 // Shooting near a cop
 hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ) {
-    // disallow spam, only increase wanted every after 2 minutes.
+    // shooter is not civilian.
     if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
         return 1;
     }
 
-    new
-        closestID = Player_GetClosestLeo(playerid),
-        Float:x,
-        Float:y,
-        Float:z;
-    GetPlayerPos(closestID, x, y, z);
+    // disallow spam, only increase wanted level after 3 minutes.
+    if((gettime() - gShotNearPoliceTick[playerid]) < (60 * 3)) {
+        return 1;
+    }
 
+    new
+        Float:distance = 20.0,
+        closestID = Player_GetClosestLeo(playerid, distance);
+
+    // no closest law enforce officers
     if(closestID == INVALID_PLAYER_ID) {
         return 1;
     }
 
-    if(!IsPlayerInRangeOfPoint(closestID, 20.0, x, y, z)) {
-        return 1;
-    }
-
-    if((gettime() - gShotNearPoliceTick[playerid]) < (60 * 2)) {
-        return 1;
-    }
-
     SendMsgF(playerid, COLOR_RED, "You shot near a on-duty police officer, you've gained an extra 4 stars.");
-
     Player_GiveWantedLevel(playerid, 4);
     gShotNearPoliceTick[playerid] = gettime();
     return 1;
 }
 
 // Shooting a cop detection.
-hook OnPlayerTakePlayerDmg(playerid, issuerid, &Float: amount, weaponid, bodypart )
-{
-    if(Player_GetClass(issuerid) == TEAM_CIVILIAN && Player_GetClass(playerid) == TEAM_POLICE) {
-        // disallow spam, only increase wanted every after 2 minutes.
-        if((gettime() - gShotPoliceTick[playerid]) < (60 * 2)) {
-            return 1;
-        }
-        SendMsgF(issuerid, COLOR_RED, "You shot an on-duty police officer, you've gained an extra 4 stars.");
-
-        Player_GiveWantedLevel(playerid, 4);
-        gShotPoliceTick[issuerid] = gettime();
+hook OnPlayerTakePlayerDmg(playerid, issuerid, &Float: amount, weaponid, bodypart ) {
+    // shooter is not civilian.
+    if(Player_GetClass(issuerid) != TEAM_CIVILIAN) {
+        return 1;
     }
+
+    // disallow spam, only issue this crime every 3 minutes.
+    if((gettime() - gShotPoliceTick[issuerid]) < (60 * 3)) {
+        return 1;
+    }
+
+    // victim is not police.
+    if(Player_GetClass(playerid) != TEAM_POLICE) {
+        return 1;
+    }
+
+    SendMsgF(issuerid, COLOR_RED, "You shot an on-duty police officer, you've gained an extra 4 stars.");
+    Player_GiveWantedLevel(issuerid, 4);
+    gShotPoliceTick[issuerid] = gettime();
     return 1;
 }

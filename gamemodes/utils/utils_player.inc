@@ -74,7 +74,7 @@ stock Player_FacePlayer(playerid, giveplayerid) {
     return false;
 }
 
-stock Player_GetClosestWanted(playerid) {
+stock Player_GetClosestWanted(playerid, Float:dist = 30.0) {
     new
         closestID = INVALID_PLAYER_ID;
 
@@ -84,7 +84,7 @@ stock Player_GetClosestWanted(playerid) {
             continue;
         }
 
-        if(Player_GetClosestPlayer(playerid, 5.0) && Player_GetWantedLevel(i) >= 3) {
+        if(Player_GetClosestPlayer(playerid, dist) && Player_GetWantedLevel(i) >= 3) {
             closestID = i;
             break;
         }
@@ -92,7 +92,7 @@ stock Player_GetClosestWanted(playerid) {
     return closestID;
 }
 
-Player_GetClosestLeo(playerid) {
+Player_GetClosestLeo(playerid, Float:dist = 30.0) {
     new
         closestID = INVALID_PLAYER_ID;
 
@@ -102,8 +102,7 @@ Player_GetClosestLeo(playerid) {
             continue;
         }
 
-        if(Player_GetClosestPlayer(playerid, 1000.0) && Player_IsLEO(i))
-        {
+        if(Player_GetClosestPlayer(playerid, dist) && Player_IsLEO(i)) {
             closestID = i;
             break;
         }

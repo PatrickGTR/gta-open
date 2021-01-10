@@ -14,29 +14,36 @@ hook OnMySQLConnected() {
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason) {
-    if(killerid != INVALID_PLAYER_ID) {
-        if(Player_GetGangID(playerid) != INVALID_GANG_ID && Player_GetGangID(killerid) != INVALID_GANG_ID) {
+hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+    if(killerid == INVALID_PLAYER_ID) {
+        return 1;
+    }
 
-            new
-                killerGangName[MAX_GANG_NAME],
-                playerGangName[MAX_GANG_NAME];
+    if(Player_GetGangID(killerid) == INVALID_GANG_ID) {
+        return 1;
+    }
 
-            Gang_GetName(Player_GetGangID(playerid), playerGangName, sizeof(playerGangName));
-            Gang_GetName(Player_GetGangID(killerid), killerGangName, sizeof(killerGangName));
+    if(Player_GetGangID(playerid) == INVALID_GANG_ID) {
+        return 1;
+    }
 
-            foreach(new i : Player) {
-                if(Player_GetGangID(i) == Player_GetGangID(playerid)) {
-                    SendMsgF(i, COLOR_RED, "[GANG DEATH]: %p (%d) got killed by %p (%d) Gang %s", playerid, playerid, killerid, killerid, killerGangName);
-                }
-                if(Player_GetGangID(i) == Player_GetGangID(killerid)) {
-                    SendMsgF(i, COLOR_RED, "[GANG KILL]: %p (%d) has killed %p (%d) Gang %s", killerid, killerid, playerid, playerid, playerGangName);
-                }
-            }
-            Gang_AddKills(Player_GetGangID(playerid), 1, true);
-            Gang_AddDeaths(Player_GetGangID(killerid), 1, true);
+    new
+        killerGangName[MAX_GANG_NAME],
+        playerGangName[MAX_GANG_NAME];
+
+    Gang_GetName(Player_GetGangID(playerid), playerGangName, sizeof(playerGangName));
+    Gang_GetName(Player_GetGangID(killerid), killerGangName, sizeof(killerGangName));
+
+    foreach(new i : Player) {
+        if(Player_GetGangID(i) == Player_GetGangID(playerid)) {
+            SendMsgF(i, COLOR_RED, "[GANG DEATH]: %p (%d) got killed by %p (%d) Gang %s", playerid, playerid, killerid, killerid, killerGangName);
+        }
+        if(Player_GetGangID(i) == Player_GetGangID(killerid)) {
+            SendMsgF(i, COLOR_RED, "[GANG KILL]: %p (%d) has killed %p (%d) Gang %s", killerid, killerid, playerid, playerid, playerGangName);
         }
     }
+    Gang_AddKills(Player_GetGangID(playerid), 1, true);
+    Gang_AddDeaths(Player_GetGangID(killerid), 1, true);
     return 1;
 }
 
