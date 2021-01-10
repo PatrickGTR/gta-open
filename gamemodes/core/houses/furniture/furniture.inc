@@ -79,28 +79,27 @@ hook OnMySQLConnected() {
         UPDATE \
             house_furniture \
         SET \
-            x = ? \
-            y = ? \
-            z = ? \
+            x = ?, \
+            y = ?, \
+            z = ?, \
             rx = ?, \
             ry = ?, \
             rz = ? \
         WHERE \
             furniture_id = ? \
         AND \
-        house_id = ?\
+            house_id = ? \
     ";
     stmt_updateFurniture = MySQL_PrepareStatement(MySQL_GetHandle(), updateQuery);
 
     static const insertQuery[] = "\
         INSERT INTO \
-        house_furniture (house_id, object_id, x, y, z, rx, ry, rz, intid, vworld) \
+            house_furniture (house_id, object_id, x, y, z, rx, ry, rz, intid, vworld) \
         VALUES \
-        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) \
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) \
     ";
     stmt_insertFurniture = MySQL_PrepareStatement(MySQL_GetHandle(), insertQuery);
 }
-
 
 hook OnPlayerEditDynObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz) {
     if(Player_IsOnFurnitureMode(playerid)) {
@@ -146,7 +145,6 @@ hook OnPlayerEditDynObject(playerid, objectid, response, Float:x, Float:y, Float
                         MySQL_BindInt(stmt_insertFurniture, 8, GetPlayerInterior(playerid));
                         MySQL_BindInt(stmt_insertFurniture, 9, GetPlayerVirtualWorld(playerid));
                         MySQL_ExecuteThreaded_Inline(stmt_insertFurniture, using inline ReloadFurniture);
-
 
                         SendServerMsg(playerid, "Object Saved "C_GREY"[BOUGHT]");
                         GivePlayerMoney(playerid, -Furniture_GetPrice(index));

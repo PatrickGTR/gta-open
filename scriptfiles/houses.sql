@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS player_houses
     interior_id TINYINT(4) NOT NULL,
     virtual_world MEDIUMINT NOT NULL,
     PRIMARY KEY (house_id),
-    FOREIGN KEY(u_id) REFERENCES players(u_id) ON DELETE SET NULL ON UPDATE CASCADE
+    FOREIGN KEY(u_id) REFERENCES players(u_id)
+    ON DELETE SET NULL ON UPDATE CASCADE
 );
 CREATE TABLE IF NOT EXISTS house_furniture
 (
@@ -28,7 +29,8 @@ CREATE TABLE IF NOT EXISTS house_furniture
     rz FLOAT(6) NOT NULL,
     intid INT(11) NOT NULL,
     vworld INT(11) NOT NULL,
-    PRIMARY KEY (furniture_id, house_id),
+    INDEX(house_id),
+    PRIMARY KEY (furniture_id),
     FOREIGN KEY(house_id) REFERENCES player_houses(house_id)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE CASCADE ON UPDATE RESTRICT
 );

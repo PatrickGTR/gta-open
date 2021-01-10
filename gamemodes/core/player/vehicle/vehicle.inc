@@ -25,7 +25,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
             return 1;
         }
 
-        foreach_PersonalVehicles(i) {
+        foreach(new i : PersonalVehicle) {
             if(Vehicle_GetHandler(i) == GetPlayerVehicleID(playerid)) {
                 SendMsgF(playerid, COLOR_SAMPBLUE, "This vehicle is owned by "C_GREY"%s", Vehicle_GetOwnerName(i));
                 break;

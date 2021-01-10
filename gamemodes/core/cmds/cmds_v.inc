@@ -32,7 +32,7 @@ CMD:v(playerid, params[])
 
 		new
     		engine, lights, alarm, doors, bonnet, boot, objective;
-		foreach_PersonalVehicles(i) {
+		foreach(new i : PersonalVehicle) {
 			if(vehicleid != Vehicle_GetHandler(i)) {
 				continue;
 			}
