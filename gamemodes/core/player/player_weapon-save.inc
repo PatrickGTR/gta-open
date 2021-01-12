@@ -1,8 +1,4 @@
 
-#if SETUP_TABLE
-	#include <player_setup-weapon-save>
-#endif
-
 #include <YSI_Coding\y_hooks>
 
 static

@@ -96,7 +96,6 @@
 #include <bank>
 #include <gangs>
 
-
 // Will be called after the rest ^
 public OnGameModeInit() {
 	Message_SetTime(5);

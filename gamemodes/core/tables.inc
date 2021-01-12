@@ -31,10 +31,10 @@ hook OnMySQLSetupTable() {
     Logger_Log("setting up 'player_weapons' table...");
 
     mysql_tquery_file(MySQL_GetHandle(), "player_shots.sql");
-    Logger_log("setting up 'player_shots_stats' table...);
+    Logger_Log("setting up 'player_shots_stats' table...");
 
     mysql_tquery_file(MySQL_GetHandle(), "player_items.sql");
-    Logger_log("setting up 'player_items' table...);
+    Logger_Log("setting up 'player_items' table...");
 
     // --------------------------------------------------------------------------------------------
     // ADMIN

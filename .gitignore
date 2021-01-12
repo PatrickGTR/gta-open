@@ -40,6 +40,9 @@ logs/
 server_log.txt
 crashinfo.txt
 
+#mysql credentials
+mysql.ini
+
 # Ban list
 samp.ban
 

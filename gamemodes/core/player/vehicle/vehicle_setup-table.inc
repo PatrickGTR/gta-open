@@ -20,7 +20,7 @@ hook OnGameModeInit() {
   	mysql_tquery(MySQL_GetHandle(), "\
     CREATE TABLE IF NOT EXISTS \
         vehicle_components (\
-  		vehicle_id int(11) DEFAULT NULL, \
+  		vehicle_id int(11) NOT NULL, \
   		component_id smallint(6) NOT NULL, \
   		slot smallint(2) NOT NULL, \
   		PRIMARY KEY (vehicle_id, slot), \

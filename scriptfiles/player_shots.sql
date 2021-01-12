@@ -1,5 +1,5 @@
 
-CREATE TABLE player_shots_stats (
+CREATE TABLE IF NOT EXISTS player_shots_stats (
     uid int(11) NOT NULL,
     chest int(11) NOT NULL DEFAULT 0,
     torso int(11) NOT NULL DEFAULT 0,

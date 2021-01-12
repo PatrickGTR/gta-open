@@ -1,5 +1,6 @@
 #include <sscanf2>
 
+
 //ALT
 #define ALTCMD:%1(%2); CMD:%1(playerid, params[]) return cmd_%2(playerid, params);
 
@@ -48,7 +49,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
     #if defined OnPlayerCommandPerformed
         return OnPlayerCommandPerformed(playerid, cmd, CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) :("\1")));
     #else
-        return CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) :("\1"));
+        return CallLocalFunction(prefix, "is", playerid, (params[0] != '\0') ? (params) : ("\1"));
     #endif
 }
 
