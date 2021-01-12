@@ -62,6 +62,9 @@
 #include <YSI_Data\y_bit>
 #include <YSI_Data\y_iterate>
 
+#include <YSI_Extra\y_inline_mysql>
+#include <YSI_Extra\y_inline_bcrypt>
+
 #include <ini>
 
 // #include <env>
