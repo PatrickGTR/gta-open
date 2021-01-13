@@ -409,7 +409,7 @@ Vehicle_Destroy(playerid) {
         VehicleInteriorID[i]	=
         VehicleVWorld[i]	    = 0;
 
-        Iter_SafeRemove(PersonalVehicle, i, i);
         DestroyVehicle(VehicleHandler[i]);
+        Iter_SafeRemove(PersonalVehicle, i, i);
     }
 }

@@ -38,7 +38,7 @@ stock Entrance_SetIcon(id, iconid) {
         return 0;
     }
 
-    CreateDynamicMapIcon(entranceX[id], entranceY[id], entranceZ[id], iconid, -1, .streamdistance = 200.0, .style = MAPICON_GLOBAL);
+    CreateDynamicMapIcon(entranceX[id], entranceY[id], entranceZ[id], iconid, -1, .style = MAPICON_GLOBAL);
     return 1;
 }
 
