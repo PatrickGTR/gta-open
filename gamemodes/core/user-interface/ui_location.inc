@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-new 
+new
     PlayerText: PlayerLocationTD[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid) {
@@ -15,7 +15,7 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
     PlayerTextDrawHide(playerid, PlayerLocationTD[playerid]);
     return 1;
 }
@@ -38,6 +38,6 @@ stock UI_SetLocation(playerid, const location[]) {
         return 0;
     }
 
-    PlayerTextDrawSetString(playerid, PlayerLocationTD[playerid], location);    
+    PlayerTextDrawSetString(playerid, PlayerLocationTD[playerid], location);
     return 1;
 }

@@ -72,7 +72,7 @@ hook OnPlayerConnect(playerid) {
    	return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
 
 	if(P_CRACKSequence[playerid] >= 0) {
 		Crack_ResetData(playerid);

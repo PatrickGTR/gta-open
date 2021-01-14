@@ -1,4 +1,4 @@
-static 
+static
     Timer:PlayerDiseaseTimer[MAX_PLAYERS],
     DiseaseType[MAX_PLAYERS];
 
@@ -11,7 +11,7 @@ enum {
     DISEASE_HERPES
 }
 
-Disease_PlayerHas(playerid) 
+Disease_PlayerHas(playerid)
 {
     return (DiseaseType[playerid] > 0);
 }
@@ -36,7 +36,7 @@ Disease_GivePlayer(playerid, type)
 }
 
 Disease_GetName(playerid) {
-    new 
+    new
         diseaseName[10];
     switch(DiseaseType[playerid])
     {
@@ -47,7 +47,7 @@ Disease_GetName(playerid) {
             strcpy(diseaseName, "Gonorrhea");
         }
         case DISEASE_HIV: {
-			strcpy(diseaseName, "HIV"); 
+			strcpy(diseaseName, "HIV");
 		}
         case DISEASE_AIDS: {
 			strcpy(diseaseName, "AIDS");
@@ -80,7 +80,7 @@ timer UpdatePlayerDiseaseDamage[1000 * 5](playerid)
 {
     if (Disease_PlayerHas(playerid))
     {
-        new 
+        new
 			Float:ply_health;
 
         GetPlayerHealth(playerid, ply_health);
@@ -93,10 +93,10 @@ timer UpdatePlayerDiseaseDamage[1000 * 5](playerid)
 hook OnPlayerConnect(playerid)
 {
 	Disease_GivePlayer(playerid, DISEASE_NONE);
-	return 1;	
+	return 1;
 }
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart)
+hook OnPlayerDeathEx(playerid, killerid, reason)
 {
     if (Disease_PlayerHas(playerid) && killerid == INVALID_PLAYER_ID)
     {

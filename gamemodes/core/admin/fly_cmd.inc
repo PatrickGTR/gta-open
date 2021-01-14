@@ -22,7 +22,7 @@ hook OnPlayerSpawn(playerid)
     return 1;
 }
 
-hook OnPlayerDeath(playerid, killerid, reason)
+hook OnPlayerDeathEx(playerid, killerid, reason)
 {
     fly[playerid] = false;
     return 1;

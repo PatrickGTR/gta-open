@@ -60,7 +60,7 @@ hook OnPlayerDisconnect(playerid, reason) {
     return 1;
 }
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
 
     ResetPlayerWeapons(playerid);
     MySQL_BindInt(stmt_deteleWeapons, 0, Player_GetAccountID(playerid));

@@ -72,7 +72,7 @@ stock Player_GiveWantedLevel(playerid, level)  {
     return 1;
 }
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
     SetPlayerWantedLevel(playerid, 0);
     return 1;
 }

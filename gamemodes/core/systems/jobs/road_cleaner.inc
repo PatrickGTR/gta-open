@@ -122,7 +122,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
 	return true;
 
 }
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
 	if(PlayerStartedSweeping[playerid]) {
 		PlayerStartedSweeping[playerid] = false;
 		PlayerSweepCount[playerid] = 0;

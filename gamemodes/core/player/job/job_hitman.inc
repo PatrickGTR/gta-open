@@ -12,7 +12,7 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart)
+hook OnPlayerDeathEx(playerid, killerid, reason)
 {
     if (killerid != INVALID_PLAYER_ID) {
         if (Bit_Get(HasHit, playerid) && Player_GetJob(killerid) == TYPE_HITMAN) {

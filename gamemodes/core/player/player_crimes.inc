@@ -11,7 +11,7 @@ hook OnPlayerConnect(playerid) {
 }
 
 // Murder
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
     if(killerid != INVALID_PLAYER_ID) {
         Player_GiveWantedLevel(killerid, 6);
 

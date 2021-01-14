@@ -31,7 +31,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 }
 
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
 	if(PlayerUsingAnimation[playerid]) {
         PlayerUsingAnimation[playerid] = false;
         TextDrawHideForPlayer(playerid, txtAnimHelper);

@@ -4,7 +4,7 @@ new
     bool:gPlayerGettingArrested[MAX_PLAYERS]
 ;
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart)
+hook OnPlayerDeathEx(playerid, killerid, reason)
 {
     if(killerid != INVALID_PLAYER_ID) {
         if(Player_IsLEO(killerid)) {

@@ -127,13 +127,14 @@ public OnGameModeInit() {
 	return 1;
 }
 
-public OnPlayerDeath(playerid, killerid, reason) {
+public OnPlayerDeathEx(playerid, killerid, reason) {
 	if(IsPlayerConnected(killerid)) {
 		Player_GiveKill(killerid, 1, true);
+		SendDeathMessage(killerid, playerid, reason);
 	}
-	if(IsPlayerConnected(playerid)) {
-		Player_SetDeaths(playerid, 1, true);
-	}
+
+	Player_SetDeaths(playerid, 1, true);
+	SendDeathMessage(INVALID_PLAYER_ID, playerid, reason);
 	return 1;
 }
 
@@ -151,5 +152,10 @@ public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bo
 // TEMP - MUST REMOVE!
 CMD:kill(playerid, params[]) {
 	SetPlayerHealth(playerid, 0.0);
+	return 1;
+}
+
+CMD:killveh(playerid, params) {
+	SetVehicleHealth(GetPlayerVehicleID(playerid), 0.0);
 	return 1;
 }

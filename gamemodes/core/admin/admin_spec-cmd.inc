@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     bool:gPlayerIsSpectating[MAX_PLAYERS],
     gSpectatingPlayer[MAX_PLAYERS],
     gPlayerLastInterior[MAX_PLAYERS],
@@ -21,34 +21,18 @@ hook OnPlayerConnect(playerid)
     return 1;
 }
 
-hook function SetPlayerInterior(playerid, interiorid)
-{
+hook OnPlayerEnterEntrance(playerid) {
     if(gIsPlayerBeingSpectated[playerid])
     {
         foreach(new i : Player)
         {
             if(gPlayerIsSpectating[i] && gSpectatingPlayer[i] == playerid)
             {
-                SetPlayerInterior(i, interiorid);
+                PlayerSpectatePlayer(i, playerid);
             }
         }
     }
-    return continue(playerid, interiorid);
-}
-
-hook function SetPlayerVirtualWorld(playerid, worldid)
-{
-    if(gIsPlayerBeingSpectated[playerid])
-    {
-        foreach(new i : Player)
-        {
-            if(gPlayerIsSpectating[i] && gSpectatingPlayer[i] == playerid)
-            {
-                SetPlayerVirtualWorld(i, worldid);
-            }
-        }
-    }
-    return continue(playerid, worldid);
+    return 1;
 }
 
 ACMD:[1]specoff(playerid, params[])
@@ -69,7 +53,7 @@ ACMD:[1]specoff(playerid, params[])
     }
     TogglePlayerSpectating(playerid, false);
     SpawnPlayer(playerid);
-    
+
     return 1;
 }
 
@@ -106,19 +90,19 @@ ACMD:[1]spec(playerid, params[])
     gPlayerIsSpectating[playerid] = true;
     gIsPlayerBeingSpectated[target] = true;
     gSpectatingPlayer[playerid] = target;
-    if(IsPlayerInAnyVehicle(target)) 
+    if(IsPlayerInAnyVehicle(target))
     {
         PlayerSpectateVehicle(playerid, GetPlayerVehicleID(target));
         SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(target));
         SetPlayerInterior(playerid, GetPlayerInterior(target));
     }
-    else 
+    else
     {
         PlayerSpectatePlayer(playerid, target);
     }
     Weapon_Save(playerid);
     ResetPlayerWeapons(playerid);
-    
+
     return 1;
 }
 

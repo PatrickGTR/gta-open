@@ -180,7 +180,7 @@ hook OnDynamicObjectMoved(objectid) {
 
 // Handler
 hook OnPlayerEnterDynArea(playerid, areaid) {
-    if (Entrance_GetPlayerCD(playerid) <= 2) {
+    if (Entrance_GetPlayerCD(playerid) < 2) {
         return 1;
     }
 
@@ -213,6 +213,10 @@ hook OnPlayerEnterDynArea(playerid, areaid) {
             strcpy(getShopName[playerid], entranceStoreName[idx], MAX_STORE_NAME);
 
             Entrance_UpdatePlayerCooldown(playerid);
+
+            // TODO:
+            // add the rest of the args to the callback.
+            CallRemoteFunction("OnPlayerEnterEntrance", "i", playerid);
         }
     }
     return 1;

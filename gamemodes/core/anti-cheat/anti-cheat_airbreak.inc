@@ -68,7 +68,7 @@ stock AC_SetPlayerPosFindZ(playerid, Float:x, Float:y, Float:z)
 #define SetPlayerPosFindZ AC_SetPlayerPosFindZ
 
 /* ** Callback Hooks ** */
-hook OnPlayerDeath( playerid, killerid, reason ) {
+hook OnPlayerDeath playerid, killerid, reason ) {
     if ( 0 <= playerid < MAX_PLAYERS ) {
         p_abLastTick[ playerid ] = GetTickCount( ) + 3000;
     }

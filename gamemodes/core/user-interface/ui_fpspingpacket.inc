@@ -20,7 +20,7 @@ hook OnPlayerSpawn(playerid) {
     return 1;
 }
 
-hook OnPlayerDeathEx(playerid, killerid, reason, Float: damage, bodypart) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
     PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
     return 1;
 }
