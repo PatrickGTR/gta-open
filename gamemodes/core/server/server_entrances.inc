@@ -129,7 +129,7 @@ stock Entrance_Create(
 
 // Returns unix timestamp of player last entered CP
 stock Entrance_GetPlayerCD(playerid) {
-    return (gettime() - playerEnExCoolDown[playerid]);
+    return playerEnExCoolDown[playerid];
 }
 
 // Assign unix timestamp of player last entered CP
@@ -180,7 +180,8 @@ hook OnDynamicObjectMoved(objectid) {
 
 // Handler
 hook OnPlayerEnterDynArea(playerid, areaid) {
-    if (Entrance_GetPlayerCD(playerid) < 2) {
+
+    if (gettime() < Entrance_GetPlayerCD(playerid)) {
         return 1;
     }
 

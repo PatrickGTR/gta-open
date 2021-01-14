@@ -140,7 +140,7 @@ public OnPlayerDeathEx(playerid, killerid, reason) {
 
 // temporary fix for players not taking damage, although api should handle this when
 // not in use.
-public OnPlayerTakePlayerDamage(playerid, issuerid, &Float: amount, weaponid, bodypart)
+public OnPlayerDamagePlayer(playerid, issuerid, &Float: amount, weaponid, bodypart)
 {
 	if(Player_GetClass(playerid) == Player_GetClass(issuerid) && Player_GetClass(playerid) != TEAM_CIVILIAN) {
 		return 0; // no team damage.

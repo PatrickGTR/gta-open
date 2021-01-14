@@ -1,6 +1,6 @@
 /*
  * Irresistible Gaming (c) 2018
- * Developed by Lorenc
+ * Developed by Lorenc, updated & modified by PatrickGTR
  * Module: anticheat/hitpoints.inc
  * Purpose: server sided damage system
 */
@@ -179,7 +179,7 @@ static const
     }
 ;
 
-static stock
+static
     Float: p_PlayerHealth 			[MAX_PLAYERS][E_PLAYER_HITPOINTS],
     Float: p_PlayerArmour 			[MAX_PLAYERS][E_PLAYER_HITPOINTS],
     Float: p_LastDamageIssued		[MAX_PLAYERS],
@@ -191,9 +191,27 @@ static stock
 ;
 
 /* ** Forwards ** */
-forward OnPlayerDamagePlayer 		(playerid, damagedid, Float: amount, weaponid, bodypart);
-forward OnPlayerTakePlayerDamage 	(playerid, issuerid, &Float: amount, weaponid, bodypart);
-forward OnPlayerDeathEx 			(playerid, killerid, reason);
+
+// Called after damage has been inflicted
+// Same parameters as OnPlayerDamagePlayer, but they can not be modified
+forward OnPlayerDamagePlayerDone(playerid, damagedid, Float: amount, weaponid, bodypart);
+
+
+// OnPlayerGiveDamage + OnPlayerTakeDamage combined, OnPlayerDamagePlayer deprecates those function.
+// playerid - The player who is about to get damaged.
+// issuerid - The player who issued the damage.
+// amount - The amount of damage about to get inflicted
+// weaponid - The weapon used to inflict the damage
+// bodypart - The bodypart
+
+// Return 0 to prevent the damage from being inflicted
+forward OnPlayerDamagePlayer(playerid, issuerid, &Float: amount, weaponid, bodypart);
+
+// The new callback, deprecates the OnPlayerDeath.
+// More accurate killerid and reason.
+// Gives the last damager if its within 2500ms the killerid rather than INVALID_PLAYER_ID
+// this callback also fixes reason, a more specific reason on death.
+forward OnPlayerDeathEx(playerid, killerid, reason);
 
 // Function (AC_UpdateKillerData)
 
@@ -307,9 +325,6 @@ hook OnPlayerTakeDamage(playerid, issuerid, Float: amount, weaponid, bodypart) {
     p_LastWeaponIssuer[ playerid ] = weaponid;
     p_LastDamageIssued[ playerid ] = amount;
 
-    //if( !( issuerid != INVALID_PLAYER_ID && IsPlayerInAnyVehicle( issuerid ) && GetPlayerVehicleSeat( issuerid ) == 0 && ( weaponid == WEAPON_M4 || weaponid == WEAPON_MINIGUN ) ) )
-    //	return 0;
-
     // Allow hunter damage/sparrow
     if(!(issuerid != INVALID_PLAYER_ID && IsPlayerInAnyVehicle(issuerid) && GetPlayerVehicleSeat(issuerid) == 0 && (weaponid == WEAPON_M4 || weaponid == WEAPON_MINIGUN)) && !is_npc)
     {
@@ -322,7 +337,7 @@ hook OnPlayerTakeDamage(playerid, issuerid, Float: amount, weaponid, bodypart) {
     {
         if(issuerid != INVALID_PLAYER_ID && ! is_npc)
         {
-            if(CallLocalFunction("OnPlayerTakePlayerDamage", "iiiii", playerid, issuerid, amount, weaponid, bodypart))
+            if(CallLocalFunction("OnPlayerDamagePlayer", "iiiii", playerid, issuerid, amount, weaponid, bodypart))
             {
                 new
                     Float: tmp,
@@ -347,7 +362,7 @@ hook OnPlayerTakeDamage(playerid, issuerid, Float: amount, weaponid, bodypart) {
                 SetPlayerArmour(playerid, p_PlayerArmour[ playerid ] [ E_POINTS ]);
                 SetPlayerHealth(playerid, p_PlayerHealth[ playerid ] [ E_POINTS ]);
 
-                CallRemoteFunction("OnPlayerDamagePlayer", "ddfdd", issuerid, playerid, amount, weaponid, bodypart);
+                CallRemoteFunction("OnPlayerDamagePlayerDone", "ddfdd", issuerid, playerid, amount, weaponid, bodypart);
             }
         }
         else
@@ -410,7 +425,7 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float: amount, weaponid, bodypart)
         if((!IsPlayerStreamedIn( playerid, damagedid ) && ! (GetTickCount() - AC_GetLastUpdateTime(playerid) >= 2595)) || !IsPlayerStreamedIn(damagedid, playerid))
             return Y_HOOKS_BREAK_RETURN_0;
 
-        if(CallLocalFunction("OnPlayerTakePlayerDamage", "iifii", damagedid, playerid, amount, weaponid, bodypart))
+        if(CallLocalFunction("OnPlayerDamagePlayer", "iifii", damagedid, playerid, amount, weaponid, bodypart))
         {
             new
                 Float: tmp,
@@ -439,7 +454,7 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float: amount, weaponid, bodypart)
             SetPlayerArmour(damagedid, p_PlayerArmour[damagedid][E_POINTS]);
             SetPlayerHealth(damagedid, p_PlayerHealth[damagedid][E_POINTS]);
 
-            CallRemoteFunction("OnPlayerDamagePlayer", "ddfdd", playerid, damagedid, amount, weaponid, bodypart);
+            CallRemoteFunction("OnPlayerDamagePlayerDone", "ddfdd", playerid, damagedid, amount, weaponid, bodypart);
         }
     }
     return 1;
@@ -450,158 +465,171 @@ stock AC_CheckForHealthHacks( playerid, iTicks )
 {
     new
         Float: currentHealth,
-        Float: currentArmour
-    ;
-    GetPlayerHealth( playerid, currentHealth );
-    GetPlayerArmour( playerid, currentArmour );
+        Float: currentArmour;
+
+    GetPlayerHealth(playerid, currentHealth);
+    GetPlayerArmour(playerid, currentArmour);
 
     // Lag Calculations
     new
-        Float: fHitDamage = p_LastDamageIssued[ playerid ],
+        Float: fHitDamage = p_LastDamageIssued[playerid],
         Float: fArmourDamage,
-        Float: fHealthDamage
-    ;
+        Float: fHealthDamage;
 
-    if( fHitDamage > currentArmour ) {
+    if(fHitDamage > currentArmour) {
         fArmourDamage = currentArmour;
         fHealthDamage = fHitDamage - currentArmour;
     }
-    else fArmourDamage = fHitDamage;
+    else {
+        fArmourDamage = fHitDamage;
+    }
 
     // Begin Health Hack Detection
-    if( iTicks > p_PlayerHealth[ playerid ] [ E_UPDATE_TIME ] )
-    {
-        new currentHealthInt 	= floatround( currentHealth, floatround_floor );
-        new healthShouldBeInt 	= floatround( p_PlayerHealth[ playerid ] [ E_POINTS ], floatround_floor );
+    if(iTicks > p_PlayerHealth[playerid][E_UPDATE_TIME]) {
+        new
+            clientSideHealth 	= floatround(currentHealth, floatround_floor),
+            serverSideHealth 	= floatround(p_PlayerHealth[playerid][E_POINTS], floatround_floor);
 
-        if( currentHealthInt == healthShouldBeInt )
-            p_PlayerHealth[ playerid ] [ E_SYNCED ] = true;
+        if(clientSideHealth == serverSideHealth) {
+            p_PlayerHealth[playerid][E_SYNCED] = true;
+        }
 
-        if( !p_PlayerHealth[ playerid ] [ E_SYNCED ] )
-        {
-            if( currentHealthInt > healthShouldBeInt )
-            {
-                switch( p_PlayerHealth[ playerid ] [ E_UPDATE_FAIL ]++ )
-                {
-                    case 0 .. 9: SetPlayerHealth( playerid, p_PlayerHealth[ playerid ] [ E_POINTS ] );
-                    case 10: SendClientMessage( playerid, 0xa9c4e4ff, "You have been kicked as you are desynced from the server. Please relog!" ), Kick( playerid ), printf("[health] Player %d was desynced thus kicked.", playerid);
+        if(!p_PlayerHealth[playerid][E_SYNCED]) {
+            if(clientSideHealth > serverSideHealth) {
+                p_PlayerHealth[playerid][E_UPDATE_FAIL] ++;
+
+                // Attempt to set player health to server sided.
+                if(p_PlayerHealth[playerid][E_UPDATE_FAIL] >= 0 && p_PlayerHealth[playerid][E_UPDATE_FAIL] <= 9) {
+                    SetPlayerHealth(playerid, p_PlayerHealth[playerid] [E_POINTS]);
+                }
+
+                if(p_PlayerHealth[playerid][E_UPDATE_FAIL] >= 10) {
+                    SendClientMessage(playerid, 0xa9c4e4ff, "You have been kicked as you are desynced from the server. Please relog!");
+                    printf("[Heath AC] Player %d was desynced thus kicked.", playerid);
+                    Kick(playerid);
                 }
             }
         }
-        else
-        {
-            p_PlayerHealth[ playerid ] [ E_UPDATE_FAIL ] = 0;
+        else {
+            p_PlayerHealth[playerid][E_UPDATE_FAIL] = 0;
 
-            if( healthShouldBeInt > currentHealthInt )
-                p_PlayerHealth[ playerid ] [ E_POINTS ] = currentHealth;
+            // server hp can't be more than client.
+            // set server hp to client hp if server is more than client.
+            if(serverSideHealth > clientSideHealth) {
+                p_PlayerHealth[playerid][E_POINTS] = currentHealth;
+            }
 
-            if( currentHealthInt > healthShouldBeInt && currentHealthInt <= 255 && currentHealthInt > 0 )
-                SetPlayerHealth( playerid, p_PlayerHealth[ playerid ] [ E_POINTS ] );
+            if(clientSideHealth > serverSideHealth && clientSideHealth <= 255 && clientSideHealth > 0) {
+                SetPlayerHealth(playerid, p_PlayerHealth[playerid][E_POINTS]);
+            }
 
-            currentHealthInt = floatround( currentHealth, floatround_floor );
-            healthShouldBeInt = floatround( p_PlayerHealth[ playerid ] [ E_POINTS ], floatround_floor );
+            clientSideHealth = floatround(currentHealth, floatround_floor);
+            serverSideHealth = floatround(p_PlayerHealth[playerid][E_POINTS], floatround_floor);
 
-            new dmgOne = floatround( currentHealthInt - fHealthDamage, floatround_floor );
-            new dmgTwo = floatround( currentHealthInt - fHealthDamage, floatround_ceil );
+            new
+                dmgOne = floatround(clientSideHealth - fHealthDamage, floatround_floor),
+                dmgTwo = floatround(clientSideHealth - fHealthDamage, floatround_ceil);
 
-            if( !( currentHealthInt == healthShouldBeInt || dmgOne == healthShouldBeInt || dmgTwo == healthShouldBeInt ) )
-            {
-                SetPlayerHealth( playerid, p_PlayerHealth[ playerid ] [ E_POINTS ] );
-                //printf("[health][%d] %d seems to health hack (server health: %d and client health: %d, health dmg: %f, armour dmg: %f).", playerid, playerid, healthShouldBeInt, currentHealthInt, fHealthDamage, fArmourDamage );
+            if(!(clientSideHealth == serverSideHealth || dmgOne == serverSideHealth || dmgTwo == serverSideHealth)) {
+                SetPlayerHealth(playerid, p_PlayerHealth[playerid][E_POINTS]);
             }
         }
-        p_PlayerHealth[ playerid ] [ E_UPDATE_TIME ] = iTicks + 1000;
+        p_PlayerHealth[playerid][E_UPDATE_TIME] = iTicks + 1000;
     }
 
     // Begin Armour Hack Detection
-    if( iTicks > p_PlayerArmour[ playerid ] [ E_UPDATE_TIME ] )
-    {
-        new currentArmourInt 	= floatround( currentArmour, floatround_floor );
-        new ArmourShouldBeInt 	= floatround( p_PlayerArmour[ playerid ] [ E_POINTS ], floatround_floor );
+    if(iTicks > p_PlayerArmour[playerid] [E_UPDATE_TIME]) {
+        new clientSideArmour 	= floatround(currentArmour, floatround_floor);
+        new serverSideArmour 	= floatround(p_PlayerArmour[playerid][E_POINTS], floatround_floor);
 
-        if( currentArmourInt == ArmourShouldBeInt )
-            p_PlayerArmour[ playerid ] [ E_SYNCED ] = true;
+        if(clientSideArmour == serverSideArmour)
+            p_PlayerArmour[playerid][E_SYNCED] = true;
 
-        if( !p_PlayerArmour[ playerid ] [ E_SYNCED ] )
-        {
-            if( currentArmourInt > ArmourShouldBeInt )
-            {
-                switch( p_PlayerArmour[ playerid ] [ E_UPDATE_FAIL ]++ )
-                {
-                    case 0 .. 9: SetPlayerArmour( playerid, p_PlayerArmour[ playerid ] [ E_POINTS ] );
-                    case 10: SendClientMessage( playerid, 0xa9c4e4ff, "You have been kicked as you are desynced from the server. Please relog!" ), Kick( playerid ), printf("[armour] Player %d was desynced thus kicked.", playerid);
+        if(!p_PlayerArmour[playerid][E_SYNCED]) {
+            if(clientSideArmour > serverSideArmour) {
+                p_PlayerArmour[playerid] [E_UPDATE_FAIL] ++;
+
+                // Attempt to set player armour to server sided.
+                if(p_PlayerArmour[playerid] [E_UPDATE_FAIL] >= 0 && p_PlayerArmour[playerid] [E_UPDATE_FAIL] <= 9) {
+                    SetPlayerArmour(playerid, p_PlayerArmour[playerid][E_POINTS]);
+                }
+
+                if(p_PlayerArmour[playerid] [E_UPDATE_FAIL] >= 10) {
+                    SendClientMessage(playerid, 0xa9c4e4ff, "You have been kicked as you are desynced from the server. Please relog!");
+                    printf("[AC Armour] Player %d was desynced thus kicked.", playerid);
+                    Kick(playerid);
                 }
             }
         }
-        else
-        {
-            p_PlayerArmour[ playerid ] [ E_UPDATE_FAIL ] = 0;
+        else {
+            p_PlayerArmour[playerid][E_UPDATE_FAIL] = 0;
 
-            if( ArmourShouldBeInt > currentArmourInt )
+            // server armour can't be more than client.
+            // set server armour to client armour if server is more than client.
+            if(serverSideArmour > clientSideArmour) {
                 p_PlayerArmour[ playerid ] [ E_POINTS ] = currentArmour;
+            }
 
-            if( currentArmourInt > ArmourShouldBeInt && currentArmourInt <= 255 && currentArmourInt > 0 )
+            if(clientSideArmour > serverSideArmour && clientSideArmour <= 255 && clientSideArmour > 0) {
                 SetPlayerArmour( playerid, p_PlayerArmour[ playerid ] [ E_POINTS ] );
+            }
 
-            currentArmourInt = floatround( currentArmour, floatround_floor );
-            ArmourShouldBeInt = floatround( p_PlayerArmour[ playerid ] [ E_POINTS ], floatround_floor );
+            clientSideArmour = floatround(currentArmour, floatround_floor);
+            serverSideArmour = floatround(p_PlayerArmour[playerid] [E_POINTS], floatround_floor);
 
-            new dmgOne = floatround( currentArmourInt - fArmourDamage, floatround_floor );
-            new dmgTwo = floatround( currentArmourInt - fArmourDamage, floatround_ceil );
+            new
+                dmgOne = floatround( clientSideArmour - fArmourDamage, floatround_floor ),
+                dmgTwo = floatround( clientSideArmour - fArmourDamage, floatround_ceil );
 
-            if( !( currentArmourInt == ArmourShouldBeInt || dmgOne == ArmourShouldBeInt || dmgTwo == ArmourShouldBeInt ) )
-            {
+            if(!(clientSideArmour == serverSideArmour || dmgOne == serverSideArmour || dmgTwo == serverSideArmour)) {
                 SetPlayerArmour( playerid, p_PlayerArmour[ playerid ] [ E_POINTS ] );
-                //printf("[armour] %d seems to armour hack (server armour: %d and client armour: %d, health dmg: %f, armour dmg: %f).", playerid, ArmourShouldBeInt, currentArmourInt, fHealthDamage, fArmourDamage );
             }
         }
         p_PlayerArmour[ playerid ] [ E_UPDATE_TIME ] = iTicks + 1000;
     }
 }
 
-hook OnPlayerDeath( playerid, killerid, reason )
+hook OnPlayerDeath(playerid, killerid, reason)
 {
-    if ( ! IsPlayerNPC( playerid ) )
+    if(!IsPlayerNPC(playerid))
     {
         new
-            server_time = gettime( );
+            server_time = gettime();
 
         // Anti-fakekill
-        switch( server_time - p_LastDeath[ playerid ] )
+        switch(server_time - p_LastDeath[playerid])
         {
             case 0 .. 3:
             {
-                if ( p_DeathSpam{ playerid } ++ == 3 )
+                if (p_DeathSpam{playerid} ++ == 3)
                 {
-                    CallLocalFunction( "OnPlayerCheatDetected", "ddd", playerid, CHEAT_TYPE_FAKEKILL, p_DeathSpam{ playerid } );
+                    CallLocalFunction("OnPlayerCheatDetected", "ddd", playerid, CHEAT_TYPE_FAKEKILL, p_DeathSpam{playerid});
                     return Y_HOOKS_BREAK_RETURN_1;
                 }
             }
-            default: p_DeathSpam{ playerid } = 0;
+            default: p_DeathSpam{playerid} = 0;
         }
 
         p_LastDeath[ playerid ] = server_time;
 
         // Died in Vehicle
-        if ( GetPlayerVehicleID( playerid ) && AC_IsPlayerSpawned( playerid ) )
-        {
-            if( ( GetTickCount( ) - p_LastTookDamage[ playerid ] ) > 2500 ) {
-                p_LastDamageIssuer[ playerid ] = INVALID_PLAYER_ID;
-                p_LastWeaponIssuer[ playerid ] = 51;
+        if (GetPlayerVehicleID(playerid) != INVALID_PLAYER_ID && AC_IsPlayerSpawned(playerid)) {
+            if((GetTickCount() - p_LastTookDamage[playerid]) > 2500) {
+                p_LastDamageIssuer[playerid] = INVALID_PLAYER_ID;
+                p_LastWeaponIssuer[playerid] = 51;
             }
-
-            CallRemoteFunction( "OnPlayerDeathEx", "ddd", playerid, p_LastDamageIssuer[ playerid ], p_LastWeaponIssuer[ playerid ]);
+            CallRemoteFunction("OnPlayerDeathEx", "ddd", playerid, p_LastDamageIssuer[playerid], p_LastWeaponIssuer[playerid]);
         }
 
         // Reset spawned variable
-        AC_SetPlayerSpawned( playerid, false );
-       }
+        AC_SetPlayerSpawned(playerid, false);
+    }
     return 1;
 }
 
 /* ** Functions ** */
 stock ForcePlayerKill(playerid, killerid, weaponid) {
-    p_LastTookDamage[playerid ] 	= GetTickCount();
+    p_LastTookDamage[playerid] 	    = GetTickCount();
     p_LastDamageIssuer[playerid]    = killerid;
     p_LastWeaponIssuer[playerid]    = weaponid;
     p_LastDamageIssued[playerid]    = 100.0;
