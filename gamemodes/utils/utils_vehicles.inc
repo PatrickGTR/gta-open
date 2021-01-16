@@ -25,11 +25,29 @@ stock LoadStaticVehiclesFromFile(const filename[])
         if (vehicletype < 400 || vehicletype > 611) {
             continue;
         }
-        
+
         AddStaticVehicleEx(vehicletype, SpawnX, SpawnY, SpawnZ, SpawnRot, col1, col2, (60*60)); // respawn 60 minutes
         vehicles_loaded ++;
     }
     fclose(file_ptr);
     printf("Loaded %d vehicles from: %s", vehicles_loaded, filename);
     return vehicles_loaded;
+}
+
+stock IsVehiclePolice(vehicleid) {
+	new
+        model = GetVehicleModel(vehicleid);
+
+    switch(model) {
+        case 425, 520, 497, 470, 432, 428, 523, 427, 490, 601: {
+            return 1;
+        }
+        case 596 .. 599: {
+            return 1;
+        }
+        default:
+            return 0;
+
+    }
+    return 0;
 }

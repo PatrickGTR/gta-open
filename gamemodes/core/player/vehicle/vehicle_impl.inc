@@ -36,9 +36,9 @@ hook OnMySQLConnected() {
 
     static const insertQuery[] = "\
         INSERT INTO \
-            player_vehicles (u_id, model_id, x, y, z, rot) \
+            player_vehicles (u_id, model_id, x, y, z, rot, color_1, color_2) \
         VALUES \
-            (?, ?, ?, ?, ?, ?) \
+            (?, ?, ?, ?, ?, ?, ?, ?) \
     ";
     stmt_insertVehicle = MySQL_PrepareStatement(MySQL_GetHandle(), insertQuery);
 
@@ -182,6 +182,10 @@ Vehicle_GetPlayerTotal(playerid) {
 }
 
 Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot) {
+
+    new
+        color = random(255);
+
     inline const OnSaveCreatedVehicle() {
         new
             idx = Iter_Alloc(PersonalVehicle);
@@ -195,8 +199,8 @@ Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot) {
         VehicleZ[idx]	            = z;
         VehicleRot[idx]		        = rot;
 
-        VehicleColor1[idx]	        = random(255);
-        VehicleColor2[idx]	        = random(255);
+        VehicleColor1[idx]	        = color;
+        VehicleColor2[idx]	        = color;
 
         VehicleInteriorID[idx]	    = 0;
         VehicleVWorld[idx]	        = 0;
@@ -222,6 +226,9 @@ Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot) {
     MySQL_BindFloat(stmt_insertVehicle, 3, y);
     MySQL_BindFloat(stmt_insertVehicle, 4, z);
     MySQL_BindFloat(stmt_insertVehicle, 5, rot);
+    MySQL_BindFloat(stmt_insertVehicle, 6, color);
+    MySQL_BindFloat(stmt_insertVehicle, 7, color);
+
     MySQL_ExecuteThreaded_Inline(stmt_insertVehicle, using inline OnSaveCreatedVehicle);
 }
 

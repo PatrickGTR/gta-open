@@ -2,7 +2,7 @@
 
 #define INVALID_ATM_ID (-1)
 
-#define ATM_LABEL_INFO "#"C_GREEN"%i\n%s's ATM\n"C_YELLOW"Press "C_GREEN"'Y' "C_YELLOW"to interact"
+#define ATM_LABEL_INFO "#"C_GREEN"%i\n%s's ATM\n"C_YELLOW"Press "C_GREEN"'~k~~CONVERSATION_YES~' "C_YELLOW"to interact"
 
 // Prepared Statements
 static

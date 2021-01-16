@@ -20,9 +20,9 @@ static
 
 hook OnGameModeInit()
 {
-    Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to purchase items", COLOR_WHITE, 295.4240, -82.5273, 1002.5156, 40.0, 6, 0);
-    Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to purchase items", COLOR_WHITE, 312.8376, -167.7640, 1000.5938, 40.0, 7, 0);
-    Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to view services", COLOR_WHITE, 1015.4679, -930.1953, 43.1797, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to purchase items", COLOR_WHITE, 295.4240, -82.5273, 1002.5156, 40.0, 6, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to purchase items", COLOR_WHITE, 312.8376, -167.7640, 1000.5938, 40.0, 7, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to view services", COLOR_WHITE, 1015.4679, -930.1953, 43.1797, 40.0, 0, 0);
     CreateActor(50, 1015.4679, -930.1953, 42.1797, 184.6950); //Mechanic
     CreateDynamicMapIcon(1015.4679, -930.1953, 42.1797, 27, -1, .streamdistance = 200.0, .style = MAPICON_GLOBAL);
     return 1;

@@ -127,7 +127,7 @@ hook OnGameModeInit() {
 		z = SlotMachinePositions[i][E_SLOT_MACHINE_Z];
 
 		SlotMachineArea[i] = CreateDynamicSphere(x, y, z, 0.5);
-		CreateDynamic3DTextLabel("Press "C_YELLOW"Y "C_WHITE"to play in this slot", COLOR_WHITE, x, y, z, TEXTLABEL_STREAMDISTANCE, .testlos = false);
+		CreateDynamic3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~ "C_WHITE"in this slot", COLOR_WHITE, x, y, z, TEXTLABEL_STREAMDISTANCE, .testlos = false);
 	}
 	return 1;
 }

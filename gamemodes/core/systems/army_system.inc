@@ -7,7 +7,7 @@ static
     HunterSpawnTick
 ;
 
-static 
+static
     armyVehicles[MAX_ARMY_VEHICLES],
     armyVehicleCount
 ;
@@ -28,13 +28,13 @@ stock bool:IsArmyVehicle(vehicleid)
 
 hook OnGameModeInit()
 {
-    Create3DTextLabel("Press "C_YELLOW"N"C_WHITE" to open the gate", COLOR_WHITE, 1240.9739, -2035.3715, 59.9941, 40.0, 0, 0);
-    Create3DTextLabel("Press "C_YELLOW"N"C_WHITE" to open the gate", COLOR_WHITE, 1086.5114, -2098.7629, 64.5963, 40.0, 0, 0);
-    Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to buy a Army Vehicle", COLOR_WHITE, 1156.6572, -2052.0520, 70.1159, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_NO~"C_WHITE" to open the gate", COLOR_WHITE, 1240.9739, -2035.3715, 59.9941, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_NO~"C_WHITE" to open the gate", COLOR_WHITE, 1086.5114, -2098.7629, 64.5963, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to buy a Army Vehicle", COLOR_WHITE, 1156.6572, -2052.0520, 70.1159, 40.0, 0, 0);
     CreateActor(191, 1156.6572, -2052.0520, 69.1159, 90.6172);
-    Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to see Medical Menu", COLOR_WHITE, 1157.1663, -2019.1108, 70.1159, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to see Medical Menu", COLOR_WHITE, 1157.1663, -2019.1108, 70.1159, 40.0, 0, 0);
     CreateActor(274, 1157.1663, -2019.1108, 69.1159, 84.8518);
-    Create3DTextLabel("Press "C_YELLOW"Y"C_WHITE" to see Army Weapons", COLOR_WHITE, 1202.7822, -2019.3701, 69.4189, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to see Army Weapons", COLOR_WHITE, 1202.7822, -2019.3701, 69.4189, 40.0, 0, 0);
     return 1;
 }
 
@@ -92,7 +92,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
         if(IsArmyVehicle(playercar) && Player_GetClass(playerid) != TEAM_ARMY){
             SendErrorMsg(playerid, "You're not a Army You can't enter this vehicle!");
             RemovePlayerFromVehicle(playerid);
-        } 
+        }
     }
     return 1;
 }

@@ -29,7 +29,7 @@ enum //5 * 8 = 40 seconds to finish.
 #define DRUG_CREATION_POSA	(220.0334)
 
 hook OnGameModeInit() {
-    CreateDynamic3DTextLabel("Press "C_YELLOW"N "C_WHITE"\nTo begin creating crack cocaine", COLOR_WHITE, DRUG_CREATION_POSX, DRUG_CREATION_POSY, DRUG_CREATION_POSZ, TEXTLABEL_STREAMDISTANCE, .testlos = 1);
+    CreateDynamic3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_NO~"C_WHITE"\nTo begin creating crack cocaine", COLOR_WHITE, DRUG_CREATION_POSX, DRUG_CREATION_POSY, DRUG_CREATION_POSZ, TEXTLABEL_STREAMDISTANCE, .testlos = 1);
 	return 1;
 }
 

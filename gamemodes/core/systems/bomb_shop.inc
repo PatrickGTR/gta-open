@@ -34,7 +34,7 @@ hook OnGameModeInit() {
     CreateDynamic3DTextLabel(
         "Bomb Dealer\n\
         Pablo\n\
-        Press "C_YELLOW"Y "C_ORANGE"to interact",
+        Press "C_YELLOW"~k~~CONVERSATION_YES~ "C_ORANGE"to interact",
         COLOR_ORANGE,
         gBombShopX,
         gBombShopY,

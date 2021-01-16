@@ -2,11 +2,40 @@
 
 static
     gShotNearPoliceTick[MAX_PLAYERS],
-    gShotPoliceTick[MAX_PLAYERS];
+    gShotPoliceTick[MAX_PLAYERS],
+    gEnteredPoliceVehicleTick[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid) {
     gShotNearPoliceTick[playerid] = 0;
     gShotPoliceTick[playerid] = 0;
+    gEnteredPoliceVehicleTick[playerid] = 0;
+    return 1;
+}
+
+// Entering Police Vehicle
+hook OnPlayerStateChange(playerid, newstate, oldstate) {
+    if(newstate != PLAYER_STATE_DRIVER) {
+        return 1;
+    }
+
+    if(Player_GetClass(playerid) != TEAM_CIVILIAN) {
+        return 1;
+    }
+
+    if((gettime() - gEnteredPoliceVehicleTick[playerid]) < (60 * 3)) {
+        return 1;
+    }
+
+    new
+        vehicleid = GetPlayerVehicleID(playerid);
+
+    if(!IsVehiclePolice(vehicleid)) {
+        return 1;
+    }
+
+    Player_GiveWantedLevel(playerid, 4);
+    SendMsgF(playerid, COLOR_RED, "You entered a police vehicle, you've gained an extra 4 stars.");
+    gEnteredPoliceVehicleTick[playerid] = gettime();
     return 1;
 }
 
@@ -14,7 +43,6 @@ hook OnPlayerConnect(playerid) {
 hook OnPlayerDeathEx(playerid, killerid, reason) {
     if(killerid != INVALID_PLAYER_ID) {
         Player_GiveWantedLevel(killerid, 6);
-
         SendMsgF(killerid, COLOR_RED, "You commited murder, you've gained an extra 6 stars.");
     }
     return 1;
@@ -29,7 +57,6 @@ hook OnPlayerRobStore(playerid, moneyTaken) {
 
     GivePlayerMoney(playerid, moneyTaken);
     Player_GiveWantedLevel(playerid, 4);
-
     return 1;
 }
 
@@ -52,6 +79,11 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
         return 1;
     }
 
+    // ignore if player is wanted already.
+    if(GetPlayerWantedLevel(playerid) >= 4) {
+        return 1;
+    }
+
     // disallow spam, only increase wanted level after 3 minutes.
     if((gettime() - gShotNearPoliceTick[playerid]) < (60 * 3)) {
         return 1;
@@ -60,6 +92,7 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
     new
         Float:distance = 20.0,
         closestID = Player_GetClosestLeo(playerid, distance);
+
 
     // no closest law enforce officers
     if(closestID == INVALID_PLAYER_ID) {
@@ -73,9 +106,14 @@ hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, 
 }
 
 // Shooting a cop detection.
-hook OnPlayerTakePlayerDmg(playerid, issuerid, &Float: amount, weaponid, bodypart ) {
+hook OnPlayerDmgPlayerDone(playerid, issuerid, &Float: amount, weaponid, bodypart ) {
     // shooter is not civilian.
     if(Player_GetClass(issuerid) != TEAM_CIVILIAN) {
+        return 1;
+    }
+
+    // ignore if player is wanted already.
+    if(GetPlayerWantedLevel(issuerid) >= 4) {
         return 1;
     }
 

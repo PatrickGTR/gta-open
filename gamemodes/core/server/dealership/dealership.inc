@@ -24,7 +24,7 @@ hook OnGameModeInit() {
 		Float:y = -973.8203,
 		Float:z = 1090.0890;
 
-	CreateDynamic3DTextLabel("Press "C_YELLOW"Y "C_WHITE"to view services", -1, x, y, z, 40.0);
+	CreateDynamic3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~ "C_WHITE"to view services", -1, x, y, z, 40.0);
 	DealershipArea = CreateDynamicSphere(x, y, z, 5.0);
 	return 1;
 }

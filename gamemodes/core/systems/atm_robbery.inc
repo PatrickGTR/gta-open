@@ -108,21 +108,16 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
         id = arr[1];
 
     if(ATM_MoneyPickup[idx][id]== pickupid) {
-        static
-            count[MAX_PLAYERS] = 0,
-            reward[MAX_PLAYERS] = 0;
+        new
+            reward = random(400) + 500;
 
-        reward[playerid] += random(250) + 500;
+        SendMsgF(
+            playerid,
+            COLOR_ORANGE, "(atm robbery) "C_WHITE"You have taken "C_GREEN"%m "C_WHITE"from the atm.",
+            reward
+        );
 
-        if(++ count[playerid] >= MAX_MONEY_PICKUP) {
-            SendMsgF(
-                playerid,
-                COLOR_ORANGE, "(atm robbery) "C_WHITE"You have taken "C_GREEN"%m "C_WHITE"from the atm.",
-                reward[playerid]
-            );
-
-            GivePlayerMoney(playerid, reward[playerid]);
-        }
+        GivePlayerMoney(playerid, reward);
 
         // Destroy the pickup once a player picked it up.
         DestroyDynamicPickup(ATM_MoneyPickup[idx][id]);
