@@ -25,8 +25,11 @@ CMD:rob(playerid, params[])
         return SendErrorMsg(playerid, "You just robbed someone recently, please try again later");
     }
 
-    if (Player_GetWallet(targetid) > 0)
-    {
+    if(GetPlayerMoney(targetid) < 1000) {
+        return SendErrorMsg(playerid, "Player does not have enough money");
+    }
+
+    if (Player_GetWallet(targetid) > 0) {
         SendMsgF(playerid, COLOR_ORANGE, "(player robbery) "C_WHITE"You failed to rob "C_GREY"%p (%i) "C_WHITE"because he had wallet, run away!", targetid, targetid);
         SendMsgF(targetid, COLOR_ORANGE, "(player robbery) "C_GREY"%p (%i) "C_WHITE"attempted to rob you but failed, chase him! - Wallets Left: %i", playerid, playerid, Player_GetWallet(playerid));
         return 1;
@@ -40,8 +43,10 @@ CMD:rob(playerid, params[])
         SendMsgF(targetid, COLOR_ORANGE, "(player robbery) "C_GREY"%p (%i) "C_WHITE"attempted to rob you but failed, chase him!", playerid, playerid);
         return 1;
     }
+
     new
-        robbedcash = random( (GetPlayerMoney(targetid) / 100) * 5 ) + 500; //5% + 500 min of player's money.
+        // 5% of player's money + $500 on top.
+        robbedcash = random((GetPlayerMoney(targetid) / 100) * 5 ) + 500;
 
     CallLocalFunction("OnPlayerRobPlayer", "iii", playerid, targetid, robbedcash);
 
