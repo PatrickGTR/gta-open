@@ -42,7 +42,6 @@ hook OnPlayerConnect(playerid) {
     strcat(string, joinString[0], sizeof(string));
 
     TextDrawSetString(LeaveJoinTD, string);
-    Logger_Log("join td debug, unmatched tilted", Logger_S("content", string));
     return 1;
 }
 
@@ -73,7 +72,6 @@ hook OnPlayerDisconnect(playerid, reason) {
     strcat(string, joinString[0], sizeof(string));
 
     TextDrawSetString(LeaveJoinTD, string);
-    Logger_Log("leave td debug, unmatched tilted", Logger_S("content", string));
     return 1;
 }
 

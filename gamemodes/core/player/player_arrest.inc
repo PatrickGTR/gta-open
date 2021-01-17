@@ -73,15 +73,17 @@ Player_Arrest(playerid, targetid, errorMessage[], len = sizeof(errorMessage)) {
         return 0;
     }
 
+    // make of them face each other.
+    Player_FacePlayer(playerid, targetid);
+    Player_FacePlayer(targetid, playerid);
+
     // UI
     GameTextForPlayer(targetid, "~r~Busted!", 4000, 0);
     ApplyAnimation(targetid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);
     ApplyAnimation(playerid, "PED", "ARRESTgun", 4.1, 0, 1, 1, 1, 3000, 1);
     SendServerMsgF(playerid, "You have arrested %p (%d)", targetid, targetid);
     SendServerMsgF(targetid, "You have been arrested by %p (%d)", playerid, playerid);
-    // make of them face each other.
-    Player_FacePlayer(playerid, targetid);
-    Player_FacePlayer(targetid, playerid);
+
     // let animation play out for both end before sending player to jail x, y, z
     defer DelaySendToJail(targetid);
 

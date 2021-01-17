@@ -4,47 +4,67 @@
 // Credits to these people, made the production easier.
 // Southclaw, Y_Less, maddinatOr, SyS, Zeex, Slice, Lorenc
 
-
-// Custom Callbacks
-// OnPlayerLogin(playerid) -> called when player successfully logged in.
-// OnPlayerRegister(playerid) -> called when player successfully registered.
-// OnPlayerPassedBanCheck(playerid) -> called when player's ip/name/gcpi wasn't found in the ban database.
-// OnPlayerSecondUpdate(playerid) -> called every second per player (like OnPlayerUpdate but not as intensive.)
-// OnMySQLConnected() -> called when MySQL successfully connects. (this is used to setup tables & prepared statements)
-// OnMySQLPreClose() -> called before MySQL disconnect (before mysql_close specifically.)
-// OnServerWeekReset() -> called when the in-game week resets.
-// OnServerDayReset() -> called when it's a new in-game day.
-// OnPlayerFirstSpawn(playerid) -> called when player spawns for the first time after initial connection.
-// OnPlayerAutoSave(playerid) -> called every 2 minutes for datas that need to be saved frequently.
-// OnPlayerRobPlayer(playerid, targetid, moneyTaken) -> called when player has robbed another player.
-// OnPlayerRobStore(playerid, moneyTaken) -> called when player has successfully robbed a store.
-// OnExplosiveDetonate(playerid, Float: x, Float: y, Float:z)  -> call when c4 has been detonated.
-
-#if 0
-	forward OnPlayerLogin(playerid);
-	forward OnPlayerRegister(playerid);
-	forward OnPlayerPassedBanCheck(playerid);
-	forward OnPlayerSecondUpdate(playerid);
-	forward OnPlayerFirstSpawn(playerid);
-	forward OnPlayerAutoSave(playerid);
-	forward OnPlayerRobPlayer(playerid, targetid, moneyTaken);
-	forward OnPlayerRobStore(playerid, moneyTaken);
-	forward OnExplosiveDetonate(playerid, Float: x, Float: y, Float: z);
-
-	forward OnServerSecondUpdate();
-	forward OnMySQLConnected();
-	forward OnMySQLPreClose();
-	forward OnServerWeekReset();
-	forward OnServerDayReset();
-#endif
-
-// Custom Functions
-// Player_GiveScore(playerid, score, bool:save = false) -> give player a score.
-// Player_RemoveScore(playerid, score) -> remove a score (automatically saved).
-
 // TextdrawLetterSize Rule -> Thanks to DamianC
 // Letter-size-y = letter-size-x * 4
 // For a nice font display
+
+#if 0
+	// called when player successfully logged in.
+	forward OnPlayerLogin(playerid);
+
+	// called when player successfully registered.
+	forward OnPlayerRegister(playerid);
+
+	// called when player's ip/name/gcpi wasn't found in the ban database.
+	forward OnPlayerPassedBanCheck(playerid);
+
+	// called every second per player (like OnPlayerUpdate but not as intensive.)
+	forward OnPlayerSecondUpdate(playerid);
+
+	// called when player spawns for the first time after initial connection.
+	forward OnPlayerFirstSpawn(playerid);
+
+	// called every 2 minutes for datas that need to be saved frequently.
+	forward OnPlayerAutoSave(playerid);
+
+	// called when player has robbed another player.
+	forward OnPlayerRobPlayer(playerid, targetid, moneyTaken);
+
+	// called when player has successfully robbed a store.
+	forward OnPlayerRobStore(playerid, moneyTaken);
+
+	// called when c4 has been detonated.
+	forward OnExplosiveDetonate(playerid, Float: x, Float: y, Float: z);
+
+	// called every second.
+	forward OnServerSecondUpdate();
+
+	// called when MySQL successfully connects. (mainly used to setup tables & prepare statements)
+	forward OnMySQLConnected();
+
+	// called before MySQL disconnects (before mysql_close specifically)
+	forward OnMySQLPreClose();
+
+	// called when the in-game week resets.
+	forward OnServerWeekReset();
+
+	// called when the in-game day resets.
+	forward OnServerDayReset();
+#endif
+
+
+// Custom Functions
+
+#if 0
+	// playerid -> player to give score.
+	// score -> amount of score to give.
+	// save -> false by default, toggle to allow saving.
+	Player_GiveScore(playerid, score, bool:save = false);
+
+	// playerid -> player to remove score.
+	// score -> how much you want to remove from the player.
+	Player_RemoveScore(playerid, score);
+#endif
 
 // Main
 #include <constants>

@@ -163,8 +163,7 @@ stock TextMenu_Show(playerid)
 		~n~\
 		%s \
 		~n~ \
-		_____~w~Press ~y~T~w~ or ~y~F6~w~ and choose option~n~ \
-		_________Press ~y~N~w~ to close this box \
+		_____~w~Press ~y~T~w~ or ~y~F6~w~ and choose option~n~_________Press ~y~N~w~ to close this box \
 		~n~~n~ \
 		", TextMenuItems[playerid]
 	);

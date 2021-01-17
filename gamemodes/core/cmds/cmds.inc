@@ -72,16 +72,12 @@ CMD:commands(playerid, params[]) {
             case 1: ShowCommands(playerid, 1);
             case 2: ShowCommands(playerid, 2);
             case 3: {
-                Dialog_Show(playerid, DIALOG_STYLE_MSGBOX,
-                    "House Commands", // Heading
-                    // Content
-                    ""C_GREY"/buyhouse "C_WHITE"- Purchase a house.\n\
-                    "C_WHITE"Press Key "C_GREY"F"C_WHITE"- To enter/exit a house.\n\
-                    "C_GREY"/hdescription "C_WHITE"- Change house description text.\n\
-                    "C_GREY"/buyfurniture "C_WHITE"- Choices to buy, edit & delete a furniture.",
-                    "Close",    // BTN 1
-                    ""          // BTN 2
-                );
+                TextInfo_Create(playerid, "HOUSE_CMD", "House Commands");
+                TextInfo_Add(playerid, "/buyhouse - Purchase the house");
+                TextInfo_Add(playerid, "/hdescription - Change house description");
+                TextInfo_Add(playerid, "~k~~VEHICLE_ENTER_EXIT~ - Enter/Exit house.");
+                TextInfo_Add(playerid, "~k~~CONVERSATION_NO~ - Open furniture menu.");
+                TextInfo_Show(playerid);
             }
             case 4: {
                 Dialog_Show(playerid, DIALOG_STYLE_MSGBOX,

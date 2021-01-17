@@ -10,13 +10,7 @@ const
     C4_PRICE = 5_000;
 
 static
-    bool:gBombDealerText[MAX_PLAYERS],
     gBombDealerAreaID;
-
-hook OnPlayerConnect(playerid) {
-    gBombDealerText[playerid] = false;
-    return 1;
-}
 
 hook OnGameModeInit() {
     gBombDealerAreaID = CreateDynamicCircle(
@@ -39,7 +33,7 @@ hook OnGameModeInit() {
         gBombShopX,
         gBombShopY,
         gBombShopZ + 1.5,
-        100.0,
+        50.0,
         .testlos = 1
     );
 
@@ -56,59 +50,77 @@ hook OnGameModeInit() {
     return 1;
 }
 
-hook OnPlayerText(playerid, text[]) {
-    if(gBombDealerText[playerid] && isnumeric(text)) {
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+    if(PRESSED(KEY_YES) && IsPlayerInDynamicArea(playerid, gBombDealerAreaID)) {
+        _BombUI_Show(playerid);
+    }
+    return 1;
+}
+
+static void:_BombUI_Show(playerid) {
+
+    new
+        limit = (MAX_ITEM - Player_GetC4(playerid));
+
+    inline const _response(response, listitem, string:inputtext[]) {
+        #pragma unused listitem
+        if(!response) {
+            return;
+        }
+
         new
-            amount = strval(text),
+            amount = strval(inputtext),
             price = (C4_PRICE * amount);
+
+        if(amount <= 0) {
+            SendErrorMsg(playerid, "Invalid amount");
+            _BombUI_Show(playerid);
+            return;
+        }
+
+        if(amount > limit) {
+            SendErrorMsg(playerid, "Amount exceeds player limit.");
+            _BombUI_Show(playerid);
+            return;
+        }
 
         if(GetPlayerMoney(playerid) < price) {
             SendErrorMsgF(playerid, "You don't have enough money to buy "C_GREY"%i "C_WHITE"C4", amount);
-            return ~0;
+            _BombUI_Show(playerid);
+            return;
         }
 
         GivePlayerMoney(playerid, -price);
         Player_GiveC4(playerid, amount);
 
         SendMsgF(playerid, COLOR_ORANGE, "(bomb dealer) "C_WHITE"Thank you for buying "C_GREY"%i "C_WHITE"C4 Explosive", amount);
-        _BombUI_Show(playerid);
-        return ~0;
     }
-    return 0;
-}
 
-hook OnPlayerLeaveDynArea(playerid, areaid) {
-
-    if(areaid == gBombDealerAreaID) {
-        TextInfo_HideSpecific(playerid, "BOMBDEALER");
-        gBombDealerText[playerid] = false;
-    }
-    return 1;
-}
-
-hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     new
-        bool:isCloseToBombShop = bool:IsPlayerInDynamicArea(playerid, gBombDealerAreaID);
+        string[128 + 32];
 
-    if(PRESSED(KEY_YES) && isCloseToBombShop) {
-        _BombUI_Show(playerid);
-        gBombDealerText[playerid] = true;
-    }
+    format(
+        string,
+        sizeof(string),
+        "\
+        "C_WHITE"You've got "C_YELLOW"%i C4s\n\n\
+        "C_WHITE"Write the amount of C4 you want to purchase.\n\n\
+        "C_GREEN"TIP!\n\
+        "C_WHITE"You can purchase maximum of "C_YELLOW"%i C4s\
+        ",
+        Player_GetC4(playerid),
+        limit
+    );
 
-    if(PRESSED(KEY_NO) && isCloseToBombShop && gBombDealerText[playerid]) {
-        TextInfo_HideSpecific(playerid, "BOMBDEALER");
-        gBombDealerText[playerid] = false;
-    }
-    return 1;
-}
+    Dialog_ShowCallback(playerid,
+        using inline _response,
+        DIALOG_STYLE_INPUT,
+        "Bomb Shop",
+        string,
+        "Purchase",
+        "Close"
+    );
 
 
-static void:_BombUI_Show(playerid) {
-    new
-        string[35];
-    TextInfo_Create(playerid, "BOMBDEALER", "Bomb Dealer");
-    format(string, sizeof(string), "~w~You've got ~y~%i ~w~C4~n~~n~", Player_GetC4(playerid));
-    TextInfo_Add(playerid, string);
-    TextInfo_Add(playerid, "Type in the chat how much you want to ~g~buy");
-    TextInfo_Show(playerid);
+
 }

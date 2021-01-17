@@ -34,6 +34,28 @@ CMD:cuff(playerid, params[]) {
     return 1;
 }
 
+CMD:uncuff(playerid, params[]) {
+    new
+        targetid = Player_GetClosestPlayer(playerid, 4.0);
+
+    if(Player_GetClass(playerid) != TEAM_POLICE) {
+        return SendErrorMsg(playerid, "Only for Police");
+    }
+
+    if(targetid == INVALID_PLAYER_ID) {
+        return SendErrorMsg(playerid, "No players nearby");
+    }
+
+    if(!Player_IsCuffed(targetid)) {
+        return SendErrorMsg(playerid, "Player close is not cuffed");
+    }
+
+    SendServerMsgF(targetid, "You have been uncuffed by officer "C_GREY"%p(%d)", playerid, playerid);
+    SendServerMsgF(playerid, "You have uncuffed "C_GREY"%p(%d)", targetid, targetid);
+    Player_Cuff(targetid, false);
+    return 1;
+}
+
 // returns
 // 0 -> fail
 // -> playerid is not police.

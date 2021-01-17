@@ -17,7 +17,6 @@
 
 // Set to true if table aren't set up.
 #define SETUP_TABLE 			(false)
-#define DISCORD					(false)
 
 // MySQL Prepared Statement
 #define MYSQL_PREPARE_DEBUG 	(false)

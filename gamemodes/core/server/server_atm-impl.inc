@@ -212,7 +212,6 @@ stock void:ATM_Load() {
 
             ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
 
-
             ATM_ID[idx] = atmID;
             ATM_X[idx] = x;
             ATM_Y[idx] = y;
@@ -263,7 +262,7 @@ void:ATM_UpdateLabel(atmIndex, colour = COLOR_YELLOW, const label[] = ATM_LABEL_
         ATM_X[atmIndex],
         ATM_Y[atmIndex],
         ATM_Z[atmIndex] + 1.5,
-        300.0,
+        100.0,
         .worldid = ATM_World[atmIndex],
         .interiorid = ATM_Interior[atmIndex],
         .testlos = 1);
