@@ -15,20 +15,14 @@ CMD:v(playerid, params[])
 	}
 	if(!strcmp(params, "lock")) {
 		new
-			vehicleid = Player_LastEnteredVehicleID(playerid);
+			vehicleid = GetNearestVehicle(playerid);
+
+		if(vehicle == INVALID_VEHICLE_ID) {
+			return SendErrorMsg(playerid, "No nearby vehicles");
+		}
 
 		if(!Vehicle_IsOwner(playerid, vehicleid))
 			return SendErrorMsg(playerid, "You must be near one of your personal vehicle");
-
-		new
-			Float:x,
-			Float:y,
-			Float:z;
-		GetVehiclePos(vehicleid, x, y, z);
-		if(!IsPlayerInRangeOfPoint(playerid, 3.0, x, y, z)) {
-			return SendErrorMsg(playerid, "Not near your last entered vehicle.");
-
-		}
 
 		new
     		engine, lights, alarm, doors, bonnet, boot, objective;
