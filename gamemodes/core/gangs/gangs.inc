@@ -390,7 +390,7 @@ Gang_ShowMembers(playerid, bool:online = true) {
     new
         count = 0;
     if(online) {
-        TextInfo_Create(playerid, "GANGMEM", "Members");
+        TextInfo_Create(playerid, "GANGMEM", "Online Members");
         foreach(new i : Player) {
             // skip self
             if(playerid == i) {

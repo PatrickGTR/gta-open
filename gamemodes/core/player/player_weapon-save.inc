@@ -82,15 +82,10 @@ void:Weapon_DeleteEntry(playerid, weaponid) {
     MySQL_BindInt(stmt_deleteSingleWeapon, 0, Player_GetAccountID(playerid));
     MySQL_BindInt(stmt_deleteSingleWeapon, 1, weaponid);
     MySQL_ExecuteThreaded(stmt_deleteSingleWeapon);
-
-    Logger_Dbg(PLAYER_DEBUG_HANDLER,
-        "[Weapon_Load / player_weapon-save.inc] Weapon loaded without ammo, deleting entry",
-            Logger_I("weaponid", weaponid)
-    );
 }
 
 void:Weapon_Load(playerid) {
-    inline const WeaponLoad() {
+    inline const OnWeaponLoad() {
         new
             weaponid,
             ammo;
@@ -106,18 +101,18 @@ void:Weapon_Load(playerid) {
                     "[Weapon_Load / player_weapon-save.inc] Unkown weapon. skipping",
                      Logger_I("weaponid", weaponid)
                 );
-
-                MySQL_BindInt(stmt_deleteSingleWeapon, 0, Player_GetAccountID(playerid));
-                MySQL_BindInt(stmt_deleteSingleWeapon, 1, weaponid);
-                MySQL_ExecuteThreaded(stmt_deleteSingleWeapon);
+                Weapon_DeleteEntry(playerid, weaponid);
             }
 
             // delete data if there is no ammo left.
             if(ammo == 0) {
+                Logger_Dbg(PLAYER_DEBUG_HANDLER,
+                    "[Weapon_Load / player_weapon-save.inc] Weapon loaded without ammo, deleting entry",
+                    Logger_I("weaponid", weaponid)
+                );
                 Weapon_DeleteEntry(playerid, weaponid);
             }
             else {
-
                 GivePlayerWeapon(playerid, weaponid, ammo);
 
                 Logger_Dbg(PLAYER_DEBUG_HANDLER,
@@ -125,14 +120,14 @@ void:Weapon_Load(playerid) {
                         Logger_I("weaponid", weaponid),
                         Logger_I("ammo", ammo),
                         Logger_P(playerid)
-                );
+                )
             }
 
         }
     }
 
     MySQL_BindInt(stmt_loadWeapon, 0, Player_GetAccountID(playerid));
-    MySQL_ExecuteParallel_Inline(stmt_loadWeapon, using inline WeaponLoad);
+    MySQL_ExecuteParallel_Inline(stmt_loadWeapon, using inline OnWeaponLoad);
 }
 
 void:Weapon_Save(playerid) {
