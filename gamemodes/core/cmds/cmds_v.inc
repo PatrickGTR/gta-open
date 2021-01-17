@@ -17,7 +17,7 @@ CMD:v(playerid, params[])
 		new
 			vehicleid = GetNearestVehicle(playerid);
 
-		if(vehicle == INVALID_VEHICLE_ID) {
+		if(vehicleid == INVALID_VEHICLE_ID) {
 			return SendErrorMsg(playerid, "No nearby vehicles");
 		}
 

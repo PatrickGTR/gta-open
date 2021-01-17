@@ -1,5 +1,4 @@
 #include <vehicle_impl>
-#include <vehicle_last>
 
 #if SETUP_TABLE
     #include <vehicle_setup-table>
@@ -18,7 +17,6 @@ hook OnPlayerLogin(playerid) {
 }
 
 hook OnPlayerStateChange(playerid, newstate, oldstate) {
-
     if(newstate == PLAYER_STATE_DRIVER) {
         if(Vehicle_IsOwner(playerid)) {
             SendMsgF(playerid, COLOR_SAMPBLUE, "Welcome back to your personal vehicle.");

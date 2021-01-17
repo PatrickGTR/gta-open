@@ -120,7 +120,7 @@ void:Weapon_Load(playerid) {
                         Logger_I("weaponid", weaponid),
                         Logger_I("ammo", ammo),
                         Logger_P(playerid)
-                )
+                );
             }
 
         }

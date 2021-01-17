@@ -15,9 +15,9 @@ enum E_ATTACHMENT_DATA
     Float:E_ATTACHMENT_DATA_SCALEY,
     Float:E_ATTACHMENT_DATA_SCALEZ
 }
-new
-    gAttachmentData[MAX_PLAYERS][MAX_ATTACHMENTS][E_ATTACHMENT_DATA],
+stock
     gAttachmentPrice[MAX_PLAYERS],
+    gAttachmentData[MAX_PLAYERS][MAX_ATTACHMENTS][E_ATTACHMENT_DATA],
     Iterator:gAttachmentIndex[MAX_PLAYERS]<MAX_ATTACHMENTS>;
 
 static
@@ -275,14 +275,21 @@ hook OnPlayerLogin(playerid) {
     return 1;
 }
 
-hook OnPlayerFirstSpawn(playerid) {
+hook OnPlayerDeathEx(playerid, killerid, reason) {
+	foreach(new i : gAttachmentIndex[playerid]) {
+		RemovePlayerAttachedObject(playerid, i);
+	}
+	return 1;
+}
+
+hook OnPlayerSpawn(playerid) {
 	defer DelayAddAttachment(playerid);
 	return 1;
 }
 
 timer DelayAddAttachment[500](playerid) {
 	foreach(new i : gAttachmentIndex[playerid]) {
-		CommandExecute(playerid, "attachment", "attach %i", i);
+		Attachment_AttachToPlayer(playerid, i);
 	}
 }
 
@@ -372,23 +379,10 @@ CMD:attachment(playerid, params[]) {
             return 1;
         }
 
-		if (!Iter_Contains(gAttachmentIndex[playerid], index)) {
+		if (!Attachment_AttachToPlayer(playerid, index)) {
 			SendErrorMsg(playerid, ERR_INVALID_SLOT);
             return 1;
         }
-
-		SetPlayerAttachedObject(playerid, index,
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_BONEID],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_OFFSETX],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_OFFSETY],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_OFFSETZ],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_ROTX],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_ROTY],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_ROTZ],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEX],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEY],
-			gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEZ]);
 
 		Attachment_GetModelName(gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID], attachmentName, sizeof(attachmentName));
 		SendServerMsgF(playerid, "Successfully attached "C_GREY"(%s [slot: %i])", attachmentName, index);
@@ -409,5 +403,28 @@ CMD:attachment(playerid, params[]) {
 		Attachment_GetModelName(gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID], attachmentName, sizeof(attachmentName));
 		SendServerMsgF(playerid, "Successfully detached "C_GREY"(%s [slot: %i])", index, attachmentName);
 	}
+	return 1;
+}
+
+Attachment_AttachToPlayer(playerid, index) {
+	if (!Iter_Contains(gAttachmentIndex[playerid], index)) {
+		return 0;
+	}
+
+	SetPlayerAttachedObject(
+		playerid,
+		index,
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_MODELID],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_BONEID],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_OFFSETX],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_OFFSETY],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_OFFSETZ],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_ROTX],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_ROTY],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_ROTZ],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEX],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEY],
+		gAttachmentData[playerid][index][E_ATTACHMENT_DATA_SCALEZ]
+	);
 	return 1;
 }
