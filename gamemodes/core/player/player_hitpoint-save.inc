@@ -14,7 +14,7 @@ hook OnMySQLConnected() {
             health, \
             armour \
         FROM \
-            players \
+            player_stats \
         WHERE \
             u_id = ? \
     ";
@@ -22,7 +22,7 @@ hook OnMySQLConnected() {
 
     static const updateQuery[] = "\
         UPDATE \
-            players \
+            player_stats \
         SET \
             health = ?, \
             armour = ? \
@@ -33,7 +33,7 @@ hook OnMySQLConnected() {
 
     static const updateHealthQuery[] = "\
         UPDATE \
-            players \
+            player_stats \
         SET \
             health = ? \
         WHERE \
@@ -43,7 +43,7 @@ hook OnMySQLConnected() {
 
     static const updateArmourQuery[] = "\
         UPDATE \
-            players \
+            player_stats \
         SET \
             armour = ? \
         WHERE \

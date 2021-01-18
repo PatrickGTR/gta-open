@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     PlayerJob[MAX_PLAYERS],
     bool:PlayerNew[MAX_PLAYERS],
     Statement:stmt_savePlayerJob;
@@ -48,17 +48,14 @@ Player_GetJob(playerid) {
 }
 
 Player_ShowJobMenu(playerid) {
-    if (Player_GetJob(playerid) != TYPE_NO_JOB)
-        return 0;
-    
     inline _response(ply_id, dialogid, response, listitem, string:inputtext[]) {
         #pragma unused ply_id, dialogid, inputtext
         if (!response) {
             SendErrorMsg(playerid, "You have to select a job!");
             return Player_ShowJobMenu(playerid);
         }
-        
-        new 
+
+        new
             jobID,
             title[24],
             objective[64 + 24];
@@ -108,7 +105,7 @@ Player_ShowJobMenu(playerid) {
 
 stock Player_Jobname(playerid)
 {
-    new job_rankname[6][24] = 
+    new job_rankname[6][24] =
     {
         "Drug Dealer",
         "Weapon Dealer",
@@ -138,7 +135,7 @@ stock Player_GetJobName(playerid, jobname[], len = sizeof(jobname)) {
         case TYPE_RAPIST: {
             strcpy(jobName, "Rapist", len);
         }
-        case TYPE_MECHANIC: { 
+        case TYPE_MECHANIC: {
             strcpy(jobName, "Mechanic", len);
         }
     }
