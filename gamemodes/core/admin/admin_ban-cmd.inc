@@ -60,7 +60,7 @@ ACMD:[2]tempban(playerid, params[])
     }
 
     if(interval != -1) {
-        success = Ban_AddUser(targetid, playerid, reason, interval, duration);
+        success = bool:Ban_AddUser(targetid, playerid, reason, interval, duration);
     }
 
     if(success) {

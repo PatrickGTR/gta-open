@@ -1,9 +1,8 @@
 #include <YSI_Coding\y_hooks>
 
 static
-    MapZone:PlayerLastZoneID[MAX_PLAYERS] = INVALID_MAP_ZONE_ID,
-    MapZone:PlayerInteriorZoneID[MAX_PLAYERS] = INVALID_MAP_ZONE_ID;
-
+    MapZone:PlayerLastZoneID[MAX_PLAYERS]       = INVALID_MAP_ZONE_ID,
+    MapZone:PlayerInteriorZoneID[MAX_PLAYERS]   = INVALID_MAP_ZONE_ID;
 
 stock Player_GetLocation(playerid, string[], len = sizeof(string)) {
 
@@ -37,8 +36,8 @@ hook OnPlayerSecondUpdate(playerid) {
 }
 
 hook OnPlayerConnect(playerid) {
-    PlayerInteriorZoneID[playerid] = INVALID_MAP_ZONE_ID;
-    PlayerInteriorZoneID[playerid] = INVALID_MAP_ZONE_ID;
+    PlayerInteriorZoneID[playerid]  = INVALID_MAP_ZONE_ID;
+    PlayerLastZoneID[playerid]      = INVALID_MAP_ZONE_ID;
     return 1;
 }
 

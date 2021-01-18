@@ -16,6 +16,7 @@ hook OnPlayerLogin(playerid) {
         if(MySQL_Statement_FetchRow(stmt_isArmy)) {
             Player_SetArmy(playerid, true);
         }
+        MySQL_StatementClose(stmt_isArmy);
     }
 
     stmt_isArmy = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT 1 FROM armys WHERE u_id = ?");
