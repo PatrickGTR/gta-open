@@ -114,7 +114,6 @@
 #include <chat> // chat & messaging
 #include <cmds>
 #include <mapping>
-#include <tester>
 
 #include <bank>
 #include <gangs>

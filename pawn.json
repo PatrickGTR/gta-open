@@ -95,7 +95,6 @@
 				"gamemodes/core/houses",
 				"gamemodes/core/houses/furniture",
 				"gamemodes/core/mapping",
-				"gamemodes/core/tester",
 				"gamemodes/core/bank",
 				"gamemodes/core/gangs"
 			],

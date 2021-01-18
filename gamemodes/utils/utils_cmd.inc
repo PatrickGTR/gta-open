@@ -18,8 +18,6 @@ _@ACMD_CHECK_ADM(playerid, const cmd[], const params[], const level) {
 #define @ACMD_PARAMS_REPLACE:%0[] %0
 #define ACMD:[%0]%1(%2,%3) CMD:%1(%2,%3)if(!_@ACMD_CHECK_ADM(%2,#%1,@ACMD_PARAMS_REPLACE:%3,%0))return 0;else
 
-// TESTER
-#define TCMD:%1(%2,%3) CMD:%1(%2,%3) if (!GetPlayerTester(%2) && Admin_GetPlayerLevel(%2) == 0) return 0; else
 
 #if defined OnPlayerCommandReceived
     forward OnPlayerCommandReceived(playerid, cmd[]);

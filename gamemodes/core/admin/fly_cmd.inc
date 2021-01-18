@@ -28,7 +28,7 @@ hook OnPlayerDeathEx(playerid, killerid, reason)
     return 1;
 }
 
-TCMD:fly(playerid, params[])
+ACMD:[5]fly(playerid, params[])
 {
     if(fly[playerid] == false)
     {

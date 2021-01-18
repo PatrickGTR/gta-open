@@ -29,31 +29,6 @@ ACMD:[5]setadmin(playerid, params[])
     return 1;
 }
 
-ACMD:[5]settester(playerid, params[])
-{
-    new
-        targetid,
-        bool:testerState;
-    if(sscanf(params, "ul", targetid, testerState)) {
-        return SendSyntaxMsg(playerid, "/settester (name/id) (0/1)");
-    }
-
-    if(!IsPlayerConnected(targetid)) {
-        return SendErrorMsg(playerid, "Player is not connected!");
-    }
-
-    if(testerState && GetPlayerTester(targetid)) {
-        return SendErrorMsg(playerid, "Player is already a tester");
-    }
-    if(!testerState && !GetPlayerTester(targetid)) {
-        return SendErrorMsg(playerid, "Player is not a tester you can't demote him");
-    }
-
-    SetPlayerTester(targetid, testerState);
-    SendMsgAllF(COLOR_MODERATION, "(BETA TESTER) "C_GREY"%p(%d) "C_WHITE"is %s a "C_GREY"Beta Tester", targetid, targetid, (testerState) ? ("now") : ("no longer"));
-    return 1;
-}
-
 ACMD:[5]setplayerdept(playerid, params[])
 {
     new target, value;
