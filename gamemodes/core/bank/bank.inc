@@ -62,8 +62,6 @@ hook OnPlayerRegister(playerid)
 hook OnPlayerLogin(playerid)
 {
     Bank_Load(playerid);
-    MySQL_BindInt(stmt_insertBank, 0, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_insertBank);
     return 1;
 }
 
@@ -76,8 +74,7 @@ hook OnPlayerConnect(playerid)
 }
 
 Bank_Load(playerid) {
-    inline BankLoad()
-    {
+    inline BankLoad() {
         new
             BMoney,
             PDept,

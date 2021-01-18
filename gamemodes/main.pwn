@@ -140,10 +140,7 @@ public OnGameModeInit() {
 	UsePlayerPedAnims();
 
 	// Init Vehicles
-	LoadStaticVehiclesFromFile("vehicles/ls_airport.txt");
-	LoadStaticVehiclesFromFile("vehicles/ls_gen_inner.txt");
-	LoadStaticVehiclesFromFile("vehicles/ls_gen_outer.txt");
-	LoadStaticVehiclesFromFile("vehicles/ls_law.txt");
+	LoadStaticVehiclesFromFile("vehicles/ls.txt");
 	return 1;
 }
 
