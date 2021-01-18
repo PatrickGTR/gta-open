@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://images-ext-1.discordapp.net/external/9bnqMJR8BELEgIBP8pyZzXRt2WJ0NmIWpsNjwcvtdMs/https/i.ibb.co/SRLzzcn/gtaopen-reddaddy.png" alt="Logo"> 
+	<img src="https://images-ext-1.discordapp.net/external/9bnqMJR8BELEgIBP8pyZzXRt2WJ0NmIWpsNjwcvtdMs/https/i.ibb.co/SRLzzcn/gtaopen-reddaddy.png" alt="Logo">
 </p>
 
 ##### A Cops and robbers mode based in Los Santos with features including...
@@ -14,7 +14,7 @@
 
 ## Discord server
 <p align="center">
-	<a href="https://discord.gg/d3ty5mnv">
+	<a href="https://discord.gg/GeRn7nC9WJ">
 		<img src="https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg" alt="Logo" height="128">
 	</a>
 </p>
