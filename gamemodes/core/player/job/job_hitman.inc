@@ -60,7 +60,7 @@ CMD:hitlist(playerid, params[]) {
             continue;
         }
 
-        format(tmpHitlist, sizeof(tmpHitlist), "%p\t%m\t%s\", i, HitAmount[i], HitReason[i]);
+        format(tmpHitlist, sizeof(tmpHitlist), "%p\t%m\t%s", i, HitAmount[i], HitReason[i]);
         strcat(hitlistContent, tmpHitlist, sizeof(hitlistContent));
         count ++;
     }
