@@ -15,7 +15,7 @@ hook OnMySQLSetupTable() {
     Logger_Log("setting up 'players' table...");
 
     // player stats table.
-    mysql_tquery_file(MySQL_GetHandle(), "stats.sql");
+    mysql_tquery_file(MySQL_GetHandle(), "player_stats.sql");
     Logger_Log("setting up 'stats' table...");
 
     // vips table.

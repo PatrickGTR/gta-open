@@ -1,6 +1,8 @@
 CREATE TABLE IF NOT EXISTS player_stats
 (
     u_id int(11) NOT NULL AUTO_INCREMENT,
+    armour float NOT NULL DEFAULT '100.0',
+    health float NOT NULL DEFAULT '100.0',
     kills mediumint(8) NOT NULL DEFAULT '0',
     deaths mediumint(8) NOT NULL DEFAULT '0',
     job_id tinyint(4) NOT NULL DEFAULT '0',

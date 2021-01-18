@@ -4,9 +4,7 @@ CREATE TABLE IF NOT EXISTS players
     username varchar(24) NOT NULL,
     password char(250) NOT NULL,
     register_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    last_login DATETIME DEFAULT NULL,
-    armour FLOAT NOT NULL DEFAULT '100.0',
-    health FLOAT NOT NULL DEFAULT '100.0',
+    last_login DATETIME DEFAULT NULL
     PRIMARY KEY
         (u_id),
     UNIQUE KEY
