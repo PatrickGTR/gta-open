@@ -155,7 +155,3 @@ stock Admin_SetPlayerDuty(playerid, bool:toggle)
 stock Admin_IsOnDuty(playerid)
     return Bit_Get(adminOnDuty, playerid);
 
-timer KickTimer[500](playerid)
-{
-    Kick(playerid);
-}

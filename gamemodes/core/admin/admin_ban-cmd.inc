@@ -60,14 +60,15 @@ ACMD:[2]tempban(playerid, params[])
     }
 
     if(interval != -1) {
-        success = !!Ban_AddUser(targetid, playerid, reason, interval, duration);
+        success = Ban_AddUser(targetid, playerid, reason, interval, duration);
     }
 
     if(success) {
-        SendMsgF(playerid, COLOR_MODERATION, "[ACCOUNT DISABLE]: You have Disabled "C_GREY"%p's account "C_WHITE"for "C_GREY"%s", targetid, reason);
-        SendMsgAllF(COLOR_MODERATION, "[ACCOUNT DISABLED]: %p (%d) has been banned for %s", targetid, targetid, reason);
-        SendMsgF(targetid, COLOR_MODERATION, "[ACCOUNT DISABLED]: You have been banned by an Admin for %s", reason);
-        defer KickTimer(targetid);
+        SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: You have Disabled %p's account for %s", targetid, reason);
+        SendMsgF(targetid, COLOR_MODERATION, "[ADMIN]: You have been banned by an Admin for %s", reason);
+
+        SendMsgAllF(COLOR_MODERATION, "[ADMIN]: %p(%d) has been banned for %s", targetid, targetid, reason);
+        Kick(targetid);
     }
     return 1;
 }

@@ -185,6 +185,7 @@ void:Ban_CheckUser(playerid) {
             if (expired <= 0) {
                 SendMsgF(playerid, COLOR_WHITE, "Your ban expired on "C_GREY"%s "C_WHITE"\nWelcome back %p(%i), don't break any rules again", unbanDate, playerid, playerid);
                 Ban_RemoveUser(banName, INVALID_PLAYER_ID);
+                CallLocalFunction("OnPlayerPassedBanCheck", "i", playerid);
             }
             else {
                 new string[512];

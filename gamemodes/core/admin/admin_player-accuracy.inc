@@ -1,10 +1,9 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     gPlayerHits[MAX_PLAYERS],
     gPlayerMissed[MAX_PLAYERS],
-    gPlayerTotalShots[MAX_PLAYERS]
-;
+    gPlayerTotalShots[MAX_PLAYERS];
 
 ACMD:[1]bulletstats(playerid, params[])
 {
@@ -34,18 +33,18 @@ stock Player_GetMissed(playerid)
 
 stock Player_GetAccuracy(playerid)
 {
-    return (gPlayerHits[playerid] / gPlayerTotalShots[playerid]);
+    return floatround(gPlayerHits[playerid] / gPlayerTotalShots[playerid]);
 }
 
 hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-    if(hittype == BULLET_HIT_TYPE_NONE) 
+    if(hittype == BULLET_HIT_TYPE_NONE)
     {
         gPlayerMissed[playerid]++;
     }
     else if(hittype == BULLET_HIT_TYPE_PLAYER && hitid != INVALID_PLAYER_ID)
     {
-        gPlayerHits[playerid]++;   
+        gPlayerHits[playerid]++;
     }
     gPlayerTotalShots[playerid]++;
     return 1;

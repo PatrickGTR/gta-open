@@ -37,7 +37,6 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(3, "/unban");
     Admin_AddCommandToList(3, "/disarm");
     Admin_AddCommandToList(3, "/sethealth");
-    Admin_AddCommandToList(3, "/eventint - event interiors");
     Admin_AddCommandToList(3, "/setarmour");
     Admin_AddCommandToList(3, "/giveweaps");
     Admin_AddCommandToList(3, "/veh");
@@ -60,9 +59,6 @@ hook OnGameModeInit() {
     Admin_AddCommandToList(5, "/setplayerdept - set a player bank's dept");
     Admin_AddCommandToList(5, "/bankrupt - set a player bank and tax bal to 0");
     Admin_AddCommandToList(5, "/skick - silent kick");
-    Admin_AddCommandToList(5, "/setarmy - set army even score is not 30k");
-    Admin_AddCommandToList(5, "/blacklist - blacklist a player from the army");
-    Admin_AddCommandToList(5, "/unblacklist");
     Admin_AddCommandToList(5, "/deleteacc - delete an acc from the database");
     Admin_AddCommandToList(5, "/createatm");
     Admin_AddCommandToList(5, "/deleteatm");
