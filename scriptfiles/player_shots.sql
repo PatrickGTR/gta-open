@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS player_shots_stats (
         (uid)
     REFERENCES
         players (u_id)
-    ON
-        DELETE CASCADE
-    ON
-        UPDATE CASCADE
+    ON DELETE
+        CASCADE
+    ON UPDATE
+        CASCADE
 );

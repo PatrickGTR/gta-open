@@ -1,5 +1,4 @@
-CREATE TABLE IF NOT EXISTS admins
-(
+CREATE TABLE IF NOT EXISTS admins (
     u_id INT(11) NOT NULL,
     admin_level TINYINT(2) NOT NULL DEFAULT 0,
     PRIMARY KEY (u_id),

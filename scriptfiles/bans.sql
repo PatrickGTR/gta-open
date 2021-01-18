@@ -1,5 +1,4 @@
-CREATE TABLE IF NOT EXISTS bans
-(
+CREATE TABLE IF NOT EXISTS bans (
     username VARCHAR(24),
     ip VARCHAR(17),
     gcpi VARCHAR(60),

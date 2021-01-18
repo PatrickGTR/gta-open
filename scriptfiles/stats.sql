@@ -10,8 +10,14 @@ CREATE TABLE IF NOT EXISTS player_stats
     money bigint(20) NOT NULL DEFAULT '0',
     score int(11) NOT NULL DEFAULT '0',
     skin smallint(4) NOT NULL DEFAULT '0',
-    PRIMARY KEY (u_id),
-    FOREIGN KEY (u_id) REFERENCES players(u_id)
-    ON DELETE CASCADE
-    ON UPDATE RESTRICT
+    PRIMARY KEY
+        (u_id),
+    FOREIGN KEY
+        (u_id)
+    REFERENCES
+        players(u_id)
+    ON DELETE
+        CASCADE
+    ON UPDATE
+        RESTRICT
 );
