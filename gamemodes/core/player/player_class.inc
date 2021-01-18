@@ -282,15 +282,6 @@ hook OnPlayerLogin(playerid) {
 	return 1;
 }
 
-hook OnPlayerSpawn(playerid) {
-	if(Player_BoughtSkin(playerid)) {
-		Player_SetBoughtSkin(playerid, false);
-		Class_SelectionState(playerid, false);
-		Player_SetSkin(playerid, Player_GetSkin(playerid), true);
-	}
-	return 1;
-}
-
 hook OnPlayerRequestClass(playerid, classid) {
 
 	// F4 Detection.
@@ -338,8 +329,6 @@ hook OnPlayerRequestSpawn(playerid)
 {
   if(Player_GetClass(playerid) == TEAM_ARMY)
   {
-    Player_SetBoughtSkin(playerid, true);
-
     if(!Player_GetArmy(playerid))
     {
       SendServerMsg(playerid, "You're not authorised to use Army skins");
