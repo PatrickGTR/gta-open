@@ -17,5 +17,5 @@ CREATE TABLE player_items (
     ON DELETE
         CASCADE
     ON UPDATE
-        CASCADE
+        NO ACTION
 );

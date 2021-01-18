@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS vips (
     ON DELETE
         CASCADE
     ON UPDATE
-        RESTRICT
+        NO ACTION
 );

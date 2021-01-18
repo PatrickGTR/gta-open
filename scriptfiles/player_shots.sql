@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS player_shots_stats (
     ON DELETE
         CASCADE
     ON UPDATE
-        CASCADE
+        NO ACTION
 );

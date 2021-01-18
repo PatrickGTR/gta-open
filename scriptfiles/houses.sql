@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS player_houses (
     ON DELETE
         SET NULL
     ON UPDATE
-        CASCADE
+        NO ACTION
 );
 
 CREATE TABLE IF NOT EXISTS house_furniture (
@@ -45,5 +45,6 @@ CREATE TABLE IF NOT EXISTS house_furniture (
         player_houses(house_id)
     ON DELETE
         CASCADE
-    ON UPDATE RESTRICT
+    ON UPDATE
+        NO ACTION
 );

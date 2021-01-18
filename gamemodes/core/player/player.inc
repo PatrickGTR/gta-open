@@ -10,6 +10,7 @@
 #include <player_skin>
 #include <player_crimes>
 #include <player_shots>
+#include <player_army>
 
 #include <player_hitpoint-save>
 #include <player_weapon-save>

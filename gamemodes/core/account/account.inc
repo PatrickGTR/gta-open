@@ -9,32 +9,18 @@
 #include <YSI_Coding\y_hooks>
 
 static
-    Player_UID[MAX_PLAYERS],
-    bool:PlayerArmyLvl[MAX_PLAYERS],
-    bool:Blacklist[MAX_PLAYERS],
     Statement: stmt_checkPlayer,
-    Statement: stmt_loadPlayerArmy,
-    Statement: stmt_insertPlayerArmy,
-    Statement: stmt_savePlayerMoney;
+    Statement: stmt_savePlayerMoney,
+    Player_UID[MAX_PLAYERS];
 
 hook OnMySQLConnected() {
     stmt_checkPlayer = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT u_id, password FROM players WHERE username=?");
     stmt_savePlayerMoney = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE player_stats SET money=? WHERE u_id=?");
-    stmt_loadPlayerArmy = MySQL_PrepareStatement(MySQL_GetHandle(), "SELECT IsArmy, Blacklisted FROM armys WHERE u_id = ?");
-    stmt_insertPlayerArmy = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT INTO armys (u_id) VALUES (?)");
     return 1;
 }
 
 hook OnPlayerConnect(playerid) {
     Player_UID[playerid] = 0;
-    PlayerArmyLvl[playerid] = false;
-    Blacklist[playerid] = false;
-    return 1;
-}
-
-hook OnPlayerLogin(playerid) {
-    MySQL_BindInt(stmt_insertPlayerArmy, 0, Player_GetAccountID(playerid));
-    MySQL_ExecuteThreaded(stmt_insertPlayerArmy);
     return 1;
 }
 
@@ -64,19 +50,6 @@ hook OnPlayerPassedBanCheck(playerid) {
         if(MySQL_Statement_FetchRow(stmt_checkPlayer)) {
             Player_SetAccountID(playerid, playerUID);
 
-            inline const OnArmyLoad() {
-                new
-                    IsArmy,
-                    blacklist;
-                MySQL_BindResultInt(stmt_loadPlayerArmy, 0, IsArmy);
-
-                if(MySQL_Statement_FetchRow(stmt_loadPlayerArmy)) {
-			        Player_SetArmy(playerid, bool:IsArmy);
-                    Player_SetBlacklist(playerid, bool:blacklist);
-		        }
-            }
-            MySQL_BindInt(stmt_loadPlayerArmy, 0, Player_GetAccountID(playerid));
-	        MySQL_ExecuteParallel_Inline(stmt_loadPlayerArmy, using inline OnArmyLoad);
             Account_PromptLogin(playerid, playerHash);
         }
         else {
@@ -97,20 +70,4 @@ stock Player_SetAccountID(playerid, value) {
 
 stock Player_GetAccountID(playerid) {
     return Player_UID[playerid];
-}
-
-stock Player_SetArmy(playerid, bool:value) {
-    return PlayerArmyLvl[playerid] = value;
-}
-
-stock bool:Player_GetArmy(playerid) {
-    return PlayerArmyLvl[playerid];
-}
-
-stock Player_SetBlacklist(playerid, bool:value) {
-    return Blacklist[playerid] = value;
-}
-
-stock bool:IsPlayerBlacklisted(playerid) {
-    return Blacklist[playerid];
 }

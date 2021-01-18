@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS player_weapons
     ON DELETE
         CASCADE
     ON UPDATE
-        RESTRICT
+        NO ACTION
 );

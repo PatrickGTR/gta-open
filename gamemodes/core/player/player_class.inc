@@ -325,23 +325,6 @@ hook OnPlayerRequestClass(playerid, classid) {
 	return 1;
 }
 
-hook OnPlayerRequestSpawn(playerid)
-{
-  if(Player_GetClass(playerid) == TEAM_ARMY)
-  {
-    if(!Player_GetArmy(playerid))
-    {
-      SendServerMsg(playerid, "You're not authorised to use Army skins");
-    }
-    else if(IsPlayerBlacklisted(playerid))
-    {
-      SendServerMsg(playerid, "You're Blacklisted from the Army Team by the Administration");
-    }
-    return 0;
-  }
-  return 1;
-}
-
 timer void:ForceSpawnPlayer[50](playerid) {
 
 	// using SetSpawnInfo fixes the kick bug when

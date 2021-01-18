@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS jailed (
     ON DELETE
         CASCADE
     ON UPDATE
-        RESTRICT
+        NO ACTION
 );

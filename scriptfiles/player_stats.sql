@@ -21,5 +21,5 @@ CREATE TABLE IF NOT EXISTS player_stats
     ON DELETE
         CASCADE
     ON UPDATE
-        RESTRICT
+        NO ACTION
 );

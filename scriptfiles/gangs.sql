@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS gangs (
     ON DELETE
         CASCADE
     ON UPDATE
-        CASCADE
+        NO ACTION
 );
 CREATE TABLE IF NOT EXISTS gang_members (
     gang_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS gang_members (
     ON DELETE
         CASCADE
     ON UPDATE
-        CASCADE
+        NO ACTION
 );
