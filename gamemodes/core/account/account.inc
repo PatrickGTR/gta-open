@@ -35,7 +35,6 @@ hook OnPlayerConnect(playerid) {
 hook OnPlayerLogin(playerid) {
     MySQL_BindInt(stmt_insertPlayerArmy, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_insertPlayerArmy);
-    Player_SetLoginStatus(playerid, true);
     return 1;
 }
 

@@ -1,7 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
 static
-    gPlayerHash[MAX_PLAYERS][62],
     bool:gPlayerLoginStatus[MAX_PLAYERS],
     PlayerAttempts[MAX_PLAYERS];
 
@@ -9,19 +8,20 @@ static
 
 // Initialise
 hook OnPlayerConnect(playerid) {
-    gPlayerHash[playerid][0] = EOS;
     gPlayerLoginStatus[playerid] = false;
     return 1;
 }
 
 // Global
 void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
-    if(isnull(gPlayerHash[playerid])) {
-        strcat(gPlayerHash[playerid], password, len);
-    }
+    new
+        playerHash[62];
+    // copy to local stack
+    // fix with y_inline scopes.
+    strcpy(playerHash, password, len);
 
-    inline const PromptLoginResponse(pid, dialogid, response, listitem, string:inputtext[]) {
-         #pragma unused pid, dialogid, listitem
+    inline const PromptLoginResponse(response, listitem, string:inputtext[]) {
+         #pragma unused listitem
 
         // User clicked the 'leave' buton or pressed 'ESC' .
         if(!response) {
@@ -29,8 +29,7 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
             return;
         }
 
-        inline const OnPasswordVerify(bool: success)
-        {
+        inline const OnPasswordVerify(bool: success) {
             if(!success) {
                 PlayerAttempts[playerid] ++;
                 if(PlayerAttempts[playerid] >= MAX_PASSWORD_ATTEMPT) {
@@ -44,7 +43,7 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
                     return;
                 }
 
-                Account_PromptLogin(playerid, gPlayerHash[playerid]);
+                Account_PromptLogin(playerid, playerHash);
                 SendErrorMsg(playerid, "Oops something went wrong, try again.");
 
                 Logger_Dbg(PLAYER_DEBUG_HANDLER, "player failed to login",
@@ -64,7 +63,7 @@ void:Account_PromptLogin(playerid, const password[], len = sizeof(password)) {
             Account_NotifySuccess(playerid);
             CallLocalFunction("OnPlayerLogin", "i", playerid); // Used in other modules to load other data.
         }
-        BCrypt_CheckInline(inputtext, gPlayerHash[playerid], using inline OnPasswordVerify);
+        BCrypt_CheckInline(inputtext, playerHash, using inline OnPasswordVerify);
     }
 
     new
@@ -103,16 +102,12 @@ static void:Account_NotifySuccess(playerid) {
     MessageBox_ShowF(playerid, TYPE_MSGBOX, msg_title, msg_content, 8000, playerid, SERVER_NAME);
 }
 
-static
-    Statement: stmt_updatePlayerLastLogin;
-
-hook OnMySQLConnected() {
-    stmt_updatePlayerLastLogin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET last_login = CURRENT_TIMESTAMP() WHERE u_id = ?");
-    return 1;
-}
 
 hook OnPlayerLogin(playerid) {
+    new
+        Statement: stmt_updatePlayerLastLogin;
 
+    stmt_updatePlayerLastLogin = MySQL_PrepareStatement(MySQL_GetHandle(), "UPDATE players SET last_login = CURRENT_TIMESTAMP() WHERE u_id = ?");
     MySQL_BindInt(stmt_updatePlayerLastLogin, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_updatePlayerLastLogin);
 
