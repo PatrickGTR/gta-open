@@ -14,7 +14,7 @@ hook OnPlayerLogin(playerid) {
 
     inline const OnArmyLoad() {
         if(MySQL_Statement_FetchRow(stmt_isArmy)) {
-            Bit_Set(PlayerIsArmy, playerid, true);
+            Player_SetArmy(playerid, true);
         }
     }
 
@@ -34,19 +34,38 @@ hook OnPlayerRequestSpawn(playerid) {
     return 1;
 }
 
-stock Player_AddToArmyDB(playerid) {
+Player_AddToArmyDB(playerid) {
+    if(Player_IsArmy(playerid)) {
+        return 0;
+    }
+
     Player_SetArmy(playerid, true);
 
-    new stmt_insertArmy = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT INTO armys (u_id) VALUES (?)");
+    new Statement:stmt_insertArmy = MySQL_PrepareStatement(MySQL_GetHandle(), "INSERT INTO armys (u_id) VALUES (?)");
     MySQL_BindInt(stmt_insertArmy, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_insertArmy);
     MySQL_StatementClose(stmt_insertArmy);
+    return 1;
+}
+
+Player_RemoveFromArmyDB(playerid) {
+    if(!Player_IsArmy(playerid)) {
+        return 0;
+    }
+
+    Player_SetArmy(playerid, false);
+
+    new Statement:stmt_deleteArmy = MySQL_PrepareStatement(MySQL_GetHandle(), "DELETE FROM armys WHERE u_id = ?");
+    MySQL_BindInt(stmt_deleteArmy, 0, Player_GetAccountID(playerid));
+    MySQL_ExecuteThreaded(stmt_deleteArmy);
+    MySQL_StatementClose(stmt_deleteArmy);
+    return 1;
 }
 
 Player_IsArmy(playerid) {
     return Bit_Get(PlayerIsArmy, playerid);
 }
 
-stock Player_SetArmy(playerid, bool:toggle) {
+Player_SetArmy(playerid, bool:toggle) {
     Bit_Set(PlayerIsArmy, playerid, toggle);
 }

@@ -23,6 +23,48 @@ ACMD:[3]setname(playerid, params[])
     return 1;
 }
 
+ACMD:[3]setarmy(playerid, params[]) {
+    new
+        targetid;
+
+    if(sscanf(params, "u", targetid)) {
+        return SendSyntaxMsg(playerid, "/setarmy <name/id>");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Player not connected");
+    }
+
+    if(!Player_AddToArmyDB(targetid)) {
+        return SendErrorMsg(playerid, "Player is already in army");
+    }
+
+    SendMsgF(targetid, COLOR_MODERATION, "[ADMIN]: %p(%i) added you to the army", playerid, playerid);
+    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: You have been added to the army by %p(%i)", targetid, targetid);
+    return 1;
+}
+
+ACMD:[3]revokearmy(playerid, params[]) {
+    new
+        targetid;
+
+    if(sscanf(params, "u", targetid)) {
+        return SendSyntaxMsg(playerid, "/setarmy <name/id>");
+    }
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Player not connected");
+    }
+
+    if(!Player_RemoveFromArmyDB(targetid)) {
+        return SendErrorMsg(playerid, "Player is not in army");
+    }
+
+    SendMsgF(targetid, COLOR_MODERATION, "[ADMIN]: %p(%i) removed you from the army", playerid, playerid);
+    SendMsgF(playerid, COLOR_MODERATION, "[ADMIN]: You have been removed from the army by %p(%i)", targetid, targetid);
+    return 1;
+}
+
 ACMD:[3]getallciv(playerid, params[])
 {
     new
