@@ -36,6 +36,10 @@ hook OnMySQLSetupTable() {
     mysql_tquery_file(MySQL_GetHandle(), "player_items.sql");
     Logger_Log("setting up 'player_items' table...");
 
+    mysql_tquery_file(MySQL_GetHandle(), "player_bank.sql");
+    Logger_Log("setting up 'player_bank' table...");
+
+
     // --------------------------------------------------------------------------------------------
     // ADMIN
     // --------------------------------------------------------------------------------------------

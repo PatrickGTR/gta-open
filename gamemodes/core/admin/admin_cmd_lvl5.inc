@@ -29,34 +29,6 @@ ACMD:[5]setadmin(playerid, params[])
     return 1;
 }
 
-ACMD:[5]setplayerdept(playerid, params[])
-{
-    new target, value;
-    if(sscanf(params, "ui", target)) return SendSyntaxMsg(playerid, "/setplayerdept (name/id) (bank dept.)");
-    if(!IsPlayerConnected(target)) {
-        return SendErrorMsg(playerid, "Player is not connected");
-    }
-    SendMsgAllF(COLOR_MODERATION, "[BANK DEPT.]: An Administrator sets %p (%d)'s bank dept. to %d", target, target, value);
-    Player_AddBankDept(target, value, true);
-    SendMsgAllF(COLOR_MODERATION, "[BANK]: %p (%d)'s Total Bank Dept. is %d", target, target, Player_GetBankDept(playerid));
-    return 1;
-}
-
-ACMD:[5]bankrupt(playerid, params[])
-{
-    new target;
-    if(sscanf(params, "u", target)) return SendSyntaxMsg(playerid, "/bankrupt (name/id)");
-    if(!IsPlayerConnected(target)) {
-        return SendErrorMsg(playerid, "Player is not connected");
-    }
-    SendMsgAllF(COLOR_MODERATION, "[BANKRUPT]: An Administrator bankrupted %p (%d)", target, target);
-    SendMsgAllF(COLOR_MODERATION, "[BANK]: Removed %d from %p (%d)'s account", Player_GetBankMoney(playerid), target, target);
-    Player_RemoveBankMoney(target, Player_GetBankMoney(target));
-    SendMsgAllF(COLOR_MODERATION, "[BANK]: Removed %p (%d)'s Tax Balance.", target, target);
-    Player_RemoveBankTax(target, Player_GetBankTax(playerid));
-    return 1;
-}
-
 ACMD:[5]skick(playerid, params[])
 {
     new target;

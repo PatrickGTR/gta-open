@@ -4,6 +4,7 @@
 #include <server_shop-items>
 #include <server_msgs>
 #include <server_motd>
+#include <server_tax>
 
 #include <server_atm-impl>
 #include <server_atm-menu>

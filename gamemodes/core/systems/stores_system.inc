@@ -45,136 +45,166 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
     return 1;
 }
 
+static ShowPistolMenu(playerid) {
+    inline _response(response, listitem, string:inputtext[]) {
+        #pragma unused inputtext
+
+        if(!response) {
+            Store_ShowAmmunationMenu(playerid);
+            return;
+        }
+
+        if(GetPlayerMoney(playerid) < WeaponPistol[listitem][1]) {
+            SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponPistol[listitem][0]);
+            return;
+        }
+
+        GivePlayerWeapon(playerid, WeaponPistol[listitem][0], WeaponPistol[listitem][2]);
+        GivePlayerMoney(playerid, -WeaponPistol[listitem][1]);
+
+        SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponPistol[listitem][0], WeaponPistol[listitem][1]);
+    }
+
+    new
+        string[256];
+    strcat(string, "Weapon\tPrice\tAmmo\n");
+    for(new i = 0; i < sizeof(WeaponPistol); ++i) {
+        format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponPistol[i][0], WeaponPistol[i][1], WeaponPistol[i][2]);
+    }
+    Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_TABLIST_HEADERS, "Pistols", string, "Select", "Back");
+}
+
+static ShowSubMachineMenu(playerid) {
+    inline _response(response, listitem, string:inputtext[]) {
+        #pragma unused inputtext
+
+        if(!response) {
+            Store_ShowAmmunationMenu(playerid);
+            return;
+        }
+
+
+        if(GetPlayerMoney(playerid) < WeaponSub[listitem][1]) {
+            SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponSub[listitem][0]);
+            return;
+        }
+
+        GivePlayerWeapon(playerid, WeaponSub[listitem][0], WeaponSub[listitem][2]);
+        GivePlayerMoney(playerid, -WeaponSub[listitem][1]);
+        SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponSub[listitem][0], WeaponSub[listitem][1]);
+    }
+
+    new
+        string[256];
+    strcat(string, "Weapon\tPrice\tAmmo\n");
+    for(new i = 0; i < sizeof(WeaponSub); ++i) {
+        format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponSub[i][0], WeaponSub[i][1], WeaponSub[i][2]);
+    }
+    Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_TABLIST_HEADERS, "Sub-Machine Guns", string, "Select", "Back");
+}
+
+static ShowShotgunMenu(playerid) {
+    inline _response(response, listitem, string:inputtext[]) {
+        #pragma unused inputtext
+
+        if(!response) {
+            Store_ShowAmmunationMenu(playerid);
+            return;
+        }
+
+        if(GetPlayerMoney(playerid) < WeaponShotgun[listitem][1]) {
+            SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponShotgun[listitem][0]);
+            return;
+        }
+
+        GivePlayerWeapon(playerid, WeaponShotgun[listitem][0], WeaponShotgun[listitem][2]);
+        GivePlayerMoney(playerid, -WeaponShotgun[listitem][1]);
+        SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponShotgun[listitem][0], WeaponShotgun[listitem][1]);
+    }
+    new
+        string[256];
+    strcat(string, "Weapon\tPrice\tAmmo\n");
+    for(new i = 0; i < sizeof(WeaponShotgun); ++i) {
+        format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponShotgun[i][0], WeaponShotgun[i][1], WeaponShotgun[i][2]);
+    }
+    Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_TABLIST_HEADERS, "Shotgun", string, "Select", "Back");
+}
+
+static ShowAssaultRifleMenu(playerid) {
+    inline _response(response, listitem, string:inputtext[]) {
+        #pragma unused inputtext
+
+        if(!response) {
+            Store_ShowAmmunationMenu(playerid);
+            return;
+        }
+
+        if(GetPlayerMoney(playerid) < WeaponAssRifle[listitem][1]) {
+            SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponAssRifle[listitem][0]);
+            return;
+        }
+
+        GivePlayerWeapon(playerid, WeaponAssRifle[listitem][0], WeaponAssRifle[listitem][2]);
+        GivePlayerMoney(playerid, -WeaponAssRifle[listitem][1]);
+        SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponAssRifle[listitem][0], WeaponAssRifle[listitem][1]);
+    }
+    new
+        string[256];
+    strcat(string, "Weapon\tPrice\tAmmo\n");
+    for(new i = 0; i < sizeof(WeaponAssRifle); ++i) {
+        format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponAssRifle[i][0], WeaponAssRifle[i][1], WeaponAssRifle[i][2]);
+    }
+    Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_TABLIST_HEADERS, "Assault Rifle", string, "Select", "Back");
+}
+
+static ShowRifleMenu(playerid) {
+    inline _response(response, listitem, string:inputtext[]) {
+        #pragma unused inputtext
+
+        if(!response) {
+            Store_ShowAmmunationMenu(playerid);
+            return;
+        }
+
+        if(GetPlayerMoney(playerid) < WeaponRifles[listitem][1]) {
+            SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponRifles[listitem][0]);
+            return;
+        }
+
+        GivePlayerWeapon(playerid, WeaponRifles[listitem][0], WeaponRifles[listitem][2]);
+        GivePlayerMoney(playerid, -WeaponRifles[listitem][1]);
+        SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponRifles[listitem][0], WeaponRifles[listitem][1]);
+    }
+
+    new
+        string[256];
+    strcat(string, "Weapon\tPrice\tAmmo\n");
+    for(new i = 0; i < sizeof(WeaponRifles); ++i) {
+        format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponRifles[i][0], WeaponRifles[i][1], WeaponRifles[i][2]);
+    }
+    Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_TABLIST_HEADERS, "Pistols", string, "Select", "Back");
+}
+
 Store_ShowAmmunationMenu(playerid) {
-    inline DialogWeaponResponse(plyid, dialogid, response, listitem, string:inputtext[]) {
-        #pragma unused plyid, dialogid, inputtext
+    inline _response(response, listitem, string:inputtext[]) {
+        #pragma unused inputtext
 
         if(!response)
-            return false;
-
-        new
-            string[512];
+            return 0;
 
         switch(listitem) {
-            case 0: {
-                inline OnPistolResponse(response2, listitem2, string:inputtext2[])
-                {
-                    #pragma unused inputtext2
-
-                    if(!response2)
-                        return Store_ShowAmmunationMenu(playerid);
-
-
-                    if(GetPlayerMoney(playerid) < WeaponPistol[listitem2][1])
-                        return SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponPistol[listitem2][0]);
-
-                    GivePlayerWeapon(playerid, WeaponPistol[listitem2][0], WeaponPistol[listitem2][2]);
-                    GivePlayerMoney(playerid, -WeaponPistol[listitem2][1]);
-
-                    SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponPistol[listitem2][0], WeaponPistol[listitem2][1]);
-                }
-
-                strcat(string, "Weapon\tPrice\tAmmo\n");
-                for(new i = 0; i < sizeof(WeaponPistol); ++i) {
-                    format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponPistol[i][0], WeaponPistol[i][1], WeaponPistol[i][2]);
-                }
-                Dialog_ShowCallback(playerid, using inline OnPistolResponse, DIALOG_STYLE_TABLIST_HEADERS, "Pistols", string, "Select", "Back");
+            case 0: ShowPistolMenu(playerid);
                 //Pistol
-            }
-            case 1: {
-                inline OnSubMachineResponse(response2, listitem2, string:inputtext2[]) {
-                    #pragma unused inputtext2
-
-                    if(!response2)
-                        return Store_ShowAmmunationMenu(playerid);
-
-
-                    if(GetPlayerMoney(playerid) < WeaponSub[listitem2][1])
-                        return SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponSub[listitem2][0]);
-
-                    GivePlayerWeapon(playerid, WeaponSub[listitem2][0], WeaponSub[listitem2][2]);
-                    GivePlayerMoney(playerid, -WeaponSub[listitem2][1]);
-                    SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponSub[listitem2][0], WeaponSub[listitem2][1]);
-                }
-
-                strcat(string, "Weapon\tPrice\tAmmo\n");
-                for(new i = 0; i < sizeof(WeaponSub); ++i) {
-                    format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponSub[i][0], WeaponSub[i][1], WeaponSub[i][2]);
-                }
-                Dialog_ShowCallback(playerid, using inline OnSubMachineResponse, DIALOG_STYLE_TABLIST_HEADERS, "Sub-Machine Guns", string, "Select", "Back");
+            case 1: ShowSubMachineMenu(playerid);
                 //Sub Machine Gun
-            }
-            case 2: {
-                inline OnShotgunResponse(response2, listitem2, string:inputtext2[]) {
-                    #pragma unused inputtext2
-
-                    if(!response2)
-                        return Store_ShowAmmunationMenu(playerid);
-
-
-                    if(GetPlayerMoney(playerid) < WeaponShotgun[listitem2][1])
-                        return SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponShotgun[listitem2][0]);
-
-                    GivePlayerWeapon(playerid, WeaponShotgun[listitem2][0], WeaponShotgun[listitem2][2]);
-                    GivePlayerMoney(playerid, -WeaponShotgun[listitem2][1]);
-                    SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponShotgun[listitem2][0], WeaponShotgun[listitem2][1]);
-                }
-
-                strcat(string, "Weapon\tPrice\tAmmo\n");
-                for(new i = 0; i < sizeof(WeaponShotgun); ++i) {
-                    format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponShotgun[i][0], WeaponShotgun[i][1], WeaponShotgun[i][2]);
-                }
-                Dialog_ShowCallback(playerid, using inline OnShotgunResponse, DIALOG_STYLE_TABLIST_HEADERS, "Pistols", string, "Select", "Back");
+            case 2: ShowShotgunMenu(playerid);
                 //Shotguns
-            }
-            case 3: {
-                inline OnAssaultRifleResponse(response2, listitem2, string:inputtext2[]) {
-                    #pragma unused inputtext2
-
-                    if(!response2)
-                        return Store_ShowAmmunationMenu(playerid);
-
-
-                    if(GetPlayerMoney(playerid) < WeaponAssRifle[listitem2][1])
-                        return SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponAssRifle[listitem2][0]);
-
-                    GivePlayerWeapon(playerid, WeaponAssRifle[listitem2][0], WeaponAssRifle[listitem2][2]);
-                    GivePlayerMoney(playerid, -WeaponAssRifle[listitem2][1]);
-                    SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponAssRifle[listitem2][0], WeaponAssRifle[listitem2][1]);
-                }
-
-                strcat(string, "Weapon\tPrice\tAmmo\n");
-                for(new i = 0; i < sizeof(WeaponAssRifle); ++i) {
-                    format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponAssRifle[i][0], WeaponAssRifle[i][1], WeaponAssRifle[i][2]);
-                }
-                Dialog_ShowCallback(playerid, using inline OnAssaultRifleResponse, DIALOG_STYLE_TABLIST_HEADERS, "Pistols", string, "Select", "Back");
+            case 3: ShowAssaultRifleMenu(playerid);
                 //Assault Rifle
-            }
-            case 4: {
-
-                inline OnRifleResponse(response2, listitem2, string:inputtext2[]) {
-                    #pragma unused inputtext2
-
-                    if(!response2)
-                        return Store_ShowAmmunationMenu(playerid);
-
-                    if(GetPlayerMoney(playerid) < WeaponRifles[listitem2][1])
-                        return SendErrorMsgF(playerid, "You don't have enough money to buy %W", WeaponRifles[listitem2][0]);
-
-                    GivePlayerWeapon(playerid, WeaponRifles[listitem2][0], WeaponRifles[listitem2][2]);
-                    GivePlayerMoney(playerid, -WeaponRifles[listitem2][1]);
-                    SendServerMsgF(playerid, "You bought a "C_GREY"%W "C_WHITE"for "C_GREEN"%m", WeaponRifles[listitem2][0], WeaponRifles[listitem2][1]);
-                }
-
-                strcat(string, "Weapon\tPrice\tAmmo\n");
-                for(new i = 0; i < sizeof(WeaponRifles); ++i) {
-                    format(string, sizeof(string), "%s%W\t"C_GREEN"%m\t"C_WHITE"%i bullets\n", string, WeaponRifles[i][0], WeaponRifles[i][1], WeaponRifles[i][2]);
-                }
-                Dialog_ShowCallback(playerid, using inline OnRifleResponse, DIALOG_STYLE_TABLIST_HEADERS, "Pistols", string, "Select", "Back");
+            case 4: ShowRifleMenu(playerid);
                 //Rifles
-            }
         }
     }
-    Dialog_ShowCallback(playerid, using inline DialogWeaponResponse, DIALOG_STYLE_LIST, "Ammunation", "Pistols\nSub-machine guns\nShotguns\nAssault rifles\nRifles", "Select", "Close");
+    Dialog_ShowCallback(playerid, using inline _response, DIALOG_STYLE_LIST, "Ammunation", "Pistols\nSub-machine guns\nShotguns\nAssault rifles\nRifles", "Select", "Close");
     return 1;
 }

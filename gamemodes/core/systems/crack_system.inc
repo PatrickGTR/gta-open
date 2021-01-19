@@ -1,5 +1,4 @@
 #include <YSI_Coding\y_hooks>
-#include <progress2>
 
 static
 	PlayerBar:TD_CrackStatus = PlayerBar:INVALID_PLAYER_BAR_ID,

@@ -49,7 +49,7 @@
 	forward OnServerWeekReset();
 
 	// called when the in-game day resets.
-	forward OnServerDayReset();
+	forward OnServerDayReset(const day[]);
 #endif
 
 
@@ -73,8 +73,6 @@
 #include <a_mysql>
 #include <samp_bcrypt>
 
-#include <EVF>
-
 // YSI
 #include <YSI_Core\y_utils>
 #include <YSI_Coding\y_inline>
@@ -84,6 +82,11 @@
 
 #include <YSI_Extra\y_inline_mysql>
 #include <YSI_Extra\y_inline_bcrypt>
+
+// Legacy Includes
+#include <EVF>
+#include <progress2>
+
 
 #include <ini>
 
@@ -115,7 +118,6 @@
 #include <cmds>
 #include <mapping>
 
-#include <bank>
 #include <gangs>
 
 // Will be called after the rest ^

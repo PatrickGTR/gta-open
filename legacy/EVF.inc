@@ -854,43 +854,43 @@ public OnVehiclePaintjob(playerid, vehicleid, paintjobid)
 }
 
 #if defined _ALS_LinkVehicleToInterior
-	#define LinkVehicleToInterior
+	#undef LinkVehicleToInterior
 #else
 	#define _ALS_LinkVehicleToInterior
 #endif
 
 #if defined _ALS_CreateVehicle
-	#define CreateVehicle
+	#undef CreateVehicle
 #else
 	#define _ALS_CreateVehicle
 #endif
 
 #if defined _ALS_DestroyVehicle
-	#define DestroyVehicle
+	#undef DestroyVehicle
 #else
 	#define _ALS_DestroyVehicle
 #endif
 
 #if defined _ALS_AddStaticVehicle
-	#define AddStaticVehicle
+	#undef AddStaticVehicle
 #else
 	#define _ALS_AddStaticVehicle
 #endif
 
 #if defined _ALS_AddStaticVehicleEx
-	#define AddStaticVehicleEx
+	#undef AddStaticVehicleEx
 #else
 	#define _ALS_AddStaticVehicleEx
 #endif
 
 #if defined _ALS_ChangeVehicleColor
-	#define ChangeVehicleColor
+	#undef ChangeVehicleColor
 #else
 	#define _ALS_ChangeVehicleColor
 #endif
 
 #if defined _ALS_ChangeVehiclePaintjob
-	#define ChangeVehiclePaintjob
+	#undef ChangeVehiclePaintjob
 #else
 	#define _ALS_ChangeVehiclePaintjob
 #endif
