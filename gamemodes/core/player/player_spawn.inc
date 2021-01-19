@@ -2,7 +2,6 @@
 
 static
     const Float:LS_SpawnPoints[][] = {
-
     {810.63520, -1340.0682, 13.5386, 37.33070},
     {1124.6071, -1427.5155, 15.7969, 350.9336},
     {585.81520, -1247.9160, 17.9521, 335.6035},
@@ -101,10 +100,11 @@ hook OnPlayerSpawn(playerid) {
         z = Police_SpawnPoints[id][2];
         ang = Police_SpawnPoints[id][3];
 
+        Weapon_DoNotSaveBegin(playerid);
         GivePlayerWeapon(playerid, WEAPON_SILENCED, 	150);
         GivePlayerWeapon(playerid, WEAPON_M4, 			200);
         GivePlayerWeapon(playerid, WEAPON_NITESTICK, 	200);
-
+        Weapon_DoNotSaveEnd(playerid);
     }
     else if(Player_GetClass(playerid) == TEAM_ARMY) {
         id = random(sizeof(Army_SpawnPoints));
@@ -114,9 +114,15 @@ hook OnPlayerSpawn(playerid) {
         z = Army_SpawnPoints[id][2];
         ang = Army_SpawnPoints[id][3];
 
+        Weapon_DoNotSaveBegin(playerid);
         GivePlayerWeapon(playerid, WEAPON_DEAGLE, 	100);
         GivePlayerWeapon(playerid, WEAPON_M4, 		200);
-        GivePlayerWeapon(playerid, WEAPON_GRENADE, 	200);
+        GivePlayerWeapon(playerid, WEAPON_SNIPER,   50);
+        GivePlayerWeapon(playerid, WEAPON_GRENADE, 	4);
+        Weapon_DoNotSaveEnd(playerid);
+
+
+        SendClientMessage(playerid, -1, "called");
     }
     SetPlayerPos(playerid, x, y, z);
     SetPlayerFacingAngle(playerid, ang);

@@ -26,8 +26,8 @@ CMD:breakcuff(playerid, params[]) {
     new
         bool:success_rate = RandomChance(65);
     if (!success_rate) {
-        PlayerBreakCuffTick[playerid] = gettime();
         SendServerMsg(playerid, "You failed to escape from cuffs");
+        PlayerBreakCuffTick[playerid] = gettime();
         return 1;
     }
 

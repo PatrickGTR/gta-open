@@ -1,12 +1,9 @@
-#include <cmds_ifix>
-#include <cmds_inv>
 #include <cmds_info>
 #include <cmds_arrest>
 #include <cmds_cuff>
 #include <cmds_bail>
 #include <cmds_v> // vehicle
 #include <cmds_pm> // private message
-#include <cmds_bank>
 #include <cmds_gang>
 
 #include <cmds_rob>
@@ -72,12 +69,12 @@ CMD:commands(playerid, params[]) {
             case 1: ShowCommands(playerid, 1);
             case 2: ShowCommands(playerid, 2);
             case 3: {
-                TextInfo_Create(playerid, "HOUSE_CMD", "House Commands");
-                TextInfo_Add(playerid, "/buyhouse - Purchase the house");
-                TextInfo_Add(playerid, "/hdescription - Change house description");
-                TextInfo_Add(playerid, "~k~~VEHICLE_ENTER_EXIT~ - Enter/Exit house.");
-                TextInfo_Add(playerid, "~k~~CONVERSATION_NO~ - Open furniture menu.");
-                TextInfo_Show(playerid);
+                SendClientMessage(playerid, COLOR_YELLOW, "========== [HOUSE CONTROLS] ========== ");
+                SendClientMessage(playerid, COLOR_GREY, "/buyhouse "C_WHITE"- Purchase the house");
+                SendClientMessage(playerid, COLOR_GREY, "/hdescription "C_WHITE"- Change house description");
+                SendClientMessage(playerid, COLOR_GREY, "~k~~VEHICLE_ENTER_EXIT~ "C_WHITE"- Enter/Exit house.");
+                SendClientMessage(playerid, COLOR_GREY, "~k~~CONVERSATION_NO~ "C_WHITE"- Open furniture menu.");
+                SendClientMessage(playerid, COLOR_YELLOW, "========== [HOUSE CONTROLS] ========== ");
             }
             case 4: {
                 Dialog_Show(playerid, DIALOG_STYLE_MSGBOX,

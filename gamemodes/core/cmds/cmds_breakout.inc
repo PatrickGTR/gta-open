@@ -26,8 +26,8 @@ CMD:breakout(playerid, params[]) {
     new
         bool:success_rate = RandomChance(65);
     if (!success_rate) {
-        PlayerBreakOutTick[playerid] = gettime();
         SendServerMsg(playerid, "You failed to escape from jail.");
+        PlayerBreakOutTick[playerid] = gettime();
         return 1;
     }
 

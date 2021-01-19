@@ -49,18 +49,14 @@ hook OnServerSecondUpdate() {
             "Friday",
             "Saturday"
         };
-        format(daystring, sizeof (daystring), "%s", dayName[clamp(ServerDay, 0, sizeof(dayName) - 1)]);
+
+        new index = clamp(ServerDay, 0, sizeof(dayName) - 1);
+        format(daystring, sizeof (daystring), "%s", dayName[index]);
         UI_SetDay(daystring);
 
-        CallRemoteFunction("OnServerDayReset", "");
-	}
+        CallRemoteFunction("OnServerDayReset", "s", dayName[index]);
 
-    if(ServerTime == 500) {
-        print("Taxes");
-        foreach(new i : Player) {
-            Player_Tax(i);
-        }
-    }
+	}
 
 	foreach(new i : Player) {
 		SetPlayerTime(i, minutes, seconds);

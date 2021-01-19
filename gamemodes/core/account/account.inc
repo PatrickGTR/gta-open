@@ -3,7 +3,6 @@
 #include <account_login>
 #include <account_vip>
 #include <account_wanted-level>
-#include <inventory>
 #include <account_stats>
 
 #include <YSI_Coding\y_hooks>

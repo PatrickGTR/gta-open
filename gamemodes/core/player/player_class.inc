@@ -277,8 +277,8 @@ static
 	PlayerClass[MAX_PLAYERS];
 
 hook OnPlayerLogin(playerid) {
-    defer ForceSpawnPlayer(playerid);
 	PlayerClassState[playerid] = false;
+	defer ForceSpawnPlayer(playerid);
 	return 1;
 }
 

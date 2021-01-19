@@ -103,7 +103,7 @@ Player_ShowJobMenu(playerid) {
     return 1;
 }
 
-stock Player_Jobname(playerid)
+stock Player_GetJobName(playerid)
 {
     new job_rankname[6][24] =
     {
@@ -116,29 +116,6 @@ stock Player_Jobname(playerid)
     };
 
     return job_rankname[Player_GetJob(playerid)];
-}
-
-stock Player_GetJobName(playerid, jobname[], len = sizeof(jobname)) {
-    switch(GetPlayerJob(playerid)) {
-        case TYPE_DRUGDEALER: {
-            strcpy(jobName, "Drug Dealer", len);
-        }
-        case TYPE_WEAPONDEALER: {
-            strcpy(jobName, "Weapon Dealer", len);
-        }
-        case TYPE_HITMAN: {
-            strcpy(jobName, "Hitman", len);
-        }
-        case TYPE_TERRORIST: {
-            strcpy(jobName, "Terrorist", len);
-        }
-        case TYPE_RAPIST: {
-            strcpy(jobName, "Rapist", len);
-        }
-        case TYPE_MECHANIC: {
-            strcpy(jobName, "Mechanic", len);
-        }
-    }
 }
 
 stock Player_GiveJobWeapons(playerid) {

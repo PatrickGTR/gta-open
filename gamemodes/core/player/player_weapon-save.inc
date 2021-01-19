@@ -55,26 +55,42 @@ hook OnPlayerAutoSave(playerid) {
     return 1;
 }
 
+static
+    BitArray:PlayerWeaponExcludeSave<MAX_PLAYERS>;
+
 hook OnPlayerDisconnect(playerid, reason) {
     Weapon_Save(playerid);
+    Bit_Set(PlayerWeaponExcludeSave, playerid, true);
     return 1;
 }
 
 hook OnPlayerDeathEx(playerid, killerid, reason) {
-
     ResetPlayerWeapons(playerid);
     MySQL_BindInt(stmt_deteleWeapons, 0, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_deteleWeapons);
     return 1;
 }
 
-hook function GivePlayerWeapon(playerid, weaponid, ammo) {
-    MySQL_BindInt(stmt_insertWeapon, 0, Player_GetAccountID(playerid));
-    MySQL_BindInt(stmt_insertWeapon, 1, weaponid);
-    MySQL_BindInt(stmt_insertWeapon, 2, ammo);
-    MySQL_BindInt(stmt_insertWeapon, 3, ammo);
-    MySQL_ExecuteThreaded(stmt_insertWeapon);
+// TODO: Look at this again.
+// Simple solution!
+// Think of a better solution to exclude class weapons from saving.
+// but for now this does the job.
+Weapon_DoNotSaveBegin(playerid) {
+    Bit_Set(PlayerWeaponExcludeSave, playerid, false);
+}
 
+Weapon_DoNotSaveEnd(playerid) {
+    Bit_Set(PlayerWeaponExcludeSave, playerid, true);
+}
+
+hook function GivePlayerWeapon(playerid, weaponid, ammo) {
+    if(Bit_Get(PlayerWeaponExcludeSave, playerid)) {
+        MySQL_BindInt(stmt_insertWeapon, 0, Player_GetAccountID(playerid));
+        MySQL_BindInt(stmt_insertWeapon, 1, weaponid);
+        MySQL_BindInt(stmt_insertWeapon, 2, ammo);
+        MySQL_BindInt(stmt_insertWeapon, 3, GetPlayerAmmo(playerid) + ammo);
+        MySQL_ExecuteThreaded(stmt_insertWeapon);
+    }
     continue(playerid, weaponid, ammo);
 }
 

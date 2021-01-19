@@ -148,15 +148,17 @@ hook OnPlayerLogin(playerid) {
 hook OnPlayerSpawn(playerid) {
     if(PlayerJailTime[playerid] > 0) {
         Player_SendToJail(playerid, PlayerJailTime[playerid], true);
-        SendServerMsg(playerid, "You've left when jailed, you are server the remaining time.");
+        SendServerMsg(playerid, "You've left when jailed, you are serving the remaining time.");
     }
     if(Player_GetBailAmount(playerid) > 0) {
         _Player_SendToJailPos(playerid);
 
-        TextInfo_Create(playerid, "JAILBAIL", "Jail");
-        TextInfo_Add(playerid, "You have unpaid fees use ~y~/bail");
-        TextInfo_Add(playerid, "~w~to pay your fees and free yourself");
-        TextInfo_Show(playerid);
+        MessageBox_Show(
+            playerid,
+            TYPE_MSGBOX,
+            "~y~Bail",
+            "You have unpaid fees use ~y~/bail ~w~to pay your fees and free yourself"
+        );
 
         // by pass Player_IsInJail check.
         // do not remove.
@@ -188,10 +190,12 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 hook OnPlayerSecondUpdate(playerid) {
     if(Player_TimeLeftInJail(playerid) == 1) {
-        TextInfo_Create(playerid, "JAILBAIL", "Jail");
-        TextInfo_Add(playerid, "Your time has ended use ~y~/bail");
-        TextInfo_Add(playerid, "~w~to pay your fees and free yourself");
-        TextInfo_Show(playerid);
+        MessageBox_Show(
+            playerid,
+            TYPE_MSGBOX,
+            "~y~Bail",
+            "You have unpaid fees use ~y~/bail ~w~to pay your fees and free yourself"
+        );
     }
     return 1;
 }

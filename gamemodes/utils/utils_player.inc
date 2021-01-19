@@ -34,28 +34,28 @@ Player_IsLEO(playerid) {
     return (Player_GetClass(playerid) == TEAM_POLICE || Player_GetClass(playerid) == TEAM_ARMY);
 }
 
-Player_IsInAmmu(playerid)
-{
-    if(GetPlayerVirtualWorld(playerid) == 6 || GetPlayerVirtualWorld(playerid) == 7) {
-        new const ammunationInteriors[] = {
-            1, 4, 6, 7
-        };
-        for(new i = 0; i < sizeof(ammunationInteriors); i ++) {
-            if(GetPlayerInterior(playerid) == ammunationInteriors[i]) {
-                return 1;
-            }
-        }
-    }
-    return 0;
-}
+// Player_IsInAmmu(playerid)
+// {
+//     if(GetPlayerVirtualWorld(playerid) == 6 || GetPlayerVirtualWorld(playerid) == 7) {
+//         new const ammunationInteriors[] = {
+//             1, 4, 6, 7
+//         };
+//         for(new i = 0; i < sizeof(ammunationInteriors); i ++) {
+//             if(GetPlayerInterior(playerid) == ammunationInteriors[i]) {
+//                 return 1;
+//             }
+//         }
+//     }
+//     return 0;
+// }
 
-/*Float:Player_GetArmour(playerid) {
+Float:Player_GetArmour(playerid) {
     new
         Float:playerArmour;
 
     GetPlayerArmour(playerid, playerArmour);
     return playerArmour;
-}*/
+}
 
 stock Player_FacePlayer(playerid, giveplayerid) {
     // function made by Nero_3D.

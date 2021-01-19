@@ -43,9 +43,12 @@ hook OnPlayerEnterDynamicCP(playerid, checkpointid)
         if(Player_IsLEO(playerid))
         {
             CanMission[playerid] = true;
-            TextInfo_Create(playerid, "PoliceMission", "Police Mission");
-            TextInfo_Add(playerid, "_________Use /mission to start a mission.");
-            TextInfo_Show(playerid);
+
+            MessageBox_Show(
+                playerid, TYPE_MSGBOX,
+                "~p~Police Mission",
+                "~w~Use ~p~/mission ~w~to start a mission."
+            );
         }
     }
     return 1;
@@ -55,7 +58,6 @@ hook OnPlayerLeaveDynamicCP(playerid, checkpointid)
 {
     if(CanMission[playerid]) {
         CanMission[playerid] = false;
-        TextInfo_Hide(playerid);
     }
     return 1;
 }

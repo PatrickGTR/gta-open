@@ -386,48 +386,73 @@ Gang_Leave(playerid) {
     return 1;
 }
 
-Gang_ShowMembers(playerid, bool:online = true) {
+void:Gang_ShowMembers(playerid, bool:online = true) {
     new
-        count = 0;
+        count = 0,
+        content[512];
     if(online) {
-        TextInfo_Create(playerid, "GANGMEM", "Online Members");
+        strcat(content, "Name\tRank\n");
         foreach(new i : Player) {
             // skip self
             if(playerid == i) {
                 continue;
             }
             if(Player_GetGangID(playerid) == Player_GetGangID(i)) {
-                TextInfo_Add(playerid, ReturnPlayerName(i));
+                strcat(content, ReturnPlayerName(i));
+                strcat(content, "\t");
+                strcat(content, (PlayerIsLeader[playerid]) ? ("Leader") : ("Member"));
+                strcat(content, "\n");
                 count ++;
             }
         }
 
         if(count == 0) {
-            TextInfo_Add(playerid, "No Online Members");
+            Dialog_Show(
+                playerid,
+                DIALOG_STYLE_MSGBOX,
+                "Gang Members",
+                "No online members",
+                "Close"
+            );
+            return;
         }
+        Dialog_Show(
+            playerid,
+            DIALOG_STYLE_TABLIST_HEADERS,
+            "Gang Members",
+            content,
+            "Close"
+        );
 
-        TextInfo_Show(playerid);
     }
     else {
         // TODO: show offline members
     }
-
-    return 1;
 }
 
 Gang_ShowGangs(playerid) {
-    TextInfo_Create(playerid, "GANGS", "Gangs");
+
+    const
+        HEADER_AND_GANGID = 24 + 16;
     new
-        string[64];
+        content[(MAX_PLAYER_NAME + MAX_GANG_NAME + HEADER_AND_GANGID) * MAX_GANGS];
+
+    strcat(content, "ID\tGang\tLeader\n");
     foreach(new i : GangIndex) {
-        format(string, sizeof(string),
-            "~y~%s ~w~- ~y~%s",
-            GangID[i], GangName[i], GangLeaderName[i]
+        format(content, sizeof(content),
+            "%s%i\t%s\t%s\n",
+            content, GangID[i], GangName[i], GangLeaderName[i]
         );
-        TextInfo_Add(playerid, string);
     }
 
-    TextInfo_Show(playerid);
+    Dialog_Show(
+        playerid,
+        DIALOG_STYLE_TABLIST_HEADERS,
+        "Server Gangs",
+        content,
+        "Close"
+    );
+
     return 1;
 }
 

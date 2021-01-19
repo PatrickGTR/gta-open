@@ -32,6 +32,7 @@ CMD:rob(playerid, params[])
     if (Player_GetWallet(targetid) > 0) {
         SendMsgF(playerid, COLOR_ORANGE, "(player robbery) "C_WHITE"You failed to rob "C_GREY"%p (%i) "C_WHITE"because he had wallet, run away!", targetid, targetid);
         SendMsgF(targetid, COLOR_ORANGE, "(player robbery) "C_GREY"%p (%i) "C_WHITE"attempted to rob you but failed, chase him! - Wallets Left: %i", playerid, playerid, Player_GetWallet(playerid));
+        PlayerRobTick[playerid] = gettime();
         return 1;
     }
 
@@ -41,6 +42,7 @@ CMD:rob(playerid, params[])
     if (!success_rate) {
         SendMsgF(playerid, COLOR_ORANGE, "(player robbery) "C_WHITE"You failed to rob "C_GREY"%p (%i) "C_WHITE"run away!", targetid, targetid);
         SendMsgF(targetid, COLOR_ORANGE, "(player robbery) "C_GREY"%p (%i) "C_WHITE"attempted to rob you but failed, chase him!", playerid, playerid);
+        PlayerRobTick[playerid] = gettime();
         return 1;
     }
 
