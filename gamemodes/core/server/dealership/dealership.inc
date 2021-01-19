@@ -18,7 +18,6 @@ static
 
 #include <YSI_Coding\y_hooks>
 hook OnGameModeInit() {
-
 	const
 		Float:x = 814.2134,
 		Float:y = -973.8203,
@@ -46,9 +45,7 @@ hook OnPlayerLeaveDynArea(playerid, areaid) {
 }
 
 
-UI_ShowDealershipUI(playerid)
-{
-
+UI_ShowDealershipUI(playerid) {
 	plyCurrentChoice[playerid] =  0;
 
 	new index = plyCurrentChoice[playerid];
@@ -60,18 +57,18 @@ UI_ShowDealershipUI(playerid)
     UI_SetDealershipVehicleModel(playerid, Dealership_GetVehicleModel(index));
 }
 
-public OnPlayerClickDealershipTextdraw(playerid, type)
-{
+public OnPlayerClickDealershipTextdraw(playerid, type) {
 	new
 		index = 0;
-	if(type == BTN_RIGHT)
-	{
+	if(type == BTN_RIGHT) {
 		index = plyCurrentChoice[playerid];
 
-		if(index >= Dealership_GetArraySize())
-			return 0;
-
-		index ++;
+		if(index >= Dealership_GetArraySize()) {
+			index = 0;
+		}
+		else {
+			index ++;
+		}
 
 		UI_SetDealershipVehicleHeader(playerid, Dealership_GetVehicleModel(index));
 		UI_SetDealershipVehiclePrice(playerid, Dealership_GetVehiclePrice(index));
@@ -79,16 +76,15 @@ public OnPlayerClickDealershipTextdraw(playerid, type)
 
 		plyCurrentChoice[playerid] = index;
 	}
-	else if(type == BTN_LEFT)
-	{
-
+	else if(type == BTN_LEFT) {
 		index = plyCurrentChoice[playerid];
 
-		if(index <= 0)
-			return 0;
-
-
-		index --;
+		if(index <= 0) {
+			index = Dealership_GetArraySize();
+		}
+		else {
+			index --;
+		}
 
         UI_SetDealershipVehicleHeader(playerid, Dealership_GetVehicleModel(index));
 		UI_SetDealershipVehiclePrice(playerid, Dealership_GetVehiclePrice(index));
@@ -96,8 +92,7 @@ public OnPlayerClickDealershipTextdraw(playerid, type)
 
 		plyCurrentChoice[playerid] = index;
 	}
-	else if(type == BTN_PURCHASE)
-	{
+	else if(type == BTN_PURCHASE) {
 		index = plyCurrentChoice[playerid];
 
 		if (GetPlayerMoney(playerid) < Dealership_GetVehiclePrice(index)) {
@@ -120,8 +115,7 @@ public OnPlayerClickDealershipTextdraw(playerid, type)
 		UI_HideDealershipTextDraw(playerid);
 		GivePlayerMoney(playerid, -Dealership_GetVehiclePrice(index));
 	}
-	else if(type == BTN_CLOSE)
-	{
+	else if(type == BTN_CLOSE) {
 		SendServerMsg(playerid, "You have closed the dealership menu.");
 		plyCurrentChoice[playerid] = -1;
 	}

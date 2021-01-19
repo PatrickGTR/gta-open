@@ -62,8 +62,6 @@ hook OnServerSecondUpdate() {
 		SetPlayerTime(i, minutes, seconds);
 	}
 
-
-
     format(timestring, sizeof (timestring), "%02d:%02d", minutes, seconds);
     UI_SetTime(timestring);
 }
