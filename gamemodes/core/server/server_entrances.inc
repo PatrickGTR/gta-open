@@ -106,7 +106,7 @@ stock Entrance_Create(
     MoveDynamicObject(EnExObject[idx], x, y, (z + 1.0), 1.0);
 
     // Area
-    EnExArea[idx] = CreateDynamicCircle(x, y, 2.0, world, interior);
+    EnExArea[idx] = CreateDynamicCircle(x, y, 0.5, world, interior);
 
     Streamer_SetArrayData(STREAMER_TYPE_AREA, EnExArea[idx], E_STREAMER_EXTRA_ID, arr, sizeof(arr));
 
@@ -127,13 +127,12 @@ stock Entrance_Create(
     return idx;
 }
 
-// Returns unix timestamp of player last entered CP
-stock Entrance_GetPlayerCD(playerid) {
-    return playerEnExCoolDown[playerid];
+stock Entrance_IsPlayerAllowed(playerid) {
+    return (gettime() > playerEnExCoolDown[playerid]);
 }
 
 // Assign unix timestamp of player last entered CP
-stock Entrance_UpdatePlayerCooldown(playerid, seconds = 2) {
+stock Entrance_UpdatePlayerTick(playerid, seconds = 2) {
     return playerEnExCoolDown[playerid] = (gettime() + seconds);
 }
 
@@ -180,12 +179,11 @@ hook OnDynamicObjectMoved(objectid) {
 
 // Handler
 hook OnPlayerEnterDynArea(playerid, areaid) {
-
-    if (gettime() < Entrance_GetPlayerCD(playerid)) {
+    if (!Entrance_IsPlayerAllowed(playerid)) {
         return 1;
     }
 
-    if(IsPlayerInAnyVehicle(playerid)) {
+    if (IsPlayerInAnyVehicle(playerid)) {
         return 1;
     }
 
@@ -205,15 +203,14 @@ hook OnPlayerEnterDynArea(playerid, areaid) {
                 defer EntranceUnfreezePlayer(playerid, 2000 + GetPlayerPing(playerid));
             }
 
+
             SetPlayerInterior(playerid, exitInteriorID[idx]);
             SetPlayerVirtualWorld(playerid, exitVirtualID[idx]);
-
             SetPlayerPos(playerid, exitX[idx], exitY[idx], exitZ[idx]);
             SetPlayerFacingAngle(playerid, exitAng[idx]);
 
+            Entrance_UpdatePlayerTick(playerid);
             strcpy(getShopName[playerid], entranceStoreName[idx], MAX_STORE_NAME);
-
-            Entrance_UpdatePlayerCooldown(playerid);
 
             // TODO:
             // add the rest of the args to the callback.

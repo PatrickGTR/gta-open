@@ -71,6 +71,16 @@ hook OnPlayerDeathEx(playerid, killerid, reason) {
     return 1;
 }
 
+hook OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ) {
+    if(GetPlayerAmmo(playerid) == 0) {
+        Logger_Dbg(PLAYER_DEBUG_HANDLER,
+            "[Weapon_Load / player_weapon-save.inc] Weapon loaded without ammo, deleting entry",
+            Logger_I("weaponid", weaponid)
+        );
+        Weapon_DeleteEntry(playerid, weaponid);
+    }
+    return 1;
+}
 // TODO: Look at this again.
 // Simple solution!
 // Think of a better solution to exclude class weapons from saving.
@@ -120,25 +130,14 @@ void:Weapon_Load(playerid) {
                 Weapon_DeleteEntry(playerid, weaponid);
             }
 
-            // delete data if there is no ammo left.
-            if(ammo == 0) {
-                Logger_Dbg(PLAYER_DEBUG_HANDLER,
-                    "[Weapon_Load / player_weapon-save.inc] Weapon loaded without ammo, deleting entry",
-                    Logger_I("weaponid", weaponid)
-                );
-                Weapon_DeleteEntry(playerid, weaponid);
-            }
-            else {
-                GivePlayerWeapon(playerid, weaponid, ammo);
+            GivePlayerWeapon(playerid, weaponid, ammo);
 
-                Logger_Dbg(PLAYER_DEBUG_HANDLER,
-                    "[Weapon_Load / player_weapon-save.inc] Weapon loaded",
-                        Logger_I("weaponid", weaponid),
-                        Logger_I("ammo", ammo),
-                        Logger_P(playerid)
-                );
-            }
-
+            Logger_Dbg(PLAYER_DEBUG_HANDLER,
+                "[Weapon_Load / player_weapon-save.inc] Weapon loaded",
+                    Logger_I("weaponid", weaponid),
+                    Logger_I("ammo", ammo),
+                    Logger_P(playerid)
+            );
         }
     }
 

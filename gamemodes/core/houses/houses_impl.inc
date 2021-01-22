@@ -124,17 +124,24 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, price, interior, descript
     }
 
     new
-        string[128 + MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION];
+        string[128 + MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION + MAX_MAP_ZONE_NAME];
 
     description = (isnull(description) ? ("For Sale!") : (description));
     ownerName = (isnull(ownerName) ? ("None") : (ownerName));
 
+    new
+        MapZone:zoneID = GetMapZoneAtPoint(x, y, z),
+        zoneName[MAX_MAP_ZONE_NAME];
+
+    GetMapZoneName(zoneID, zoneName);
+
     format(string, sizeof(string),
-        "HouseID: "C_WHITE"%i\n\
+        "%i "C_WHITE"%s\n\
         "C_ORANGE"Description: "C_WHITE"%s\n\
         "C_ORANGE"Owner: "C_WHITE"%s\n\
         "C_ORANGE"Price: "C_GREEN"$%i",
         houseid,
+        zoneName,
         description,
         ownerName,
         price);
@@ -284,24 +291,27 @@ House_UpdateDescription(playerid, houseid, const description[]) {
     }
 
     new
-        string[128 + MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION],
-        name[MAX_PLAYER_NAME];
-
-    GetPlayerName(playerid, name, sizeof(name));
+        string[128 + MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION];
 
     strcpy(HouseDescription[houseid], description);
 
+    new
+        MapZone:zoneID = GetMapZoneAtPoint(HouseEntranceX[houseid], HouseEntranceY[houseid], HouseEntranceZ[houseid]),
+        zoneName[MAX_MAP_ZONE_NAME];
+
+    GetMapZoneName(zoneID, zoneName);
+
     format(string, sizeof(string),
-        "HouseID: "C_WHITE"%i\n\
+        "%i "C_WHITE"%s\n\
         "C_ORANGE"Description: "C_WHITE"%s\n\
         "C_ORANGE"Owner: "C_WHITE"%s\n\
         "C_ORANGE"Price: "C_GREEN"$%i",
         HouseID[houseid],
+        zoneName,
         HouseDescription[houseid],
-        name,
+        ReturnPlayerName(playerid),
         HousePrice[houseid]
     );
-
     UpdateDynamic3DTextLabelText(HouseEntranceLabel[houseid], COLOR_ORANGE, string);
 
     MySQL_Bind(stmt_updateDescription, 0, HouseDescription[houseid]);
