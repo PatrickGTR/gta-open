@@ -1,4 +1,5 @@
 #define DIALOG_PERKS 69
+#define DIALOG_PERKS_TP 6970
 
 enum
     E_PERKS_DATA
@@ -13,7 +14,8 @@ static
     {
         {"Repair Vehicle", "Restores a vehicle's health to 1000", 5000},
         {"Flip Vehicle", "Flips a vehicle back to wheels if it's backflipped", 1000},
-        {"Add NOS", "Adds a NOS to vehicle", 4000}
+        {"Add NOS", "Adds a NOS to vehicle", 4000},
+        {"Teleportation", "You can teleport to any player", 1000}
     }
 ;
 
@@ -77,7 +79,32 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
                 SendMsgF(playerid, -1, "[VEH-NOS] You have installed NOS your vehicle for {FFDC2E}$%d", gPerkData[listitem][E_COST]);
             }
+            case 3: // Teleport
+            {
+                ShowPlayerDialog(playerid, DIALOG_PERKS_TP, DIALOG_STYLE_INPUT, "{FFFFFF}Teleport To A Player", "Input a valid player name/id", "Select", "Cancel");
+            }
         }
+    }
+    else if(dialogid == DIALOG_PERKS_TP)
+    {
+        new
+            id
+        ;
+
+        if(sscanf(inputtext, "u", id))
+            return ShowPlayerDialog(playerid, DIALOG_PERKS_TP, DIALOG_STYLE_INPUT, "{FFFFFF}Teleport To A Player", "Input a valid player name/id", "Select", "Cancel");
+
+        else if(!IsPlayerConected(id))
+            return SendErrorMsg(playerid, "Invalid Player ID");
+
+        else if(GetPlayerWantedLevel(playerid) != 0)
+            return SendErrorMsg(playerid, "You mustn't be a wanted player to use this perk.");
+            
+        new Float:x, Float:y, Float:z;
+        GetPlayerPos(id, x, y, z);
+        SetPlayerPos(playerid, x, y, z);
+                
+        SendMsgF(playerid -1, "[PERK-TP] You have successfully teleported to %s", id);
     }
     return 1;
 }
