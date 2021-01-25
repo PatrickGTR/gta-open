@@ -21,9 +21,6 @@ static
 
 CMD:perks(playerid, params[])
 {
-    if(!IsPlayerInAnyVehicle(playerid))
-        return SendErrorMsg(playerid, "You must be in a vehicle to use this command.");
-
     new 
         perksStr[256]
     ;
