@@ -93,7 +93,7 @@ ACMD:[4]hcreate(playerid, params[])
 ACMD:[4]hdelete(playerid, params[]) {
 
     if(isnull(params)) {
-        return SendErrorMsg(playerid, "/hdelete <house id>");
+        return SendSyntaxMsg(playerid, "/hdelete <house id>");
     }
 
     if(!isnumeric(params)) {
@@ -101,8 +101,13 @@ ACMD:[4]hdelete(playerid, params[]) {
     }
 
     new
-        houseid = strval(params);
+        houseid = strval(params),
+        ret = House_Delete(houseid);
 
-    House_Delete(playerid, houseid);
+    if(!ret) {
+        SendErrorMsgF(playerid, "House ID: ~r~%i ~w~does not exists", houseid);
+    } else {
+        SendServerMsgF(playerid, "You have successfully deleted house id "C_GREY"%i", houseid);
+    }
     return 1;
 }

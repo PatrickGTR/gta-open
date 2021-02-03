@@ -9,7 +9,6 @@ static
     Statement: stmt_InsertHouse,
     Statement: stmt_LoadHouse,
     Statement: stmt_updateDescription,
-    Statement: stmt_houseExists,
     Statement: stmt_removeHouse,
     Statement: stmt_updateOwner;
 
@@ -59,16 +58,6 @@ hook OnMySQLConnected() {
 
     stmt_updateDescription = MySQL_PrepareStatement(MySQL_GetHandle(), updateDescriptionQuery);
 
-    static const checkQuery[] = "\
-    SELECT \
-        house_id \
-    FROM \
-        player_houses \
-    WHERE \
-        house_id = ? \
-    ";
-    stmt_houseExists = MySQL_PrepareStatement(MySQL_GetHandle(), checkQuery);
-
     static const deleteQuery[] = "\
     DELETE FROM \
         player_houses \
@@ -86,6 +75,9 @@ hook OnMySQLConnected() {
         house_id = ? \
     ";
     stmt_updateOwner = MySQL_PrepareStatement(MySQL_GetHandle(), updateOwnerQuery);
+
+
+    LoadHouses();
     return 1;
 }
 
@@ -190,78 +182,44 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, price, interior, descript
     Iter_Add(HouseIndex, houseid);
 
     if(save) {
-        House_InsertToDatabase(houseid);
+        InsertToDatabase(houseid);
     }
     return houseid;
 }
 
-House_Delete(playerid, houseid) {
-    inline OnHouseRemove()
-    {
-        if (MySQL_Statement_FetchRow(stmt_houseExists))
-        {
-            MySQL_BindInt(stmt_removeHouse, 0, houseid);
-            MySQL_ExecuteThreaded(stmt_removeHouse);
+House_Delete(houseid) {
 
-            if (playerid != INVALID_PLAYER_ID)
-            {
-                SendServerMsgF(playerid, "You successfully deleted house id "C_GREY"%i", houseid);
-            }
-
-            Streamer_RemoveArrayData(STREAMER_TYPE_CP, HouseEntranceCP[houseid], E_STREAMER_EXTRA_ID, houseid);
-            Streamer_RemoveArrayData(STREAMER_TYPE_CP, HouseExitCP[houseid], E_STREAMER_EXTRA_ID, houseid);
-
-            DestroyDynamicCP(HouseEntranceCP[houseid]);
-            DestroyDynamicCP(HouseExitCP[houseid]);
-            DestroyDynamic3DTextLabel(HouseEntranceLabel[houseid]);
-            DestroyDynamic3DTextLabel(HouseExitLabel[houseid]);
-            HouseOwnerID[houseid] = -1;
-
-            Iter_Remove(HouseIndex, houseid);
-        }
-        else
-        {
-            if (playerid != INVALID_PLAYER_ID)
-            {
-                SendErrorMsgF(playerid, "The house "C_GREY"(ID:%i) "C_WHITE"you are trying to delete was not found in the database.", houseid);
-            }
-        }
+    if(!Iter_Contains(HouseIndex, houseid)) {
+        return 0;
     }
-    MySQL_BindInt(stmt_houseExists, 0, houseid);
-    MySQL_ExecuteThreaded_Inline(stmt_houseExists, using inline OnHouseRemove);
-}
 
-stock House_InsertToDatabase(houseid) {
-    MySQL_BindInt(stmt_InsertHouse, 0, houseid);
-    MySQL_BindInt(stmt_InsertHouse, 1, HouseInterior[houseid]);
-    MySQL_Bind(stmt_InsertHouse, 2, HouseDescription[houseid]);
-    MySQL_BindInt(stmt_InsertHouse, 3, HousePrice[houseid]);
-    MySQL_BindInt(stmt_InsertHouse, 4, 0);
-    MySQL_BindFloat(stmt_InsertHouse, 5, HouseEntranceX[houseid]);
-    MySQL_BindFloat(stmt_InsertHouse, 6, HouseEntranceY[houseid]);
-    MySQL_BindFloat(stmt_InsertHouse, 7, HouseEntranceZ[houseid]);
-    MySQL_BindFloat(stmt_InsertHouse, 8, HouseEntranceA[houseid]);
-    MySQL_BindInt(stmt_InsertHouse, 9, HouseVWorld[houseid]);
-    MySQL_BindInt(stmt_InsertHouse, 10, HouseInteriorID[houseid]);
-    MySQL_ExecuteThreaded(stmt_InsertHouse);
+    MySQL_BindInt(stmt_removeHouse, 0, houseid);
+    MySQL_ExecuteThreaded(stmt_removeHouse);
+
+    Streamer_RemoveArrayData(STREAMER_TYPE_CP, HouseEntranceCP[houseid], E_STREAMER_EXTRA_ID, houseid);
+    Streamer_RemoveArrayData(STREAMER_TYPE_CP, HouseExitCP[houseid], E_STREAMER_EXTRA_ID, houseid);
+
+    DestroyDynamicCP(HouseEntranceCP[houseid]);
+    DestroyDynamicCP(HouseExitCP[houseid]);
+    DestroyDynamic3DTextLabel(HouseEntranceLabel[houseid]);
+    DestroyDynamic3DTextLabel(HouseExitLabel[houseid]);
+    HouseOwnerID[houseid] = INVALID_HOUSE_ID;
+
+    Iter_Remove(HouseIndex, houseid);
+    return 1;
+
 }
 
 // Change the owner ID to the buyer
 // Change the description to 'SOLD TO BuyerName!'
 // returns N/A
-stock House_Buy(playerid, houseid) {
+House_Buy(playerid, houseid) {
     new
-        description[MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION],
-        name[MAX_PLAYER_NAME];
-
-    GetPlayerName(playerid, name, sizeof(name));
+        description[MAX_PLAYER_NAME + MAX_HOUSE_DESCRIPTION];
 
     // set new description
     // e.g SOLD TO PatrickGTR!
-    strcat(description, "SOLD TO");
-    strcat(description, " ");
-    strcat(description, name);
-    strcat(description, "!");
+    format(description, _, "Sold to %s", ReturnPlayerName(playerid));
 
     // set new ownerid.
     HouseOwnerID[houseid] = Player_GetAccountID(playerid);
@@ -279,7 +237,6 @@ stock House_Buy(playerid, houseid) {
 // 1 on success
 // 0 if description is more than MAX_HOUSE_DESCRIPTION
 // -1 if invalid houseid.
-
 House_UpdateDescription(playerid, houseid, const description[]) {
 
     if(strlen(description) > MAX_HOUSE_DESCRIPTION) {
@@ -319,53 +276,6 @@ House_UpdateDescription(playerid, houseid, const description[]) {
     MySQL_BindInt(stmt_updateDescription, 2, HouseOwnerID[houseid]);
     MySQL_ExecuteThreaded(stmt_updateDescription);
     return 1;
-}
-
-House_Load() {
-
-    inline const OnHouseLoad() {
-        new
-            houseid,
-            ownerID,
-            description[MAX_HOUSE_DESCRIPTION],
-            price,
-            money_stored,
-            interior,
-            Float:x,
-            Float:y,
-            Float:z,
-            Float:a,
-            intid,
-            ownerName[MAX_PLAYER_NAME];
-
-        MySQL_BindResultInt(stmt_LoadHouse, 0, houseid);
-        MySQL_BindResultInt(stmt_LoadHouse, 1, ownerID);
-        MySQL_BindResult(stmt_LoadHouse, 2, description);
-        MySQL_BindResultInt(stmt_LoadHouse, 3, price);
-        MySQL_BindResultInt(stmt_LoadHouse, 4, money_stored);
-        MySQL_BindResultInt(stmt_LoadHouse, 5, interior);
-        MySQL_BindResultFloat(stmt_LoadHouse, 6, x);
-        MySQL_BindResultFloat(stmt_LoadHouse, 7, y);
-        MySQL_BindResultFloat(stmt_LoadHouse, 8, z);
-        MySQL_BindResultFloat(stmt_LoadHouse, 9, a);
-        MySQL_BindResultInt(stmt_LoadHouse, 10, intid);
-        MySQL_BindResult(stmt_LoadHouse, 11, ownerName);
-
-        new
-            benchHouse = GetTickCount(),
-            count = 0;
-        while(MySQL_Statement_FetchRow(stmt_LoadHouse)) {
-            House_Create(x, y, z, a, price, interior, description, ownerName, ownerID);
-            count ++;
-        }
-        Logger_Log(
-            "House Loaded",
-            Logger_I("total", count),
-            Logger_I("took (ms)", GetTickCount() - benchHouse)
-        );
-    }
-
-    MySQL_ExecuteThreaded_Inline(stmt_LoadHouse, using inline OnHouseLoad);
 }
 
 stock House_GetEntranceData(houseid, &Float:x, &Float:y, &Float:z, &Float:a) {
@@ -411,7 +321,6 @@ stock House_GetTotal() {
     return Iter_Count(HouseIndex);
 }
 
-
 stock Player_GetTotalHouses(playerid) {
     new
         count = 0;
@@ -427,4 +336,69 @@ stock Player_GetTotalHouses(playerid) {
         }
     }
     return count;
+}
+
+
+// --
+// Internal Functions
+// --
+
+static InsertToDatabase(houseid) {
+    MySQL_BindInt(stmt_InsertHouse, 0, houseid);
+    MySQL_BindInt(stmt_InsertHouse, 1, HouseInterior[houseid]);
+    MySQL_Bind(stmt_InsertHouse, 2, HouseDescription[houseid]);
+    MySQL_BindInt(stmt_InsertHouse, 3, HousePrice[houseid]);
+    MySQL_BindInt(stmt_InsertHouse, 4, 0);
+    MySQL_BindFloat(stmt_InsertHouse, 5, HouseEntranceX[houseid]);
+    MySQL_BindFloat(stmt_InsertHouse, 6, HouseEntranceY[houseid]);
+    MySQL_BindFloat(stmt_InsertHouse, 7, HouseEntranceZ[houseid]);
+    MySQL_BindFloat(stmt_InsertHouse, 8, HouseEntranceA[houseid]);
+    MySQL_BindInt(stmt_InsertHouse, 9, HouseVWorld[houseid]);
+    MySQL_BindInt(stmt_InsertHouse, 10, HouseInteriorID[houseid]);
+    MySQL_ExecuteThreaded(stmt_InsertHouse);
+}
+
+static LoadHouses() {
+
+    inline const OnHouseLoad() {
+        new
+            houseid,
+            ownerID,
+            description[MAX_HOUSE_DESCRIPTION],
+            price,
+            money_stored,
+            interior,
+            Float:x,
+            Float:y,
+            Float:z,
+            Float:a,
+            intid,
+            ownerName[MAX_PLAYER_NAME];
+
+        MySQL_BindResultInt(stmt_LoadHouse, 0, houseid);
+        MySQL_BindResultInt(stmt_LoadHouse, 1, ownerID);
+        MySQL_BindResult(stmt_LoadHouse, 2, description);
+        MySQL_BindResultInt(stmt_LoadHouse, 3, price);
+        MySQL_BindResultInt(stmt_LoadHouse, 4, money_stored);
+        MySQL_BindResultInt(stmt_LoadHouse, 5, interior);
+        MySQL_BindResultFloat(stmt_LoadHouse, 6, x);
+        MySQL_BindResultFloat(stmt_LoadHouse, 7, y);
+        MySQL_BindResultFloat(stmt_LoadHouse, 8, z);
+        MySQL_BindResultFloat(stmt_LoadHouse, 9, a);
+        MySQL_BindResultInt(stmt_LoadHouse, 10, intid);
+        MySQL_BindResult(stmt_LoadHouse, 11, ownerName);
+
+        new
+            benchHouse = GetTickCount();
+        while(MySQL_Statement_FetchRow(stmt_LoadHouse)) {
+            House_Create(x, y, z, a, price, interior, description, ownerName, ownerID);
+        }
+        Logger_Log(
+            "House Loaded",
+            Logger_I("total", House_GetTotal()),
+            Logger_I("took (ms)", GetTickCount() - benchHouse)
+        );
+    }
+
+    MySQL_ExecuteThreaded_Inline(stmt_LoadHouse, using inline OnHouseLoad);
 }

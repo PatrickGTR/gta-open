@@ -1,22 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
-static
-		Statement: stmt_deleteFurniture;
-
-hook OnMySQLConnected() {
-	static const deleteQuery[] = "\
-		DELETE FROM \
-			house_furniture \
-		WHERE \
-			furniture_id = ? \
-		AND \
-			house_id = ? \
-	";
-	stmt_deleteFurniture = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
-	return 1;
-}
-
 hook OnPlayerConnect(playerid) {
+	// Reset
 	Furniture_DeleteTemporary(playerid);
 	return 1;
 }
@@ -153,9 +138,23 @@ Furniture_Create(furnitureID, houseID, modelId, Float:x, Float:y, Float:z, Float
 }
 
 Furniture_Delete(houseID, furnitureID) {
+	new
+		Statement: stmt_deleteFurniture;
+
+	static const deleteQuery[] = "\
+		DELETE FROM \
+			house_furniture \
+		WHERE \
+			furniture_id = ? \
+		AND \
+			house_id = ? \
+	";
+	stmt_deleteFurniture = MySQL_PrepareStatement(MySQL_GetHandle(), deleteQuery);
+
 	MySQL_BindInt(stmt_deleteFurniture, 0, furnitureID);
 	MySQL_BindInt(stmt_deleteFurniture, 1, houseID);
 	MySQL_ExecuteThreaded(stmt_deleteFurniture);
+	MySQL_StatementClose(stmt_deleteFurniture);
 
 }
 
@@ -170,7 +169,11 @@ Furniture_DeleteTemporary(playerid) {
 	Player_SetFurnitureMode(playerid, false);
 }
 
-Furniture_Buy(playerid, index) {
+// --
+// Internal
+// --
+
+static Furniture_Buy(playerid, index) {
 	new
         Float: x,
         Float: y,
