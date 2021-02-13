@@ -179,8 +179,8 @@ static void:_SaveItem(playerid, const itemName[], value) {
         "UPDATE player_items SET ? = ? + ? WHERE u_id = ?"
     );
 
-    MySQL_Bind(stmt_saveItem, 0, itemName, true);
-    MySQL_Bind(stmt_saveItem, 1, itemName, true);
+    MySQL_Bind(stmt_saveItem, 0, itemName);
+    MySQL_Bind(stmt_saveItem, 1, itemName);
     MySQL_BindInt(stmt_saveItem, 2, value);
     MySQL_BindInt(stmt_saveItem, 3, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_saveItem);
