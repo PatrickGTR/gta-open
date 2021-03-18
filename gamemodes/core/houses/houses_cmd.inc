@@ -23,6 +23,29 @@ CMD:buyhouse(playerid, params[]) {
     return 1;
 }
 
+
+CMD:hlock(playerid, params[]) {
+    new
+        houseid = Player_GetInHouseID(playerid);
+
+    if(!Player_InHouseEntrance(playerid, houseid)) {
+        return SendErrorMsg(playerid, "You are not in any house entrance.");
+    }
+
+    if(!House_PlayerIsOwner(playerid, houseid)) {
+        return SendErrorMsg(playerid, "You do not own this house.");
+    }
+
+    SendServerMsgF(
+        playerid,
+        "You have %s your house",
+        (House_IsLocked(houseid) ? "unlocked" : "locked")
+    );
+
+    House_Lock(houseid);
+    return 1;
+}
+
 CMD:hdescription(playerid, params[]) {
     if(isnull(params)) {
         return SendErrorMsg(playerid, "/hdescription <new description>");

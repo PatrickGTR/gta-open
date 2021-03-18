@@ -3,8 +3,7 @@
 
 #define MAX_ADMIN_LEVELS (5)
 
-enum
-{
+enum {
     ADM_LVL_1 = 1,
     ADM_LVL_2,
     ADM_LVL_3,
@@ -15,10 +14,7 @@ enum
 static
     PlayerAdminLevel[MAX_PLAYERS],
     BitArray: adminOnDuty<MAX_PLAYERS>,
-    Statement: stmt_retrieveAdmin
-;
-
-
+    Statement: stmt_retrieveAdmin;
 
 hook OnGameModeInit() {
     static const query_retrieveAdmin[] = "\
@@ -39,8 +35,7 @@ hook OnPlayerConnect(playerid) {
     return 1;
 }
 
-hook OnPlayerLogin(playerid)
-{
+hook OnPlayerLogin(playerid) {
     inline OnPlayerAdminLoad() {
         new
             adminLevel;
@@ -63,10 +58,8 @@ hook OnPlayerLogin(playerid)
         - SendAdminMessageF(fmat[], {Float,_}:...);
 */
 
-stock SendAdminMsg(const fmat[])
-{
-    foreach(new i : Player)
-    {
+stock SendAdminMsg(const fmat[]) {
+    foreach(new i : Player) {
         if (i != INVALID_PLAYER_ID && Admin_GetPlayerLevel(i) > 0)
         {
             SendMsgF(i, COLOR_MODERATION, "(Admin) "C_WHITE" %s", fmat);
@@ -75,15 +68,12 @@ stock SendAdminMsg(const fmat[])
     return 1;
 }
 
-stock SendAdminMsgF(const fmat[], {Float,_}:...)
-{
+stock SendAdminMsgF(const fmat[], {Float,_}:...) {
     new
         out[144];
 
-    foreach(new i : Player)
-    {
-        if (i != INVALID_PLAYER_ID && Admin_GetPlayerLevel(i) > 0)
-        {
+    foreach(new i : Player) {
+        if (i != INVALID_PLAYER_ID && Admin_GetPlayerLevel(i) > 0) {
             formatex(out, sizeof(out), fmat, ___(1));
             SendAdminMsg(out);
         }
@@ -91,8 +81,7 @@ stock SendAdminMsgF(const fmat[], {Float,_}:...)
     return 1;
 }
 
-stock Admin_SetPlayerLevel(playerid, level)
-{
+stock Admin_SetPlayerLevel(playerid, level) {
     PlayerAdminLevel[playerid] = level;
 
     new string[256];
@@ -110,10 +99,8 @@ stock Admin_SetPlayerLevel(playerid, level)
     mysql_tquery(MySQL_GetHandle(), string);
 }
 
-stock Admin_GetRankName(playerid)
-{
-    new admin_RankNames[6][24] =
-    {
+stock Admin_GetRankName(playerid) {
+    new admin_RankNames[6][24] = {
         "None",          // 0
         "Junior Admin",  // 1
         "General Admin", // 2
@@ -125,7 +112,7 @@ stock Admin_GetRankName(playerid)
     return admin_RankNames[Admin_GetPlayerLevel(playerid)];
 }
 
-Admin_GetPlayerLevel(playerid)
+stock Admin_GetPlayerLevel(playerid)
     return PlayerAdminLevel[playerid];
 
 stock SendAdminCmdUsage(playerid, const cmd[], const params[]) {
@@ -144,8 +131,7 @@ stock SendAdminCmdUsage(playerid, const cmd[], const params[]) {
     return 1;
 }
 
-stock Admin_SetPlayerDuty(playerid, bool:toggle)
-{
+stock Admin_SetPlayerDuty(playerid, bool:toggle) {
     // TODO: Change colour when player is on duty.
 
     Bit_Set(adminOnDuty, playerid, toggle);

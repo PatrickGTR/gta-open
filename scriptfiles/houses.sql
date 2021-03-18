@@ -23,6 +23,21 @@ CREATE TABLE IF NOT EXISTS player_houses (
         NO ACTION
 );
 
+CREATE TABLE IF NOT EXISTS house_settings (
+    house_id smallint(6) NOT NULL,
+    locked tinyint(1) NOT NULL DEFAULT 0,
+    PRIMARY KEY
+        (house_id),
+    FOREIGN KEY
+        (house_id)
+    REFERENCES
+        player_houses (house_id)
+    ON DELETE
+        CASCADE
+    ON UPDATE
+        CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS house_furniture (
     furniture_id INT(11) AUTO_INCREMENT,
     house_id SMALLINT(6) NOT NULL,

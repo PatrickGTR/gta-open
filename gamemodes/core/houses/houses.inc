@@ -3,6 +3,7 @@
 #include <houses_impl>
 #include <houses_entext-handler>
 #include <houses_cmd>
+#include <houses_lock>
 
 #include <furniture>
 
@@ -50,7 +51,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
         new
             houseid = Player_GetInHouseID(playerid);
         if(Player_InHouseEntrance(playerid, houseid)) {
-            if(House_PlayerIsOwner(playerid, houseid)) {
+            if(
+                (House_PlayerIsOwner(playerid, houseid) && House_IsLocked(houseid))
+                || !House_IsLocked(houseid)
+            ) {
 
                 new
                     homeMessage[256];
