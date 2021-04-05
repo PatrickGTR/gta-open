@@ -114,6 +114,10 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
                 return 1;
             }
 
+            if (Player_IsOnFurnitureMode(playerid)) {
+                return 1;
+            }
+
             MessageBox_Show(
                 playerid,
                 TYPE_MSGBOX,

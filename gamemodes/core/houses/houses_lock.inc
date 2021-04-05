@@ -22,10 +22,14 @@ hook OnMySQLConnected() {
 }
 
 House_IsLocked(houseid) {
-    return HouseLockState[houseid];
+    return House_IsValid(houseid) && HouseLockState[houseid];
 }
 
 House_Lock(houseid) {
+    if (!House_IsValid(houseid)) {
+        return 0;
+    }
+
     new
         bool: ret;
 
