@@ -1,4 +1,4 @@
-CREATE TABLE atms (
+CREATE TABLE IF NOT EXISTS atms (
     atm_id int(11) NOT NULL AUTO_INCREMENT,
     atm_x float NOT NULL,
     atm_y float NOT NULL,
