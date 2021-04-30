@@ -4,6 +4,7 @@
 #include <houses_entext-handler>
 #include <houses_cmd>
 #include <houses_lock>
+#include <houses_key_holder>
 
 #include <furniture>
 
