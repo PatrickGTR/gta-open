@@ -38,6 +38,10 @@ CMD:hgivekey(playerid, params[]) {
         houseid = Player_GetInHouseID(playerid),
         ret = House_SetKeyHolder(playerid, houseid);
 
+    if(!House_PlayerIsOwner(playerid, houseid)) {
+
+    }
+
     if(ret == -1) {
         return SendErrorMsg(playerid, "This player is already a key holder.");
     }
@@ -67,6 +71,7 @@ CMD:hremovekey(playerid, params[]) {
     SendServerMsgF(playerid, "You have successfully removed "C_GREY"%p(%i) "C_WHITE"as a key holder.", playerid, playerid);
     return 1;
 }
+
 
 CMD:hlock(playerid, params[]) {
     new
