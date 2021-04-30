@@ -39,7 +39,7 @@ CMD:hgivekey(playerid, params[]) {
         ret = House_SetKeyHolder(playerid, houseid);
 
     if(!House_PlayerIsOwner(playerid, houseid)) {
-
+        return SendErrorMsg(playerid, "You are not the owner of this house.");
     }
 
     if(ret == -1) {
@@ -63,6 +63,10 @@ CMD:hremovekey(playerid, params[]) {
     new
         houseid = Player_GetInHouseID(playerid),
         ret = House_RevokeKeyHolder(playerid, houseid);
+
+    if(!House_PlayerIsOwner(playerid, houseid)) {
+        return SendErrorMsg(playerid, "You are not the owner of this house.");
+    }
 
     if(!ret) {
         return SendErrorMsg(playerid, "This player is not a key holder.");
