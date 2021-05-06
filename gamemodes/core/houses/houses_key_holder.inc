@@ -35,10 +35,6 @@ hook OnMySQLConnected() {
             }
 
             KeyHolder[houseid][freeSlot] = userid;
-
-            printf("keyholders for house id %i", houseid);
-            printf("on slot %i is account id %i", freeSlot, userid);
-
         }
     }
     MySQL_ExecuteThreaded_Inline(stmt_LoadKeyHolders, using inline OnHouseKeyHolderLoad);
@@ -73,7 +69,6 @@ House_IsKeyHolder(playerid, houseid) {
         new
             accountid = Player_GetAccountID(playerid);
         if(KeyHolder[houseid][i] == accountid) {
-            printf("found accountid %i in houseid %i in slot %i", accountid, houseid, i);
             ret = true;
             break;
         }
