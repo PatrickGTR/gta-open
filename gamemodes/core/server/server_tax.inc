@@ -5,7 +5,13 @@ const WEEKLY_TAX_PERCENTANGE = 10;
 
 hook OnPlayerDeathEx(playerid, killerid, reason) {
     new
-        cashInHand = GetPlayerMoney(playerid) + Player_GetBankMoney(playerid),
+        cashInHand = GetPlayerMoney(playerid) + Player_GetBankMoney(playerid);
+
+    if(cashInHand > 50_000) {
+        return 1;
+    }
+
+    new
         tax = (cashInHand / 100) * DEATH_TAX_PERCENTAGE;
 
     MessageBox_ShowF(
@@ -34,6 +40,11 @@ hook OnServerWeekReset() {
         }
 
         cashInHand = GetPlayerMoney(playerid) + Player_GetBankMoney(playerid);
+
+        if(cashInHand > 50_000) {
+            continue;
+        }
+
         tax = (cashInHand / 100) * WEEKLY_TAX_PERCENTANGE;
 
         MessageBox_ShowF(
@@ -55,6 +66,7 @@ hook OnServerWeekReset() {
 stock Server_GetMoney() {
     return GetSVarInt("SERVER_MONEY");
 }
+
 Server_GiveMoney(amount) {
     SetSVarInt("SERVER_MONEY", Server_GetMoney() + amount);
 }
