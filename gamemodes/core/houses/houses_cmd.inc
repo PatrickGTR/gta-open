@@ -23,6 +23,59 @@ CMD:buyhouse(playerid, params[]) {
     return 1;
 }
 
+CMD:hgivekey(playerid, params[]) {
+
+    new
+        targetid;
+    if(sscanf(params, "u", targetid))
+        return SendSyntaxMsg(playerid, "/hgivekey <playerid/username>");
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Invalid username / targetid");
+    }
+
+    new
+        houseid = Player_GetInHouseID(playerid),
+        ret = House_SetKeyHolder(playerid, houseid);
+
+    if(!House_PlayerIsOwner(playerid, houseid)) {
+        return SendErrorMsg(playerid, "You are not the owner of this house.");
+    }
+
+    if(ret == -1) {
+        return SendErrorMsg(playerid, "This player is already a key holder.");
+    }
+
+    SendServerMsgF(playerid, "You have successfully added "C_GREY"%p(%i) "C_WHITE"as a key holder.", playerid, playerid);
+    return 1;
+}
+
+CMD:hremovekey(playerid, params[]) {
+    new
+        targetid;
+    if(sscanf(params, "u", targetid))
+        return SendSyntaxMsg(playerid, "/hgivekey <playerid/username>");
+
+    if(!IsPlayerConnected(targetid)) {
+        return SendErrorMsg(playerid, "Invalid username / targetid");
+    }
+
+    new
+        houseid = Player_GetInHouseID(playerid),
+        ret = House_RevokeKeyHolder(playerid, houseid);
+
+    if(!House_PlayerIsOwner(playerid, houseid)) {
+        return SendErrorMsg(playerid, "You are not the owner of this house.");
+    }
+
+    if(!ret) {
+        return SendErrorMsg(playerid, "This player is not a key holder.");
+    }
+
+    SendServerMsgF(playerid, "You have successfully removed "C_GREY"%p(%i) "C_WHITE"as a key holder.", playerid, playerid);
+    return 1;
+}
+
 
 CMD:hlock(playerid, params[]) {
     new
@@ -32,8 +85,11 @@ CMD:hlock(playerid, params[]) {
         return SendErrorMsg(playerid, "You are not in any house entrance.");
     }
 
-    if(!House_PlayerIsOwner(playerid, houseid)) {
-        return SendErrorMsg(playerid, "You do not own this house.");
+    new
+        isKeyHolder = House_IsKeyHolder(playerid, houseid);
+    printf("%s", isKeyHolder ? "YES" : "NO");
+    if(!isKeyHolder) {
+        return SendErrorMsg(playerid, "You do not have a key to this house.");
     }
 
     SendServerMsgF(

@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS player_houses (
     entrance_a FLOAT NOT NULL,
     interior_id TINYINT(4) NOT NULL,
     virtual_world MEDIUMINT NOT NULL,
-    PRIMARY KEY
+    UNIQUE KEY
         (house_id),
     FOREIGN KEY
         (u_id)
@@ -32,6 +32,29 @@ CREATE TABLE IF NOT EXISTS house_settings (
         (house_id)
     REFERENCES
         player_houses (house_id)
+    ON DELETE
+        CASCADE
+    ON UPDATE
+        CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS house_key_holders (
+    houseid smallint(6) NOT NULL,
+    uid int(11) NOT NULL,
+    PRIMARY KEY (houseid),
+    KEY uid (uid),
+    FOREIGN KEY
+        (houseid)
+    REFERENCES
+        player_houses (house_id)
+    ON DELETE
+        CASCADE
+    ON UPDATE
+        CASCADE,
+    FOREIGN KEY
+        (uid)
+    REFERENCES
+        players (u_id)
     ON DELETE
         CASCADE
     ON UPDATE
