@@ -1,4 +1,4 @@
-CREATE TABLE player_items (
+CREATE TABLE IF NOT EXISTS player_items (
     u_id int(11) NOT NULL,
     c4 tinyint(4) NOT NULL DEFAULT 0,
     crack tinyint(4) NOT NULL DEFAULT 0,

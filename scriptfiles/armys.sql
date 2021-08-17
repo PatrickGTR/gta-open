@@ -1,4 +1,4 @@
-CREATE TABLE armys (
+CREATE TABLE IF NOT EXISTS armys (
     u_id int(11) NOT NULL,
     PRIMARY KEY
         (u_id),

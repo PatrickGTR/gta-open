@@ -12,6 +12,10 @@ CMD:furniture(playerid, params[]) {
         if(!response)
             return 0;
 
+        if (!Player_IsInsideHouse(playerid)) {
+            return SendErrorMsg(playerid, "You must be inside your house to buy a furniture.");
+        }
+
         switch(listitem) {
             // Main Menu
             case 0: {

@@ -187,9 +187,13 @@ stock House_Create(Float:x, Float:y, Float:z, Float:a, price, interior, descript
     return houseid;
 }
 
+House_IsValid(houseid) {
+    return Iter_Contains(HouseIndex, houseid);
+}
+
 House_Delete(houseid) {
 
-    if(!Iter_Contains(HouseIndex, houseid)) {
+    if(!House_IsValid(houseid)) {
         return 0;
     }
 
@@ -279,6 +283,10 @@ House_UpdateDescription(playerid, houseid, const description[]) {
 }
 
 stock House_GetEntranceData(houseid, &Float:x, &Float:y, &Float:z, &Float:a) {
+    if (!House_IsValid(houseid)) {
+        return 0;
+    }
+
     x = HouseEntranceX[houseid];
     y = HouseEntranceY[houseid];
     z = HouseEntranceZ[houseid];
@@ -287,31 +295,31 @@ stock House_GetEntranceData(houseid, &Float:x, &Float:y, &Float:z, &Float:a) {
 }
 
 stock House_GetEntranceCPHandler(houseid) {
-    return HouseEntranceCP[houseid];
+    return !House_IsValid(houseid) ? INVALID_STREAMER_ID : HouseEntranceCP[houseid];
 }
 
 stock House_GetExitCPHandler(houseid) {
-    return HouseExitCP[houseid];
+    return !House_IsValid(houseid) ? INVALID_STREAMER_ID : HouseExitCP[houseid];
 }
 
 stock bool:House_HasOwner(houseid) {
-    return (HouseOwnerID[houseid] != INVALID_HOUSE_ID);
+    return House_IsValid(houseid) && (HouseOwnerID[houseid] != INVALID_HOUSE_ID);
 }
 
 stock House_GetInterior(houseid) {
-    return HouseInterior[houseid];
+    return !House_IsValid(houseid) ? -1 : HouseInterior[houseid];
 }
 
 stock House_GetWorld(houseid) {
-    return HouseVWorld[houseid];
+    return !House_IsValid(houseid) ? 0 : HouseVWorld[houseid];
 }
 
 stock House_GetPrice(houseid) {
-    return HousePrice[houseid];
+    return !House_IsValid(houseid) ? 0 : HousePrice[houseid];
 }
 
 stock bool:House_PlayerIsOwner(playerid, houseid) {
-    return (HouseOwnerID[houseid] == Player_GetAccountID(playerid));
+    return House_IsValid(houseid) && (HouseOwnerID[houseid] == Player_GetAccountID(playerid));
 }
 
 

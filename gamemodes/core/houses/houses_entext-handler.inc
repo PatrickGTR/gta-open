@@ -5,11 +5,11 @@ stock Player_GetInHouseID(playerid) {
 }
 
 stock Player_InHouseEntrance(playerid, houseid) {
-    return IsPlayerInDynamicCP(playerid, House_GetEntranceCPHandler(houseid));
+    return House_IsValid(houseid) && IsPlayerInDynamicCP(playerid, House_GetEntranceCPHandler(houseid));
 }
 
 stock Player_InHouseExit(playerid, houseid) {
-    return IsPlayerInDynamicCP(playerid, House_GetExitCPHandler(houseid));
+    return House_IsValid(houseid) && IsPlayerInDynamicCP(playerid, House_GetExitCPHandler(houseid));
 }
 
 stock Player_InHouseWorld(playerid) {
@@ -28,6 +28,11 @@ stock Player_InHouseInterior(playerid) {
     return House_GetInterior(arr[1]);
 }
 
+hook OnPlayerConnect(playerid) {
+    SetPVarInt(playerid, "House_Id", -1);
+    SetPVarInt(playerid, "House_CheckpointId", INVALID_STREAMER_ID);
+    return 1;
+}
 
 hook OnPlayerEnterDynamicCP(playerid, checkpointid) {
     new
@@ -61,8 +66,8 @@ hook OnPlayerLeaveDynamicCP(playerid, checkpointid) {
                 return 1;
             }
 
-            DeletePVar(playerid, "House_Id");
-            DeletePVar(playerid, "House_CheckpointId");
+            SetPVarInt(playerid, "House_Id", -1);
+            SetPVarInt(playerid, "House_CheckpointId", INVALID_STREAMER_ID);
         }
     }
     return 1;
