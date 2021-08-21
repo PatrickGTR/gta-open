@@ -2,7 +2,7 @@
 
 #define INVALID_ATM_ID (-1)
 
-#define ATM_LABEL_INFO "#"C_GREEN"%i\n%s's ATM\n"C_YELLOW"Press "C_GREEN"'~k~~CONVERSATION_YES~' "C_YELLOW"to interact"
+#define ATM_LABEL_INFO "%s's ATM\n"C_YELLOW"Press "C_GREEN"'~k~~CONVERSATION_YES~' "C_YELLOW"to interact"
 
 // Prepared Statements
 static
@@ -169,7 +169,6 @@ stock ATM_GetClosest(playerid, Float:lowestdistance = 5000.0) {
 // false -> player not close to any ATM.
 stock bool:Player_IsNearATM(playerid) {
     foreach(new i : ATMIndex) {
-
         if(IsPlayerInRangeOfPoint(playerid, 3.0, ATM_X[i], ATM_Y[i], ATM_Z[i])) {
             return true;
         }
@@ -181,6 +180,7 @@ stock bool:Player_IsNearATM(playerid) {
 
 // no returns
 stock void:ATM_Load() {
+
     inline const OnATMLoad() {
         new
             atmID,
@@ -206,25 +206,46 @@ stock void:ATM_Load() {
         MySQL_BindResultInt(stmt_LoadATM, 8, interior);
 
         new
-            idx = INVALID_ATM_ID;
+            idx;
+
+        // Thanks to Lorenc for this ATM position.
+        idx = Internal_ATM_Create(2234.733398, 51.345561000, 26.134365, 0.0, 0.0, 0.000000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(1381.069213, 259.56204200, 19.156929, 0.0, 0.0, 157.0000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(661.3598020, -555.1714470, 15.965932, 0.0, 0.0, -90.0000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(-2177.50292, -2435.006591, 30.214990, 0.0, 0.0, 52.00000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(1367.251464, -1284.611938, 13.156874, 0.0, 0.0, -90.6000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(1928.592651, -1771.088012, 13.172806, 0.0, 0.0, 90.00000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(2323.767333, -1644.993896, 14.442724, 0.0, 0.0, 0.000000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(2043.748779, -1416.704711, 16.810766, 0.0, 0.0, -90.0000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(2387.751464, -1981.961669, 13.156866, 0.0, 0.0, -180.000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(1494.450195, -1768.979492, 18.365745, 0.0, 0.0, -90.0000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(1051.627075, -1026.406616, 31.661567, 0.0, 0.0, 0.000000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(816.8725580, -1356.521240, 13.156099, 0.0, 0.0, -180.000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(1808.732177, -1567.267822, 13.063967, 0.0, 0.0, 37.00000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(2412.541259, -1492.666992, 23.628126, 0.0, 0.0, -180.000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(2431.131347, -1219.477539, 25.022165, 0.0, 0.0, 0.000000);
+        ATM_UpdateLabel(idx);
+        idx = Internal_ATM_Create(255.4551690, -197.5846250, 1.2381240, 0.0, 0.0, -90.0000);
+        ATM_UpdateLabel(idx);
+
         while(MySQL_Statement_FetchRow(stmt_LoadATM)) {
-            idx = Iter_Alloc(ATMIndex);
-
-            ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
-
+            idx = Internal_ATM_Create(x, y, z, rx, ry, rz, world, interior);
             ATM_ID[idx] = atmID;
-            ATM_X[idx] = x;
-            ATM_Y[idx] = y;
-            ATM_Z[idx] = z;
-            ATM_RX[idx] = rx;
-            ATM_RY[idx] = ry;
-            ATM_RZ[idx] = rz;
-            ATM_World[idx] = world;
-            ATM_Interior[idx] = interior;
-
             ATM_UpdateLabel(idx);
-
-            Iter_Add(ATMIndex, idx);
 
             Logger_Dbg("server-atm", "[OnMySQLConnected / server_atm.inc] atm loaded",
                 Logger_I("atm id", atmID),
@@ -256,7 +277,7 @@ void:ATM_UpdateLabel(atmIndex, colour = COLOR_YELLOW, const label[] = ATM_LABEL_
         zoneName[MAX_MAP_ZONE_NAME];
     GetMapZoneName(zoneID, zoneName, sizeof(zoneName));
 
-    formatex(string, sizeof(string), label, ATM_ID[atmIndex], zoneName);
+    formatex(string, sizeof(string), label, zoneName);
     ATM_Label[atmIndex] = CreateDynamic3DTextLabel(string,
         colour,
         ATM_X[atmIndex],
@@ -364,7 +385,7 @@ stock void:ATM_Update(atmID,
 
     // update data
     DestroyDynamicObject(ATM_ObjectID[idx]);
-    ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
+    // ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
 
     ATM_X[idx] = x;
     ATM_Y[idx] = y;
@@ -402,12 +423,8 @@ stock void:ATM_Update(atmID,
     );
 }
 
-// returns
-// -1 -> all slots used
-// if success, function returns the new id found.
-stock ATM_Create(Float: x, Float: y, Float: z, Float:ang, world, interior) {
+static Internal_ATM_Create(Float: x, Float: y, Float: z, Float:rx, Float:ry, Float:rz, world = 0, interior = 0) {
 
-    // finding new id.
     new
         idx = Iter_Alloc(ATMIndex);
 
@@ -416,38 +433,51 @@ stock ATM_Create(Float: x, Float: y, Float: z, Float:ang, world, interior) {
         return -1;
     }
 
+    //ATM_ID[idx]         = id;
+    ATM_X[idx]          = x;
+    ATM_Y[idx]          = y;
+    ATM_Z[idx]          = z;
+    ATM_RX[idx]         = rx;
+    ATM_RY[idx]         = ry;
+    ATM_RZ[idx]         = rz;
+    ATM_World[idx]      = world;
+    ATM_Interior[idx]   = interior;
+    ATM_Disabled[idx]   = false;
+
+    ATM_ObjectID[idx]   = CreateDynamicObject(19324, x, y, z, 0.0, 0.0, rz, world, interior, -1, 300.0);
+    ATM_Label[idx]      = CreateDynamic3DTextLabel("Creation in progress...", COLOR_YELLOW, x, y, z + 1.5, 300.0, .worldid = world, .interiorid = interior);
+
+    Iter_Add(ATMIndex, idx);
+
+    Logger_Dbg(
+        "server-atm",
+        "[ATM_Create / server_atm.inc] atm created",
+        // Logger_I("atm id", id),
+        Logger_F("x", x),
+        Logger_F("y", y),
+        Logger_F("z", z),
+        Logger_I("world", world),
+        Logger_I("interior", interior)
+    );
+    return idx;
+}
+
+// returns
+// -1 -> all slots used
+// if success, function returns the new id found.
+stock ATM_Create(Float: x, Float: y, Float: z, Float:ang, world, interior) {
+
+    new
+        idx = Internal_ATM_Create(Float: x, Float: y, Float: z, 0.0, 0.0, Float:ang, world, interior);
+
+    // finding new id.
     inline const OnATMCreated() {
         // assign data.
         new
-            atmID = cache_insert_id();
+            id = cache_insert_id();
 
-        ATM_ID[idx] = atmID;
-        ATM_X[idx] = x;
-        ATM_Y[idx] = y;
-        ATM_Z[idx] = z;
-        ATM_RX[idx] =
-        ATM_RY[idx] =
-        ATM_RZ[idx] = 0.0;
-        ATM_World[idx] = world;
-        ATM_Interior[idx] = interior;
-        ATM_Disabled[idx] = false;
-        Iter_Add(ATMIndex, idx);
-
-        Logger_Dbg(
-            "server-atm",
-            "[ATM_Create / server_atm.inc] atm created",
-            Logger_I("atm id", atmID),
-            Logger_F("x", x),
-            Logger_F("y", y),
-            Logger_F("z", z),
-            Logger_I("world", world),
-            Logger_I("interior", interior)
-        );
+        ATM_ID[idx] = id;
     }
-    // Creating object
-    ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y + 2.0, z, 0.0, 0.0, ang, world, interior, -1, 300.0);
-    ATM_Label[idx] = CreateDynamic3DTextLabel("Creation in progress...", COLOR_YELLOW, x, y, z + 1.5, 300.0, .worldid = world, .interiorid = interior);
-
 
     // Insert data to database.
     MySQL_BindFloat(stmt_InsertATM, 0, x);
