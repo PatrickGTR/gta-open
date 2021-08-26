@@ -367,7 +367,7 @@ stock void:ATM_Update(atmID,
 
     // update data
     DestroyDynamicObject(ATM_ObjectID[idx]);
-    // ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
+    ATM_ObjectID[idx] = CreateDynamicObject(19324, x, y, z, rx, ry, rz, world, interior, -1, 300.0);
 
     ATM_X[idx] = x;
     ATM_Y[idx] = y;
