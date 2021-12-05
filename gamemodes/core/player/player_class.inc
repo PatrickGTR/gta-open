@@ -330,8 +330,8 @@ timer void:ForceSpawnPlayer[50](playerid) {
 	// using SetSpawnInfo fixes the kick bug when
 	// TogglePlayerSpectating is used to force spawn player but without using
 	// SetSpawnInfo the server does not know where to spawn the player.
-	SetSpawnInfo(playerid, 0, Player_GetSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
-
+	// SetSpawnInfo(playerid, 0, Player_GetSkin(playerid), 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
+	SpawnPlayer(playerid);
 	TogglePlayerSpectating(playerid, false);
 }
 

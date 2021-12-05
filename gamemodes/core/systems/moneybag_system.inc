@@ -523,7 +523,7 @@ static const Float:MoneyBagData[][E_MONEYBAG_DATA] = {
 	{-531.809875, -467.091979, 26.224544}
 };
 
-new
+static
 	Float:MoneyBagX,
     Float:MoneyBagY,
     Float:MoneyBagZ,
