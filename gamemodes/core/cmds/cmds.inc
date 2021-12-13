@@ -5,6 +5,7 @@
 #include <cmds_v> // vehicle
 #include <cmds_pm> // private message
 #include <cmds_gang>
+#include <cmds_perks>
 
 #include <cmds_rob>
 
