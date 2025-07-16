@@ -9,7 +9,7 @@ const
     HOSPITAL_SKIN_CHANGE = 20_000;
 
 hook OnGameModeInit() {
-    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to view services", COLOR_WHITE, 1173.1469, -1323.4918, 16.3958, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to view services", COLOR_WHITE, 1173.1469, -1323.4918, 16.3958, 40.0, 0, false);
     CreateActor(70, 1173.1469, -1323.4918, 15.3958, 270.2290);
     return 1;
 }

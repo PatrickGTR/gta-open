@@ -210,7 +210,7 @@ CMD:shots(playerid, params[])
         return 1;
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Invalid ID");
     }
 

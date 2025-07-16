@@ -13,7 +13,7 @@ SetPlayerSpecialAction_UI(playerid, action) {
 
 ApplyAnimation_UI(playerid, const animlib[], const aninamne[], Float:fDelta, loop, lockx, locky, freeze, time, forcesync) {
 	PlayerUsingAnimation[playerid] = true;
-	ApplyAnimation(playerid, animlib, aninamne, fDelta, loop, lockx, locky, freeze, time, forcesync);
+	ApplyAnimation(playerid, animlib, aninamne, Float:fDelta, bool:loop, bool:lockx, bool:locky, bool:freeze, time, forcesync);
 	TextDrawShowForPlayer(playerid, txtAnimHelper);
 }
 
@@ -46,13 +46,13 @@ hook OnPlayerConnect(playerid) {
 
 hook OnGameModeInit() {
 	txtAnimHelper = TextDrawCreate(630.0, 420.0,"~r~~k~~PED_SPRINT~ ~w~to stop the animation");
-	TextDrawUseBox(txtAnimHelper, 0);
-	TextDrawFont(txtAnimHelper, 2);
+	TextDrawUseBox(txtAnimHelper, false);
+	TextDrawFont(txtAnimHelper, TEXT_DRAW_FONT_2);
 	TextDrawSetShadow(txtAnimHelper, 0);
     TextDrawSetOutline(txtAnimHelper, 1);
     TextDrawBackgroundColor(txtAnimHelper, 0x000000FF);
     TextDrawColor(txtAnimHelper ,0xFFFFFFFF);
-    TextDrawAlignment(txtAnimHelper, 3);
+    TextDrawAlignment(txtAnimHelper, TEXT_DRAW_ALIGN_RIGHT);
 	return 1;
 }
 
@@ -95,7 +95,7 @@ CMD:sit(playerid,params[]) {
         return SendSyntaxMsg(playerid, "/sit <1-5>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -133,7 +133,7 @@ CMD:sleep(playerid,params[]) {
         return SendSyntaxMsg(playerid, "/sleep <1-2>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -155,7 +155,7 @@ CMD:cheer(playerid,params[]) {
         return SendSyntaxMsg(playerid, "/cheer <1-8>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -188,7 +188,7 @@ CMD:dj(playerid,params[]) {
         return SendSyntaxMsg(playerid, "/dj <1-4>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -212,7 +212,7 @@ CMD:breathless(playerid,params[]){
         return SendSyntaxMsg(playerid, "/breathless <1-2>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -234,7 +234,7 @@ CMD:poli(playerid,params[]){
         return SendSyntaxMsg(playerid, "/poli <1-2>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -256,7 +256,7 @@ CMD:seat(playerid,params[]){
         return SendSyntaxMsg(playerid, "/seat <1-7>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -283,7 +283,7 @@ CMD:dance(playerid,params[]){
         return SendSyntaxMsg(playerid, "/dance <1-3>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -307,7 +307,7 @@ CMD:cross(playerid,params[]){
         return SendSyntaxMsg(playerid, "/cross <1-5>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -332,7 +332,7 @@ CMD:jiggy(playerid,params[]) {
         return SendSyntaxMsg(playerid, "/jiggy <1-10>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -362,7 +362,7 @@ CMD:ped(playerid,params[]) {
         return SendSyntaxMsg(playerid, "/ped <1-26>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -408,7 +408,7 @@ CMD:rap(playerid,params[]){
         return SendSyntaxMsg(playerid, "/rap <1-3>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -429,7 +429,7 @@ CMD:gesture(playerid,params[]){
         return SendSyntaxMsg(playerid, "/gesture <1-15>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -464,7 +464,7 @@ CMD:smoke(playerid,params[]){
         return SendSyntaxMsg(playerid, "/smoke <1-2>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -625,7 +625,7 @@ CMD:carjacked(playerid, params[]) {
         return SendSyntaxMsg(playerid, "/carjacked <1-2>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -709,7 +709,7 @@ CMD:chat(playerid, params[]) {
         return SendSyntaxMsg(playerid, "/chat <1-2>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -760,7 +760,7 @@ CMD:sup(playerid, params[]) {
         return SendSyntaxMsg(playerid, "/sup <1-3>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -975,7 +975,7 @@ CMD:knife(playerid, params[]) {
         return SendSyntaxMsg(playerid, "/knife <1-4>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 
@@ -1007,7 +1007,7 @@ CMD:basket(playerid, params[]) {
         return SendSyntaxMsg(playerid, "/basket <1-6>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Only numerical values allowed.");
     }
 

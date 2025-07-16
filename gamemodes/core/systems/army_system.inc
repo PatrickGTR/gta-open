@@ -18,8 +18,8 @@ stock bool:IsArmyVehicle(vehicleid)
 
 hook OnGameModeInit()
 {
-    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_NO~"C_WHITE" to open the gate", COLOR_WHITE, 1240.9739, -2035.3715, 59.9941, 40.0, 0, 0);
-    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_NO~"C_WHITE" to open the gate", COLOR_WHITE, 1086.5114, -2098.7629, 64.5963, 40.0, 0, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_NO~"C_WHITE" to open the gate", COLOR_WHITE, 1240.9739, -2035.3715, 59.9941, 40.0, 0, false);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_NO~"C_WHITE" to open the gate", COLOR_WHITE, 1086.5114, -2098.7629, 64.5963, 40.0, 0, false);
 
     CreateDynamic3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to see Heal\n\nCost "C_GREEN"$500", COLOR_WHITE, 1157.1663, -2019.1108, 70.1159, 40.0, .testlos = 1);
     CreateActor(274, 1157.1663, -2019.1108, 69.1159, 84.8518);

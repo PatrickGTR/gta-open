@@ -16,7 +16,7 @@ CMD:info(playerid, params[])
     return 1;
 }
 
-void:Player_ShowInfo(playerid, targetid) {
+Player_ShowInfo(playerid, targetid) {
     new
         formatContent[64],
         mainContent[512],

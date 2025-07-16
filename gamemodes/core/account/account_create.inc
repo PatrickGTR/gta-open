@@ -52,7 +52,7 @@ static Account_Create(playerid, const password[]) {
         Account_PromptRegister(playerid);
         return;
     }
-    if (isnumeric(password)) {
+    if (IsNumeric(password)) {
         SendErrorMsg(playerid, "Your password is invalid. The password should include alphabets.");
         Account_PromptRegister(playerid);
         return;

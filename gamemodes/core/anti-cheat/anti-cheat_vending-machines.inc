@@ -154,7 +154,7 @@ hook OnPlayerKeyStateChange( playerid, newkeys, oldkeys )
 						SetPlayerFacingAngle( playerid, g_VendingMachines[ i ] [ E_RZ ] );
 						SetPlayerPos( playerid, g_VendingMachines[ i ] [ E_FX ], g_VendingMachines[ i ] [ E_FY ], Z );
 
-						ApplyAnimation( playerid, "VENDING", "VEND_USE", 4.1, 0, 0, 1, 0, 0, 1 );
+						ApplyAnimation( playerid, "VENDING", "VEND_USE", 4.1, false, false, true, false, 0, SYNC_ALL);
 						PlayerPlaySound( playerid, 42600, 0.0, 0.0, 0.0 );
 					}
 					else

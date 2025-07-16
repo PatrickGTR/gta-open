@@ -4,7 +4,7 @@ const
     CHANGE_SKILL_PRICE  = 15_000;
 
 hook OnGameModeInit() {
-    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to change skill", COLOR_WHITE, 359.7139, 173.5916, 1009.3893, 40.0, 26, 0);
+    Create3DTextLabel("Press "C_YELLOW"~k~~CONVERSATION_YES~"C_WHITE" to change skill", COLOR_WHITE, 359.7139, 173.5916, 1009.3893, 40.0, 26, false);
     new BotAnna = CreateActor(141, 359.7139, 173.5916, 1008.3893, 271.1871);
     SetActorVirtualWorld(BotAnna, 26);
     return 1;

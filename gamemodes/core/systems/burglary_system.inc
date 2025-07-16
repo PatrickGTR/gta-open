@@ -59,7 +59,7 @@ stock SetRandomHideout(playerid) {
     new rand = random(sizeof(RandomHideouts));
     robbingdone[playerid] = 1;
     DisablePlayerRaceCheckpoint(playerid);
-    SetPlayerRaceCheckpoint(playerid, 1, RandomHideouts[rand][rhX], RandomHideouts[rand][rhY], RandomHideouts[rand][rhZ], RandomHideouts[rand][rhX], RandomHideouts[rand][rhY], RandomHideouts[rand][rhZ], 3.0);
+    SetPlayerRaceCheckpoint(playerid, CP_TYPE_GROUND_FINISH, RandomHideouts[rand][rhX], RandomHideouts[rand][rhY], RandomHideouts[rand][rhZ], RandomHideouts[rand][rhX], RandomHideouts[rand][rhY], RandomHideouts[rand][rhZ], 3.0);
     return 1;
 }
 
@@ -218,7 +218,7 @@ CMD:robbery(playerid) {
         bankrecent = 1;
         UI_TimeLeft(playerid, 20);
         SendServerMsg(playerid, "Robbing the bank stay in the red marker!");
-        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 1);
+        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, false, false, false, false, 5000, SYNC_ALL);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 7.0, 1141.6899, 11.1338, 1000.6797)) {
@@ -236,7 +236,7 @@ CMD:robbery(playerid) {
         casinorecent = 1;
         SendServerMsg(playerid, "Robbing the casino stay in the red marker!");
         UI_TimeLeft(playerid, 20);
-        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 1);
+        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, false, false, false, false, 5000, SYNC_ALL);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
     }
     else if(IsPlayerInRangeOfPoint(playerid, 7.0, 1230.8403, -807.2298, 1084.0078)) {
@@ -254,7 +254,7 @@ CMD:robbery(playerid) {
         mansrecent = 1;
         SendServerMsg(playerid, "Robbing the mansion stay in the red marker!");
         UI_TimeLeft(playerid, 20);
-        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 1);
+        ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, false, false, false, false, 5000, SYNC_ALL);
         burglarytimer[playerid] = defer SetHideoutTimer(playerid);
     }
     else {
@@ -278,7 +278,7 @@ stock Player_StopRobbery(playerid) {
 timer SetHideoutTimer[20000](playerid)
 {
     Player_GiveWantedLevel(playerid, 6);
-    ClearAnimations(playerid, 1);
+    ClearAnimations(playerid, SYNC_ALL);
     robbingdone[playerid] = 1;
     SetRandomHideout(playerid);
     SendServerMsg(playerid, "Go to the hideout and evade the cops!");

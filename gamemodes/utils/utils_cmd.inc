@@ -8,8 +8,8 @@
 #define CMD:%1(%2) forward cmd_%1(%2); public cmd_%1(%2)
 
 // ADMIN
-_@ACMD_CHECK_ADM(playerid, const cmd[], const params[], const level) {
-    if(Admin_GetPlayerLevel(playerid) < level) {
+_@ACMD_CHECK_ADM(playerid, const cmd[], const params[], const plevel) {
+    if(Admin_GetPlayerLevel(playerid) < plevel) {
         return false;
     }
     SendAdminCmdUsage(playerid, cmd, params);

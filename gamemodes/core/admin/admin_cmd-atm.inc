@@ -33,7 +33,7 @@ ACMD:[5]editatm(playerid, params[]) {
         return SendSyntaxMsg(playerid, "/editatm <atm id>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Invalid input.");
     }
 
@@ -53,7 +53,7 @@ ACMD:[5]deleteatm(playerid, params[]) {
         return SendSyntaxMsg(playerid, "/deleteatm <atm id>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "Invalid input.");
     }
 

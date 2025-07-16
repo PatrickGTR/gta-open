@@ -33,7 +33,7 @@ static const AnimData[][] = {
 
 hook OnPlayerConnect(playerid) {
 	for(new i = 0; i < sizeof(AnimData); i++) {
-		ApplyAnimation(playerid, AnimData[i], "null", 4.0, 0, 0, 0, 0, 0, 1);
+		ApplyAnimation(playerid, AnimData[i], "null", 4.0, false, false, false, false, 0, SYNC_ALL);
 	}
 	return 1;
 }

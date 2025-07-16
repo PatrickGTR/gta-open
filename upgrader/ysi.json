@@ -1,0 +1,42 @@
+{
+	/* You must escape `\`, so `\\\\\\\\` matches `\\` in a test input. */
+	"defines":
+	{
+		/* These are mostly defined in _defines.json. */
+		/* There should be no capture groups in here. */
+	},
+	"replacements":
+	[
+		{
+			"description": "Upgrading hooks to decorators",
+			"from": "((?&start))(hook\\s+stock|hook\\s+function|HOOK__\\s+stock|HOOK__\\s+function|HOOK_STOCK__|HOOK_FUNCTION__)\\s+((?&declaration))\\s*\\(",
+			"to": "$1@hook(.stock = \"$3\") $3("
+		},
+		{
+			"description": "Upgrading hooks to decorators",
+			"from": "((?&start))(hook\\s+public|hook\\s+callback|HOOK__\\s+public|HOOK__\\s+callback|HOOK_PUBLIC__|HOOK_CALLBACK__)\\s+((?&declaration))\\s*\\(",
+			"to": "$1@hook(.public = \"$3\") $3("
+		},
+		{
+			"description": "Upgrading hooks to decorators",
+			"from": "((?&start))(hook\\s+native|HOOK__\\s+native|HOOK_NATIVE__)\\s+((?&declaration))\\s*\\(",
+			"to": "$1@hook(.native = \"$3\") $3("
+		},
+		{
+			"description": "Upgrading hooks to decorators",
+			"from": "((?&start))(hook|HOOK__)\\s+((?&declaration))\\s*\\(",
+			"to": "$1@hook(.fallback = true) $3("
+		},
+		{
+			"description": "Upgrading timers to decorators",
+			"from": "((?&start))(timer|TIMER__)\\s+((?&declaration))\\s*\\[\\s*(.*?)\\s*\\]\\s*\\(",
+			"to": "$1@timer($4) $3("
+		},
+		{
+			"description": "Upgrading remote functions to decorators",
+			"from": "((?&start))(remotefunc|REMOTEFUNC__)\\s+((?&declaration))\\s*\\(",
+			"to": "$1@remote() $3("
+		}
+	]
+}
+

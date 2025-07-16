@@ -168,7 +168,7 @@ CMD:harvestweed(playerid, params[]) {
     }
 
     Weed_ResetData(playerid, weedId);
-    ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.0, 0 , 0, 0, 0, 0, 1);
+    ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.0, false, false, false, false, 0, SYNC_ALL);
 
     Player_GiveWeed(playerid, 1);
     SendClientMessage(playerid, COLOR_GREEN, "** WEED PICKUP ** "C_WHITE"You have harvested 10 grams of weed.");

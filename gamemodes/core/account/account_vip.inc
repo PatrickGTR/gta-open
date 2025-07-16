@@ -41,15 +41,15 @@ hook OnPlayerLogin(playerid)
 {
     inline OnPlayerVIPLoad()
     {
-        new 
-            expire, 
+        new
+            expire,
             expiry_date[30];
 
         MySQL_BindResultInt(stmt_selectVIP, 0, Player_VIPLevel[playerid]);
         MySQL_BindResult(stmt_selectVIP, 1, expiry_date, sizeof(expiry_date));
         MySQL_BindResultInt(stmt_selectVIP, 2, expire);
 
-        
+
         if(MySQL_Statement_FetchRow(stmt_selectVIP)) {
             if (expire <= 0) {
                 VIP_RemovePlayer(playerid);
@@ -65,18 +65,18 @@ hook OnPlayerLogin(playerid)
     MySQL_ExecuteThreaded_Inline(stmt_selectVIP, using inline OnPlayerVIPLoad);
 }
 
-stock VIP_GivePlayer(playerid, level, interval_type, duration) {
+stock VIP_GivePlayer(playerid, plevel, interval_type, duration) {
     new interval[6];
 
 	interval = interval_type == 0 ? ("MONTH") : ("YEAR");
 
     MySQL_BindInt(stmt_insertVIP, 0, Player_GetAccountID(playerid));
-    MySQL_BindInt(stmt_insertVIP, 1, level);
+    MySQL_BindInt(stmt_insertVIP, 1, plevel);
     MySQL_BindInt(stmt_insertVIP, 2, duration);
     MySQL_Bind(stmt_insertVIP, 3, interval);
 
     MySQL_ExecuteThreaded(stmt_insertVIP);
-    Player_VIPLevel[playerid] = level;
+    Player_VIPLevel[playerid] = plevel;
 }
 
 stock VIP_RemovePlayer(playerid) {

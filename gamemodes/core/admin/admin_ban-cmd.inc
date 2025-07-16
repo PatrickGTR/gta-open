@@ -1,6 +1,6 @@
 ACMD:[2]tempban(playerid, params[])
 {
-    if (isnull(params) || isnumeric(params))  {
+    if (isnull(params) || IsNumeric(params))  {
         return SendSyntaxMsg(playerid, "/tempban <options: d(ay), m(onth), y(ear)>");
     }
 
@@ -75,7 +75,7 @@ ACMD:[2]tempban(playerid, params[])
 
 ACMD:[2]offban(playerid, params[])
 {
-    if (isnull(params) || isnumeric(params))  {
+    if (isnull(params) || IsNumeric(params))  {
         return SendSyntaxMsg(playerid, "/offban <options: d(ay), m(onth), y(ear)>");
     }
     new

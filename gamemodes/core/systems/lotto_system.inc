@@ -73,7 +73,7 @@ hook OnServerSecondUpdate() {
             GivePlayerMoney(winnerID, LottoJackpot);
             LottoJackpot = LOTTO_START;
 
-            ApplyAnimation(winnerID, "OTB", "wtchrace_win", 4.1, 0, 1, 1, 0, 3300); // Winning animation
+            ApplyAnimation(winnerID, "OTB", "wtchrace_win", 4.1, false, true, true, false, 3300); // Winning animation
         }
 
         if(winnerID == INVALID_PLAYER_ID) {
@@ -110,7 +110,7 @@ hook OnServerSecondUpdate() {
 }
 
 CMD:lotto(playerid, params[]) {
-    if(isnull(params) || !isnumeric(params)) {
+    if(isnull(params) || !IsNumeric(params)) {
       	SendMsgF(playerid, COLOR_YELLOW, "Usage: "C_WHITE"/lotto <1 - %i>", MAX_LOTTO_INPUT);
       	SendMsgF(playerid, COLOR_WHITE, "The current Jackpot is "C_GREEN"%m", LottoJackpot);
         return 1;

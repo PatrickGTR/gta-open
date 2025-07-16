@@ -53,7 +53,7 @@ hook OnGameModeInit() {
     SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "white", 0);
     tmpobjid = CreateDynamicObject(3498,567.090,-1309.292,24.999,0.000,90.000,90.000,-1,-1,-1,300.000,300.000);
     SetDynamicObjectMaterial(tmpobjid, 1, 10765, "airportgnd_sfse", "white", 0);
-    tmpobjid = CreateDynamicObject(11313,561.131,-1294.352,18.089,0.000,0.000,-90.000,-1,-1,-1,300.000,300.000);
+    CreateDynamicObject(11313,561.131,-1294.352,18.089,0.000,0.000,-90.000,-1,-1,-1,300.000,300.000);
     return 1;
 }
 

@@ -21,7 +21,7 @@ static
 ;
 
 /* STATEMETS */
-static 
+static
     Statement:stmt_loadWeaponInv,
     Statement:stmt_saveWeaponInv
 ;
@@ -64,7 +64,7 @@ hook OnPlayerConnect(playerid)
         Bit_Set(gHasBeenOffered, playerid, false);
     }
     Iter_Clear(gWeaponIndex[playerid]);
-    return 1; 
+    return 1;
 }
 
 hook OnPlayerLogin(playerid)
@@ -104,7 +104,7 @@ hook OnPlayerSecondUpdate(playerid)
     {
         if(gWeaponCount[playerid][i] == 0)
         {
-            DeleteWeaponIndex(playerid, i); 
+            DeleteWeaponIndex(playerid, i);
         }
     }
     return 1;
@@ -217,7 +217,7 @@ TDMenu:WeaponInventory(playerid, listitem)
             return 1;
         }
         else {
-            if(!isnumeric(inputtext)) return SendErrorMsg(playerid, "This is not a number");
+            if(!IsNumeric(inputtext)) return SendErrorMsg(playerid, "This is not a number");
             new value = strval(inputtext);
             if(value < MIN_WEAPON_PRICE || value > MAX_WEAPON_PRICE) return SendErrorMsgF(playerid, "Max weapon price is %d and min is %d", MAX_WEAPON_PRICE, MIN_WEAPON_PRICE);
             gWeaponPrice[playerid][index] = value;
@@ -236,7 +236,7 @@ TDMenu:WeaponInventory(playerid, listitem)
 
 static Player_ShowWeaponInv(playerid)
 {
-    new 
+    new
         count = 0,
         tmpString[100],
         weaponname[16]
@@ -337,7 +337,7 @@ TDMenu:WeaponShowPage1(playerid, listitem)
             GivePlayerMoney(playerid, -10000);
             GivePlayerInvWeapon(playerid, 26, 250);
             Player_ShowWeaponShop(playerid, 1);
-        }   
+        }
         case 4: {
             if(GetPlayerMoney(playerid) < 25000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -25000);
@@ -402,7 +402,7 @@ TDMenu:WeaponShowPage2(playerid, listitem)
             GivePlayerMoney(playerid, -26000);
             GivePlayerInvWeapon(playerid, 27, 250);
             Player_ShowWeaponShop(playerid, 2);
-        }   
+        }
         case 4: {
             if(GetPlayerMoney(playerid) < 25000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -25000);
@@ -464,7 +464,7 @@ TDMenu:WeaponShowPage3(playerid, listitem)
             GivePlayerMoney(playerid, -10000);
             GivePlayerInvWeapon(playerid, 33, 100);
             Player_ShowWeaponShop(playerid, 3);
-        }   
+        }
         case 4: {
             if(GetPlayerMoney(playerid) < 6000) return SendErrorMsg(playerid, "You don't have enough money");
             GivePlayerMoney(playerid, -6000);
@@ -493,7 +493,7 @@ Player_ShowWeaponShop(playerid, page)
             TextMenu_Add(playerid, "Deagle (250 Ammo)\t~g~$15000");
             TextMenu_Add(playerid, "Deagle (500 Ammo)\t~g~$30000");
             TextMenu_Add(playerid, "Sawn Off (250 Ammo)\t~g~$10000");
-            TextMenu_Add(playerid, "Sawn Off (500 Ammo)\t~g~$25000");  
+            TextMenu_Add(playerid, "Sawn Off (500 Ammo)\t~g~$25000");
             TextMenu_Add(playerid, "9mm (100 Ammo)\t~g~$5000");
             TextMenu_Add(playerid, "9mm (250 Ammo)\t~g~$10000");
             TextMenu_Add(playerid, "Silenced 9mm (100 Ammo)\t~g~$5000");
@@ -506,7 +506,7 @@ Player_ShowWeaponShop(playerid, page)
             TextMenu_Add(playerid, "Shotgun (100 Ammo)\t~g~$12000");
             TextMenu_Add(playerid, "Automatic Shotgun (100 Ammo)\t~g~$13000");
             TextMenu_Add(playerid, "Automatic Shotgun (250 Ammo)\t~g~$26000");
-            TextMenu_Add(playerid, "UZI (250 Ammo)\t~g~$25000");  
+            TextMenu_Add(playerid, "UZI (250 Ammo)\t~g~$25000");
             TextMenu_Add(playerid, "UZI (500 Ammo)\t~g~$50000");
             TextMenu_Add(playerid, "Tec9 (250 Ammo)\t~g~$25000");
             TextMenu_Add(playerid, "Tec9 (500 Ammo)\t~g~$50000");
@@ -519,7 +519,7 @@ Player_ShowWeaponShop(playerid, page)
             TextMenu_Add(playerid, "AK-47 (250 Ammo)\t~g~$10000");
             TextMenu_Add(playerid, "Country Rifle (50 Ammo)\t~g~$5000");
             TextMenu_Add(playerid, "Country Rifle (100 Ammo)\t~g~$10000");
-            TextMenu_Add(playerid, "Sniper Rifle (50 Ammo)\t~g~$6000");  
+            TextMenu_Add(playerid, "Sniper Rifle (50 Ammo)\t~g~$6000");
             TextMenu_Add(playerid, "Sniper Rifle (100 Ammo)\t~g~$12000");
             TextMenu_Add(playerid, "Previous Page");
         }

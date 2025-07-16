@@ -390,8 +390,8 @@ stock GetVehicleRandomColors(modelid, &color1, &color2)
 		{
 			index = random(s_CarColors[modelid][0]) & -2;
 
-			color1 = s_CarColors[modelid][++index];
-			color2 = s_CarColors[modelid][++index];
+			color1 = s_CarColors[modelid][index + 1];
+			color2 = s_CarColors[modelid][index + 2];
 		}
 	}
 	return 1;
@@ -429,49 +429,6 @@ stock SetVehicleParams(vehicleid, type, status, delay = 0)
 	return 0;
 }
 
-stock GetVehicleOffset(vehicleid, type, &Float:x, &Float:y, &Float:z)
-{
-    new Float:fPos[4], Float:fSize[3];
-
-	if (!IsValidVehicle(vehicleid))
-	{
-		x = 0.0;
-		y = 0.0;
-		z = 0.0;
-
-		return 0;
-	}
-	else
-	{
-		GetVehiclePos(vehicleid, fPos[0], fPos[1], fPos[2]);
-		GetVehicleZAngle(vehicleid, fPos[3]);
-		GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, fSize[0], fSize[1], fSize[2]);
-
-		switch (type)
-		{
-		    case VEHICLE_OFFSET_BOOT:
-		    {
-				x = fPos[0] - (floatsqroot(fSize[1] + fSize[1]) * floatsin(-fPos[3], degrees));
-				y = fPos[1] - (floatsqroot(fSize[1] + fSize[1]) * floatcos(-fPos[3], degrees));
- 				z = fPos[2];
-			}
-			case VEHICLE_OFFSET_HOOD:
-			{
-			    x = fPos[0] + (floatsqroot(fSize[1] + fSize[1]) * floatsin(-fPos[3], degrees));
-				y = fPos[1] + (floatsqroot(fSize[1] + fSize[1]) * floatcos(-fPos[3], degrees));
-	 			z = fPos[2];
-			}
-			case VEHICLE_OFFSET_ROOF:
-			{
-			    x = fPos[0];
-			    y = fPos[1];
-			    z = fPos[2] + floatsqroot(fSize[2]);
-			}
-		}
-	}
-	return 1;
-}
-
 stock GetNearestVehicle(playerid)
 {
  	new
@@ -483,7 +440,7 @@ stock GetNearestVehicle(playerid)
 		Float:fSZ,
 		Float:fRadius;
 
-	for (new i = 1, j = GetVehiclePoolSize(); i <= j; i ++)
+	for (new i = 1, j = MAX_VEHICLES; i <= j; i ++)
 	{
 	    if (!IsVehicleStreamedIn(i, playerid))
 		{
@@ -506,7 +463,7 @@ stock GetNearestVehicle(playerid)
 	return INVALID_VEHICLE_ID;
 }
 
-stock GetVehicleDriver(vehicleid)
+/*stock GetVehicleDriver(vehicleid)
 {
 	for (new i = 0; i < MAX_PLAYERS; i ++)
 	{
@@ -516,7 +473,7 @@ stock GetVehicleDriver(vehicleid)
 		}
 	}
 	return INVALID_PLAYER_ID;
-}
+}*/
 
 stock IsVehicleSeatOccupied(vehicleid, seatid)
 {
@@ -582,7 +539,7 @@ stock Float:GetVehicleTopSpeed(vehicleid)
    	return 0.0;
 }
 
-stock GetVehicleInterior(vehicleid)
+/*stock GetVehicleInterior(vehicleid)
 {
 	if (IsValidVehicle(vehicleid))
 	{
@@ -616,7 +573,7 @@ stock GetVehiclePaintjob(vehicleid)
 		}
 	}
 	return 0;
-}
+}*/
 
 stock ResetVehiclePaintjob(vehicleid)
 {
@@ -662,7 +619,7 @@ stock EVF_CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:a, color1, col
 				color2 = randcolor2;
 			}
 		}
-  		vehicleid = CreateVehicle(modelid, x, y, z, a, color1, color2, respawn_delay, addsiren);
+  		vehicleid = CreateVehicle(modelid, x, y, z, a, color1, color2, boo:respawn_delay, bool:addsiren);
 
 	    if (vehicleid != INVALID_VEHICLE_ID)
 	    {
@@ -748,7 +705,7 @@ stock EVF_AddStaticVehicleEx(modelid, Float:x, Float:y, Float:z, Float:a, color1
 				color2 = randcolor2;
 			}
 		}
-  		vehicleid = AddStaticVehicleEx(modelid, x, y, z, a, color1, color2, respawn_delay, addsiren);
+  		vehicleid = AddStaticVehicleEx(modelid, x, y, z, a, color1, color2, bool:respawn_delay, bool:addsiren);
 
 	    if (vehicleid != INVALID_VEHICLE_ID)
 	    {
@@ -786,6 +743,83 @@ stock EVF_ChangeVehiclePaintjob(vehicleid, paintjobid)
 		SetVehiclePropertyValue(vehicleid, e_VEHICLE_PAINTJOB, paintjobid);
 	}
 	return ret;
+}
+
+stock GetVehicleOffset(vehicleid, offsetType, &Float:x, &Float:y, &Float:z)
+{
+    new model = GetVehicleModel(vehicleid);
+
+    switch (offsetType)
+    {
+        case VEHICLE_OFFSET_BOOT:
+        {
+            switch (model)
+            {
+                case 411:  // Infernus
+                {
+                    x = 0.0;
+                    y = -1.5;
+                    z = 0.3;
+                    return 1;
+                }
+                // Add other vehicle models here...
+                default:
+                {
+                    x = 0.0;
+                    y = -1.2;
+                    z = 0.3;
+                    return 1;
+                }
+            }
+        }
+        case VEHICLE_OFFSET_HOOD:
+        {
+            switch (model)
+            {
+                case 411: // Infernus
+                {
+                    x = 0.0;
+                    y = 1.5;
+                    z = 0.3;
+                    return 1;
+                }
+                default:
+                {
+                    x = 0.0;
+                    y = 1.2;
+                    z = 0.3;
+                    return 1;
+                }
+            }
+        }
+        case VEHICLE_OFFSET_ROOF:
+        {
+            switch (model)
+            {
+                case 411: // Infernus
+                {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 1.2;
+                    return 1;
+                }
+                default:
+                {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 1.0;
+                    return 1;
+                }
+            }
+        }
+        default:
+        {
+            x = y = z = 0.0;
+            return 0;
+        }
+    }
+
+    return 0;
 }
 
 public OnPlayerUpdate(playerid)

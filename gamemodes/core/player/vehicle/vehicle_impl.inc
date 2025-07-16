@@ -212,7 +212,7 @@ Vehicle_Create(playerid, modelid, Float:x, Float:y, Float:z, Float:rot) {
         strcpy(VehiclePlate[idx], "GTA-OPEN");
         strcpy(VehicleOwnerName[idx], ReturnPlayerName(playerid));
 
-        VehicleHandler[idx] = CreateVehicle(modelid, x, y, z, rot, VehicleColor1[idx], VehicleColor2[idx], -1, 0);
+        VehicleHandler[idx] = CreateVehicle(modelid, x, y, z, rot, VehicleColor1[idx], VehicleColor2[idx], -1, false);
         SetVehicleNumberPlate(VehicleHandler[idx], VehiclePlate[idx]);
         LinkVehicleToInterior(VehicleHandler[idx], VehicleInteriorID[idx]);
         SetVehicleVirtualWorld(VehicleHandler[idx], VehicleVWorld[idx]);
@@ -337,7 +337,7 @@ stock Vehicle_Load(playerid) {
 
             strcpy(VehicleOwnerName[idx], ownerName);
 
-            VehicleHandler[idx] = CreateVehicle(modelID, x, y, z, rot, -1, -1, -1, 0);
+            VehicleHandler[idx] = CreateVehicle(modelID, x, y, z, rot, -1, -1, -1, false);
             SetVehicleNumberPlate(VehicleHandler[idx], VehiclePlate[idx]);
             LinkVehicleToInterior(VehicleHandler[idx], VehicleInteriorID[idx]);
             SetVehicleVirtualWorld(VehicleHandler[idx], VehicleVWorld[idx]);
@@ -417,6 +417,6 @@ Vehicle_Destroy(playerid) {
         VehicleVWorld[i]	    = 0;
 
         DestroyVehicle(VehicleHandler[i]);
-        Iter_SafeRemove(PersonalVehicle, i, i);
+        Iter_Remove(PersonalVehicle, i);
     }
 }

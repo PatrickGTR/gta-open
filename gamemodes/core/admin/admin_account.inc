@@ -81,8 +81,8 @@ stock SendAdminMsgF(const fmat[], {Float,_}:...) {
     return 1;
 }
 
-stock Admin_SetPlayerLevel(playerid, level) {
-    PlayerAdminLevel[playerid] = level;
+stock Admin_SetPlayerLevel(playerid, plevel) {
+    PlayerAdminLevel[playerid] = plevel;
 
     new string[256];
 
@@ -95,7 +95,7 @@ stock Admin_SetPlayerLevel(playerid, level) {
         admin_level = %i \
     ";
 
-    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), level, level);
+    mysql_format(MySQL_GetHandle(), string, sizeof(string), query, Player_GetAccountID(playerid), plevel, plevel);
     mysql_tquery(MySQL_GetHandle(), string);
 }
 

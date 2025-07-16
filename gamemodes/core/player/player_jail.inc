@@ -86,7 +86,7 @@ stock Player_SendToJail(playerid, seconds, bool:save = false) {
     }
     _Player_SendToJailPos(playerid);
 
-    ClearAnimations(playerid, 1);
+    ClearAnimations(playerid, SYNC_ALL);
 
     Player_Cuff(playerid, false);
     SetPlayerWantedLevel(playerid, 0);

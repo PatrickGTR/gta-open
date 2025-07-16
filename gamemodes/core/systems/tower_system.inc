@@ -94,7 +94,7 @@ CMD:towerrobbery(playerid) {
     BurglaryInfo[playerid] = 4;
     TowerRobbedRecently = 1;
     SendServerMsg(playerid, "Robbing the Office stay in the red marker!");
-    ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 5000, 0);
+    ApplyAnimation(playerid, "SHOP", "ROB_Shifty", 4.0, false, false, false, false, 5000, SYNC_NONE);
     burglarytimer[playerid] = defer SetBriefCaseLoc(playerid);
     UI_TimeLeft(playerid, 20);
     return 1;
@@ -103,7 +103,7 @@ CMD:towerrobbery(playerid) {
 timer SetBriefCaseLoc[20000](playerid)
 {
     Player_GiveWantedLevel(playerid, 6);
-    ClearAnimations(playerid, 1);
+    ClearAnimations(playerid, SYNC_ALL);
     robbingdone[playerid] = 1;
     Briefcase_SetRandomLoc(playerid);
     FindingTimer[playerid] = defer TowerFailedToGetBC(playerid);
