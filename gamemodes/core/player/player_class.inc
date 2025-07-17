@@ -282,7 +282,7 @@ timer ForceSpawnPlayer[50](playerid) {
 	// TogglePlayerSpectating is used to force spawn player but without using
 	// SetSpawnInfo the server does not know where to spawn the player.
 	// SetSpawnInfo(playerid, 0, Player_GetSkin(playerid), 0.0, 0.0, 0.0, 0.0, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
-	SpawnPlayer(playerid);
+	//SpawnPlayer(playerid); // Since TogglePlayerSpectating spawns the player.
 	TogglePlayerSpectating(playerid, false);
 	printf("PLAYER IS SPAWNED I THINK?");
 }
