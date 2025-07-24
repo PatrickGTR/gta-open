@@ -5,18 +5,18 @@ static
 
 hook OnPlayerConnect(playerid) {
     MoneyNotification[playerid] = CreatePlayerTextDraw(playerid, 610.000000, 125.000000, "~g~+ $4,000");
-    PlayerTextDrawFont(playerid, MoneyNotification[playerid], 3);
+    PlayerTextDrawFont(playerid, MoneyNotification[playerid], TEXT_DRAW_FONT_3);
     PlayerTextDrawLetterSize(playerid, MoneyNotification[playerid], 0.400000, 1.600000);
     PlayerTextDrawTextSize(playerid, MoneyNotification[playerid], 400.000000, 17.000000);
     PlayerTextDrawSetOutline(playerid, MoneyNotification[playerid], 1);
     PlayerTextDrawSetShadow(playerid, MoneyNotification[playerid], 0);
-    PlayerTextDrawAlignment(playerid, MoneyNotification[playerid], 3);
+    PlayerTextDrawAlignment(playerid, MoneyNotification[playerid], TEXT_DRAW_ALIGN_RIGHT);
     PlayerTextDrawColor(playerid, MoneyNotification[playerid], -1);
     PlayerTextDrawBackgroundColor(playerid, MoneyNotification[playerid], 255);
-    PlayerTextDrawBoxColor(playerid, MoneyNotification[playerid], 50);
-    PlayerTextDrawUseBox(playerid, MoneyNotification[playerid], 0);
-    PlayerTextDrawSetProportional(playerid, MoneyNotification[playerid], 1);
-    PlayerTextDrawSetSelectable(playerid, MoneyNotification[playerid], 0);
+    PlayerTextDrawBoxColour(playerid, MoneyNotification[playerid], 50);
+    PlayerTextDrawUseBox(playerid, MoneyNotification[playerid], false);
+    PlayerTextDrawSetProportional(playerid, MoneyNotification[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, MoneyNotification[playerid], false);
     return 1;
 }
 

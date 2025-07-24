@@ -175,7 +175,7 @@ ACMD:[4]hdelete(playerid, params[]) {
         return SendSyntaxMsg(playerid, "/hdelete <house id>");
     }
 
-    if(!isnumeric(params)) {
+    if(!IsNumeric(params)) {
         return SendErrorMsg(playerid, "invalid input.");
     }
 

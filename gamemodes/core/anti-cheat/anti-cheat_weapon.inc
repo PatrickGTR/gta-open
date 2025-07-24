@@ -138,7 +138,7 @@ hook OnPlayerRequestClass( playerid, classid ) {
 /* ** Function Hooks ** */
 // Function Hook (GivePlayerWeapon)
 
-stock AC_GivePlayerWeapon( playerid, weaponid, ammo )
+stock AC_GivePlayerWeapon( playerid, WEAPON:weaponid, ammo )
 {
 	p_PlayerWeaponUpdateTime[ playerid ] = GetTickCount( ) + 2000;
 
@@ -158,7 +158,7 @@ stock AC_GivePlayerWeapon( playerid, weaponid, ammo )
 
 // Function Hook (SetPlayerArmedWeapon)
 
-stock AC_SetPlayerArmedWeapon( playerid, weaponid )
+stock AC_SetPlayerArmedWeapon( playerid, WEAPON:weaponid)
 {
 	if ( 0 <= weaponid <= AC_MAX_WEAPONS && p_CurrentArmedWeapon{ playerid } != weaponid ) {
 		p_PlayerWeaponUpdateTime[ playerid ] = GetTickCount( ) + 2000;
@@ -195,7 +195,7 @@ stock AC_ResetPlayerWeapons( playerid )
 
 // Function Hook (SetSpawnInfo)
 
-stock AC_SetSpawnInfo( playerid, team, skin, Float: x, Float: y, Float: z, Float: Angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo )
+stock bool:AC_SetSpawnInfo( playerid, team, skin, Float: x, Float: y, Float: z, Float: Angle, WEAPON:weapon1 = WEAPON_FIST, weapon1_ammo, WEAPON:weapon2 = WEAPON_FIST, weapon2_ammo, WEAPON:weapon3 = WEAPON_FIST, weapon3_ammo )
 {
 	if ( weapon1 != -1 && weapon1 < AC_MAX_WEAPONS ) p_PlayerHasWeapon[ playerid ] { weapon1 } = true;
 	if ( weapon2 != -1 && weapon2 < AC_MAX_WEAPONS ) p_PlayerHasWeapon[ playerid ] { weapon2 } = true;
@@ -213,7 +213,7 @@ stock AC_SetSpawnInfo( playerid, team, skin, Float: x, Float: y, Float: z, Float
 
 // Function Hook (AddPlayerClass)
 
-stock AC_AddPlayerClass( skin, Float: x, Float: y, Float: z, Float: Angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo )
+stock AC_AddPlayerClass( skin, Float: x, Float: y, Float: z, Float: Angle, WEAPON:weapon1 = WEAPON_FIST, weapon1_ammo, WEAPON:weapon2 = WEAPON_FIST, weapon2_ammo, WEAPON:weapon3 = WEAPON_FIST, weapon3_ammo )
 {
 	new
 		classid = Iter_Free(classes);
@@ -243,7 +243,7 @@ stock AC_AddPlayerClass( skin, Float: x, Float: y, Float: z, Float: Angle, weapo
 
 // Function Hook (AddPlayerClass)
 
-stock AC_AddPlayerClassEx( teamid, skin, Float:x, Float:y, Float:z, Float:Angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo )
+stock AC_AddPlayerClassEx( teamid, skin, Float:x, Float:y, Float:z, Float:Angle, WEAPON:weapon1 = WEAPON_FIST, weapon1_ammo, WEAPON:weapon2 = WEAPON_FIST, weapon2_ammo, WEAPON:weapon3 = WEAPON_FIST, weapon3_ammo )
 {
 	new
 		classid = Iter_Free(classes);

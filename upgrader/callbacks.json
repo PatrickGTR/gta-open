@@ -1,0 +1,62 @@
+{
+	/* You must escape `\`, so `\\\\\\\\` matches `\\` in a test input. */
+	"defines":
+	{
+		/* These are mostly defined in _defines.json. */
+		/* There should be no capture groups in here. */
+	},
+	"replacements":
+	[
+		{
+			"description": "Adding `PLAYER_STATE` tag to `OnPlayerStateChange`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?OnPlayerStateChange\\s*\\(\\s*playerid\\s*,\\s*newstate\\s*,\\s*oldstate\\s*\\)",
+			"to": "$1#if !defined PLAYER_STATE\n$1\t#define PLAYER_STATE: _:\n$1#endif\n$1$2 $3OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)"
+		},
+		{
+			"description": "Adding `CLICK_SOURCE` tag to `OnPlayerClickPlayer`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?OnPlayerClickPlayer\\s*\\(\\s*playerid\\s*,\\s*clickedplayerid\\s*,\\s*source\\s*\\)",
+			"to": "$1#if !defined CLICK_SOURCE\n$1\t#define CLICK_SOURCE: _:\n$1#endif\n$1$2 $3OnPlayerClickPlayer(playerid, clickedplayerid, CLICK_SOURCE:source)"
+		},
+		{
+			"description": "Adding `EDIT_RESPONSE` tag to `OnPlayerEditObject`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?OnPlayerEditObject\\s*\\(\\s*playerid\\s*,\\s*playerobject\\s*,\\s*objectid\\s*,\\s*response\\s*,\\s*Float\\s*:\\s*fX\\s*,\\s*Float\\s*:\\s*fY\\s*,\\s*Float\\s*:\\s*fZ\\s*,\\s*Float\\s*:\\s*fRotX\\s*,\\s*Float\\s*:\\s*fRotY\\s*,\\s*Float\\s*:\\s*fRotZ\\s*\\)",
+			"to": "$1#if !defined EDIT_RESPONSE\n$1\t#define EDIT_RESPONSE: _:\n$1#endif\n$1$2 $3OnPlayerEditObject(playerid, playerobject, objectid, EDIT_RESPONSE:response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ)"
+		},
+		{
+			"description": "Adding `EDIT_RESPONSE` tag to `OnPlayerEditAttachedObject`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?OnPlayerEditAttachedObject\\s*\\(\\s*playerid\\s*,\\s*response\\s*,\\s*index\\s*,\\s*modelid\\s*,\\s*boneid\\s*,\\s*Float\\s*:\\s*fOffsetX\\s*,\\s*Float\\s*:\\s*fOffsetY\\s*,\\s*Float\\s*:\\s*fOffsetZ\\s*,\\s*Float\\s*:\\s*fRotX\\s*,\\s*Float\\s*:\\s*fRotY\\s*,\\s*Float\\s*:\\s*fRotZ\\s*,\\s*Float\\s*:\\s*fScaleX\\s*,\\s*Float\\s*:\\s*fScaleY\\s*,\\s*Float\\s*:\\s*fScaleZ\\s*\\)",
+			"to": "$1#if !defined EDIT_RESPONSE\n$1\t#define EDIT_RESPONSE: _:\n$1#endif\n$1$2 $3OnPlayerEditAttachedObject(playerid, EDIT_RESPONSE:response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fScaleX, Float:fScaleY, Float:fScaleZ)"
+		},
+		{
+			"description": "Adding `SELECT_OBJECT` tag to `OnPlayerSelectObject`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?OnPlayerSelectObject\\s*\\(\\s*playerid\\s*,\\s*type\\s*,\\s*objectid\\s*,\\s*modelid\\s*,\\s*Float\\s*:\\s*fX\\s*,\\s*Float\\s*:\\s*fY\\s*,\\s*Float\\s*:\\s*fZ\\s*\\)",
+			"to": "$1#if !defined SELECT_OBJECT\n$1\t#define SELECT_OBJECT: _:\n$1#endif\n$1$2 $3OnPlayerSelectObject(playerid, SELECT_OBJECT:type, objectid, modelid, Float:fX, Float:fY, Float:fZ)"
+		},
+		{
+			"description": "Adding `BULLET_HIT_TYPE` tag to `OnPlayerWeaponShot`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?OnPlayerWeaponShot\\s*\\(\\s*playerid\\s*,\\s*weaponid\\s*,\\s*hittype\\s*,\\s*hitid\\s*,\\s*Float\\s*:\\s*fX\\s*,\\s*Float\\s*:\\s*fY\\s*,\\s*Float\\s*:\\s*fZ\\s*\\)",
+			"to": "$1#if !defined BULLET_HIT_TYPE\n$1\t#define BULLET_HIT_TYPE: _:\n$1#endif\n$1$2 $3OnPlayerWeaponShot(playerid, weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)"
+		},
+		{
+			"description": "Adding `KEY` tag to `OnPlayerKeyStateChange`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?OnPlayerKeyStateChange\\s*\\(\\s*playerid\\s*,\\s*newkeys\\s*,\\s*oldkeys\\s*\\)",
+			"to": "$1#if !defined KEY\n$1\t#define KEY: _:\n$1#endif\n$1$2 $3OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)"
+		},
+		{
+			"description": "Adding `DOWNLOAD_REQUEST` tag to `OnPlayerRequestDownload`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?OnPlayerRequestDownload\\s*\\(\\s*playerid\\s*,\\s*type\\s*,\\s*crc\\s*\\)",
+			"to": "$1#if !defined DOWNLOAD_REQUEST\n$1\t#define DOWNLOAD_REQUEST: _:\n$1#endif\n$1$2 $3OnPlayerRequestDownload(playerid, DOWNLOAD_REQUEST:type, crc)"
+		},
+		{
+			"description": "Adding `STREAMER_TYPE` tag to `Streamer_OnItemStreamIn`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?Streamer_OnItemStreamIn\\s*\\(\\s*type\\s*,\\s*(STREAMER_ALL_TAGS\\s*:\\s*)?id\\s*,\\s*forplayerid\\s*\\)",
+			"to": "$1#if !defined STREAMER_TYPE\n$1\t#define STREAMER_TYPE: _:\n$1#endif\n$1$2 $3Streamer_OnItemStreamIn(STREAMER_TYPE:type, $4id, forplayerid)"
+		},
+		{
+			"description": "Adding `STREAMER_TYPE` tag to `Streamer_OnItemStreamOut`",
+			"from": "((?&start))((?&publics))\\s+((?&symbol))?Streamer_OnItemStreamOut\\s*\\(\\s*type\\s*,\\s*(STREAMER_ALL_TAGS\\s*:\\s*)?id\\s*,\\s*forplayerid\\s*\\)",
+			"to": "$1#if !defined STREAMER_TYPE\n$1\t#define STREAMER_TYPE: _:\n$1#endif\n$1$2 $3Streamer_OnItemStreamOut(STREAMER_TYPE:type, $4id, forplayerid)"
+		}
+	]
+}
+

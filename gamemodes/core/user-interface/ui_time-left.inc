@@ -8,18 +8,18 @@ static
 
 hook OnPlayerConnect(playerid) {
     timeLeft[playerid] = CreatePlayerTextDraw(playerid, 130.000000, 400.000000, "Time left:~n~~g~05:55");
-    PlayerTextDrawFont(playerid, timeLeft[playerid], 1);
+    PlayerTextDrawFont(playerid, timeLeft[playerid], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, timeLeft[playerid], 0.270000,  0.270000 * 4);
     PlayerTextDrawTextSize(playerid, timeLeft[playerid], 200.000000, 46.500000);
     PlayerTextDrawSetOutline(playerid, timeLeft[playerid], 1);
     PlayerTextDrawSetShadow(playerid, timeLeft[playerid], 0);
-    PlayerTextDrawAlignment(playerid, timeLeft[playerid], 2);
+    PlayerTextDrawAlignment(playerid, timeLeft[playerid], TEXT_DRAW_ALIGN_CENTRE);
     PlayerTextDrawColor(playerid, timeLeft[playerid], -1);
     PlayerTextDrawBackgroundColor(playerid, timeLeft[playerid], 255);
-    PlayerTextDrawBoxColor(playerid, timeLeft[playerid], 50);
-    PlayerTextDrawUseBox(playerid, timeLeft[playerid], 0);
-    PlayerTextDrawSetProportional(playerid, timeLeft[playerid], 1);
-    PlayerTextDrawSetSelectable(playerid, timeLeft[playerid], 0);
+    PlayerTextDrawBoxColour(playerid, timeLeft[playerid], 50);
+    PlayerTextDrawUseBox(playerid, timeLeft[playerid], false);
+    PlayerTextDrawSetProportional(playerid, timeLeft[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, timeLeft[playerid], false);
 
     timeLeftShown[playerid] = false;
     timeLeftCounter[playerid] = 0;

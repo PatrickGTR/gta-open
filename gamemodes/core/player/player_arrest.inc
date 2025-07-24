@@ -4,6 +4,15 @@ new
     bool:gPlayerGettingArrested[MAX_PLAYERS]
 ;
 
+timer DelaySendToJail[1500 + GetPlayerPing(targetid)](targetid) {
+    new
+        wantedlevelsendj = GetPlayerWantedLevel(targetid), // I don't know but when you use level here it gets an preceding level error (investigate with YLess).
+        seconds = (wantedlevelsendj * 2);
+    Player_SetBailAmount(targetid, 5000);
+    Player_SendToJail(targetid, seconds, true);
+    gPlayerGettingArrested[targetid] = false;
+}
+
 hook OnPlayerDeathEx(playerid, killerid, reason)
 {
     if(killerid != INVALID_PLAYER_ID) {
@@ -79,8 +88,8 @@ Player_Arrest(playerid, targetid, errorMessage[], len = sizeof(errorMessage)) {
 
     // UI
     GameTextForPlayer(targetid, "~r~Busted!", 4000, 0);
-    ApplyAnimation(targetid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 3000, 1);
-    ApplyAnimation(playerid, "PED", "ARRESTgun", 4.1, 0, 1, 1, 1, 3000, 1);
+    ApplyAnimation(targetid, "SHOP", "SHP_Rob_HandsUp", 4.1, false, true, true, true, 3000, SYNC_ALL);
+    ApplyAnimation(playerid, "PED", "ARRESTgun", 4.1, false, true, true, true, 3000, SYNC_ALL);
     SendServerMsgF(playerid, "You have arrested %p (%d)", targetid, targetid);
     SendServerMsgF(targetid, "You have been arrested by %p (%d)", playerid, playerid);
 
@@ -92,15 +101,6 @@ Player_Arrest(playerid, targetid, errorMessage[], len = sizeof(errorMessage)) {
     // if player is getting arrested, disallow actions from other police officers while UI is playing.
     gPlayerGettingArrested[targetid] = true;
     return 1;
-}
-
-timer void:DelaySendToJail[1500 + GetPlayerPing(targetid)](targetid) {
-    new
-        level = GetPlayerWantedLevel(targetid),
-        seconds = (level * 2);
-    Player_SetBailAmount(targetid, 5000);
-    Player_SendToJail(targetid, seconds, true);
-    gPlayerGettingArrested[targetid] = false;
 }
 
 stock void:Player_AwardArrest(playerid, targetid, bool:notify = true) {

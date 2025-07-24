@@ -578,7 +578,7 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
 		GivePlayerMoney(playerid, prize);
 
         // Pickup animation.
-		ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.0, 0, 0, 0, 0, 0, 1);
+		ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.0, false, false, false, false, 0, SYNC_ALL);
 	}
     return 1;
 }
@@ -586,20 +586,20 @@ hook OnPlayerPickUpDynPickup(playerid, pickupid) {
 // 12 minutes.
 task OnMoneyBagUpdate[1000 * 60 * 12]() {
     new
-		location[MAX_MAP_ZONE_NAME];
+		moneybaglocation[MAX_MAP_ZONE_NAME];
 
 	if(!HasMoneyBagBeenFound) {
         new
-            MapZone:zoneid = GetMapZoneAtPoint(MoneyBagX, MoneyBagY, MoneyBagZ);
+            MapZone:zoneidmoney = GetMapZoneAtPoint(MoneyBagX, MoneyBagY, MoneyBagZ);
 
-        GetMapZoneName(zoneid, location, sizeof(location));
+        GetMapZoneName(zoneidmoney, moneybaglocation, sizeof(moneybaglocation));
 
 		MessageBox_ShowAllF(
             TYPE_INFORMATION,
             "~y~Moneybag hint!",
             "~w~The money bag has not been found and it is still hidden near ~p~%s",
             _,
-            location
+            moneybaglocation
         );
 	}
 	else {
@@ -610,9 +610,9 @@ task OnMoneyBagUpdate[1000 * 60 * 12]() {
 	    MoneyBagZ = MoneyBagData[randombag][E_MONEYBAG_Z];
 
         new
-            MapZone:zoneid = GetMapZoneAtPoint(MoneyBagX, MoneyBagY, MoneyBagZ);
+            MapZone:zoneidmoney = GetMapZoneAtPoint(MoneyBagX, MoneyBagY, MoneyBagZ);
 
-        GetMapZoneName(zoneid, location, sizeof(location));
+        GetMapZoneName(zoneidmoney, moneybaglocation, sizeof(moneybaglocation));
 
 		defer MoneyBag_NotifyPlayers();
 
@@ -623,18 +623,18 @@ task OnMoneyBagUpdate[1000 * 60 * 12]() {
 
 // This gives the player who found the money bag a moment of fame before
 // showing the new location of where the new money bag location is.
-timer void:MoneyBag_NotifyPlayers[7000]() {
+timer MoneyBag_NotifyPlayers[7000]() {
 	new
-		location[MAX_MAP_ZONE_NAME],
+		moneybaglocation2[MAX_MAP_ZONE_NAME],
 		MapZone:zoneid = GetMapZoneAtPoint(MoneyBagX, MoneyBagY, MoneyBagZ);
 
-	GetMapZoneName(zoneid, location, sizeof(location));
+	GetMapZoneName(zoneid, moneybaglocation2, sizeof(moneybaglocation2));
 
 	MessageBox_ShowAllF(
 		TYPE_INFORMATION,
 		"~y~Moneybag new location!",
 		"~w~The money bag is hidden near ~p~%s",
 		_,
-		location
+		moneybaglocation2
 	);
 }

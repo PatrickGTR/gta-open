@@ -57,7 +57,7 @@ Trucker_Pickup(playerid) {
     PlayerTruckingState[playerid] = STATE_PICKUP;
 
     DisablePlayerRaceCheckpoint(playerid);
-    SetPlayerRaceCheckpoint(playerid, 1, 2174.6182, -2266.6165, 13.3797, 2174.6182, -2266.6165, 13.3797, 3.0);
+    SetPlayerRaceCheckpoint(playerid, CP_TYPE_GROUND_FINISH, 2174.6182, -2266.6165, 13.3797, 2174.6182, -2266.6165, 13.3797, 3.0);
 
     UI_TimeLeft(playerid, 300);
     TruckingPickupTimer[playerid] = defer TruckingPickup(playerid);
@@ -81,7 +81,7 @@ Trucker_Begin(playerid) {
     strcpy(storeName, DeliverData[randloc][E_STORE], sizeof(storeName));
 
     DisablePlayerRaceCheckpoint(playerid);
-    SetPlayerRaceCheckpoint(playerid, 1, x, y, z, x, y, z, 3.0);
+    SetPlayerRaceCheckpoint(playerid, CP_TYPE_GROUND_FINISH, x, y, z, x, y, z, 3.0);
 
 	stop TruckingPickupTimer[playerid];
     UI_TimeLeft(playerid, 300);

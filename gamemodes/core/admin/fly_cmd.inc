@@ -84,7 +84,7 @@ hook OnPlayerUpdate(playerid)
     }
     if(fly[playerid] == true)
     {
-        GetPlayerKeys(playerid,keys,updown,leftright);
+        GetPlayerKeys(playerid, keys, updown, leftright);
         if(updown == KEY_UP) {
             if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) {
                 GetPlayerPos(playerid, fx, fy, fz);

@@ -104,6 +104,8 @@ hook OnMySQLConnected() {
 hook OnPlayerEditDynObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz) {
     if(Player_IsOnFurnitureMode(playerid)) {
         switch(Furniture_GetEditingState(playerid)) {
+            case INVALID_EDITING_TYPE: return 1;
+            case TYPE_DELETING_FURNITURE: return 1;
             case TYPE_BUYING_FURNITURE: {
                 switch(response) {
                     case EDIT_RESPONSE_CANCEL: {

@@ -100,7 +100,7 @@ mission_begin(playerid)
     strcpy(mname, MissionData[randloc][F_NAME], sizeof(mname));
 
     DisablePlayerRaceCheckpoint(playerid);
-    SetPlayerRaceCheckpoint(playerid, 1, x, y, z, x, y, z, 3.0);
+    SetPlayerRaceCheckpoint(playerid, CP_TYPE_GROUND_FINISH, x, y, z, x, y, z, 3.0);
 
     new
         currentTime = UI_GetTimeLeft(playerid),

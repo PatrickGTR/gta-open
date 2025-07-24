@@ -1,0 +1,267 @@
+{
+	/* You must escape `\`, so `\\\\\\\\` matches `\\` in a test input. */
+	"defines":
+	{
+		/* These are mostly defined in _defines.json. */
+		/* There should be no capture groups in here. */
+	},
+	"replacements":
+	[
+		{
+			"description": "Add `const` to `SendChat`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SendChat\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3SendChat(const $4)"
+		},
+		{
+			"description": "Add `const` to `SendCommand`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SendCommand\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3SendCommand(const $4)"
+		},
+		{
+			"description": "Add `const` to `StartRecordingPlayback`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))StartRecordingPlayback\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3StartRecordingPlayback($4, const $5)"
+		},
+		{
+			"description": "Add `const` to `ApplyActorAnimation`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))ApplyActorAnimation\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3ApplyActorAnimation($4, const $5, const $6,"
+		},
+		{
+			"description": "Add `const` to `HTTP`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))HTTP\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3HTTP($4, $5, const $6, const $7, const $8)"
+		},
+		{
+			"description": "Add `const` to `SetObjectMaterial`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetObjectMaterial\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetObjectMaterial($4, $5, $6, const $7, const $8,"
+		},
+		{
+			"description": "Add `const` to `SetPlayerObjectMaterial`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetPlayerObjectMaterial\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetPlayerObjectMaterial($4, $5, $6, $7, const $8, const $9,"
+		},
+		{
+			"description": "Add `const` to `SetObjectMaterialText`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetObjectMaterialText\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetObjectMaterialText($4, const $5, $6, $7, const $8,"
+		},
+		{
+			"description": "Add `const` to `SetPlayerObjectMaterialText`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetPlayerObjectMaterialText\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetPlayerObjectMaterialText($4, $5, const $6, $7, $8, const $9,"
+		},
+		{
+			"description": "Add `const` to `PlayAudioStreamForPlayer`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))PlayAudioStreamForPlayer\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3PlayAudioStreamForPlayer($4, const $5,"
+		},
+		{
+			"description": "Add `const` to `SetPlayerShopName`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetPlayerShopName\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3SetPlayerShopName($4, const $5)"
+		},
+		{
+			"description": "Add `const` to `CreatePlayerTextDraw`",
+			"from": "((?&start))((?&stocks))\\s+PlayerText\\s*:\\s*((?&prefix))CreatePlayerTextDraw\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 PlayerText:$3CreatePlayerTextDraw($4, $5, $6, const $7)"
+		},
+		{
+			"description": "Add `const` to `PlayerTextDrawSetString`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))PlayerTextDrawSetString\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3PlayerTextDrawSetString($4, $5, const $6)"
+		},
+		{
+			"description": "Add `const` to `SetPVarInt`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetPVarInt\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetPVarInt($4, const $5,"
+		},
+		{
+			"description": "Add `const` to `GetPVarInt`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))GetPVarInt\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3GetPVarInt($4, const $5)"
+		},
+		{
+			"description": "Add `const` to `SetPVarString`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetPVarString\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3SetPVarString($4, const $5, const $6)"
+		},
+		{
+			"description": "Add `const` to `GetPVarString`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))GetPVarString\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3GetPVarString($4, const $5,"
+		},
+		{
+			"description": "Add `const` to `SetPVarFloat`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetPVarFloat\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetPVarFloat($4, const $5,"
+		},
+		{
+			"description": "Add `const` to `GetPVarFloat`",
+			"from": "((?&start))((?&stocks))\\s+Float\\s*:\\s*((?&prefix))GetPVarFloat\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 Float:$3GetPVarFloat($4, const $5)"
+		},
+		{
+			"description": "Add `const` to `DeletePVar`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))DeletePVar\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3DeletePVar($4, const $5)"
+		},
+		{
+			"description": "Add `const` to `GetPVarType`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))GetPVarType\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3GetPVarType($4, const $5)"
+		},
+		{
+			"description": "Add `const` to `SetPlayerChatBubble`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetPlayerChatBubble\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetPlayerChatBubble($4, const $5,"
+		},
+		{
+			"description": "Add `const` to `ApplyAnimation`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))ApplyAnimation\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3ApplyAnimation($4, const $5, const $6,"
+		},
+		{
+			"description": "Add `const` to `StartRecordingPlayerData`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))StartRecordingPlayerData\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3StartRecordingPlayerData($4, $5, const $6)"
+		},
+		{
+			"description": "Add `const` to `SetTimer`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetTimer\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetTimer(const $4,"
+		},
+		{
+			"description": "Add `const` to `SetTimerEx`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetTimerEx\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetTimerEx(const $4, $5, $6, const $7,"
+		},
+		{
+			"description": "Add `const` to `SHA256_PassHash`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SHA256_PassHash\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SHA256_PassHash(const $4, const $5,"
+		},
+		{
+			"description": "Add `const` to `SetSVarInt`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetSVarInt\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetSVarInt(const $4,"
+		},
+		{
+			"description": "Add `const` to `GetSVarInt`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))GetSVarInt\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3GetSVarInt(const $4)"
+		},
+		{
+			"description": "Add `const` to `SetSVarString`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetSVarString\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3SetSVarString(const $4, const $5)"
+		},
+		{
+			"description": "Add `const` to `GetSVarString`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))GetSVarString\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3GetSVarString(const $4,"
+		},
+		{
+			"description": "Add `const` to `SetSVarFloat`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetSVarFloat\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3SetSVarFloat(const $4,"
+		},
+		{
+			"description": "Add `const` to `GetSVarFloat`",
+			"from": "((?&start))((?&stocks))\\s+Float\\s*:\\s*((?&prefix))GetSVarFloat\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 Float:$3GetSVarFloat(const $4)"
+		},
+		{
+			"description": "Add `const` to `DeleteSVar`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))DeleteSVar\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3DeleteSVar(const $4)"
+		},
+		{
+			"description": "Add `const` to `GetSVarType`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))GetSVarType\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3GetSVarType(const $4)"
+		},
+		{
+			"description": "Add `const` to `ConnectNPC`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))ConnectNPC\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3ConnectNPC(const $4, const $5)"
+		},
+		{
+			"description": "Add `const` to `SendRconCommand`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SendRconCommand\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3SendRconCommand(const $4)"
+		},
+		{
+			"description": "Remove `const` from `GetPlayerVersion`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))GetPlayerVersion\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3GetPlayerVersion($4, $5,"
+		},
+		{
+			"description": "Remove `const` from `GetPlayerName`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))GetPlayerName\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3GetPlayerName($4, $5,"
+		},
+		{
+			"description": "Add `const` to `BlockIpAddress`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))BlockIpAddress\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 $3BlockIpAddress(const $4,"
+		},
+		{
+			"description": "Add `const` to `UnBlockIpAddress`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))UnBlockIpAddress\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3UnBlockIpAddress(const $4)"
+		},
+		{
+			"description": "Add `const` to `TextDrawCreate`",
+			"from": "((?&start))((?&stocks))\\s+Text\\s*:\\s*((?&prefix))TextDrawCreate\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 Text:$3TextDrawCreate($4, $5, const $6)"
+		},
+		{
+			"description": "Add `const` to `TextDrawSetString`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))TextDrawSetString\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3TextDrawSetString($4, const $5)"
+		},
+		{
+			"description": "Add `const` to `Create3DTextLabel`",
+			"from": "((?&start))((?&stocks))\\s+Text3D\\s*:\\s*((?&prefix))Create3DTextLabel\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 Text3D:$3Create3DTextLabel(const $4,"
+		},
+		{
+			"description": "Add `const` to `Update3DTextLabelText`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))Update3DTextLabelText\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3Update3DTextLabelText($4, $5, const $6)"
+		},
+		{
+			"description": "Add `const` to `CreatePlayer3DTextLabel`",
+			"from": "((?&start))((?&stocks))\\s+PlayerText3D\\s*:\\s*((?&prefix))CreatePlayer3DTextLabel\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,",
+			"to": "$1$2 PlayerText3D:$3CreatePlayer3DTextLabel($4, const $5,"
+		},
+		{
+			"description": "Add `const` to `UpdatePlayer3DTextLabelText`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))UpdatePlayer3DTextLabelText\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3UpdatePlayer3DTextLabelText($4, $5, $6, const $7)"
+		},
+		{
+			"description": "Add `const` to `ShowPlayerDialog`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))ShowPlayerDialog\\s*\\(\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3ShowPlayerDialog($4, $5, $6, const $7, const $8, const $9, const $10)"
+		},
+		{
+			"description": "Add `const` to `db_open`",
+			"from": "((?&start))((?&stocks))\\s+DB\\s*:\\s*((?&prefix))db_open\\s*\\(\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 DB:$3db_open(const $4)"
+		},
+		{
+			"description": "Add `const` to `db_query`",
+			"from": "((?&start))((?&stocks))\\s+DBResult\\s*:\\s*((?&prefix))db_query\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 DBResult:$3db_query($4, const $5)"
+		},
+		{
+			"description": "Add `const` to `SetVehicleNumberPlate`",
+			"from": "((?&start))((?&stocks))\\s+((?&prefix))SetVehicleNumberPlate\\s*\\(\\s*((?&parameter))\\s*,\\s*(?:const\\s+)?((?&nonconst))\\s*\\)",
+			"to": "$1$2 $3SetVehicleNumberPlate($4, const $5)"
+		}
+	]
+}
+

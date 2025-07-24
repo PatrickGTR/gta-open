@@ -93,7 +93,7 @@ Weapon_DoNotSaveEnd(playerid) {
     Bit_Set(PlayerWeaponExcludeSave, playerid, true);
 }
 
-hook function GivePlayerWeapon(playerid, weaponid, ammo) {
+hook function GivePlayerWeapon(playerid, WEAPON:weaponid, ammo) {
     if(Bit_Get(PlayerWeaponExcludeSave, playerid)) {
         MySQL_BindInt(stmt_insertWeapon, 0, Player_GetAccountID(playerid));
         MySQL_BindInt(stmt_insertWeapon, 1, weaponid);

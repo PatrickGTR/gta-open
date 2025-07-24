@@ -81,11 +81,11 @@ public OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently) {
     }
 
     new
-        location[MAX_MAP_ZONE_NAME];
-    Player_GetLocation(playerid, location, sizeof(location));
+        plocation[MAX_MAP_ZONE_NAME];
+    Player_GetLocation(playerid, plocation, sizeof(plocation));
 
     // Notify Players.
-    SendMsgAllF(COLOR_ORANGE, "(store robbery) "C_GREY"%p(%i) "C_WHITE"began robbing "C_YELLOW"%s"C_WHITE" in "C_GREY"%s.", playerid, playerid, Entrance_PlayerIn(playerid), location);
+    SendMsgAllF(COLOR_ORANGE, "(store robbery) "C_GREY"%p(%i) "C_WHITE"began robbing "C_YELLOW"%s"C_WHITE" in "C_GREY"%s.", playerid, playerid, Entrance_PlayerIn(playerid), plocation);
     return 1;
 }
 

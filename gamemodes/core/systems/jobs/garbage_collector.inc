@@ -499,12 +499,12 @@ hook OnPlayerConnect(playerid) {
 
     CapacityText[playerid] = CreatePlayerTextDraw(playerid, 32.000000, 290.000000, "Vehicle Capacity (0/10)");
     PlayerTextDrawBackgroundColor(playerid, CapacityText[playerid], 255);
-    PlayerTextDrawFont(playerid, CapacityText[playerid], 1);
+    PlayerTextDrawFont(playerid, CapacityText[playerid], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, CapacityText[playerid], 0.200000, 1.000000);
     PlayerTextDrawColor(playerid, CapacityText[playerid], -1);
     PlayerTextDrawSetOutline(playerid, CapacityText[playerid], 1);
-    PlayerTextDrawSetProportional(playerid, CapacityText[playerid], 1);
-    PlayerTextDrawSetSelectable(playerid, CapacityText[playerid], 0);
+    PlayerTextDrawSetProportional(playerid, CapacityText[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, CapacityText[playerid], false);
 
     CapacityBar[playerid] = CreatePlayerProgressBar(playerid, 30.000000, 304.000000, 118.500000, 6.199999, -1429936641, TRASH_LIMIT, 0);
     return 1;
@@ -592,7 +592,7 @@ public OnPlayerEnterDynamicCP(playerid, checkpointid) {
 
 		LoadedTrash[vehicleid]++;
 
-		ApplyAnimation(playerid, "GRENADE", "WEAPON_throwu", 4.1, 0, 0, 0, 0, 0);
+		ApplyAnimation(playerid, "GRENADE", "WEAPON_throwu", 4.1, false, false, false, false, 0);
 
 		SendClientMessage(playerid, 0x2ECC71FF, "TRASHMASTER JOB: {FFFFFF}You've collected a trash bag.");
 
@@ -719,7 +719,7 @@ CMD:pickup(playerid, params[])
 	TrashCheckpoint[playerid] = CreateDynamicCP(x, y, z, 3.0, .playerid = playerid);
 	PlayerHasTrash[playerid] = true;
 
-	ApplyAnimation(playerid, "CARRY", "liftup105", 4.1, 0, 0, 0, 0, 0);
+	ApplyAnimation(playerid, "CARRY", "liftup105", 4.1, false, false, false, false, 0);
 	SetPlayerAttachedObject(playerid, ATTACHMENT_INDEX, 1264, 6, 0.222, 0.024, 0.128, 1.90, -90.0, 0.0, 0.5,0.5, 0.5);
 
 	Streamer_SetIntData(STREAMER_TYPE_3D_TEXT_LABEL, TrashData[id][TrashLabel], E_STREAMER_COLOR, (TrashData[id][TrashLevel] == 0) ? 0xE74C3CFF : 0xF39C12FF);

@@ -23,42 +23,42 @@ hook OnPlayerConnect(playerid)
     // Middle textdraws
     caption_TD[playerid][TYPE_MSGBOX] = CreatePlayerTextDraw(playerid, 21.000000, 204.000000, "~y~~h~caption");
     PlayerTextDrawBackgroundColor(playerid, caption_TD[playerid][TYPE_MSGBOX], TD_OUTLINE_COLOUR);
-    PlayerTextDrawFont(playerid, caption_TD[playerid][TYPE_MSGBOX], 3);
+    PlayerTextDrawFont(playerid, caption_TD[playerid][TYPE_MSGBOX], TEXT_DRAW_FONT_3);
     PlayerTextDrawLetterSize(playerid, caption_TD[playerid][TYPE_MSGBOX], 0.45, 1.8);
     PlayerTextDrawColor(playerid, caption_TD[playerid][TYPE_MSGBOX], -1);
     PlayerTextDrawSetOutline(playerid, caption_TD[playerid][TYPE_MSGBOX], 0);
-    PlayerTextDrawSetProportional(playerid, caption_TD[playerid][TYPE_MSGBOX], 1);
+    PlayerTextDrawSetProportional(playerid, caption_TD[playerid][TYPE_MSGBOX], true);
     PlayerTextDrawSetShadow(playerid, caption_TD[playerid][TYPE_MSGBOX], 1);
 
     info_TD[playerid][TYPE_MSGBOX] = CreatePlayerTextDraw(playerid, 22.000000, 220.000000, "This is a text. This is another one. The whole paragraph is supposed to be quite long. So, yeah!");
     PlayerTextDrawBackgroundColor(playerid, info_TD[playerid][TYPE_MSGBOX], TD_OUTLINE_COLOUR);
-    PlayerTextDrawFont(playerid, info_TD[playerid][TYPE_MSGBOX], 1);
+    PlayerTextDrawFont(playerid, info_TD[playerid][TYPE_MSGBOX], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, info_TD[playerid][TYPE_MSGBOX], 0.2, 0.8);
     PlayerTextDrawColor(playerid, info_TD[playerid][TYPE_MSGBOX], -1);
     PlayerTextDrawSetOutline(playerid, info_TD[playerid][TYPE_MSGBOX], 0);
-    PlayerTextDrawSetProportional(playerid, info_TD[playerid][TYPE_MSGBOX], 1);
+    PlayerTextDrawSetProportional(playerid, info_TD[playerid][TYPE_MSGBOX], true);
     PlayerTextDrawSetShadow(playerid, info_TD[playerid][TYPE_MSGBOX], 1);
-    PlayerTextDrawUseBox(playerid, info_TD[playerid][TYPE_MSGBOX], 1);
-    PlayerTextDrawBoxColor(playerid, info_TD[playerid][TYPE_MSGBOX], 68);
+    PlayerTextDrawUseBox(playerid, info_TD[playerid][TYPE_MSGBOX], true);
+    PlayerTextDrawBoxColour(playerid, info_TD[playerid][TYPE_MSGBOX], 68);
     PlayerTextDrawTextSize(playerid, info_TD[playerid][TYPE_MSGBOX], 179.000000, 0.000000);
 
     // Bottom textdraws
     caption_TD[playerid][TYPE_INFORMATION] = CreatePlayerTextDraw(playerid, 162.000000, 363.000000, "~y~~h~caption");
     PlayerTextDrawBackgroundColor(playerid, caption_TD[playerid][TYPE_INFORMATION], TD_OUTLINE_COLOUR);
-    PlayerTextDrawFont(playerid, caption_TD[playerid][TYPE_INFORMATION], 3);
+    PlayerTextDrawFont(playerid, caption_TD[playerid][TYPE_INFORMATION], TEXT_DRAW_FONT_3);
     PlayerTextDrawLetterSize(playerid, caption_TD[playerid][TYPE_INFORMATION], 0.5, 2.0);
     PlayerTextDrawColor(playerid, caption_TD[playerid][TYPE_INFORMATION], -1);
     PlayerTextDrawSetOutline(playerid, caption_TD[playerid][TYPE_INFORMATION], 1);
-    PlayerTextDrawSetProportional(playerid, caption_TD[playerid][TYPE_INFORMATION], 1);
+    PlayerTextDrawSetProportional(playerid, caption_TD[playerid][TYPE_INFORMATION], true);
     PlayerTextDrawSetShadow(playerid, caption_TD[playerid][TYPE_INFORMATION], 1);
 
     info_TD[playerid][TYPE_INFORMATION] = CreatePlayerTextDraw(playerid, 161.000000, 393.000000, "This is the message. We tell the user what's going on here!");
     PlayerTextDrawBackgroundColor(playerid, info_TD[playerid][TYPE_INFORMATION], TD_OUTLINE_COLOUR);
-    PlayerTextDrawFont(playerid, info_TD[playerid][TYPE_INFORMATION], 1);
+    PlayerTextDrawFont(playerid, info_TD[playerid][TYPE_INFORMATION], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, info_TD[playerid][TYPE_INFORMATION], 0.2, 0.8);
     PlayerTextDrawColor(playerid, info_TD[playerid][TYPE_INFORMATION], -1);
     PlayerTextDrawSetOutline(playerid, info_TD[playerid][TYPE_INFORMATION], 1);
-    PlayerTextDrawSetProportional(playerid, info_TD[playerid][TYPE_INFORMATION], 1);
+    PlayerTextDrawSetProportional(playerid, info_TD[playerid][TYPE_INFORMATION], true);
     PlayerTextDrawSetShadow(playerid, info_TD[playerid][TYPE_INFORMATION], 1);
 }
 

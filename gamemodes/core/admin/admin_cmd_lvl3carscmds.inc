@@ -473,7 +473,7 @@ ACMD:[3]dav(playerid, params[])
 
 ACMD:[3]rscars(playerid, params[])
 {
-    for(new i = GetVehiclePoolSize(); i > 0; i--)
+    for(new i = MAX_VEHICLES; i > 0; i--)
     {
         if(IsSpawnedVehicle(i) && !VehicleHasAPlayer(i) || IsAdminVehicle(i) && !VehicleHasAPlayer(i))
         {

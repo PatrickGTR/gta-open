@@ -23,24 +23,24 @@ stock PLAYER_GetPlayerWantedLevel(playerid) {
 
 #define GetPlayerWantedLevel PLAYER_GetPlayerWantedLevel
 
-stock PLAYER_SetPlayerWantedLevel(playerid, level) {
+stock PLAYER_SetPlayerWantedLevel(playerid, plevel) {
 
     // we do not allow negative value.
-    if(level < 0) {
-       level = 0;
+    if(plevel < 0) {
+       plevel = 0;
     }
 
     // if player goes above the limit then
     // we put his wanted level back to the limit.
-    if(level > MAX_WANTED_LEVEL) {
-        level = MAX_WANTED_LEVEL;
+    if(plevel > MAX_WANTED_LEVEL) {
+        plevel = MAX_WANTED_LEVEL;
     }
 
-    PlayerWantedLevel[playerid] = level;
-    UI_UpdatePlayerWanted(playerid, level);
+    PlayerWantedLevel[playerid] = plevel;
+    UI_UpdatePlayerWanted(playerid, plevel);
     Player_UpdateColour(playerid);
-    Player_SaveWantedLevel(playerid, level);
-	return SetPlayerWantedLevel(playerid, level);
+    Player_SaveWantedLevel(playerid, plevel);
+	return SetPlayerWantedLevel(playerid, plevel);
 }
 
 #if defined _ALS_SetPlayerWantedLevel
@@ -60,13 +60,13 @@ stock Player_GetWantedLevel(playerid) {
     return GetPlayerWantedLevel(playerid);
 }
 
-stock Player_GiveWantedLevel(playerid, level)  {
+stock Player_GiveWantedLevel(playerid, plevel)  {
     if(!IsPlayerConnected(playerid)) {
         return 0;
     }
     new
         currentLevel = Player_GetWantedLevel(playerid),
-        newLevel = currentLevel + level;
+        newLevel = currentLevel + plevel;
 
     SetPlayerWantedLevel(playerid, newLevel);
     return 1;

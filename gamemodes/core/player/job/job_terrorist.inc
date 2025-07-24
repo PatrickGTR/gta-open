@@ -22,7 +22,7 @@ CMD:plantc4(playerid, params[])
 
 	PlayerC4Object[playerid] = CreateDynamicObject(1252, x, y, z-1, 90, 0, 0);
 
-	ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 1, 1, 0, 5, 1);
+	ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, false, true, true, false, 5, SYNC_ALL);
 	PlayerC4Planted[playerid] = true;
 	return true;
 }

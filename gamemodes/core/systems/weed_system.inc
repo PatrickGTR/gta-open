@@ -42,7 +42,7 @@ Weed_Create(playerid, Float:x, Float:y, Float:z)
 	weedTimer[playerid][slot] 		= repeat OnWeedGrow(playerid, slot);
 
 	Iter_Add(weedIndex[playerid], slot);
-	ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.0, 0 , 0, 0, 0, 0, 1);
+	ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.0, false , false, false, false, 0, SYNC_ALL);
 
 	SendMsgF(playerid, COLOR_GREEN, "** WEED PLANT ** "C_WHITE"You have planted your weed - You could plant "C_GREY"%i "C_WHITE"more cannabis plant.", MAX_WEED_PLANT_PER_PLAYER - Iter_Count(weedIndex[playerid]));
 	return slot;

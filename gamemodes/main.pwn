@@ -1,12 +1,16 @@
 // Patrick Dave Subang (c) 2020 April
 // Github -> https://github.com/PatrickGTR
 
+// Ervin Lance Zamora (c) 2020 April
+// Github -> https://github.com/CnRXoMoX
+
 // Credits to these people, made the production easier.
 // Southclaw, Y_Less, maddinatOr, SyS, Zeex, Slice, Lorenc
 
 // TextdrawLetterSize Rule -> Thanks to DamianC
 // Letter-size-y = letter-size-x * 4
 // For a nice font display
+#define SAMP_COMPAT
 
 #if 0
 	// called when player successfully logged in.
@@ -95,7 +99,7 @@
 #include <logger>
 #include <mysql_prepared>
 #include <map-zones>
-#include <formatex>
+//#include <formatex>
 
 // Gamemode Scripts
 
@@ -137,7 +141,7 @@ public OnGameModeInit() {
 	SetWorldTime(23);
 	SetWeather(0);
 	DisableInteriorEnterExits();
-	EnableStuntBonusForAll(0);
+	EnableStuntBonusForAll(false);
 	UsePlayerPedAnims();
 
 	// Init Vehicles

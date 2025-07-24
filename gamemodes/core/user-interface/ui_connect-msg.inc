@@ -8,13 +8,13 @@ static
 hook OnGameModeInit() {
     LeaveJoinTD = TextDrawCreate    (536.000000, 210.000000, "JOIN: PDS2K12");
     TextDrawLetterSize              (LeaveJoinTD, 0.2, 0.2 * 4);
-    TextDrawAlignment               (LeaveJoinTD, 1);
+    TextDrawAlignment(LeaveJoinTD, TEXT_DRAW_ALIGN_LEFT);
     TextDrawBackgroundColor         (LeaveJoinTD, TD_OUTLINE_COLOUR);
     TextDrawColor                   (LeaveJoinTD, -1);
     TextDrawSetOutline              (LeaveJoinTD, 1);
-    TextDrawSetProportional         (LeaveJoinTD, 1);
-    TextDrawFont                    (LeaveJoinTD, 1);
-    TextDrawSetSelectable           (LeaveJoinTD, 0);
+    TextDrawSetProportional         (LeaveJoinTD, true);
+    TextDrawFont(LeaveJoinTD, TEXT_DRAW_FONT_1);
+    TextDrawSetSelectable           (LeaveJoinTD, false);
     return 1;
 }
 

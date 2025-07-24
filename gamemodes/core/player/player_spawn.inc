@@ -83,6 +83,13 @@ hook OnPlayerSpawn(playerid) {
         ang = LS_SpawnPoints[id][3];
 
         PlayerLastSpawn[playerid] = id;
+
+        Logger_Dbg(PLAYER_DEBUG_HANDLER, "[OnPlayerSpawn / player_spawn.inc] Server spawn coordinates",
+            Logger_P(playerid),
+            Logger_F("Position X", x),
+            Logger_F("Position Y", y),
+            Logger_F("Position Z", z)
+        );
     }
     else if(Player_GetClass(playerid) == TEAM_MEDIC) {
         id = random(sizeof(Medic_SpawnPoints));

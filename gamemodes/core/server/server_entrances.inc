@@ -31,6 +31,11 @@ static
     getShopName[MAX_PLAYERS][MAX_STORE_NAME],
     entranceFreezePlayer[MAX_ENTRANCES];
 
+timer EntranceUnfreezePlayer[seconds](playerid, seconds) {
+    #pragma unused seconds
+    TogglePlayerControllable(playerid, true);
+}
+
 // Attach a map icon to assigned entranceid.
 stock Entrance_SetIcon(id, iconid) {
 
@@ -134,11 +139,6 @@ stock Entrance_IsPlayerAllowed(playerid) {
 // Assign unix timestamp of player last entered CP
 stock Entrance_UpdatePlayerTick(playerid, seconds = 2) {
     return playerEnExCoolDown[playerid] = (gettime() + seconds);
-}
-
-timer void:EntranceUnfreezePlayer[seconds](playerid, seconds) {
-    #pragma unused seconds
-    TogglePlayerControllable(playerid, true);
 }
 
 // Object Visual (Animation)

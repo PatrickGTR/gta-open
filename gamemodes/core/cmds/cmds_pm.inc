@@ -6,6 +6,7 @@ static
 
 hook OnPlayerConnect(playerid) {
     Bit_Set(PlayerPMDisabled, playerid, false);
+    PlayerLastPM[playerid] = INVALID_PLAYER_ID;
     return 1;
 }
 
@@ -23,9 +24,13 @@ CMD:dnd(playerid, params[]) {
 
 hook OnPlayerDisconnect(playerid, reason)
 {
+    if(PlayerLastPM[playerid] == INVALID_PLAYER_ID) return 1;
+
     new target = PlayerLastPM[PlayerLastPM[playerid]];
-    if(IsPlayerConnected(target))
-    target = -1;
+    if(IsPlayerConnected(target)) {
+        PlayerLastPM[target] = INVALID_PLAYER_ID;
+    }
+    PlayerLastPM[playerid] = INVALID_PLAYER_ID;
     return 1;
 }
 

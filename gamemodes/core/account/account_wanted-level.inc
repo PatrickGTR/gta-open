@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-static 
+static
     Statement: stmt_updateWantedLevel;
 
 hook OnMySQLConnected(playerid) {
@@ -8,13 +8,13 @@ hook OnMySQLConnected(playerid) {
     return 1;
 }
 
-stock Player_SaveWantedLevel(playerid, level) {
+stock Player_SaveWantedLevel(playerid, plevel) {
 
     if(!IsPlayerConnected(playerid)) {
         return 0;
     }
 
-    MySQL_BindInt(stmt_updateWantedLevel, 0, level);
+    MySQL_BindInt(stmt_updateWantedLevel, 0, plevel);
     MySQL_BindInt(stmt_updateWantedLevel, 1, Player_GetAccountID(playerid));
     MySQL_ExecuteThreaded(stmt_updateWantedLevel);
     return 1;

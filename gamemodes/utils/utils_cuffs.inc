@@ -20,6 +20,9 @@ TODO:
 // ----------------------------------------------------------------------------
 
 // This is the main array that holds the attach object offsets for every skin.
+
+#include <YSI_Coding\y_hooks>
+
 static stock const Float:CUFF_CuffObjectOffsets[][] = {
     {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, // 0
     {0.021000, 0.101998, -0.009999, -6.099919, -7.100001, 83.099945, 1.489999, 3.036000, 1.957998}, // 1
@@ -345,7 +348,7 @@ native SetPlayerCuffed(playerid, bool:cuffed = true);
 stock bool:Player_IsCuffed(playerid)
 {
 	// Check if the pVar 'CUFF_object_index' is NOT 0.
-	return (GetPVarType(playerid, "CUFF_object_index") != 0);
+	return (t_VARTYPE:GetPVarType(playerid, "CUFF_object_index") != t_VARTYPE:0);
 }
 
 // SetPlayerCuffed(playerid, bool:cuffed = true)
@@ -381,7 +384,7 @@ stock Player_Cuff(playerid, bool:cuffed = true)
 	{
 		RemovePlayerAttachedObject(playerid, GetPVarInt(playerid, "CUFF_object_index"));
 		DeletePVar(playerid, "CUFF_object_index");
-		SetPlayerSpecialAction(playerid, 0);
+		SetPlayerSpecialAction(playerid, t_SPECIAL_ACTION:0);
 		return 1; // Successfully attached
 	}
 }
@@ -419,32 +422,13 @@ stock CUFF_SetPlayerSkin(playerid, skin)
 
 // ============================================================================
 
-#if !defined CUFFS_ALLOW_JUMP
-
-public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(newkeys & KEY_JUMP && !(oldkeys & KEY_JUMP) && GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED)
 	{
-		ApplyAnimation(playerid, "GYMNASIUM", "gym_jog_falloff", 4.1, 0, 1, 1, 0, 0);
+		ApplyAnimation(playerid, "GYMNASIUM", "gym_jog_falloff", 4.1, false, true, true, false, 0);
 	}
-
-	#if defined CUFF_OnPlayerKeyStateChange
-		return CUFF_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
-	#else
-		return 1;
-	#endif
+	return 1;
 }
-#if defined _ALS_OnPlayerKeyStateChange
-	#undef OnPlayerKeyStateChange
-#else
-	#define _ALS_OnPlayerKeyStateChange
-#endif
-
-#define OnPlayerKeyStateChange CUFF_OnPlayerKeyStateChange
-#if defined CUFF_OnPlayerKeyStateChange
-	forward CUFF_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
-#endif
-
-#endif
 
 // ----------------------------------------------------------------------------

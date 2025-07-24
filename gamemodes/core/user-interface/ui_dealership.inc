@@ -146,86 +146,86 @@ hook OnGameModeInit() {
         gBody[i] = TextDrawCreate(135.0, 150.0, "LD_SPAC:white");
         TextDrawLetterSize(gBody[i], 0.0, 0.0);
         TextDrawTextSize(gBody[i], 350.0, 113.0);
-        TextDrawAlignment(gBody[i], 1);
+        TextDrawAlignment(gBody[i], TEXT_DRAW_ALIGN_LEFT);
         TextDrawColor(gBody[i], 153);
         TextDrawBackgroundColor(gBody[i], 255);
-        TextDrawFont(gBody[i], 4);
-        TextDrawSetProportional(gBody[i], 0);
+        TextDrawFont(gBody[i], TEXT_DRAW_FONT_SPRITE_DRAW);
+        TextDrawSetProportional(gBody[i], false);
         TextDrawSetShadow(gBody[i], 0);
 
 		gBtnRight[i] = TextDrawCreate(161.0, 142.0, "LD_Beat:right");
 		TextDrawTextSize(gBtnRight[i], 21.0, 15.0);
-		TextDrawAlignment(gBtnRight[i], 1);
+		TextDrawAlignment(gBtnRight[i], TEXT_DRAW_ALIGN_LEFT);
 		TextDrawColor(gBtnRight[i], -1);
 		TextDrawBackgroundColor(gBtnRight[i], 255);
-		TextDrawFont(gBtnRight[i], 4);
-		TextDrawSetProportional(gBtnRight[i], 0);
+		TextDrawFont(gBtnRight[i], TEXT_DRAW_FONT_SPRITE_DRAW);
+		TextDrawSetProportional(gBtnRight[i], false);
 		TextDrawSetSelectable(gBtnRight[i], true);
 
 		gBtnLeft[i] = TextDrawCreate(135.0, 142.0, "LD_BEAT:left");
 		TextDrawTextSize(gBtnLeft[i], 21.0, 15.0);
-		TextDrawAlignment(gBtnLeft[i], 1);
+		TextDrawAlignment(gBtnLeft[i], TEXT_DRAW_ALIGN_LEFT);
 		TextDrawColor(gBtnLeft[i], -1);
 		TextDrawBackgroundColor(gBtnLeft[i], 255);
-		TextDrawFont(gBtnLeft[i], 4);
-		TextDrawSetProportional(gBtnLeft[i], 0);
+		TextDrawFont(gBtnLeft[i], TEXT_DRAW_FONT_SPRITE_DRAW);
+		TextDrawSetProportional(gBtnLeft[i], false);
 		TextDrawSetSelectable(gBtnLeft[i], true);
 
 		gBtnClose[i] = TextDrawCreate(474.0, 142.0, "X");
 		TextDrawLetterSize(gBtnClose[i], 0.4, 0.4 * 3);
-		TextDrawAlignment(gBtnClose[i], 1);
+		TextDrawAlignment(gBtnClose[i], TEXT_DRAW_ALIGN_LEFT);
 		TextDrawColor(gBtnClose[i], -1);
 		TextDrawSetOutline(gBtnClose[i], 1);
 		TextDrawBackgroundColor(gBtnClose[i], 255);
-		TextDrawFont(gBtnClose[i], 2);
-		TextDrawSetProportional(gBtnClose[i], 1);
+		TextDrawFont(gBtnClose[i], TEXT_DRAW_FONT_2);
+		TextDrawSetProportional(gBtnClose[i], true);
 		TextDrawSetSelectable(gBtnClose[i], true);
 
 		gBtnPurchase[i] = TextDrawCreate(405.0, 253.0, "PURCHASE");
 		TextDrawLetterSize(gBtnPurchase[i], 0.4, 0.4 * 3);
-		TextDrawAlignment(gBtnPurchase[i], 1);
+		TextDrawAlignment(gBtnPurchase[i], TEXT_DRAW_ALIGN_LEFT);
 		TextDrawColor(gBtnPurchase[i], -1);
 		TextDrawSetOutline(gBtnPurchase[i], 1);
 		TextDrawBackgroundColor(gBtnPurchase[i], 255);
-		TextDrawFont(gBtnPurchase[i], 1);
-		TextDrawSetProportional(gBtnPurchase[i], 1);
+		TextDrawFont(gBtnPurchase[i], TEXT_DRAW_FONT_1);
+		TextDrawSetProportional(gBtnPurchase[i], true);
 		TextDrawSetSelectable(gBtnPurchase[i], true);
 
 		gPrevNext[i] = TextDrawCreate(179.0, 134.000061, "Prev____Next");
 		TextDrawLetterSize(gPrevNext[i], 0.2, 0.2 * 3);
-		TextDrawAlignment(gPrevNext[i], 3);
+		TextDrawAlignment(gPrevNext[i], TEXT_DRAW_ALIGN_RIGHT);
 		TextDrawColor(gPrevNext[i], -1378294017);
 		TextDrawSetShadow(gPrevNext[i], 1);
 		TextDrawBackgroundColor(gPrevNext[i], 255);
-		TextDrawFont(gPrevNext[i], 1);
-		TextDrawSetProportional(gPrevNext[i], 1);
+		TextDrawFont(gPrevNext[i], TEXT_DRAW_FONT_1);
+		TextDrawSetProportional(gPrevNext[i], true);
 
 		gHeaderSide[i] = TextDrawCreate(400.0, 160.0, "Side");
 		TextDrawLetterSize(gHeaderSide[i], 0.4, 0.4 * 3);
-		TextDrawAlignment(gHeaderSide[i], 1);
+		TextDrawAlignment(gHeaderSide[i], TEXT_DRAW_ALIGN_LEFT);
 		TextDrawColor(gHeaderSide[i], -1);
 		TextDrawSetOutline(gHeaderSide[i], 1);
 		TextDrawBackgroundColor(gHeaderSide[i], 255);
-		TextDrawFont(gHeaderSide[i], 2);
-		TextDrawSetProportional(gHeaderSide[i], 1);
+		TextDrawFont(gHeaderSide[i], TEXT_DRAW_FONT_2);
+		TextDrawSetProportional(gHeaderSide[i], true);
 
 		gHeaderBack[i] = TextDrawCreate(288.0, 160.0, "Back");
 		TextDrawLetterSize(gHeaderBack[i], 0.4, 0.4 * 3);
-		TextDrawAlignment(gHeaderBack[i], 1);
+		TextDrawAlignment(gHeaderBack[i], TEXT_DRAW_ALIGN_LEFT);
 		TextDrawColor(gHeaderBack[i], -1);
 		TextDrawSetOutline(gHeaderBack[i], 1);
 		TextDrawBackgroundColor(gHeaderBack[i], 255);
-		TextDrawFont(gHeaderBack[i], 2);
-		TextDrawSetProportional(gHeaderBack[i], 1);
+		TextDrawFont(gHeaderBack[i], TEXT_DRAW_FONT_2);
+		TextDrawSetProportional(gHeaderBack[i], true);
 
 		gHeaderFront[i] = TextDrawCreate(170.0, 160.0, "Front");
 		TextDrawLetterSize(gHeaderFront[i], 0.4, 0.4 * 3);
-		TextDrawAlignment(gHeaderFront[i], 1);
+		TextDrawAlignment(gHeaderFront[i], TEXT_DRAW_ALIGN_LEFT);
 		TextDrawColor(gHeaderFront[i], -1);
 		TextDrawSetOutline(gHeaderFront[i], 1);
 		TextDrawBackgroundColor(gHeaderFront[i], 255);
-		TextDrawFont(gHeaderFront[i], 2);
-		TextDrawSetProportional(gHeaderFront[i], 1);
+		TextDrawFont(gHeaderFront[i], TEXT_DRAW_FONT_2);
+		TextDrawSetProportional(gHeaderFront[i], true);
 	}
     return 1;
 }
@@ -233,33 +233,33 @@ hook OnGameModeInit() {
 hook OnPlayerConnect(playerid) {
 	gVehModelCenter[playerid] = CreatePlayerTextDraw(playerid, 250.0, 160.0, "");
 	PlayerTextDrawTextSize(playerid, gVehModelCenter[playerid], 115.0, 112.0);
-	PlayerTextDrawAlignment(playerid, gVehModelCenter[playerid], 1);
+	PlayerTextDrawAlignment(playerid, gVehModelCenter[playerid], TEXT_DRAW_ALIGN_LEFT);
 	PlayerTextDrawColor(playerid, gVehModelCenter[playerid], -1);
 	PlayerTextDrawBackgroundColor(playerid, gVehModelCenter[playerid], 0);
-	PlayerTextDrawFont(playerid, gVehModelCenter[playerid], 5);
-	PlayerTextDrawSetProportional(playerid, gVehModelCenter[playerid], 0);
+	PlayerTextDrawFont(playerid, gVehModelCenter[playerid], TEXT_DRAW_FONT_MODEL_PREVIEW);
+	PlayerTextDrawSetProportional(playerid, gVehModelCenter[playerid], false);
 	PlayerTextDrawSetPreviewModel(playerid, gVehModelCenter[playerid], 400);
 	PlayerTextDrawSetPreviewRot(playerid, gVehModelCenter[playerid], 0.0, 0.0, 140.0, 0.899999);
 	PlayerTextDrawSetPreviewVehCol(playerid, gVehModelCenter[playerid], 1, 1);
 
 	gVehModelRight[playerid] = CreatePlayerTextDraw(playerid, 365.0, 160.0, "");
 	PlayerTextDrawTextSize(playerid, gVehModelRight[playerid], 115.0, 112.0);
-	PlayerTextDrawAlignment(playerid, gVehModelRight[playerid], 1);
+	PlayerTextDrawAlignment(playerid, gVehModelRight[playerid], TEXT_DRAW_ALIGN_LEFT);
 	PlayerTextDrawColor(playerid, gVehModelRight[playerid], -1);
 	PlayerTextDrawBackgroundColor(playerid, gVehModelRight[playerid], 0);
-	PlayerTextDrawFont(playerid, gVehModelRight[playerid], 5);
-	PlayerTextDrawSetProportional(playerid, gVehModelRight[playerid], 0);
+	PlayerTextDrawFont(playerid, gVehModelRight[playerid], TEXT_DRAW_FONT_MODEL_PREVIEW);
+	PlayerTextDrawSetProportional(playerid, gVehModelRight[playerid], false);
 	PlayerTextDrawSetPreviewModel(playerid, gVehModelRight[playerid], 400);
 	PlayerTextDrawSetPreviewRot(playerid, gVehModelRight[playerid], 0.0, 0.0, 45.0, 0.899999);
 	PlayerTextDrawSetPreviewVehCol(playerid, gVehModelRight[playerid], 1, 1);
 
 	gVehModelLeft[playerid] = CreatePlayerTextDraw(playerid, 135.0, 160.0, "");
 	PlayerTextDrawTextSize(playerid, gVehModelLeft[playerid], 115.0, 112.0);
-	PlayerTextDrawAlignment(playerid, gVehModelLeft[playerid], 1);
+	PlayerTextDrawAlignment(playerid, gVehModelLeft[playerid], TEXT_DRAW_ALIGN_LEFT);
 	PlayerTextDrawColor(playerid, gVehModelLeft[playerid], -1);
 	PlayerTextDrawBackgroundColor(playerid, gVehModelLeft[playerid], 0);
-	PlayerTextDrawFont(playerid, gVehModelLeft[playerid], 5);
-	PlayerTextDrawSetProportional(playerid, gVehModelLeft[playerid], 0);
+	PlayerTextDrawFont(playerid, gVehModelLeft[playerid], TEXT_DRAW_FONT_MODEL_PREVIEW);
+	PlayerTextDrawSetProportional(playerid, gVehModelLeft[playerid], false);
 	PlayerTextDrawSetPreviewModel(playerid, gVehModelLeft[playerid], 400);
 	PlayerTextDrawSetPreviewRot(playerid, gVehModelLeft[playerid], -20.0, 0.0, 0.0, 0.899999);
 	PlayerTextDrawSetPreviewVehCol(playerid, gVehModelLeft[playerid], 1, 1);
@@ -267,21 +267,21 @@ hook OnPlayerConnect(playerid) {
 	gVehModelHeader[playerid] = CreatePlayerTextDraw(playerid, 310.0, 142.0, "Landstalker");
 	PlayerTextDrawLetterSize(playerid, gVehModelHeader[playerid], 0.500000, 1.500000);
 	PlayerTextDrawTextSize(playerid, gVehModelHeader[playerid], 0.0, 227.0);
-	PlayerTextDrawAlignment(playerid, gVehModelHeader[playerid], 2);
+	PlayerTextDrawAlignment(playerid, gVehModelHeader[playerid], TEXT_DRAW_ALIGN_CENTRE);
 	PlayerTextDrawColor(playerid, gVehModelHeader[playerid], -1);
 	PlayerTextDrawSetOutline(playerid, gVehModelHeader[playerid], 1);
 	PlayerTextDrawBackgroundColor(playerid, gVehModelHeader[playerid], 255);
-	PlayerTextDrawFont(playerid, gVehModelHeader[playerid], 3);
-	PlayerTextDrawSetProportional(playerid, gVehModelHeader[playerid], 1);
+	PlayerTextDrawFont(playerid, gVehModelHeader[playerid], TEXT_DRAW_FONT_3);
+	PlayerTextDrawSetProportional(playerid, gVehModelHeader[playerid], true);
 
 	gVehModelPrice[playerid] = CreatePlayerTextDraw(playerid, 313.0, 125.0, "~g~$3,500,000");
 	PlayerTextDrawLetterSize(playerid, gVehModelPrice[playerid], 0.400000, 1.600000);
-	PlayerTextDrawAlignment(playerid, gVehModelPrice[playerid], 2);
+	PlayerTextDrawAlignment(playerid, gVehModelPrice[playerid], TEXT_DRAW_ALIGN_CENTRE);
 	PlayerTextDrawColor(playerid, gVehModelPrice[playerid], -1);
 	PlayerTextDrawSetOutline(playerid, gVehModelPrice[playerid], 1);
 	PlayerTextDrawBackgroundColor(playerid, gVehModelPrice[playerid], 255);
-	PlayerTextDrawFont(playerid, gVehModelPrice[playerid], 3);
-	PlayerTextDrawSetProportional(playerid, gVehModelPrice[playerid], 1);
+	PlayerTextDrawFont(playerid, gVehModelPrice[playerid], TEXT_DRAW_FONT_3);
+	PlayerTextDrawSetProportional(playerid, gVehModelPrice[playerid], true);
     return 1;
 }
 

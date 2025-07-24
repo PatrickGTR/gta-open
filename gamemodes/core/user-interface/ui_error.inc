@@ -6,20 +6,34 @@ static
     Timer:ErrorTimer[MAX_PLAYERS],
     PlayerText:ErrorContent[MAX_PLAYERS];
 
+timer UI_HideError[3500](playerid) {
+    if(!IsPlayerConnected(playerid)) {
+        return;
+    }
+
+    if(!ErrorAlreadyShown[playerid]) {
+        return;
+    }
+
+    ErrorAlreadyShown[playerid] = false;
+    TextDrawHideForPlayer(playerid, ErrorSign);
+    PlayerTextDrawHide(playerid, ErrorContent[playerid]);
+}
+
 hook OnGameModeInit() {
     ErrorSign = TextDrawCreate(340.000000, 285.000000, "ld_chat:badchat");
-    TextDrawFont(ErrorSign, 4);
+    TextDrawFont(ErrorSign, TEXT_DRAW_FONT_SPRITE_DRAW);
     TextDrawLetterSize(ErrorSign, 0.600000, 2.000000);
     TextDrawTextSize(ErrorSign, 20.000000, 20.000000);
     TextDrawSetOutline(ErrorSign, 1);
     TextDrawSetShadow(ErrorSign, 0);
-    TextDrawAlignment(ErrorSign, 2);
+    TextDrawAlignment(ErrorSign, TEXT_DRAW_ALIGN_CENTRE);
     TextDrawColor(ErrorSign, -1);
     TextDrawBackgroundColor(ErrorSign, 255);
     TextDrawBoxColor(ErrorSign, 50);
-    TextDrawUseBox(ErrorSign, 1);
-    TextDrawSetProportional(ErrorSign, 1);
-    TextDrawSetSelectable(ErrorSign, 0);
+    TextDrawUseBox(ErrorSign, true);
+    TextDrawSetProportional(ErrorSign, true);
+    TextDrawSetSelectable(ErrorSign, false);
     return 1;
 }
 
@@ -33,18 +47,18 @@ hook OnPlayerConnect(playerid) {
     ErrorAlreadyShown[playerid] = false;
 
     ErrorContent[playerid] = CreatePlayerTextDraw(playerid, 320.000000, 300.000000, "~r~ERROR~n~~w~Oops something went wrong, try again!");
-    PlayerTextDrawFont(playerid, ErrorContent[playerid], 1);
+    PlayerTextDrawFont(playerid, ErrorContent[playerid], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, ErrorContent[playerid], 0.400000, 1.600000);
     PlayerTextDrawTextSize(playerid, ErrorContent[playerid], 420.000000, 300.000000);
     PlayerTextDrawSetOutline(playerid, ErrorContent[playerid], 1);
     PlayerTextDrawSetShadow(playerid, ErrorContent[playerid], 0);
-    PlayerTextDrawAlignment(playerid, ErrorContent[playerid], 2);
+    PlayerTextDrawAlignment(playerid, ErrorContent[playerid], TEXT_DRAW_ALIGN_CENTRE);
     PlayerTextDrawColor(playerid, ErrorContent[playerid], -1);
     PlayerTextDrawBackgroundColor(playerid, ErrorContent[playerid], 200);
-    PlayerTextDrawBoxColor(playerid, ErrorContent[playerid], 127);
-    PlayerTextDrawUseBox(playerid, ErrorContent[playerid], 0);
-    PlayerTextDrawSetProportional(playerid, ErrorContent[playerid], 1);
-    PlayerTextDrawSetSelectable(playerid, ErrorContent[playerid], 0);
+    PlayerTextDrawBoxColour(playerid, ErrorContent[playerid], 127);
+    PlayerTextDrawUseBox(playerid, ErrorContent[playerid], false);
+    PlayerTextDrawSetProportional(playerid, ErrorContent[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, ErrorContent[playerid], false);
     return 1;
 }
 
@@ -77,18 +91,4 @@ stock void:UI_ShowError(playerid, const message[]) {
 
     ErrorTimer[playerid] = defer UI_HideError(playerid);
     ErrorAlreadyShown[playerid] = true;
-}
-
-timer void:UI_HideError[3500](playerid) {
-    if(!IsPlayerConnected(playerid)) {
-        return;
-    }
-
-    if(!ErrorAlreadyShown[playerid]) {
-        return;
-    }
-
-    ErrorAlreadyShown[playerid] = false;
-    TextDrawHideForPlayer(playerid, ErrorSign);
-    PlayerTextDrawHide(playerid, ErrorContent[playerid]);
 }

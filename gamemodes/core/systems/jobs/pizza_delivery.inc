@@ -45,6 +45,21 @@ static
 	{"The Book Emporium", 832.689575, -1598.760498, 13.12357}
 };
 
+timer PDeliveringPickup[300000](playerid) {
+    SendMsgF(playerid, COLOR_RED, "(pizza delivery) "C_WHITE"You have failed to pickup the goods");
+    Trucker_End(playerid);
+}
+
+/*timer PDelivery[300000](playerid) {
+    SendMsgF(playerid, COLOR_RED, "(pizza delivery) "C_WHITE"You have failed to deliver the goods.");
+    Trucker_End(playerid);
+}*/
+
+timer PDeliveryMsg[1000](playerid) {
+    SendServerMsg(playerid, "Use /pdelivery to start a Pizza delivery men mission");
+    PlayerCanPDeliver[playerid] = true;
+}
+
 CMD:pdelivery(playerid) {
     if(!PlayerCanPDeliver[playerid]) {
         return SendErrorMsg(playerid, "You're not in a Pizzaboy bike!");
@@ -67,7 +82,7 @@ Pizza_Pickup(playerid) {
     PlayerPDeliveringState[playerid] = STATE_PICKUP;
 
     DisablePlayerRaceCheckpoint(playerid);
-    SetPlayerRaceCheckpoint(playerid, 1, 2115.5190, -1788.4954, 13.5547, 2115.5190, -1788.4954, 13.5547, 3.0);
+    SetPlayerRaceCheckpoint(playerid, CP_TYPE_GROUND_FINISH, 2115.5190, -1788.4954, 13.5547, 2115.5190, -1788.4954, 13.5547, 3.0);
 
     UI_TimeLeft(playerid, 300);
     PizzaPickupTimer[playerid] = defer PDeliveringPickup(playerid);
@@ -91,7 +106,7 @@ Pizza_Begin(playerid) {
     strcpy(storeName, DeliverData[randloc][F_STORE], sizeof(storeName));
 
     DisablePlayerRaceCheckpoint(playerid);
-    SetPlayerRaceCheckpoint(playerid, 1, x, y, z, x, y, z, 3.0);
+    SetPlayerRaceCheckpoint(playerid, CP_TYPE_GROUND_FINISH, x, y, z, x, y, z, 3.0);
 
     stop PizzaPickupTimer[playerid];
     UI_TimeLeft(playerid, 300);
@@ -149,19 +164,4 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
         }
     }
     return 1;
-}
-
-timer PDeliveringPickup[300000](playerid) {
-    SendMsgF(playerid, COLOR_RED, "(pizza delivery) "C_WHITE"You have failed to pickup the goods");
-    Trucker_End(playerid);
-}
-
-timer PDelivery[300000](playerid) {
-    SendMsgF(playerid, COLOR_RED, "(pizza delivery) "C_WHITE"You have failed to deliver the goods.");
-    Trucker_End(playerid);
-}
-
-timer PDeliveryMsg[1000](playerid) {
-    SendServerMsg(playerid, "Use /pdelivery to start a Pizza delivery men mission");
-    PlayerCanPDeliver[playerid] = true;
 }

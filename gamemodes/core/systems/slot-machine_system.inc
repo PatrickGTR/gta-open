@@ -65,7 +65,7 @@ PlayerText:CreatePlayerGamblingSprite(playerid, Float:x, Float:y, const td_name[
 {
 
 	new PlayerText:RetSprite = CreatePlayerTextDraw(playerid, x, y, td_name);
-	PlayerTextDrawFont(playerid, RetSprite, 4);
+	PlayerTextDrawFont(playerid, RetSprite, TEXT_DRAW_FONT_SPRITE_DRAW);
 	PlayerTextDrawColor(playerid, RetSprite, 0xFFFFFFFF);
 	PlayerTextDrawTextSize(playerid, RetSprite, width, height);
 	return RetSprite;
@@ -80,10 +80,10 @@ Text:CreateGamblingBox(Float:x, Float:y, Float:width, Float:height, color)
 	}
 
 	new Text:RetSprite = TextDrawCreate(x, y, string);
-	TextDrawFont(RetSprite, 0);
+	TextDrawFont(RetSprite, TEXT_DRAW_FONT_0);
 	TextDrawColor(RetSprite, 0xFFFFFFFF);
 	TextDrawTextSize(RetSprite, width + x, height + y);
-	TextDrawUseBox(RetSprite, 1);
+	TextDrawUseBox(RetSprite, true);
 	TextDrawBoxColor(RetSprite, color);
 	TextDrawLetterSize(RetSprite, 0.0001, 0.1158);
 	return RetSprite;
@@ -95,23 +95,23 @@ hook OnGameModeInit() {
 
 	for(new i = 0; i < MAX_PLAYERS; i++) {
 		slot_HeaderTD[i] = TextDrawCreate(302.000000, 184.000000, "Slot Machine");
-		TextDrawAlignment(slot_HeaderTD[i], 3);
+		TextDrawAlignment(slot_HeaderTD[i], TEXT_DRAW_ALIGN_RIGHT);
 		TextDrawBackgroundColor(slot_HeaderTD[i], 255);
-		TextDrawFont(slot_HeaderTD[i], 0);
+		TextDrawFont(slot_HeaderTD[i], TEXT_DRAW_FONT_0);
 		TextDrawLetterSize(slot_HeaderTD[i], 0.680000, 2.500000);
 		TextDrawColor(slot_HeaderTD[i], -1);
 		TextDrawSetOutline(slot_HeaderTD[i], 1);
-		TextDrawSetProportional(slot_HeaderTD[i], 1);
-		TextDrawSetSelectable(slot_HeaderTD[i], 0);
+		TextDrawSetProportional(slot_HeaderTD[i], true);
+		TextDrawSetSelectable(slot_HeaderTD[i], false);
 
 		slot_ControlsTD[i] = TextDrawCreate(193.000000, 300.000000, "~g~Press ~w~SPACE ~g~to Gamble~n~Press ~w~RETURN ~g~to Exit~n~Press ~w~LSHIFT ~g~to Increase Bet");
 		TextDrawBackgroundColor(slot_ControlsTD[i], 85);
-		TextDrawFont(slot_ControlsTD[i], 1);
+		TextDrawFont(slot_ControlsTD[i], TEXT_DRAW_FONT_1);
 		TextDrawLetterSize(slot_ControlsTD[i], 0.270000, 1.399999);
 		TextDrawColor(slot_ControlsTD[i], -1);
 		TextDrawSetOutline(slot_ControlsTD[i], 1);
-		TextDrawSetProportional(slot_ControlsTD[i], 1);
-		TextDrawSetSelectable(slot_ControlsTD[i], 0);
+		TextDrawSetProportional(slot_ControlsTD[i], true);
+		TextDrawSetSelectable(slot_ControlsTD[i], false);
 
 		slot_BoxTD[i] = CreateGamblingBox(194.0, Y - 20, 3 * 64.0 + 3 * 20, 84, 0x00000099);
 	}
@@ -137,12 +137,12 @@ hook OnPlayerConnect(playerid) {
 
 	slot_BetTD[playerid] = CreatePlayerTextDraw(playerid, 337.000000, 199.000000, "~w~Balance ~g~$100,00 ~w~Your Bet ~g~$100");
 	PlayerTextDrawBackgroundColor(playerid, slot_BetTD[playerid], 85);
-	PlayerTextDrawFont(playerid, slot_BetTD[playerid], 1);
+	PlayerTextDrawFont(playerid, slot_BetTD[playerid], TEXT_DRAW_FONT_1);
 	PlayerTextDrawLetterSize(playerid, slot_BetTD[playerid], 0.200000, 0.999998);
 	PlayerTextDrawColor(playerid, slot_BetTD[playerid], -1);
 	PlayerTextDrawSetOutline(playerid, slot_BetTD[playerid], 1);
-	PlayerTextDrawSetProportional(playerid, slot_BetTD[playerid], 1);
-	PlayerTextDrawSetSelectable(playerid, slot_BetTD[playerid], 0);
+	PlayerTextDrawSetProportional(playerid, slot_BetTD[playerid], true);
+	PlayerTextDrawSetSelectable(playerid, slot_BetTD[playerid], false);
 
 	new Float:Y = 230.0;
 
@@ -251,7 +251,7 @@ SlotMachine_Use(playerid, firstBet = MIN_BET,  startBalance = 0)
 
 	Updateslot_BetTD(playerid);
 
-	TogglePlayerControllable(playerid, 0);
+	TogglePlayerControllable(playerid, false);
 	return 1;
 }
 
@@ -263,7 +263,7 @@ SlotMachine_Exit(playerid) {
 	SlotMachine_Hide(playerid);
 	PlayerGamblingState[playerid] = G_STATE_NOT_GAMBLING;
 
-	TogglePlayerControllable(playerid, 1);
+	TogglePlayerControllable(playerid, true);
 
 	TextDrawHideForPlayer(playerid, slot_HeaderTD[playerid]);
 	TextDrawHideForPlayer(playerid, slot_ControlsTD[playerid]);
@@ -475,7 +475,7 @@ timer PlayerPlaySlotAgain[DISPLAY_TIME](playerid) {
 	PlayerGamblingState[playerid] = G_STATE_READY;
 
 	new keys,lr,ud;
-	GetPlayerKeys(playerid,keys,ud,lr);
+	GetPlayerKeys(playerid, keys, ud, lr);
 	if(keys & KEY_SPRINT) {
 		CallLocalFunction("OnPlayerKeyStateChange", "ii", KEY_SPRINT, 0);
 	}

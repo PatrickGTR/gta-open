@@ -1,5 +1,5 @@
 // SAMP
-#include <a_samp>
+#include <open.mp>
 
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 50
@@ -16,7 +16,7 @@
 #define BCRYPT_COST 12
 
 // Set to true if table aren't set up.
-#define SETUP_TABLE 			(false)
+#define SETUP_TABLE 			(true)
 
 // MySQL Prepared Statement
 #define MYSQL_PREPARE_DEBUG 	(false)

@@ -1,0 +1,58 @@
+{
+	/* You must escape `\`, so `\\\\\\\\` matches `\\` in a test input. */
+	/* There should be no capture groups in here. */
+	"defines":
+	{
+		/*       */
+		/* ATOMS */
+		/*       */
+		/* This is for only proper symbols that don't start with a number. */
+		"symbol": "[a-zA-Z_@][a-zA-Z0-9_@]*",
+		/* Floats can look like `0_1.2_3e4` - `_` doesn't work in the exponent and `a.b` is required. */
+		"float": "-?[0-9]+(?:_[0-9]+)*\\.[0-9]+(?:_[0-9]+)*(?:[eE][0-9])?",
+		"hex": "0[xX][0-9a-fA-F]+(?:_[0-9a-fA-F]+)*",
+		"binary": "0[bB][01]+(?:_[01]+)*",
+		"integer": "-?[0-9]+(?:_[0-9]+)*",
+		/* Require \\ and ' to be escaped, but allow anything else to maybe be escaped. */
+		"character": "'\\\\.'|'[^\\\\']'",
+		/* Needs extra escapes to allow " in JSON. */
+		"string": "\"(?:\\\\\\\\|\\\\\\\"|[^\\\"])*\"",
+		"operator": "[*&^%!\\-=+\\/?\\|<>.:]+",
+		/*       */
+		/* PARTS */
+		/*       */
+		/* Now we can start building up more complex expressions. */
+		"number": "(?&float)|(?&hex)|(?&binary)|(?&integer)",
+		"tag": "(?&symbol)\\s*:|\\{\\s*(?&symbol)(?:\\s*,\\s*(?&symbol))*\\s*\\}\\s*:",
+		"varargs": "(?&tag)?\\s*\\.\\.\\.",
+		/*             */
+		/* EXPRESSIONS */
+		/*             */
+		/* Expressions are very lax with their contents - any letters, numbers, and operators anywhere are fine. */
+		"expressionpart": "(?&roundbrackets)|(?&curlybrackets)|(?&squarebrackets)|[*&^%!\\-=+\\/?\\|<>.:a-zA-Z0-9_@\\s]+|(?&string)|(?&character)",
+		"expression": "(?&expressionpart)+",
+		"squarebrackets": "\\[(?&expressionpart)*(?:[,;](?&expressionpart)*)*\\]",
+		"roundbrackets": "\\((?&expressionpart)*(?:[,;](?&expressionpart)*)*\\)",
+		"curlybrackets": "\\{(?&expressionpart)*(?:[,;](?&expressionpart)*)*\\}",
+		/* Be careful with this, it is untested against expression parts, which also contain `>`. */
+		"anglebrackets": "\\<(?&expressionpart)*(?:[,;](?&expressionpart)*)*\\>",
+		"parameter": "(?:const\\s+)?(?:&\\s*)?(?:(?&tag)\\s*)?(?&symbol)(?:\\s*(?&squarebrackets))*(?:\\s*=\\s*(?&expression))?",
+		"const": "const\\s+(?:(?&tag)\\s*)?(?&symbol)(?:\\s*(?&squarebrackets))*(?:\\s*=\\s*(?&expression))?",
+		"nonconst": "(?&symbol)(?:\\s*(?&squarebrackets))*(?:\\s*=\\s*(?&expression))?",
+		"untagged": "(?&symbol)(?:\\s*=\\s*(?&expression))?",
+		/* Three types - at least one named parameter, only `...`, and nothing. */
+		"parameterlist": "\\(\\s*(?&parameter)\\s*(?:,\\s*(?&parameter)\\s*)*(?:,\\s*(?&varargs)\\s*)?\\)|\\(\\s*(?&varargs)\\s*\\)|\\(\\s*\\)",
+		"declaration": "(?&tag)?\\s*(?&symbol)",
+		/*              */
+		/* DECLARATIONS */
+		/*              */
+		"publics": "forward\\s+public|forward|public|hook\\s+public|hook\\s+callback|hook|HOOK__\\s+public|HOOK__\\s+callback|HOOK_PUBLIC__|HOOK_CALLBACK__|HOOK__|@hook\\s*(?&parameterlist)",
+		"stocks": "stock|native|hook\\s+stock|hook\\s+native|hook\\s+function|HOOK__\\s+stock|HOOK__\\s+native|HOOK__\\s+function|HOOK_STOCK__|HOOK_FUNCTION__|HOOK_NATIVE__|@hook\\s*(?&parameterlist)",
+		/* This is unusual in that it contains trailing whitespace, most defines don't. */
+		"start": "^[ \t]*"
+	},
+	"replacements":
+	[
+	]
+}
+

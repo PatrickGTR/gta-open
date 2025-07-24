@@ -20,12 +20,27 @@
 </p>
 
 # Running & Compiling
-Run this gamemode in three line!
-```bash
-sampctl package ensure
-sampctl package build
-sampctl package run
-```
+
+### Compiling & Ensuring
+    Running this gamemode might be a little tricky because we recently migrated to open.mp
+    take note that you need compiler 3.10.11 to compile this gamemode (sampctl has 3.10.10).
+    replace the compiler at sampctl's AppData with 3.10.11 which can be downloaded in open.mp's files and make the folder named `pawn` inside the `sampctl` folder to read only access so it won't be replaced with 3.10.10 again every time you compile.
+
+    Ensure dependencies using `sampctl ensure` and build it with `sampctl build`.
+
+### Running
+    Before running this gamemode if you don't have the tables required the gamemode itself will create one for you just go to `gamemode -> core -> constants.inc` and change the value of `##define SETUP_TABLE` to true, once you have the tables you can set this to false again.
+
+    The gamemode uses a file to connect to databases create a file named `mysql.ini` in the main directory. The variables are as follows
+
+    ```bash
+        hostname=
+        username=
+        pass= # delete when your database doesn't require a password
+        database=
+    ```
+
+    After that you can now run the gamemode by running omp-server.exe
 
 # How to contribute.
 
