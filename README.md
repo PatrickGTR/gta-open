@@ -28,6 +28,15 @@
 
     Ensure dependencies using `sampctl ensure` and build it with `sampctl build`.
 
+### Required Plugins
+    All server plugins are declared in `pawn.json` and automatically downloaded by `sampctl ensure`.
+    No manual plugin installation is needed. The key plugins used are:
+    - **SA-MP MySQL** (`pBlueG/SA-MP-MySQL`) - Database connectivity
+    - **samp-bcrypt** (`Sreyas-Sreelal/samp-bcrypt`) - Password hashing (uses direct native API)
+    - **sscanf** (`maddinat0r/sscanf`) - String parsing
+    - **Streamer** (`samp-incognito/samp-streamer-plugin`) - Object streaming
+    - **Crashdetect** (`AmyrAhmady/samp-plugin-crashdetect`) - Crash diagnostics
+
 ### Running
     Before running this gamemode if you don't have the tables required the gamemode itself will create one for you just go to `gamemode -> core -> constants.inc` and change the value of `##define SETUP_TABLE` to true, once you have the tables you can set this to false again.
 
