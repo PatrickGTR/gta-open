@@ -61,10 +61,15 @@ static Account_Create(playerid, const password[]) {
         return;
     }
 
-    inline const OnPasswordHash(string:hash[]) {
-        Account_InsertToDatabase(playerid, hash);
-    }
-    BCrypt_HashInline(password, BCRYPT_COST, using inline OnPasswordHash);
+    bcrypt_hash(playerid, "OnBCryptPasswordHash", password, BCRYPT_COST);
+}
+
+forward OnBCryptPasswordHash(playerid, hashid);
+public OnBCryptPasswordHash(playerid, hashid) {
+    #pragma unused hashid
+    new hash[61];
+    bcrypt_get_hash(hash);
+    Account_InsertToDatabase(playerid, hash);
 }
 
 // only used internally, when all checks passed this function will be called.
